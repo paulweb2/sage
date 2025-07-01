@@ -1,4 +1,4 @@
-# SAGE – Supporting Accessible Guidance in Education
+# SAGE – Supporting Adolescent Girls’ Education
 
 SAGE is a mobile-first learning companion for **The Open University** that curates video, audio, and written guidance to help educators understand and support students with a wide range of disabilities. Built with the Ionic Framework, the app places inclusive-practice know‑how in your pocket so you can reference it any time, online or off.
 
