@@ -4,8 +4,8 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
+            <ion-list-header>SAGE Disability</ion-list-header>
+            <ion-note>Supporting Accessible Guidance in Education</ion-note>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
@@ -15,13 +15,21 @@
             </ion-menu-toggle>
           </ion-list>
 
-          <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
+          <ion-list id="disability-categories">
+            <ion-list-header>Disability Categories</ion-list-header>
 
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
+            <ion-item v-for="(category, index) in disabilityCategories" lines="none" :key="index" @click="toggleSubmenu(index)">
+              <ion-icon aria-hidden="true" slot="start" :ios="category.icon" :md="category.icon"></ion-icon>
+              <ion-label>{{ category.title }}</ion-label>
+              <ion-icon :icon="chevronDown" slot="end" :class="{ 'rotated': category.expanded }"></ion-icon>
             </ion-item>
+
+            <!-- Submenu items -->
+            <div v-for="(category, index) in disabilityCategories" :key="`submenu-${index}`" v-show="category.expanded">
+              <ion-item v-for="subItem in category.subItems" :key="subItem.title" lines="none" class="submenu-item">
+                <ion-label>{{ subItem.title }}</ion-label>
+              </ion-item>
+            </div>
           </ion-list>
         </ion-content>
       </ion-menu>
@@ -47,62 +55,108 @@ import {
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
+  homeOutline,
+  homeSharp,
+  informationCircleOutline,
+  informationCircleSharp,
+  accessibilityOutline,
+  accessibilitySharp,
+  schoolOutline,
+  schoolSharp,
+  peopleOutline,
+  peopleSharp,
+  settingsOutline,
+  settingsSharp,
+  chevronDown,
+  eyeOutline,
+  earOutline,
+  bodyOutline,
+  chatbubbleOutline,
+  bulbOutline,
+  medicalOutline,
 } from 'ionicons/icons';
 
 const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Inbox',
-    url: '/folder/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    title: 'Home',
+    url: '/folder/Home',
+    iosIcon: homeOutline,
+    mdIcon: homeSharp,
   },
   {
-    title: 'Outbox',
-    url: '/folder/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    title: 'General Information',
+    url: '/folder/General',
+    iosIcon: informationCircleOutline,
+    mdIcon: informationCircleSharp,
   },
   {
-    title: 'Favorites',
-    url: '/folder/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    title: 'Screening Tool',
+    url: '/folder/Screening',
+    iosIcon: accessibilityOutline,
+    mdIcon: accessibilitySharp,
   },
   {
-    title: 'Archived',
-    url: '/folder/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
+    title: 'Resources',
+    url: '/folder/Resources',
+    iosIcon: schoolOutline,
+    mdIcon: schoolSharp,
   },
   {
-    title: 'Trash',
-    url: '/folder/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-  },
-  {
-    title: 'Spam',
-    url: '/folder/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
+    title: 'About',
+    url: '/folder/About',
+    iosIcon: peopleOutline,
+    mdIcon: peopleSharp,
   },
 ];
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
+const disabilityCategories = ref([
+  {
+    title: 'Physical Disabilities',
+    icon: bodyOutline,
+    expanded: false,
+    subItems: [
+      { title: 'Visual Impairments' },
+      { title: 'Hearing Impairments' },
+      { title: 'Physical Mobility' },
+      { title: 'Speech Difficulties' },
+    ]
+  },
+  {
+    title: 'Cognition & Learning',
+    icon: bulbOutline,
+    expanded: false,
+    subItems: [
+      { title: 'Dyslexia' },
+      { title: 'Dyscalculia' },
+      { title: 'ADHD' },
+      { title: 'Memory Issues' },
+    ]
+  },
+  {
+    title: 'Communication & Interaction',
+    icon: chatbubbleOutline,
+    expanded: false,
+    subItems: [
+      { title: 'Autism Spectrum' },
+      { title: 'Social Anxiety' },
+      { title: 'Language Barriers' },
+    ]
+  },
+  {
+    title: 'Multiple Impairments',
+    icon: medicalOutline,
+    expanded: false,
+    subItems: [
+      { title: 'Complex Needs' },
+      { title: 'Combined Disabilities' },
+    ]
+  },
+]);
+
+const toggleSubmenu = (index: number) => {
+  disabilityCategories.value[index].expanded = !disabilityCategories.value[index].expanded;
+};
 
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
@@ -142,17 +196,13 @@ ion-menu.md ion-list#inbox-list {
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
-
   min-height: 20px;
 }
 
-ion-menu.md ion-list#labels-list ion-list-header {
+ion-menu.md ion-list#disability-categories ion-list-header {
   font-size: 16px;
-
   margin-bottom: 18px;
-
   color: #757575;
-
   min-height: 26px;
 }
 
@@ -176,6 +226,16 @@ ion-menu.md ion-item ion-icon {
 
 ion-menu.md ion-item ion-label {
   font-weight: 500;
+}
+
+.submenu-item {
+  --padding-start: 30px;
+  font-size: 14px;
+}
+
+.rotated {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
 }
 
 ion-menu.ios ion-content {
@@ -206,7 +266,7 @@ ion-menu.ios ion-item ion-icon {
   color: #73849a;
 }
 
-ion-menu.ios ion-list#labels-list ion-list-header {
+ion-menu.ios ion-list#disability-categories ion-list-header {
   margin-bottom: 8px;
 }
 
@@ -223,7 +283,6 @@ ion-menu.ios ion-note {
 ion-note {
   display: inline-block;
   font-size: 16px;
-
   color: var(--ion-color-medium-shade);
 }
 
