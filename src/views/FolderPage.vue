@@ -21,7 +21,7 @@
           <ion-card>
             <ion-card-header>
               <ion-card-title>Welcome to SAGE</ion-card-title>
-              <ion-card-subtitle>Supporting Accessible Guidance in Education</ion-card-subtitle>
+              <ion-card-subtitle>Supporting Adolescent Girls' Education</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
               <p>SAGE is your mobile learning companion for understanding and supporting students with disabilities. 
@@ -133,7 +133,7 @@
               <ion-card-title>About SAGE</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <p>SAGE (Supporting Accessible Guidance in Education) is developed by The Open University's 
+              <p>SAGE (Supporting Adolescent Girls' Education) is developed by The Open University's 
               Access & Success Team to help educators understand and support students with disabilities.</p>
               
               <h3>Project Scope</h3>

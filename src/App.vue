@@ -5,7 +5,7 @@
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>SAGE Disability</ion-list-header>
-            <ion-note>Supporting Accessible Guidance in Education</ion-note>
+            <ion-note>Supporting Adolescent Girls' Education</ion-note>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
@@ -26,7 +26,7 @@
 
             <!-- Submenu items -->
             <div v-for="(category, index) in disabilityCategories" :key="`submenu-${index}`" v-show="category.expanded">
-              <ion-item v-for="subItem in category.subItems" :key="subItem.title" lines="none" class="submenu-item">
+              <ion-item v-for="subItem in category.subItems" :key="subItem.title" lines="none" class="submenu-item" router-direction="root" :router-link="subItem.url">
                 <ion-label>{{ subItem.title }}</ion-label>
               </ion-item>
             </div>
@@ -116,10 +116,10 @@ const disabilityCategories = ref([
     icon: bodyOutline,
     expanded: false,
     subItems: [
-      { title: 'Visual Impairments' },
-      { title: 'Hearing Impairments' },
-      { title: 'Physical Mobility' },
-      { title: 'Speech Difficulties' },
+      { title: 'Visual Impairments', url: '/disability/visual-impairments' },
+      { title: 'Hearing Impairments', url: '/disability/hearing-impairments' },
+      { title: 'Physical Mobility', url: '/disability/physical-mobility' },
+      { title: 'Speech Difficulties', url: '/disability/speech-difficulties' },
     ]
   },
   {
@@ -127,10 +127,10 @@ const disabilityCategories = ref([
     icon: bulbOutline,
     expanded: false,
     subItems: [
-      { title: 'Dyslexia' },
-      { title: 'Dyscalculia' },
-      { title: 'ADHD' },
-      { title: 'Memory Issues' },
+      { title: 'Dyslexia', url: '/disability/dyslexia' },
+      { title: 'Dyscalculia', url: '/disability/dyscalculia' },
+      { title: 'ADHD', url: '/disability/adhd' },
+      { title: 'Memory Issues', url: '/disability/memory-issues' },
     ]
   },
   {
@@ -138,9 +138,9 @@ const disabilityCategories = ref([
     icon: chatbubbleOutline,
     expanded: false,
     subItems: [
-      { title: 'Autism Spectrum' },
-      { title: 'Social Anxiety' },
-      { title: 'Language Barriers' },
+      { title: 'Autism Spectrum', url: '/disability/autism-spectrum' },
+      { title: 'Social Anxiety', url: '/disability/social-anxiety' },
+      { title: 'Language Barriers', url: '/disability/language-barriers' },
     ]
   },
   {
@@ -148,8 +148,8 @@ const disabilityCategories = ref([
     icon: medicalOutline,
     expanded: false,
     subItems: [
-      { title: 'Complex Needs' },
-      { title: 'Combined Disabilities' },
+      { title: 'Complex Needs', url: '/disability/complex-needs' },
+      { title: 'Combined Disabilities', url: '/disability/combined-disabilities' },
     ]
   },
 ]);
@@ -157,6 +157,8 @@ const disabilityCategories = ref([
 const toggleSubmenu = (index: number) => {
   disabilityCategories.value[index].expanded = !disabilityCategories.value[index].expanded;
 };
+
+
 
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
