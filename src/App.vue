@@ -4,9 +4,9 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>SAGE Disability</ion-list-header>
-            <ion-note>Supporting Adolescent Girls' Education</ion-note>
-
+            <div class="sage-logo-wrapper">
+              <img src="/sage-logo.png" alt="SAGE: Supporting Adolescent Girls' Education logo" class="sage-logo-img" />
+            </div>
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
@@ -290,5 +290,22 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+.sage-logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0 16px 0;
+}
+.sage-logo-img {
+  max-width: 140px;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: white;
+  margin-top: 0;
 }
 </style>
