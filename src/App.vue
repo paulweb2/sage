@@ -8,7 +8,7 @@
               <img src="/sage-logo.png" alt="SAGE: Supporting Adolescent Girls' Education logo" class="sage-logo-img" />
             </div>
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+              <ion-item @click="setActivePage('top', i)" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: activeSection === 'top' && activeIndex === i }">
                 <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
@@ -18,17 +18,20 @@
           <ion-list id="disability-categories">
             <ion-list-header>Disability Categories</ion-list-header>
 
-            <ion-item v-for="(category, index) in disabilityCategories" lines="none" :key="index" @click="toggleSubmenu(index)">
-              <ion-icon aria-hidden="true" slot="start" :ios="category.icon" :md="category.icon"></ion-icon>
-              <ion-label>{{ category.title }}</ion-label>
-              <ion-icon :icon="chevronDown" slot="end" :class="{ 'rotated': category.expanded }"></ion-icon>
-            </ion-item>
-
-            <!-- Submenu items -->
-            <div v-for="(category, index) in disabilityCategories" :key="`submenu-${index}`" v-show="category.expanded">
-              <ion-item v-for="subItem in category.subItems" :key="subItem.title" lines="none" class="submenu-item" router-direction="root" :router-link="subItem.url">
-                <ion-label>{{ subItem.title }}</ion-label>
+            <div v-for="(category, index) in disabilityCategories" :key="index">
+              <!-- Main category item -->
+              <ion-item lines="none" @click="handleCategoryClick(index)" class="category-item" router-direction="root" :router-link="category.url" :class="{ selected: activeSection === 'bottom' && activeIndex === index }">
+                <ion-icon aria-hidden="true" slot="start" :ios="category.icon" :md="category.icon"></ion-icon>
+                <ion-label>{{ category.title }}</ion-label>
+                <ion-icon v-if="category.subItems.length > 0" :icon="chevronDown" slot="end" :class="{ 'rotated': category.expanded }"></ion-icon>
               </ion-item>
+
+              <!-- Submenu items -->
+              <div v-show="category.expanded && category.subItems.length > 0" class="submenu-container">
+                <ion-item v-for="subItem in category.subItems" :key="subItem.title" lines="none" class="submenu-item" @click="scrollToSection(subItem.anchor, index)">
+                  <ion-label>{{ subItem.title }}</ion-label>
+                </ion-item>
+              </div>
             </div>
           </ion-list>
         </ion-content>
@@ -53,7 +56,8 @@ import {
   IonRouterOutlet,
   IonSplitPane,
 } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import {
   homeOutline,
   homeSharp,
@@ -76,7 +80,9 @@ import {
   medicalOutline,
 } from 'ionicons/icons';
 
-const selectedIndex = ref(0);
+const route = useRoute();
+const activeSection = ref<'top' | 'bottom'>('top');
+const activeIndex = ref(0);
 const appPages = [
   {
     title: 'Home',
@@ -112,45 +118,65 @@ const appPages = [
 
 const disabilityCategories = ref([
   {
-    title: 'Physical Disabilities',
+    title: 'Visual Needs',
     icon: bodyOutline,
     expanded: false,
+    url: '/disability/physical-disabilities',
     subItems: [
-      { title: 'Visual Impairments', url: '/disability/visual-impairments' },
-      { title: 'Hearing Impairments', url: '/disability/hearing-impairments' },
-      { title: 'Physical Mobility', url: '/disability/physical-mobility' },
-      { title: 'Speech Difficulties', url: '/disability/speech-difficulties' },
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' },
+
     ]
   },
   {
-    title: 'Cognition & Learning',
+    title: 'Hearing Needs',
+    icon: earOutline,
+    expanded: false,
+    url: '/disability/hearing-needs',
+    subItems: []
+  },
+  {
+    title: 'Physical and Sensory Needs',
+    icon: bodyOutline,
+    expanded: false,
+    url: '/disability/physical-sensory-needs',
+    subItems: []
+  },
+  {
+    title: 'Cognitive and Intellectual Needs',
     icon: bulbOutline,
     expanded: false,
-    subItems: [
-      { title: 'Dyslexia', url: '/disability/dyslexia' },
-      { title: 'Dyscalculia', url: '/disability/dyscalculia' },
-      { title: 'ADHD', url: '/disability/adhd' },
-      { title: 'Memory Issues', url: '/disability/memory-issues' },
-    ]
+    url: '/disability/cognitive-intellectual-needs',
+    subItems: []
   },
   {
-    title: 'Communication & Interaction',
+    title: 'Speech and Language Needs',
     icon: chatbubbleOutline,
     expanded: false,
+    url: '/disability/speech-language-needs',
+    subItems: []
+  },
+  {
+    title: 'Communication',
+    icon: chatbubbleOutline,
+    expanded: false,
+    url: '/disability/communication',
     subItems: [
-      { title: 'Autism Spectrum', url: '/disability/autism-spectrum' },
-      { title: 'Social Anxiety', url: '/disability/social-anxiety' },
-      { title: 'Language Barriers', url: '/disability/language-barriers' },
+      { title: 'Quiz', anchor: 'knowledge-check' },
     ]
   },
   {
-    title: 'Multiple Impairments',
+    title: 'Multiple Disabilities',
     icon: medicalOutline,
     expanded: false,
-    subItems: [
-      { title: 'Complex Needs', url: '/disability/complex-needs' },
-      { title: 'Combined Disabilities', url: '/disability/combined-disabilities' },
-    ]
+    url: '/disability/multiple-disabilities',
+    subItems: []
   },
 ]);
 
@@ -158,12 +184,118 @@ const toggleSubmenu = (index: number) => {
   disabilityCategories.value[index].expanded = !disabilityCategories.value[index].expanded;
 };
 
+const handleCategoryClick = (index: number) => {
+  // Set this category as active
+  setActivePage('bottom', index);
+  
+  // If the clicked category is already expanded, collapse it and scroll to top
+  if (disabilityCategories.value[index].expanded) {
+    disabilityCategories.value[index].expanded = false;
+    // Scroll to top of the page
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  } else {
+    // Close all other categories first (accordion behavior)
+    disabilityCategories.value.forEach((category, i) => {
+      if (i !== index) {
+        category.expanded = false;
+      }
+    });
+    // Expand the clicked category
+    disabilityCategories.value[index].expanded = true;
+  }
+};
 
+const scrollToSection = (anchor: string, categoryIndex: number) => {
+  // Close the menu first
+  const menu = document.querySelector('ion-menu');
+  if (menu) {
+    menu.close();
+  }
+  
+  // Get the current page and target page
+  const currentPath = window.location.pathname;
+  const targetPage = disabilityCategories.value[categoryIndex].url;
+  
+  // If we're not on the target page, navigate there first
+  if (currentPath !== targetPage) {
+    // Navigate to the target page
+    window.location.href = targetPage;
+    
+    // Store the anchor to scroll to after navigation
+    sessionStorage.setItem('scrollToAnchor', anchor);
+    
+    // Listen for the page to load and then scroll
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const element = document.getElementById(anchor);
+        if (element) {
+          const cardHeader = element.querySelector('ion-card-header');
+          const targetElement = cardHeader || element;
+          
+          targetElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+        // Clear the stored anchor
+        sessionStorage.removeItem('scrollToAnchor');
+      }, 500);
+    }, { once: true });
+  } else {
+    // We're already on the correct page, just scroll to the section
+    setTimeout(() => {
+      const element = document.getElementById(anchor);
+      if (element) {
+        const cardHeader = element.querySelector('ion-card-header');
+        const targetElement = cardHeader || element;
+        
+        targetElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+    }, 300);
+  }
+};
 
-const path = window.location.pathname.split('folder/')[1];
-if (path !== undefined) {
-  selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
-}
+const setActivePage = (section: 'top' | 'bottom', index: number) => {
+  activeSection.value = section;
+  activeIndex.value = index;
+};
+
+onMounted(() => {
+  updateActiveState();
+});
+
+// Watch for route changes to update active state
+watch(() => route.path, () => {
+  updateActiveState();
+});
+
+const updateActiveState = () => {
+  const path = route.path;
+  
+  // Check if we're on a top-level page by matching the full URL
+  const topIndex = appPages.findIndex((page) => page.url === path);
+  if (topIndex !== -1) {
+    setActivePage('top', topIndex);
+    return;
+  }
+  
+  // Check if we're on a disability page
+  const bottomIndex = disabilityCategories.value.findIndex((category) => 
+    category.url === path
+  );
+  if (bottomIndex !== -1) {
+    setActivePage('bottom', bottomIndex);
+    return;
+  }
+  
+  // Default to Home if no match found
+  setActivePage('top', 0);
+};
 </script>
 
 <style scoped>
@@ -230,9 +362,33 @@ ion-menu.md ion-item ion-label {
   font-weight: 500;
 }
 
+.category-item {
+  --background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.category-item:hover {
+  --background: rgba(var(--ion-color-primary-rgb), 0.05);
+}
+
+.submenu-container {
+  background: rgba(var(--ion-color-light-rgb), 0.3);
+  border-radius: 0 0 8px 8px;
+  margin: 0 8px 8px 8px;
+  overflow: hidden;
+}
+
 .submenu-item {
   --padding-start: 30px;
+  --padding-end: 16px;
   font-size: 14px;
+  --background: transparent;
+  margin: 0;
+  border-radius: 0;
+}
+
+.submenu-item:hover {
+  --background: rgba(var(--ion-color-primary-rgb), 0.1);
 }
 
 .rotated {

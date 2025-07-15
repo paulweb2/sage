@@ -333,7 +333,7 @@
               </ion-list>
               
               <h3>Navigation Guide</h3>
-              <p>Use the menu to navigate between different sections. The app is organized into four main areas of needs: Physical Disabilities, Cognition & Learning, Communication & Interaction, and Multiple Impairments. Each section contains specific information, strategies, and resources relevant to that category.</p>
+              <p>Use the menu to navigate between different sections. The app is organized into seven main areas of needs: Visual Needs, Hearing Needs, Physical and Sensory Needs, Cognitive and Intellectual Needs, Speech and Language Needs, Communication, and Multiple Disabilities. Each section contains specific information, strategies, and resources relevant to that category.</p>
             </ion-card-content>
           </ion-card>
 
@@ -923,7 +923,7 @@
               <ion-list>
                 <ion-item>
                   <ion-label>
-                    <h4>1. Physical Disabilities</h4>
+                    <h4>1. Visual Needs</h4>
                     <p>Visual, hearing, mobility, and speech impairments</p>
                     <ion-note>Focus on accessibility, assistive technologies, and environmental adaptations</ion-note>
                   </ion-label>

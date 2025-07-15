@@ -22,24 +22,166 @@
       </ion-header>
 
       <div id="container">
-        <div v-if="disabilityContent">
-          <!-- 1. Name of Disability -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>{{ disabilityContent.title }}</ion-card-title>
-              <ion-card-subtitle>{{ disabilityContent.category }}</ion-card-subtitle>
-              <ion-chip :color="getDisabilityColor()">
-                <ion-icon :icon="getDisabilityIcon()"></ion-icon>
-                <ion-label>{{ disabilityContent.category }}</ion-label>
-              </ion-chip>
-            </ion-card-header>
-            <ion-card-content>
-              <p>{{ disabilityContent.description }}</p>
-            </ion-card-content>
-          </ion-card>
+        <div v-if="disabilityContent && disabilityContent.title">
+          <!-- For communication page, only show the quiz -->
+          <div v-if="route.params.id === 'communication'">
+            <!-- Quiz -->
+            <ion-card id="knowledge-check">
+              <ion-card-header>
+                <ion-card-title>Communication Quiz</ion-card-title>
+                <ion-card-subtitle>Test Your Understanding of Communication Disabilities</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <div v-if="!quizCompleted">
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-title>Question {{ currentQuizQuestion + 1 }} of {{ quizQuestions.length }}</ion-card-title>
+                      <ion-progress-bar :value="(currentQuizQuestion + 1) / quizQuestions.length" color="primary"></ion-progress-bar>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <h4>{{ quizQuestions[currentQuizQuestion].question }}</h4>
+                      
+                      <!-- Multiple Choice Questions -->
+                      <div v-if="!quizQuestions[currentQuizQuestion].type || quizQuestions[currentQuizQuestion].type === 'multiple-choice'">
+                        <ion-radio-group v-model="currentQuizAnswer">
+                          <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
+                            <ion-radio :value="option.value" slot="start"></ion-radio>
+                            <ion-label>{{ option.text }}</ion-label>
+                          </ion-item>
+                        </ion-radio-group>
+                      </div>
+                      
+                      <!-- True/False Questions -->
+                      <div v-else-if="quizQuestions[currentQuizQuestion].type === 'true-false'">
+                        <ion-radio-group v-model="currentQuizAnswer">
+                          <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
+                            <ion-radio :value="option.value" slot="start"></ion-radio>
+                            <ion-label>{{ option.text }}</ion-label>
+                          </ion-item>
+                        </ion-radio-group>
+                      </div>
+                      
+                      <!-- Matching Questions -->
+                      <div v-else-if="quizQuestions[currentQuizQuestion].type === 'matching'">
+                        <div class="matching-instructions">
+                          <ion-note color="primary">
+                            <strong>Instructions:</strong> Match each communication support strategy (A, B, C) with its correct purpose (1, 2, 3) using the dropdown menus.
+                          </ion-note>
+                        </div>
+                        <ion-list>
+                          <ion-item v-for="strategy in quizQuestions[currentQuizQuestion].strategies" :key="strategy.id" class="matching-item">
+                            <ion-label>
+                              <h4><strong>{{ strategy.id }}.</strong> {{ strategy.text }}</h4>
+                            </ion-label>
+                            <ion-select 
+                              v-model="matchingAnswers[strategy.id]" 
+                              interface="popover" 
+                              placeholder="Select purpose"
+                              :value="matchingAnswers[strategy.id]"
+                              class="matching-select"
+                            >
+                              <ion-select-option value="">Select purpose</ion-select-option>
+                              <ion-select-option 
+                                v-for="purpose in quizQuestions[currentQuizQuestion].purposes" 
+                                :key="purpose.id" 
+                                :value="purpose.id"
+                              >
+                                {{ purpose.id }}. {{ purpose.text }}
+                              </ion-select-option>
+                            </ion-select>
+                          </ion-item>
+                        </ion-list>
+                      </div>
+                      
+                      <div class="ion-padding-top">
+                        <ion-button expand="block" color="primary" @click="nextQuizQuestion" :disabled="!canProceedToNextQuestion">
+                          {{ currentQuizQuestion === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
+                        </ion-button>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+                </div>
+                
+                <div v-if="quizCompleted">
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-title>Quiz Results</ion-card-title>
+                      <ion-card-subtitle>Your Score: {{ quizScore }}%</ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
+                      <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+                      
+                      <!-- Detailed Results -->
+                      <div class="quiz-results-details">
+                        <h4>Question Results:</h4>
+                        <ion-list>
+                          <ion-item v-for="(question, index) in quizQuestions" :key="index">
+                            <ion-icon 
+                              :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle" 
+                              :color="isQuestionCorrect(index) ? 'success' : 'danger'"
+                              slot="start"
+                            ></ion-icon>
+                            <ion-label>
+                              <h5>Question {{ index + 1 }}</h5>
+                              <p>{{ question.question }}</p>
+                              <ion-note color="medium">
+                                <strong>Your answer:</strong> {{ formatUserAnswer(index) }} | 
+                                <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              </ion-note>
+                            </ion-label>
+                          </ion-item>
+                        </ion-list>
+                      </div>
+                      
+                      <ion-button expand="block" color="primary" @click="retakeQuiz">
+                        <ion-icon :icon="refresh" slot="start"></ion-icon>
+                        Retake Quiz
+                      </ion-button>
+                    </ion-card-content>
+                  </ion-card>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+          
+          <!-- For other pages, show all content -->
+          <div v-else>
+            <!-- 1. Main Content Card -->
+            <ion-card>
+              <ion-card-content>
+                <p>{{ disabilityContent.description }}</p>
+                
+                <!-- Add key considerations for Visual Needs -->
+                <div v-if="route.params.id === 'physical-disabilities'">
+                  <h4>Key Considerations:</h4>
+                  <ion-list>
+                    <ion-item>
+                      <ion-icon :icon="eyeOutline" slot="start" color="primary"></ion-icon>
+                      <ion-label>Provide materials in accessible formats (large print, audio, digital)</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                      <ion-label>Use descriptive language for all visual content</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="home" slot="start" color="warning"></ion-icon>
+                      <ion-label>Ensure adequate lighting and high contrast in learning environments</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                      <ion-label>Include student in all group activities with appropriate support</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </div>
+              </ion-card-content>
+            </ion-card>
+
+            <!-- Show detailed content only if it exists and has subheadings -->
+            <div v-if="hasSubheadings">
 
           <!-- 2. Language Section -->
-          <ion-card>
+          <ion-card id="language">
             <ion-card-header>
               <ion-card-title>Language</ion-card-title>
               <ion-card-subtitle>Using Respectful and Appropriate Language</ion-card-subtitle>
@@ -53,7 +195,7 @@
                   </ion-item>
                   <div class="ion-padding" slot="content">
                     <ion-list>
-                      <ion-item v-for="(word, index) in disabilityContent.language.wordsToAvoid" :key="index">
+                      <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
                         <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                         <ion-label>
                           <h4>{{ word.term }}</h4>
@@ -86,7 +228,7 @@
           </ion-card>
 
           <!-- 3. Understanding the Learner -->
-        <ion-card>
+        <ion-card id="understanding">
           <ion-card-header>
               <ion-card-title>Understanding the Learner</ion-card-title>
               <ion-card-subtitle>Questions to Support Understanding</ion-card-subtitle>
@@ -156,7 +298,7 @@
           </ion-card>
 
           <!-- 4. Challenges to Learning -->
-          <ion-card>
+          <ion-card id="challenges">
             <ion-card-header>
               <ion-card-title>Challenges to Learning</ion-card-title>
               <ion-card-subtitle>Common Barriers and Difficulties</ion-card-subtitle>
@@ -232,7 +374,7 @@
           </ion-card>
 
           <!-- 5. Enabling Learning -->
-          <ion-card>
+          <ion-card id="enabling">
             <ion-card-header>
               <ion-card-title>Enabling Learning</ion-card-title>
               <ion-card-subtitle>Strategies to Support Success</ion-card-subtitle>
@@ -303,7 +445,7 @@
           </ion-card>
 
           <!-- 6. Resources to Support Learning -->
-          <ion-card>
+          <ion-card id="resources">
             <ion-card-header>
               <ion-card-title>Resources to Support Learning</ion-card-title>
               <ion-card-subtitle>Key Resources and Organizations</ion-card-subtitle>
@@ -377,7 +519,7 @@
           </ion-card>
 
           <!-- 7. Case Study -->
-          <ion-card>
+          <ion-card id="case-study">
             <ion-card-header>
               <ion-card-title>Case Study</ion-card-title>
               <ion-card-subtitle>Real-World Example</ion-card-subtitle>
@@ -404,29 +546,129 @@
           </ion-card>
 
           <!-- 8. Reflective Task -->
-          <ion-card>
+          <ion-card id="reflective-task">
             <ion-card-header>
-              <ion-card-title>Reflective Task</ion-card-title>
-              <ion-card-subtitle>Apply Your Learning</ion-card-subtitle>
+              <ion-card-title>Reflective Writing Journal</ion-card-title>
+              <ion-card-subtitle>Deepen Your Learning Through Reflection</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <ion-list>
-                <ion-item v-for="(task, index) in disabilityContent.reflectiveTasks" :key="index">
-                  <ion-icon :icon="getTaskIcon(index)" slot="start" :color="getTaskColor(index)"></ion-icon>
-                  <ion-label>
-                    <h4>{{ task.title }}</h4>
-                    <p>{{ task.description }}</p>
-                  </ion-label>
-                  <ion-button fill="clear" slot="end" @click="completeTask(index)">
-                    <ion-icon :icon="task.completed ? checkmarkCircle : ellipse"></ion-icon>
-                  </ion-button>
-                </ion-item>
-              </ion-list>
+              <!-- Version Selector -->
+              <ion-item>
+                <ion-label position="stacked">Select Version</ion-label>
+                <ion-select 
+                  v-model="selectedReflectionVersion" 
+                  interface="popover" 
+                  placeholder="Choose version"
+                  @ionChange="loadReflectionVersion"
+                >
+                  <ion-select-option 
+                    v-for="version in reflectionVersions" 
+                    :key="version.id" 
+                    :value="version.id"
+                  >
+                    {{ version.name }} ({{ version.lastModified }})
+                  </ion-select-option>
+                </ion-select>
+                <ion-button fill="clear" slot="end" @click="createNewVersion">
+                  <ion-icon :icon="add"></ion-icon>
+                </ion-button>
+              </ion-item>
+
+              <!-- Reflection Prompts -->
+              <div class="reflection-section">
+                <h4>
+                  <ion-icon :icon="helpCircle" slot="start" color="primary"></ion-icon>
+                  Case Study Reflection
+                </h4>
+                <p class="reflection-prompt">
+                  Based on the case study you've read, consider how you would apply similar strategies in your own context. 
+                  What specific adaptations would you make? What challenges might you face and how would you address them?
+                </p>
+                <ion-textarea
+                  v-model="currentReflection.caseStudyReflection"
+                  placeholder="Reflect on how you would adapt the case study strategies to your own teaching context..."
+                  :rows="6"
+                  :auto-grow="true"
+                  :maxlength="2000"
+                  :counter="true"
+                  class="reflection-textarea"
+                  @ionInput="autoSaveReflection"
+                ></ion-textarea>
+              </div>
+
+              <div class="reflection-section">
+                <h4>
+                  <ion-icon :icon="bulb" slot="start" color="secondary"></ion-icon>
+                  Practice Reflection
+                </h4>
+                <p class="reflection-prompt">
+                  Think about your current teaching practice. What aspects of your approach could be made more accessible 
+                  for students with visual needs? What barriers might exist and how could you remove them?
+                </p>
+                <ion-textarea
+                  v-model="currentReflection.practiceReflection"
+                  placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
+                  :rows="6"
+                  :auto-grow="true"
+                  :maxlength="2000"
+                  :counter="true"
+                  class="reflection-textarea"
+                  @ionInput="autoSaveReflection"
+                ></ion-textarea>
+              </div>
+
+              <div class="reflection-section">
+                <h4>
+                  <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                  Next Steps Action Plan
+                </h4>
+                <p class="reflection-prompt">
+                  Based on your reflections, what specific actions will you take to improve your practice? 
+                  Set concrete, achievable goals with timelines for implementation.
+                </p>
+                <ion-textarea
+                  v-model="currentReflection.nextSteps"
+                  placeholder="Outline your specific action plan with timelines and measurable goals..."
+                  :rows="6"
+                  :auto-grow="true"
+                  :maxlength="2000"
+                  :counter="true"
+                  class="reflection-textarea"
+                  @ionInput="autoSaveReflection"
+                ></ion-textarea>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="reflection-actions">
+                <ion-button expand="block" color="primary" @click="saveReflection">
+                  <ion-icon :icon="save" slot="start"></ion-icon>
+                  Save Reflection
+                </ion-button>
+                
+                <ion-button expand="block" fill="outline" color="secondary" @click="exportReflection">
+                  <ion-icon :icon="download" slot="start"></ion-icon>
+                  Export as PDF
+                </ion-button>
+                
+                <ion-button expand="block" fill="outline" color="warning" @click="clearReflection">
+                  <ion-icon :icon="trash" slot="start"></ion-icon>
+                  Clear All
+                </ion-button>
+              </div>
+
+              <!-- Progress Indicator -->
+              <div class="reflection-progress">
+                <ion-progress-bar 
+                  :value="reflectionProgress" 
+                  color="success"
+                ></ion-progress-bar>
+                <ion-note>{{ Math.round(reflectionProgress * 100) }}% Complete</ion-note>
+              </div>
             </ion-card-content>
           </ion-card>
 
           <!-- 9. Quiz -->
-          <ion-card>
+          <ion-card id="knowledge-check">
             <ion-card-header>
               <ion-card-title>Knowledge Check</ion-card-title>
               <ion-card-subtitle>Test Your Understanding</ion-card-subtitle>
@@ -441,15 +683,60 @@
                   <ion-card-content>
                     <h4>{{ quizQuestions[currentQuizQuestion].question }}</h4>
                     
-                    <ion-radio-group v-model="currentQuizAnswer">
-                      <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
-                        <ion-radio :value="option.value" slot="start"></ion-radio>
-                        <ion-label>{{ option.text }}</ion-label>
-                      </ion-item>
-                    </ion-radio-group>
+                    <!-- Multiple Choice Questions -->
+                    <div v-if="!quizQuestions[currentQuizQuestion].type || quizQuestions[currentQuizQuestion].type === 'multiple-choice'">
+                      <ion-radio-group v-model="currentQuizAnswer">
+                        <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
+                          <ion-radio :value="option.value" slot="start"></ion-radio>
+                          <ion-label>{{ option.text }}</ion-label>
+                        </ion-item>
+                      </ion-radio-group>
+                    </div>
+                    
+                    <!-- True/False Questions -->
+                    <div v-else-if="quizQuestions[currentQuizQuestion].type === 'true-false'">
+                      <ion-radio-group v-model="currentQuizAnswer">
+                        <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
+                          <ion-radio :value="option.value" slot="start"></ion-radio>
+                          <ion-label>{{ option.text }}</ion-label>
+                        </ion-item>
+                      </ion-radio-group>
+                    </div>
+                    
+                    <!-- Matching Questions -->
+                    <div v-else-if="quizQuestions[currentQuizQuestion].type === 'matching'">
+                      <div class="matching-instructions">
+                        <ion-note color="primary">
+                          <strong>Instructions:</strong> Match each communication support strategy (A, B, C) with its correct purpose (1, 2, 3) using the dropdown menus.
+                        </ion-note>
+                      </div>
+                      <ion-list>
+                        <ion-item v-for="strategy in quizQuestions[currentQuizQuestion].strategies" :key="strategy.id" class="matching-item">
+                          <ion-label>
+                            <h4><strong>{{ strategy.id }}.</strong> {{ strategy.text }}</h4>
+                          </ion-label>
+                          <ion-select 
+                            v-model="matchingAnswers[strategy.id]" 
+                            interface="popover" 
+                            placeholder="Select purpose"
+                            :value="matchingAnswers[strategy.id]"
+                            class="matching-select"
+                          >
+                            <ion-select-option value="">Select purpose</ion-select-option>
+                            <ion-select-option 
+                              v-for="purpose in quizQuestions[currentQuizQuestion].purposes" 
+                              :key="purpose.id" 
+                              :value="purpose.id"
+                            >
+                              {{ purpose.id }}. {{ purpose.text }}
+                            </ion-select-option>
+                          </ion-select>
+                        </ion-item>
+                      </ion-list>
+                    </div>
                     
                     <div class="ion-padding-top">
-                      <ion-button expand="block" color="primary" @click="nextQuizQuestion" :disabled="!currentQuizAnswer">
+                      <ion-button expand="block" color="primary" @click="nextQuizQuestion" :disabled="!currentQuizAnswer && quizQuestions[currentQuizQuestion].type !== 'matching'">
                         {{ currentQuizQuestion === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
                       </ion-button>
                     </div>
@@ -476,24 +763,30 @@
               </div>
             </ion-card-content>
           </ion-card>
-            </div>
-            
-            <div v-else>
-          <ion-card>
-            <ion-card-content>
-              <ion-spinner name="crescent"></ion-spinner>
-              <p>Content for {{ getPageTitle() }} is coming soon...</p>
-          </ion-card-content>
-        </ion-card>
+
+
+
+
+            </div> <!-- End of detailed content conditional -->
         </div>
       </div>
-    </ion-content>
-  </ion-page>
+      
+      <div v-else>
+        <ion-card>
+          <ion-card-content>
+            <ion-spinner name="crescent"></ion-spinner>
+            <p>Content for {{ getPageTitle() }} is coming soon...</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </ion-content>
+</ion-page>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { 
   IonButtons, 
   IonContent, 
@@ -530,9 +823,11 @@ import {
   IonCol,
   IonAccordionGroup,
   IonAccordion,
-  actionSheetController,
-  toastController
+  IonSelect,
+  IonSelectOption,
+  IonTextarea
 } from '@ionic/vue';
+import { actionSheetController, toastController } from '@ionic/vue';
 import { 
   documentOutline,
   videocamOutline,
@@ -563,10 +858,139 @@ import {
   home,
   laptop,
   business,
-  mail
+  mail,
+  eyeOutline,
+  chatbubbleOutline,
+  save,
+  trash,
+  arrowForward
 } from 'ionicons/icons';
 
 const route = useRoute();
+
+// Reflective Writing State
+const selectedReflectionVersion = ref('current');
+const reflectionVersions = ref([
+  {
+    id: 'current',
+    name: 'Current Session',
+    lastModified: new Date().toLocaleDateString()
+  }
+]);
+
+const currentReflection = ref({
+  caseStudyReflection: '',
+  practiceReflection: '',
+  nextSteps: ''
+});
+
+const reflectionProgress = computed(() => {
+  const totalFields = 3;
+  const completedFields = [
+    currentReflection.value.caseStudyReflection.trim(),
+    currentReflection.value.practiceReflection.trim(),
+    currentReflection.value.nextSteps.trim()
+  ].filter(field => field.length > 0).length;
+  
+  return completedFields / totalFields;
+});
+
+// Auto-save functionality with debouncing
+let autoSaveTimeout: ReturnType<typeof setTimeout> | null = null;
+const autoSaveReflection = () => {
+  // Clear existing timeout
+  if (autoSaveTimeout) {
+    clearTimeout(autoSaveTimeout);
+  }
+  
+  // Set new timeout for debounced save
+  autoSaveTimeout = setTimeout(() => {
+    try {
+      saveReflectionToStorage();
+      console.log('Auto-saved reflection');
+    } catch (e) {
+      console.error('Error auto-saving reflection:', e);
+    }
+  }, 1000);
+};
+
+// Check for stored anchor to scroll to after page load
+onMounted(() => {
+  console.log('DisabilityPage mounted, loading reflections...');
+  
+  // Load existing reflection versions from localStorage
+  loadExistingReflectionVersions();
+  console.log('Reflection loading completed');
+  
+  // Handle anchor scrolling after a delay to ensure DOM is ready
+  const storedAnchor = sessionStorage.getItem('scrollToAnchor');
+  if (storedAnchor) {
+    setTimeout(() => {
+      try {
+        if (typeof window !== 'undefined' && window.document) {
+          const element = window.document.getElementById(storedAnchor);
+          if (element) {
+            const cardHeader = element.querySelector('ion-card-header');
+            const targetElement = cardHeader || element;
+            
+            targetElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
+          }
+        }
+      } catch (e) {
+        console.error('Error scrolling to anchor:', e);
+      }
+      sessionStorage.removeItem('scrollToAnchor');
+    }, 1000);
+  }
+});
+
+const loadExistingReflectionVersions = () => {
+  const pageId = route.params.id;
+  console.log('Loading reflections for page:', pageId);
+  
+  const savedVersions = localStorage.getItem(`sage-reflection-versions-${pageId}`);
+  if (savedVersions) {
+    try {
+      reflectionVersions.value = JSON.parse(savedVersions);
+      console.log('Loaded reflection versions:', reflectionVersions.value);
+    } catch (e) {
+      console.error('Error loading reflection versions:', e);
+      reflectionVersions.value = [
+        {
+          id: 'current',
+          name: 'Current Session',
+          lastModified: new Date().toLocaleDateString()
+        }
+      ];
+    }
+  } else {
+    console.log('No saved versions found, using default');
+  }
+  
+  // Load current reflection if it exists
+  const currentVersion = reflectionVersions.value.find(v => v.id === selectedReflectionVersion.value);
+  if (currentVersion) {
+    const savedReflection = localStorage.getItem(`sage-reflection-${pageId}-${currentVersion.id}`);
+    if (savedReflection) {
+      try {
+        currentReflection.value = JSON.parse(savedReflection);
+        console.log('Loaded current reflection:', currentReflection.value);
+      } catch (e) {
+        console.error('Error loading current reflection:', e);
+        currentReflection.value = {
+          caseStudyReflection: '',
+          practiceReflection: '',
+          nextSteps: ''
+        };
+      }
+    } else {
+      console.log('No saved reflection found for current version, using empty defaults');
+    }
+  }
+};
 
 // State variables
 const selectedUnderstandingSection = ref('strengths');
@@ -575,6 +999,21 @@ const currentQuizQuestion = ref(0);
 const currentQuizAnswer = ref('');
 const quizCompleted = ref(false);
 const quizScore = ref(0);
+const matchingAnswers = ref<{ [key: string]: string }>({});
+const quizAnswers = ref<{ [key: number]: string | { [key: string]: string } }>({});
+
+// Computed property to check if user can proceed to next question
+const canProceedToNextQuestion = computed(() => {
+  const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
+  
+  if (currentQuestion.type === 'matching' && currentQuestion.strategies) {
+    // Check if all strategies have been matched
+    return currentQuestion.strategies.every(strategy => matchingAnswers.value[strategy.id]);
+  }
+  
+  // For other question types, check if an answer is selected
+  return !!currentQuizAnswer.value;
+});
 
 // Comprehensive disability content data following the specified structure
 const disabilityData = {
@@ -847,56 +1286,145 @@ const disabilityData = {
 };
 
 // Quiz questions for each disability
-const quizQuestions = ref([
-  {
-    question: "What is the most important consideration when supporting students with this disability?",
-    options: [
-      { value: 'a', text: 'Providing extra time for all activities' },
-      { value: 'b', text: 'Understanding individual needs and preferences' },
-      { value: 'c', text: 'Using the same approach for all students' },
-      { value: 'd', text: 'Focusing only on academic performance' }
-    ]
-  },
-  {
-    question: "Which strategy is most effective for this disability category?",
-    options: [
-      { value: 'a', text: 'Standardized testing' },
-      { value: 'b', text: 'Flexible learning approaches' },
-      { value: 'c', text: 'Strict deadlines' },
-      { value: 'd', text: 'One-size-fits-all instruction' }
-    ]
-  },
-  {
-    question: "What should you avoid when working with students with this disability?",
-    options: [
-      { value: 'a', text: 'Making assumptions about their capabilities' },
-      { value: 'b', text: 'Providing clear instructions' },
-      { value: 'c', text: 'Offering multiple ways to demonstrate learning' },
-      { value: 'd', text: 'Using assistive technologies' }
-    ]
-  },
-  {
-    question: "How should you approach language when discussing this disability?",
-    options: [
-      { value: 'a', text: 'Use medical terminology only' },
-      { value: 'b', text: 'Use person-first language and respect individual preferences' },
-      { value: 'c', text: 'Use outdated terms if they are commonly understood' },
-      { value: 'd', text: 'Avoid discussing the disability altogether' }
-    ]
-  },
-  {
-    question: "What is the best way to support self-advocacy for students with this disability?",
-    options: [
-      { value: 'a', text: 'Make all decisions for them' },
-      { value: 'b', text: 'Encourage them to express their needs and preferences' },
-      { value: 'c', text: 'Ignore their input to maintain authority' },
-      { value: 'd', text: 'Assume you know what they need' }
-    ]
+const quizQuestions = computed(() => {
+  const id = route.params.id as string;
+  
+  if (id === 'communication') {
+    return [
+      {
+        question: "Which of the following is the most inclusive way to describe a learner who does not use speech?",
+        options: [
+          { value: 'a', text: 'Mute' },
+          { value: 'b', text: 'Non-verbal' },
+          { value: 'c', text: 'Can\'t communicate' },
+          { value: 'd', text: 'Non-speaking' }
+        ],
+        correctAnswer: 'd'
+      },
+      {
+        question: "Students with communication needs always experience the same challenges at home and school.",
+        type: 'true-false',
+        options: [
+          { value: 'true', text: 'True' },
+          { value: 'false', text: 'False' }
+        ],
+        correctAnswer: 'false'
+      },
+      {
+        question: "Match the communication support strategy to its purpose:",
+        type: 'matching',
+        strategies: [
+          { id: 'A', text: 'Visual timetable' },
+          { id: 'B', text: 'Clear seating plan' },
+          { id: 'C', text: 'Noise-cancelling headphones' }
+        ],
+        purposes: [
+          { id: '1', text: 'Reduce sensory input to support regulation' },
+          { id: '2', text: 'Help understand daily structure and transitions' },
+          { id: '3', text: 'Support concentration and communication access' }
+        ],
+        correctAnswers: { 'A': '2', 'B': '3', 'C': '1' } as { [key: string]: string }
+      },
+      {
+        question: "Children who cannot speak cannot learn.",
+        type: 'true-false',
+        options: [
+          { value: 'true', text: 'True' },
+          { value: 'false', text: 'False' }
+        ],
+        correctAnswer: 'false'
+      },
+      {
+        question: "Which of the following best describes a 'total communication approach'?",
+        options: [
+          { value: 'a', text: 'Only using speech and writing in the classroom' },
+          { value: 'b', text: 'Encouraging all students to use sign language' },
+          { value: 'c', text: 'Supporting and valuing multiple communication methods (e.g., symbols, AAC, gestures, speech)' },
+          { value: 'd', text: 'Limiting communication to one consistent method per student' }
+        ],
+        correctAnswer: 'c'
+      }
+    ];
   }
-]);
+  
+  // Default quiz questions for other pages
+  return [
+    {
+      question: "What is the most important consideration when supporting students with this disability?",
+      options: [
+        { value: 'a', text: 'Providing extra time for all activities' },
+        { value: 'b', text: 'Understanding individual needs and preferences' },
+        { value: 'c', text: 'Using the same approach for all students' },
+        { value: 'd', text: 'Focusing only on academic performance' }
+      ],
+      correctAnswer: 'b'
+    },
+    {
+      question: "Which strategy is most effective for this disability category?",
+      options: [
+        { value: 'a', text: 'Standardized testing' },
+        { value: 'b', text: 'Flexible learning approaches' },
+        { value: 'c', text: 'Strict deadlines' },
+        { value: 'd', text: 'One-size-fits-all instruction' }
+      ],
+      correctAnswer: 'b'
+    },
+    {
+      question: "What should you avoid when working with students with this disability?",
+      options: [
+        { value: 'a', text: 'Making assumptions about their capabilities' },
+        { value: 'b', text: 'Providing clear instructions' },
+        { value: 'c', text: 'Offering multiple ways to demonstrate learning' },
+        { value: 'd', text: 'Using assistive technologies' }
+      ],
+      correctAnswer: 'a'
+    },
+    {
+      question: "How should you approach language when discussing this disability?",
+      options: [
+        { value: 'a', text: 'Use medical terminology only' },
+        { value: 'b', text: 'Use person-first language and respect individual preferences' },
+        { value: 'c', text: 'Use outdated terms if they are commonly understood' },
+        { value: 'd', text: 'Avoid discussing the disability altogether' }
+      ],
+      correctAnswer: 'b'
+    },
+    {
+      question: "What is the best way to support self-advocacy for students with this disability?",
+      options: [
+        { value: 'a', text: 'Make all decisions for them' },
+        { value: 'b', text: 'Encourage them to express their needs and preferences' },
+        { value: 'c', text: 'Ignore their input to maintain authority' },
+        { value: 'd', text: 'Assume you know what they need' }
+      ],
+      correctAnswer: 'b'
+    }
+  ];
+});
 
 const getPageTitle = () => {
   const id = route.params.id as string;
+  if (id === 'physical-disabilities') {
+    return 'Visual Needs';
+  }
+  if (id === 'hearing-needs') {
+    return 'Hearing Needs';
+  }
+  if (id === 'physical-sensory-needs') {
+    return 'Physical and Sensory Needs';
+  }
+  if (id === 'cognitive-intellectual-needs') {
+    return 'Cognitive and Intellectual Needs';
+  }
+  if (id === 'speech-language-needs') {
+    return 'Speech and Language Needs';
+  }
+  if (id === 'communication') {
+    return 'Communication';
+  }
+  if (id === 'multiple-disabilities') {
+    return 'Multiple Disabilities';
+  }
   return disabilityData[id as keyof typeof disabilityData]?.title || id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
@@ -905,15 +1433,557 @@ const getCategoryTitle = () => {
   return disabilityData[id as keyof typeof disabilityData]?.category || 'Disability Category';
 };
 
+const hasSubheadings = computed(() => {
+  const id = route.params.id as string;
+  // Pages with subheadings: physical-disabilities (Visual Needs), communication
+  // Pages without subheadings: hearing-needs, physical-sensory-needs, cognitive-intellectual-needs, speech-language-needs, multiple-disabilities
+  return id === 'physical-disabilities' || id === 'communication';
+});
+
 const disabilityContent = computed(() => {
   const id = route.params.id as string;
-  return disabilityData[id as keyof typeof disabilityData] || null;
+  if (id === 'hearing-needs') {
+    return {
+      title: 'Hearing Needs',
+      category: 'Hearing Needs',
+      description: 'Content for Hearing Needs is coming soon...',
+      language: {
+        wordsToAvoid: [],
+        wordsToUse: []
+      },
+      understanding: {
+        strengths: [],
+        challenges: [],
+        strategies: [],
+        advocacy: []
+      },
+      challenges: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      enabling: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      resources: {
+        electronic: [],
+        paper: [],
+        organizations: []
+      },
+      caseStudy: {
+        title: '',
+        scenario: '',
+        details: [],
+        learningPoints: []
+      },
+      reflectiveTasks: []
+    };
+  }
+  if (id === 'physical-sensory-needs') {
+    return {
+      title: 'Physical and Sensory Needs',
+      category: 'Physical and Sensory Needs',
+      description: 'Content for Physical and Sensory Needs is coming soon...',
+      language: {
+        wordsToAvoid: [],
+        wordsToUse: []
+      },
+      understanding: {
+        strengths: [],
+        challenges: [],
+        strategies: [],
+        advocacy: []
+      },
+      challenges: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      enabling: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      resources: {
+        electronic: [],
+        paper: [],
+        organizations: []
+      },
+      caseStudy: {
+        title: '',
+        scenario: '',
+        details: [],
+        learningPoints: []
+      },
+      reflectiveTasks: []
+    };
+  }
+  if (id === 'cognitive-intellectual-needs') {
+    return {
+      title: 'Cognitive and Intellectual Needs',
+      category: 'Cognitive and Intellectual Needs',
+      description: 'Content for Cognitive and Intellectual Needs is coming soon...',
+      language: {
+        wordsToAvoid: [],
+        wordsToUse: []
+      },
+      understanding: {
+        strengths: [],
+        challenges: [],
+        strategies: [],
+        advocacy: []
+      },
+      challenges: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      enabling: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      resources: {
+        electronic: [],
+        paper: [],
+        organizations: []
+      },
+      caseStudy: {
+        title: '',
+        scenario: '',
+        details: [],
+        learningPoints: []
+      },
+      reflectiveTasks: []
+    };
+  }
+  if (id === 'speech-language-needs') {
+    return {
+      title: 'Speech and Language Needs',
+      category: 'Speech and Language Needs',
+      description: 'Content for Speech and Language Needs is coming soon...',
+      language: {
+        wordsToAvoid: [],
+        wordsToUse: []
+      },
+      understanding: {
+        strengths: [],
+        challenges: [],
+        strategies: [],
+        advocacy: []
+      },
+      challenges: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      enabling: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      resources: {
+        electronic: [],
+        paper: [],
+        organizations: []
+      },
+      caseStudy: {
+        title: '',
+        scenario: '',
+        details: [],
+        learningPoints: []
+      },
+      reflectiveTasks: []
+    };
+  }
+  if (id === 'multiple-disabilities') {
+    return {
+      title: 'Multiple Disabilities',
+      category: 'Multiple Disabilities',
+      description: 'Content for Multiple Disabilities is coming soon...',
+      language: {
+        wordsToAvoid: [],
+        wordsToUse: []
+      },
+      understanding: {
+        strengths: [],
+        challenges: [],
+        strategies: [],
+        advocacy: []
+      },
+      challenges: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      enabling: {
+        physical: [],
+        social: [],
+        tasks: [],
+        assessment: []
+      },
+      resources: {
+        electronic: [],
+        paper: [],
+        organizations: []
+      },
+      caseStudy: {
+        title: '',
+        scenario: '',
+        details: [],
+        learningPoints: []
+      },
+      reflectiveTasks: []
+    };
+  }
+  if (id === 'communication') {
+    // Return content structure for the communication page
+    return {
+      title: 'Communication',
+      category: 'Communication & Interaction',
+      description: 'Communication disabilities encompass a range of conditions that may affect speech, language, and social interaction. This guide provides information and strategies for supporting students with communication needs.',
+      language: {
+        wordsToAvoid: [
+          { term: 'Handicapped', reason: 'Outdated and offensive term' },
+          { term: 'Crippled', reason: 'Derogatory and inappropriate' },
+          { term: 'Disabled person', reason: 'Person-first language is preferred' }
+        ],
+        wordsToUse: [
+          { term: 'Student with communication needs', explanation: 'Person-first language that respects individual identity' },
+          { term: 'Non-speaking student', explanation: 'Respectful term for students who do not use speech' },
+          { term: 'Student with communication differences', explanation: 'Emphasizes diversity rather than deficits' }
+        ]
+      },
+      understanding: {
+        strengths: [
+          'What communication methods work best for you?',
+          'How do you prefer to express your thoughts and ideas?',
+          'What assistive communication technologies do you use?',
+          'Which social situations do you find most comfortable?'
+        ],
+        challenges: [
+          'What communication barriers do you face in learning environments?',
+          'How do you prefer to receive information and instructions?',
+          'What social situations are most challenging for you?',
+          'How do you handle group discussions and presentations?'
+        ],
+        strategies: [
+          'What communication support strategies have been most helpful?',
+          'How do you prefer to participate in classroom activities?',
+          'What environmental factors help or hinder your communication?',
+          'Which technologies or tools support your communication best?'
+        ],
+        advocacy: [
+          'I need alternative ways to communicate my ideas',
+          'Please provide written instructions and information',
+          'I prefer to participate in discussions in smaller groups',
+          'I need extra time to process and respond to questions'
+        ]
+      },
+      challenges: {
+        physical: [
+          'Limited access to assistive communication technologies',
+          'Inadequate seating arrangements for communication devices',
+          'Poor acoustics and background noise in classrooms',
+          'Inaccessible communication tools and materials'
+        ],
+        social: [
+          'Difficulty participating in group discussions and activities',
+          'Potential isolation from peer interactions',
+          'Misunderstandings about communication abilities',
+          'Limited opportunities for social communication practice'
+        ],
+        tasks: [
+          'Completing oral presentations and assessments',
+          'Participating in classroom discussions',
+          'Accessing verbal instructions and information',
+          'Communicating needs and preferences effectively'
+        ],
+        assessment: [
+          'Standard assessment formats may not accommodate communication needs',
+          'Oral components in assessments create barriers',
+          'Limited access to communication accommodations during testing',
+          'Difficulty with verbal presentation requirements'
+        ]
+      },
+      enabling: {
+        physical: [
+          'Provide access to assistive communication technologies',
+          'Create quiet, distraction-free communication spaces',
+          'Ensure proper seating and positioning for communication devices',
+          'Use visual supports and written materials'
+        ],
+        social: [
+          'Include student in all activities with appropriate communication support',
+          'Provide alternative ways to participate in group work',
+          'Encourage peer support and understanding',
+          'Create opportunities for successful social interactions'
+        ],
+        tasks: [
+          'Offer multiple ways to demonstrate understanding and knowledge',
+          'Provide written alternatives for oral assignments',
+          'Allow extra time for communication and responses',
+          'Use visual aids and written instructions'
+        ],
+        assessment: [
+          'Offer alternative assessment formats and methods',
+          'Provide communication accommodations during assessment',
+          'Allow use of assistive technologies during testing',
+          'Focus on content mastery rather than communication method'
+        ]
+      },
+      resources: {
+        electronic: [
+          { title: 'Communication Support Guidelines', description: 'Comprehensive guide to supporting communication needs', url: 'www.communicationmatters.org.uk' },
+          { title: 'Assistive Communication Technology', description: 'Guide to AAC devices and communication tools', url: 'www.isaac-online.org' },
+          { title: 'Inclusive Communication Resources', description: 'Resources for creating inclusive communication environments', url: 'www.inclusive-communication.org' }
+        ],
+        paper: [
+          { title: 'Communication Support Handbook', description: 'Printed guide to supporting communication needs in education', availability: 'Available from speech and language services' },
+          { title: 'AAC Device Catalog', description: 'Catalog of available augmentative and alternative communication devices', availability: 'Contact communication support services' }
+        ],
+        organizations: [
+          { name: 'Communication Matters', description: 'UK organization supporting people with communication needs', contact: 'www.communicationmatters.org.uk' },
+          { name: 'ISAAC', description: 'International Society for Augmentative and Alternative Communication', contact: 'www.isaac-online.org' }
+        ]
+      },
+      caseStudy: {
+        title: 'Supporting a Non-Speaking Student in Mainstream Education',
+        scenario: 'A student with cerebral palsy who uses a communication device joins a mainstream secondary school and needs support to participate fully in all aspects of learning.',
+        details: [
+          'Student uses an eye-gaze communication device for expression',
+          'Requires support to access and use communication technology',
+          'Needs visual supports and written materials for comprehension',
+          'Benefits from peer support and inclusive communication strategies'
+        ],
+        learningPoints: [
+          'Communication technology enables full participation in learning',
+          'Visual supports enhance understanding and engagement',
+          'Peer support creates inclusive communication environments',
+          'Multiple communication methods support diverse learning needs'
+        ]
+      },
+      reflectiveTasks: [
+        {
+          title: 'Assess Communication Environment',
+          description: 'Review your learning environment for communication accessibility',
+          completed: false
+        },
+        {
+          title: 'Explore Communication Technologies',
+          description: 'Research available assistive communication technologies',
+          completed: false
+        },
+        {
+          title: 'Plan Inclusive Communication',
+          description: 'Design activities that include students with communication needs',
+          completed: false
+        }
+      ]
+    };
+  }
+  if (id === 'physical-disabilities') {
+    // Return a default content structure for the visual needs page
+    return {
+      title: 'Visual Needs',
+      category: 'Visual Needs',
+      description: 'Visual needs encompass a range of conditions that may affect vision, sensory functions, or visual capabilities. This comprehensive guide provides information and strategies for supporting students with various visual needs.',
+      language: {
+        wordsToAvoid: [
+          { term: 'Handicapped', reason: 'Outdated and offensive term' },
+          { term: 'Crippled', reason: 'Derogatory and inappropriate' },
+          { term: 'Disabled person', reason: 'Person-first language is preferred' }
+        ],
+        wordsToUse: [
+          { term: 'Student with a physical disability', explanation: 'Person-first language that respects individual identity' },
+          { term: 'Student with mobility needs', explanation: 'Focuses on accommodation needs rather than limitations' },
+          { term: 'Student with physical access requirements', explanation: 'Clear description of specific needs' }
+        ]
+      },
+      understanding: {
+        strengths: [
+          'What are your strongest learning methods?',
+          'Which activities do you enjoy and feel confident doing?',
+          'What assistive technologies work best for you?',
+          'How do you prefer to receive information?'
+        ],
+        challenges: [
+          'What physical barriers do you face in learning environments?',
+          'Which tasks require the most physical effort?',
+          'What environmental factors affect your learning?',
+          'How do you currently navigate physical spaces?'
+        ],
+        strategies: [
+          'What support strategies have been most helpful in the past?',
+          'How do you prefer to access learning materials?',
+          'What environmental adjustments make learning easier?',
+          'Which technologies or tools do you find most useful?'
+        ],
+        advocacy: [
+          'I need accessible learning environments',
+          'Please provide materials in accessible formats',
+          'I require additional time for physical tasks',
+          'I need adaptive equipment and technologies'
+        ]
+      },
+      challenges: {
+        physical: [
+          'Inaccessible learning environments and facilities',
+          'Limited access to adaptive equipment and technologies',
+          'Physical barriers in classrooms and common areas',
+          'Inadequate seating and workspace accommodations'
+        ],
+        social: [
+          'Difficulty participating in physical group activities',
+          'Potential isolation from peers during physical tasks',
+          'Misunderstandings about capabilities and needs',
+          'Limited access to social spaces and activities'
+        ],
+        tasks: [
+          'Completing physical assignments and projects',
+          'Accessing learning materials and resources',
+          'Participating in hands-on learning activities',
+          'Managing time for physical tasks and transitions'
+        ],
+        assessment: [
+          'Standard assessment formats may not be accessible',
+          'Physical components in assessments create barriers',
+          'Limited access to assessment accommodations',
+          'Difficulty with physical presentation requirements'
+        ]
+      },
+      enabling: {
+        physical: [
+          'Ensure physical accessibility of all learning spaces',
+          'Provide adaptive equipment and assistive technologies',
+          'Create clear pathways and remove physical barriers',
+          'Offer flexible seating and workspace arrangements'
+        ],
+        social: [
+          'Include student in all activities with appropriate support',
+          'Provide alternative ways to participate in group work',
+          'Encourage peer support and collaboration',
+          'Foster understanding and inclusion among classmates'
+        ],
+        tasks: [
+          'Provide materials in accessible formats',
+          'Offer alternative ways to complete physical tasks',
+          'Allow additional time for physical activities',
+          'Use adaptive technologies and equipment'
+        ],
+        assessment: [
+          'Offer alternative assessment formats and methods',
+          'Provide physical accommodations during assessment',
+          'Allow use of assistive technologies during testing',
+          'Focus on content mastery rather than physical presentation'
+        ]
+      },
+      resources: {
+        electronic: [
+          { title: 'Accessibility Guidelines', description: 'Comprehensive accessibility standards and guidelines', url: 'www.w3.org/WAI' },
+          { title: 'Assistive Technology Guide', description: 'Guide to assistive technologies for physical disabilities', url: 'www.abilitynet.org.uk' },
+          { title: 'Accessible Design Resources', description: 'Resources for creating accessible learning environments', url: 'www.inclusive-design.org' }
+        ],
+        paper: [
+          { title: 'Physical Accessibility Handbook', description: 'Printed guide to physical accessibility in education', availability: 'Available from disability services' },
+          { title: 'Adaptive Equipment Catalog', description: 'Catalog of available adaptive equipment and tools', availability: 'Contact disability services office' }
+        ],
+        organizations: [
+          { name: 'Disability Rights UK', description: 'National organization advocating for disability rights', contact: 'www.disabilityrightsuk.org' },
+          { name: 'Scope', description: 'Charity supporting people with physical disabilities', contact: 'www.scope.org.uk' }
+        ]
+      },
+      caseStudy: {
+        title: 'Supporting a Student with Physical Mobility Needs',
+        scenario: 'A student with cerebral palsy joins a mainstream secondary school and needs support to access all aspects of the curriculum.',
+        details: [
+          'Student uses a wheelchair and has limited hand mobility',
+          'Requires accessible classrooms and facilities',
+          'Needs adaptive equipment for writing and computer use',
+          'Benefits from peer support and inclusive activities'
+        ],
+        learningPoints: [
+          'Physical accessibility is essential for full participation',
+          'Adaptive technologies can enable independent learning',
+          'Peer support enhances social inclusion and learning',
+          'Flexible approaches accommodate diverse physical needs'
+        ]
+      },
+      reflectiveTasks: [
+        {
+          title: 'Assess Your Environment',
+          description: 'Review your learning environment for physical accessibility',
+          completed: false
+        },
+        {
+          title: 'Explore Assistive Technologies',
+          description: 'Research available assistive technologies for physical disabilities',
+          completed: false
+        },
+        {
+          title: 'Plan Inclusive Activities',
+          description: 'Design activities that include students with physical disabilities',
+          completed: false
+        }
+      ]
+    };
+  }
+  return disabilityData[id as keyof typeof disabilityData] || {
+    title: getPageTitle(),
+    category: 'Disability Category',
+    description: 'Content for this disability category is coming soon...',
+    language: {
+      wordsToAvoid: [],
+      wordsToUse: []
+    },
+    understanding: {
+      strengths: [],
+      challenges: [],
+      strategies: [],
+      advocacy: []
+    },
+    challenges: {
+      physical: [],
+      social: [],
+      tasks: [],
+      assessment: []
+    },
+    enabling: {
+      physical: [],
+      social: [],
+      tasks: [],
+      assessment: []
+    },
+    resources: {
+      electronic: [],
+      paper: [],
+      organizations: []
+    },
+    caseStudy: {
+      title: '',
+      scenario: '',
+      details: [],
+      learningPoints: []
+    },
+    reflectiveTasks: []
+  };
 });
 
 const getDisabilityColor = () => {
   const category = getCategoryTitle();
   const colors: { [key: string]: string } = {
-    'Physical Disabilities': 'primary',
+    'Visual Needs': 'primary',
     'Cognition & Learning': 'secondary',
     'Communication & Interaction': 'tertiary',
     'Multiple Impairments': 'warning'
@@ -924,7 +1994,7 @@ const getDisabilityColor = () => {
 const getDisabilityIcon = () => {
   const category = getCategoryTitle();
   const icons: { [key: string]: string } = {
-    'Physical Disabilities': 'body-outline',
+    'Visual Needs': 'body-outline',
     'Cognition & Learning': 'bulb-outline',
     'Communication & Interaction': 'chatbubble-outline',
     'Multiple Impairments': 'medical-outline'
@@ -983,17 +2053,194 @@ const downloadResource = (resource: any) => {
   console.log(`Downloading resource: ${resource.title}`);
 };
 
+// Reflective Writing Functions
+const createNewVersion = () => {
+  // Save current reflection to localStorage before creating new version
+  saveReflectionToStorage();
+  
+  const newVersion = {
+    id: `version-${Date.now()}`,
+    name: `Version ${reflectionVersions.value.length + 1}`,
+    lastModified: new Date().toLocaleDateString()
+  };
+  reflectionVersions.value.push(newVersion);
+  selectedReflectionVersion.value = newVersion.id;
+  
+  // Clear current reflection for new version
+  currentReflection.value = {
+    caseStudyReflection: '',
+    practiceReflection: '',
+    nextSteps: ''
+  };
+  
+  console.log('Created new version:', newVersion.id);
+};
+
+const loadReflectionVersion = () => {
+  const version = reflectionVersions.value.find(v => v.id === selectedReflectionVersion.value);
+  if (version) {
+    const pageId = route.params.id;
+    console.log('Loading reflection for version:', version.id);
+    const savedReflection = localStorage.getItem(`sage-reflection-${pageId}-${version.id}`);
+    if (savedReflection) {
+      try {
+        currentReflection.value = JSON.parse(savedReflection);
+        console.log('Loaded reflection for version:', version.id, currentReflection.value);
+      } catch (e) {
+        console.error('Error loading reflection version:', e);
+        currentReflection.value = {
+          caseStudyReflection: '',
+          practiceReflection: '',
+          nextSteps: ''
+        };
+      }
+    } else {
+      console.log('No saved reflection found for version:', version.id);
+      currentReflection.value = {
+        caseStudyReflection: '',
+        practiceReflection: '',
+        nextSteps: ''
+      };
+    }
+  }
+};
+
+const saveReflection = () => {
+  saveReflectionToStorage();
+  
+  // Show success message
+  if (typeof toastController !== 'undefined') {
+    toastController.create({
+      message: 'Reflection saved successfully!',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    }).then(toast => toast.present());
+  }
+};
+
+const saveReflectionToStorage = () => {
+  const version = reflectionVersions.value.find(v => v.id === selectedReflectionVersion.value);
+  if (version) {
+    const pageId = route.params.id;
+    localStorage.setItem(`sage-reflection-${pageId}-${version.id}`, JSON.stringify(currentReflection.value));
+    version.lastModified = new Date().toLocaleDateString();
+    
+    // Also save the versions list
+    localStorage.setItem(`sage-reflection-versions-${pageId}`, JSON.stringify(reflectionVersions.value));
+  }
+};
+
+const exportReflection = () => {
+  const version = reflectionVersions.value.find(v => v.id === selectedReflectionVersion.value);
+  if (!version) return;
+  
+  const content = `
+Reflective Writing Journal - ${getPageTitle()}
+Version: ${version.name}
+Date: ${version.lastModified}
+
+CASE STUDY REFLECTION:
+${currentReflection.value.caseStudyReflection || 'No reflection written yet.'}
+
+PRACTICE REFLECTION:
+${currentReflection.value.practiceReflection || 'No reflection written yet.'}
+
+NEXT STEPS ACTION PLAN:
+${currentReflection.value.nextSteps || 'No action plan written yet.'}
+  `.trim();
+  
+  // Create and download text file
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = window.document.createElement('a');
+  a.href = url;
+  a.download = `reflection-${getPageTitle().toLowerCase().replace(/\s+/g, '-')}-${version.name.toLowerCase().replace(/\s+/g, '-')}.txt`;
+  window.document.body.appendChild(a);
+  a.click();
+  window.document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  // Show success message
+  if (typeof toastController !== 'undefined') {
+    toastController.create({
+      message: 'Reflection exported successfully!',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    }).then(toast => toast.present());
+  }
+};
+
+const clearReflection = () => {
+  // Simple confirmation for now since actionSheetController might not be available
+  if (confirm('Are you sure you want to clear all your reflections? This action cannot be undone.')) {
+    currentReflection.value = {
+      caseStudyReflection: '',
+      practiceReflection: '',
+      nextSteps: ''
+    };
+    saveReflectionToStorage();
+    
+    // Show success message
+    if (typeof toastController !== 'undefined') {
+      toastController.create({
+        message: 'Reflection cleared successfully!',
+        duration: 2000,
+        position: 'bottom',
+        color: 'warning'
+      }).then(toast => toast.present());
+    }
+  }
+};
+
 const contactOrganization = (org: any) => {
   console.log(`Contacting organization: ${org.name}`);
 };
 
 const nextQuizQuestion = () => {
+  // Save current answer before moving to next question
+  const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
+  
+  if (currentQuestion.type === 'matching') {
+    // Save matching answers
+    quizAnswers.value[currentQuizQuestion.value] = { ...matchingAnswers.value };
+  } else {
+    // Save regular answer
+    quizAnswers.value[currentQuizQuestion.value] = currentQuizAnswer.value;
+  }
+  
   if (currentQuizQuestion.value < quizQuestions.value.length - 1) {
     currentQuizQuestion.value++;
     currentQuizAnswer.value = '';
+    // Reset matching answers for next question
+    matchingAnswers.value = {};
   } else {
-    // Calculate score (simplified)
-    quizScore.value = Math.floor(Math.random() * 40) + 60; // 60-100 for demo
+    // Calculate score based on correct answers
+    let correctAnswers = 0;
+    const totalQuestions = quizQuestions.value.length;
+    
+    quizQuestions.value.forEach((question, index) => {
+      const userAnswer = quizAnswers.value[index];
+      
+      if (question.type === 'matching') {
+        // Check if all matching answers are correct
+        const userMatchingAnswers = userAnswer as { [key: string]: string };
+        const allCorrect = question.strategies?.every(strategy => 
+          userMatchingAnswers[strategy.id] === question.correctAnswers[strategy.id]
+        );
+        if (allCorrect) {
+          correctAnswers++;
+        }
+      } else {
+        // Check regular question
+        if (userAnswer === question.correctAnswer) {
+          correctAnswers++;
+        }
+      }
+    });
+    
+    quizScore.value = Math.round((correctAnswers / totalQuestions) * 100);
     quizCompleted.value = true;
   }
 };
@@ -1003,6 +2250,61 @@ const retakeQuiz = () => {
   currentQuizAnswer.value = '';
   quizCompleted.value = false;
   quizScore.value = 0;
+  matchingAnswers.value = {};
+  quizAnswers.value = {};
+};
+
+// Helper functions for quiz results
+const isQuestionCorrect = (index: number) => {
+  const question = quizQuestions.value[index];
+  const userAnswer = quizAnswers.value[index];
+  
+  if (question.type === 'matching') {
+    const userMatchingAnswers = userAnswer as { [key: string]: string };
+    return question.strategies?.every(strategy => 
+      userMatchingAnswers[strategy.id] === question.correctAnswers[strategy.id]
+    ) || false;
+  } else {
+    return userAnswer === question.correctAnswer;
+  }
+};
+
+const formatUserAnswer = (index: number) => {
+  const question = quizQuestions.value[index];
+  const userAnswer = quizAnswers.value[index];
+  
+  if (question.type === 'matching') {
+    const userMatchingAnswers = userAnswer as { [key: string]: string };
+    if (userMatchingAnswers) {
+      return Object.entries(userMatchingAnswers)
+        .map(([strategy, purpose]) => `${strategy}${purpose}`)
+        .join(', ');
+    }
+    return 'Not answered';
+  } else if (question.type === 'true-false') {
+    return userAnswer === 'true' ? 'True' : 'False';
+  } else {
+    const option = question.options?.find(opt => opt.value === userAnswer);
+    return option ? option.text : 'Not answered';
+  }
+};
+
+const formatCorrectAnswer = (index: number) => {
+  const question = quizQuestions.value[index];
+  
+  if (question.type === 'matching') {
+    if (question.correctAnswers) {
+      return Object.entries(question.correctAnswers)
+        .map(([strategy, purpose]) => `${strategy}${purpose}`)
+        .join(', ');
+    }
+    return 'Unknown';
+  } else if (question.type === 'true-false') {
+    return question.correctAnswer === 'true' ? 'True' : 'False';
+  } else {
+    const option = question.options?.find(opt => opt.value === question.correctAnswer);
+    return option ? option.text : 'Unknown';
+  }
 };
 
 const presentActionSheet = async () => {
@@ -1037,6 +2339,16 @@ const presentActionSheet = async () => {
 <style scoped>
 ion-card {
   margin: 16px;
+}
+
+/* Apply scroll margin to card headers for proper anchor positioning */
+ion-card-header {
+  scroll-margin-top: 100px; /* Account for fixed header */
+}
+
+/* Alternative: apply to the card title for more precise targeting */
+ion-card-title {
+  scroll-margin-top: 100px; /* Account for fixed header */
 }
 
 ion-tabs {
@@ -1097,5 +2409,111 @@ ion-spinner {
   margin-left: 8px;
   font-size: 0.9em;
   color: var(--ion-color-medium);
+}
+
+/* Matching question styles */
+.matching-instructions {
+  margin-bottom: 16px;
+}
+
+.matching-item {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  --background: var(--ion-color-light);
+}
+
+.matching-item ion-label h4 {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.matching-select {
+  min-width: 200px;
+  --placeholder-color: var(--ion-color-medium);
+  --placeholder-opacity: 0.8;
+}
+
+/* Reflective Writing Styles */
+.reflection-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(var(--ion-color-light-rgb), 0.3);
+  border-radius: 8px;
+  border-left: 4px solid var(--ion-color-primary);
+}
+
+.reflection-section h4 {
+  display: flex;
+  align-items: center;
+  margin: 0 0 12px 0;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+.reflection-section h4 ion-icon {
+  margin-right: 8px;
+}
+
+.reflection-prompt {
+  margin: 0 0 16px 0;
+  color: var(--ion-color-medium);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.reflection-textarea {
+  --background: white;
+  --border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  border: 1px solid var(--ion-color-light-shade);
+  margin-bottom: 8px;
+}
+
+.reflection-textarea:focus-within {
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.2);
+}
+
+.reflection-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.reflection-actions ion-button {
+  margin: 0;
+}
+
+.reflection-progress {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(var(--ion-color-success-rgb), 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.reflection-progress ion-progress-bar {
+  margin-bottom: 8px;
+}
+
+.reflection-progress ion-note {
+  font-size: 14px;
+  color: var(--ion-color-success);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .reflection-section {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .reflection-actions {
+    gap: 8px;
+  }
 }
 </style> 
