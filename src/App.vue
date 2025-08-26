@@ -147,7 +147,16 @@ const disabilityCategories = ref([
     icon: earOutline,
     expanded: false,
     url: '/disability/hearing-needs',
-    subItems: []
+    subItems: [
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+    ]
   },
   {
     title: 'Physical and Sensory Needs',

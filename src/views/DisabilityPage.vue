@@ -211,6 +211,29 @@
                     </ion-item>
                   </ion-list>
                 </div>
+                
+                <!-- Add key considerations for Hearing Needs -->
+                <div v-if="route.params.id === 'hearing-needs'">
+                  <h4>Key Considerations:</h4>
+                  <ion-list>
+                    <ion-item>
+                      <ion-icon :icon="earOutline" slot="start" color="primary"></ion-icon>
+                      <ion-label>Provide written materials alongside all verbal content</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                      <ion-label>Use captions and subtitles for all video and audio content</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="home" slot="start" color="warning"></ion-icon>
+                      <ion-label>Reduce background noise and ensure good acoustics in learning environments</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                      <ion-label>Face the student when speaking and use clear visual cues</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </div>
               </ion-card-content>
             </ion-card>
 
@@ -1046,6 +1069,7 @@ import {
   business,
   mail,
   eyeOutline,
+  earOutline,
   chatbubbleOutline,
   save,
   trash,  arrowForward,
@@ -1508,6 +1532,65 @@ const disabilityData = {
 const quizQuestions = computed(() => {
   const id = route.params.id as string;
   
+  if (id === 'hearing-needs') {
+    return [
+      {
+        question: "Which of the following is the most appropriate way to describe a student with hearing loss?",
+        options: [
+          { value: 'a', text: 'Deaf and dumb' },
+          { value: 'b', text: 'Student with hearing loss' },
+          { value: 'c', text: 'Hearing impaired person' },
+          { value: 'd', text: 'Partially deaf student' }
+        ],
+        correctAnswer: 'b'
+      },
+      {
+        question: "What is the most effective strategy for supporting students with hearing needs in group discussions?",
+        options: [
+          { value: 'a', text: 'Speaking louder and more slowly' },
+          { value: 'b', text: 'Providing written summaries and visual aids' },
+          { value: 'c', text: 'Asking them to sit at the front' },
+          { value: 'd', text: 'Using only verbal instructions' }
+        ],
+        correctAnswer: 'b'
+      },
+      {
+        question: "Students with hearing loss cannot participate effectively in classroom activities.",
+        type: 'true-false',
+        options: [
+          { value: 'true', text: 'True' },
+          { value: 'false', text: 'False' }
+        ],
+        correctAnswer: 'false'
+      },
+      {
+        question: "Match the hearing support strategy to its purpose:",
+        type: 'matching',
+        strategies: [
+          { id: 'A', text: 'Captions on videos' },
+          { id: 'B', text: 'Peer note-taking' },
+          { id: 'C', text: 'Assistive listening devices' }
+        ],
+        purposes: [
+          { id: '1', text: 'Amplify speech and reduce background noise' },
+          { id: '2', text: 'Provide visual access to audio content' },
+          { id: '3', text: 'Support participation in discussions' }
+        ],
+        correctAnswers: { 'A': '2', 'B': '3', 'C': '1' } as { [key: string]: string }
+      },
+      {
+        question: "What is the best approach for providing feedback to a student with hearing needs?",
+        options: [
+          { value: 'a', text: 'Only give verbal feedback' },
+          { value: 'b', text: 'Provide written feedback alongside verbal' },
+          { value: 'c', text: 'Use gestures only' },
+          { value: 'd', text: 'Avoid giving feedback altogether' }
+        ],
+        correctAnswer: 'b'
+      }
+    ];
+  }
+  
   if (id === 'communication') {
     return [
       {
@@ -1654,9 +1737,9 @@ const getCategoryTitle = () => {
 
 const hasSubheadings = computed(() => {
   const id = route.params.id as string;
-  // Pages with subheadings: physical-disabilities (Visual Needs), communication
-  // Pages without subheadings: hearing-needs, physical-sensory-needs, cognitive-intellectual-needs, speech-language-needs, multiple-disabilities
-  return id === 'physical-disabilities' || id === 'communication';
+  // Pages with subheadings: physical-disabilities (Visual Needs), hearing-needs, communication
+  // Pages without subheadings: physical-sensory-needs, cognitive-intellectual-needs, speech-language-needs, multiple-disabilities
+  return id === 'physical-disabilities' || id === 'hearing-needs' || id === 'communication';
 });
 
 const disabilityContent = computed(() => {
@@ -1665,41 +1748,154 @@ const disabilityContent = computed(() => {
     return {
       title: 'Hearing Needs',
       category: 'Hearing Needs',
-      description: 'Content for Hearing Needs is coming soon...',
+      description: 'Hearing needs encompass a range of conditions that may affect a student\'s ability to process auditory information, including speech, audio content, and environmental sounds. This comprehensive guide provides information and strategies for supporting students with various hearing needs.',
       language: {
-        wordsToAvoid: [],
-        wordsToUse: []
+        wordsToAvoid: [
+          { term: 'Deaf and dumb', reason: 'Offensive and inaccurate - people with hearing loss can communicate' },
+          { term: 'Hearing impaired person', reason: 'Some prefer "deaf person" or "person with hearing loss"' },
+          { term: 'Suffers from hearing loss', reason: 'Implies illness or tragedy rather than a difference' },
+          { term: 'Partially deaf', reason: 'Vague term that doesn\'t describe specific needs' }
+        ],
+        wordsToUse: [
+          { term: 'Student with hearing loss', explanation: 'Person-first language that respects individual identity' },
+          { term: 'Deaf student', explanation: 'Identity-first language preferred by many in the Deaf community' },
+          { term: 'Student with hearing impairment', explanation: 'Alternative acceptable terminology' },
+          { term: 'Student who is hard of hearing', explanation: 'Clear description of moderate hearing loss' }
+        ]
       },
       understanding: {
-        strengths: [],
-        challenges: [],
-        strategies: [],
-        advocacy: []
+        strengths: [
+          'What communication methods work best for you?',
+          'Which assistive technologies do you find most helpful?',
+          'What are your preferred learning activities?',
+          'How do you like to receive information?',
+          'What visual cues help you understand conversations?'
+        ],
+        challenges: [
+          'What sounds or speech are most difficult to understand?',
+          'How do you handle group conversations?',
+          'What barriers do you face in noisy environments?',
+          'Which learning situations are most challenging?',
+          'How do you manage when multiple people speak at once?'
+        ],
+        strategies: [
+          'What support strategies have been most effective?',
+          'How do you prefer to access audio content?',
+          'What environmental adjustments help you most?',
+          'Which communication methods work best for you?',
+          'What technology supports your learning best?'
+        ],
+        advocacy: [
+          'I need captions for all videos',
+          'Please face me when speaking',
+          'I prefer written instructions alongside verbal ones',
+          'Background noise makes it difficult to concentrate',
+          'I may need to ask for clarification or repetition'
+        ]
       },
       challenges: {
-        physical: [],
-        social: [],
-        tasks: [],
-        assessment: []
+        physical: [
+          'Difficulty hearing in noisy environments',
+          'Struggling with audio-only content',
+          'Missing parts of conversations',
+          'Fatigue from concentrating on listening',
+          'Difficulty with phone or video calls'
+        ],
+        social: [
+          'Feeling isolated in group discussions',
+          'Missing social cues and context',
+          'Difficulty participating in fast-paced conversations',
+          'Embarrassment about asking for repetition',
+          'Struggling with multiple speakers'
+        ],
+        tasks: [
+          'Following verbal instructions',
+          'Participating in class discussions',
+          'Understanding audio recordings',
+          'Working in noisy group settings',
+          'Accessing multimedia content'
+        ],
+        assessment: [
+          'Oral presentations and discussions',
+          'Listening comprehension tests',
+          'Group work assessments',
+          'Audio-based learning activities',
+          'Verbal feedback and instructions'
+        ]
       },
       enabling: {
-        physical: [],
-        social: [],
-        tasks: [],
-        assessment: []
+        physical: [
+          'Provide written materials alongside verbal content',
+          'Use visual aids and diagrams',
+          'Ensure good lighting for lip reading',
+          'Reduce background noise and distractions',
+          'Use assistive listening devices'
+        ],
+        social: [
+          'Assign peer note-takers for discussions',
+          'Create small group discussion opportunities',
+          'Use visual cues and gestures',
+          'Provide written summaries of conversations',
+          'Encourage inclusive communication practices'
+        ],
+        tasks: [
+          'Offer alternative formats for audio content',
+          'Provide written instructions and checklists',
+          'Use visual timetables and schedules',
+          'Create quiet spaces for focused work',
+          'Offer extended time for audio-based tasks'
+        ],
+        assessment: [
+          'Provide written assessment instructions',
+          'Offer alternative assessment formats',
+          'Use visual and written feedback',
+          'Allow extra time for audio comprehension',
+          'Provide written summaries of oral content'
+        ]
       },
       resources: {
-        electronic: [],
-        paper: [],
-        organizations: []
+        electronic: [
+          { title: 'Captioning Guidelines', description: 'How to create effective captions for educational videos', url: 'www.captioning.org/guidelines' },
+          { title: 'Assistive Listening Technology', description: 'Overview of hearing assistive technologies', url: 'www.hearinglink.org/technology' },
+          { title: 'Sign Language Learning Apps', description: 'Digital resources for learning sign language', url: 'www.british-sign.co.uk/apps' },
+          { title: 'Audio Description Services', description: 'Services for making audio content accessible', url: 'www.audiodescription.org.uk' }
+        ],
+        paper: [
+          { title: 'Communication Strategies Guide', description: 'Best practices for communicating with hearing-impaired students', availability: 'Available from local hearing services' },
+          { title: 'Lip Reading Manual', description: 'Guide to lip reading techniques and support', availability: 'Available from specialist organizations' },
+          { title: 'Classroom Acoustics Guide', description: 'How to improve classroom sound quality', availability: 'Available from educational resource centers' },
+          { title: 'Hearing Support Handbook', description: 'Comprehensive guide for educators', availability: 'Available from hearing support services' }
+        ],
+        organizations: [
+          { name: 'National Deaf Children\'s Society', description: 'Supporting deaf children and their families', contact: '0808 800 8880' },
+          { name: 'Action on Hearing Loss', description: 'Supporting people with hearing loss and tinnitus', contact: '0808 808 0123' },
+          { name: 'British Deaf Association', description: 'Promoting sign language and Deaf culture', contact: '0121 450 7711' },
+          { name: 'Hearing Link', description: 'Supporting people with hearing loss', contact: 'www.hearinglink.org' }
+        ]
       },
       caseStudy: {
-        title: '',
-        scenario: '',
-        details: [],
-        learningPoints: []
+        title: 'Supporting Sarah in Science Class',
+        scenario: 'Sarah is a 14-year-old student with moderate hearing loss who loves science but struggles with group discussions and audio-visual content in her biology class.',
+        details: [
+          'Sarah uses hearing aids and prefers visual learning materials',
+          'She misses parts of group discussions and feels left out',
+          'Audio recordings of experiments are difficult to access',
+          'She excels at written work but struggles with oral presentations',
+          'Background noise in the lab makes it hard to hear instructions'
+        ],
+        learningPoints: [
+          'Written summaries help clarify complex discussions',
+          'Peer note-taking supports active participation',
+          'Alternative formats make content accessible to all',
+          'Visual aids enhance understanding for hearing-impaired students',
+          'Quiet spaces support focused learning and communication'
+        ]
       },
-      reflectiveTasks: []
+      reflectiveTasks: [
+        { title: 'Case Study Reflection', description: 'How would you adapt your teaching methods to support Sarah\'s learning needs?', completed: false },
+        { title: 'Practice Reflection', description: 'What audio content in your teaching could be made more accessible?', completed: false },
+        { title: 'Next Steps Action Plan', description: 'Identify three specific ways to improve communication accessibility in your classroom', completed: false }
+      ]
     };
   }
   if (id === 'physical-sensory-needs') {
