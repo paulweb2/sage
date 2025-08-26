@@ -13,6 +13,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/disability/:id',
     component: () => import ('../views/DisabilityPage.vue')
+  },
+  {
+    path: '/progress',
+    component: () => import ('../views/ProgressPage.vue')
   }
 ]
 

@@ -78,6 +78,8 @@ import {
   chatbubbleOutline,
   bulbOutline,
   medicalOutline,
+  trophyOutline,
+  trophySharp,
 } from 'ionicons/icons';
 
 const route = useRoute();
@@ -89,6 +91,12 @@ const appPages = [
     url: '/folder/Home',
     iosIcon: homeOutline,
     mdIcon: homeSharp,
+  },
+  {
+    title: 'My Progress',
+    url: '/progress',
+    iosIcon: trophyOutline,
+    mdIcon: trophySharp,
   },
   {
     title: 'General Information',

@@ -98,13 +98,52 @@
                   Play Video
                 </ion-button>
               </ion-item>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Progress Summary Card -->
+          <ion-card v-if="overallProgress.percentage > 0" class="progress-summary-card">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon :icon="trophy" slot="start" :color="achievementLevel.color"></ion-icon>
+                Your Learning Progress
+              </ion-card-title>
+              <ion-card-subtitle>Track your SAGE journey</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="progress-summary-content">
+                <div class="progress-circle-small" :style="{ '--progress': overallProgress.percentage }">
+                  <div class="progress-circle-inner-small">
+                    <div class="progress-percentage-small">{{ overallProgress.percentage }}%</div>
+                  </div>
+                </div>
+                <div class="progress-details">
+                  <ion-chip :color="achievementLevel.color" class="achievement-chip-small">
+                    <ion-icon :icon="achievementLevel.icon"></ion-icon>
+                    <ion-label>{{ achievementLevel.level }}</ion-label>
+                  </ion-chip>
+                  <p class="progress-stats-small">
+                    {{ overallProgress.completedItems }} of {{ overallProgress.totalItems }} activities completed
+                  </p>
+                  <ion-button 
+                    fill="clear" 
+                    size="small" 
+                    router-link="/progress" 
+                    router-direction="forward"
+                    class="view-progress-btn"
+                  >
+                    View Full Progress
+                    <ion-icon :icon="arrowForward" slot="end"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
               
               <ion-button expand="block" fill="outline" class="ion-margin-top" @click="startScreening">
                 <ion-icon :icon="accessibilityOutline" slot="start"></ion-icon>
                 Start Screening Tool
               </ion-button>
-            </ion-card-content>
-          </ion-card>
 
           <!-- Quick Stats with Progress -->
           <ion-card>
@@ -1067,8 +1106,11 @@ import {
   IonCheckbox,
   IonToggle,
   IonRange,
-  IonTextarea
+  IonTextarea,
+  actionSheetController,
+  toastController
 } from '@ionic/vue';
+import { ProgressService } from '../services/ProgressService';
 import { 
   accessibilityOutline,
   informationCircleOutline,
@@ -1098,7 +1140,10 @@ import {
   bodyOutline,
   chatbubbleOutline,
   eyeOutline,
-  earOutline
+  earOutline,
+  printOutline,
+  trophy,
+  arrowForward
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';
 
@@ -1116,6 +1161,10 @@ const selectedCategory = ref('all');
 
 // Add separate state for checkbox options
 const checkboxAnswers = ref<{ [key: string]: boolean }>({});
+
+// Progress tracking
+const overallProgress = ref(ProgressService.getOverallProgress());
+const achievementLevel = computed(() => ProgressService.getAchievementLevel(overallProgress.value.percentage));
 
 // Add a computed property for the current question
 const currentQuizQuestionObj = computed(() => questions[currentQuestion.value]);
@@ -1285,7 +1334,7 @@ const filteredResources = computed(() => {
 const getPageTitle = () => {
   const id = route.params.id as string;
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Disability',
+    'Home': 'SAGE Disability v0.0.2',
     'General': 'General Information',
     'Screening': 'Screening Tool',
     'Resources': 'Resources',
@@ -1365,33 +1414,187 @@ const navigateTo = (page: string) => {
   router.push(`/folder/${page}`);
 };
 
+const showToast = (message: string) => {
+  if (typeof toastController !== 'undefined') {
+    toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    }).then(toast => toast.present());
+  }
+};
+
+const openAccessibilitySettings = () => {
+  // Open accessibility settings modal or navigate to settings page
+  console.log('Opening accessibility settings');
+  showToast('Accessibility settings coming soon!');
+};
+
+const showFallbackOptions = () => {
+  console.log('Showing fallback options');
+  
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    console.warn('Not in browser environment, cannot show fallback');
+    return;
+  }
+  
+  try {
+    // Simple alert as fallback
+    const options = [
+      'Print Page',
+      'Accessibility'
+    ];
+    
+    const choice = prompt(`Choose an option:\n${options.map((opt, i) => `${i + 1}. ${opt}`).join('\n')}`);
+    
+    console.log('User selected option:', choice);
+    
+    switch(choice) {
+      case '1': 
+        console.log('Executing print function');
+        printPage(); 
+        break;
+      case '2': 
+        console.log('Executing accessibility function');
+        openAccessibilitySettings(); 
+        break;
+      default:
+        console.log('No option selected or invalid choice');
+    }
+  } catch (error) {
+    console.error('Error in fallback options:', error);
+    // Last resort: just trigger print
+    printPage();
+  }
+};
+
 const presentActionSheet = async () => {
-  // if (typeof actionSheetController === 'undefined') return;
-  // const actionSheet = await actionSheetController.create({
-  //   header: 'Options',
-  //   buttons: [
-  //     {
-  //       text: 'Share',
-  //       icon: 'share-outline',
-  //       handler: () => {
-  //         console.log('Share clicked');
-  //       }
-  //     },
-  //     {
-  //       text: 'Download',
-  //       icon: 'download-outline',
-  //       handler: () => {
-  //         console.log('Download clicked');
-  //       }
-  //     },
-  //     {
-  //       text: 'Cancel',
-  //       icon: 'close',
-  //       role: 'cancel'
-  //     }
-  //   ]
-  // });
-  // await actionSheet.present();
+  console.log('Action sheet triggered');
+  
+  // Check if actionSheetController is available
+  if (typeof actionSheetController === 'undefined') {
+    console.warn('actionSheetController not available, using fallback');
+    showFallbackOptions();
+    return;
+  }
+  
+  try {
+    console.log('Creating action sheet...');
+    const actionSheet = await actionSheetController.create({
+      header: 'Page Options',
+      buttons: [
+        {
+          text: 'Print Page',
+          icon: 'print-outline',
+          handler: () => {
+            console.log('Print option selected');
+            printPage();
+          }
+        },
+        {
+          text: 'Accessibility',
+          icon: 'accessibility-outline',
+          handler: () => {
+            console.log('Accessibility option selected');
+            openAccessibilitySettings();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    console.log('Presenting action sheet...');
+    await actionSheet.present();
+    console.log('Action sheet presented successfully');
+    
+  } catch (error) {
+    console.error('Error presenting action sheet:', error);
+    console.log('Using fallback options');
+    // Fallback: show a simple alert with options
+    showFallbackOptions();
+  }
+};
+
+const printPage = () => {
+  console.log('Print function called');
+  
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    console.warn('Print function called in non-browser environment');
+    return;
+  }
+  
+  try {
+    // Get the current page content
+    const container = document.querySelector('#container');
+    if (!container) {
+      console.error('Container not found');
+      window.print(); // Fallback
+      return;
+    }
+    
+    console.log('Container found:', container);
+    console.log('Container content:', container.innerHTML);
+    
+    // Create a new window with the content
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      console.error('Could not open print window');
+      window.print(); // Fallback
+      return;
+    }
+    
+    // Write the content to the new window
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>SAGE - ${document.title}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .print-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+            .print-content { margin: 20px 0; }
+            .print-footer { text-align: center; margin-top: 30px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 12px; color: #666; }
+            @media print {
+              body { margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-header">
+            <h1>SAGE - Supporting Accessible and Inclusive Education</h1>
+            <p>Printed on: ${new Date().toLocaleDateString()}</p>
+          </div>
+          <div class="print-content">
+            ${container.innerHTML}
+          </div>
+          <div class="print-footer">
+            SAGE - Supporting Accessible and Inclusive Education
+          </div>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    
+    // Wait for content to load then print
+    printWindow.onload = () => {
+      console.log('Print window loaded, triggering print...');
+      printWindow.print();
+      printWindow.close();
+    };
+    
+  } catch (error) {
+    console.error('Error during print:', error);
+    // Fallback to simple print
+    window.print();
+  }
 };
 
 const filterResources = () => {
@@ -1485,6 +1688,386 @@ ion-badge {
 @media (max-width: 768px) {
   .sage-cover-illustration-wrapper {
     padding: 8px;
+  }
+}
+
+/* Print Styles */
+@media print {
+/* Hide navigation elements */
+  ion-header, 
+  ion-toolbar, 
+  ion-buttons, 
+  ion-menu-button,
+  ion-fab,
+  ion-fab-button {
+    display: none !important;
+  }
+  
+/* Reset content padding and margins */
+  ion-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    --padding-top: 0 !important;
+    --padding-bottom: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+  
+/* Ensure the page shows all content */
+  ion-page {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+}
+
+/* Progress Summary Card Styles */
+.progress-summary-card {
+  background: linear-gradient(135deg, var(--ion-color-primary-tint), var(--ion-color-secondary-tint));
+  color: white;
+}
+
+.progress-summary-card ion-card-title,
+.progress-summary-card ion-card-subtitle {
+  color: white;
+}
+
+.progress-summary-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.progress-circle-small {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--ion-color-success) calc(var(--progress) * 3.6deg),
+    rgba(255, 255, 255, 0.3) calc(var(--progress) * 3.6deg)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.progress-circle-inner-small {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ion-color-primary);
+}
+
+.progress-percentage-small {
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.progress-details {
+  flex: 1;
+}
+
+.achievement-chip-small {
+  margin-bottom: 8px;
+}
+
+.progress-stats-small {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.view-progress-btn {
+  margin-top: 8px;
+  --color: var(--ion-color-primary);
+}
+
+/* Print Styles */
+@media print {
+  ion-header, 
+  ion-toolbar, 
+  ion-buttons, 
+  ion-menu-button,
+  ion-fab,
+  ion-fab-button {
+    display: none !important;
+  }
+  
+  /* Reset content padding and margins */
+  ion-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    --padding-top: 0 !important;
+    --padding-bottom: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+  
+  /* Ensure the page shows all content */
+  ion-page {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+
+  /* Override Ionic's viewport restrictions */
+  .ion-page {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+
+  /* Ensure scroll containers don't limit content */
+  .ion-content-scroll-host {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+    
+  /* Format container for print */
+  #container {
+    padding: 20px !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Show all divs that might be hidden */
+  div {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure specific content elements are visible */
+  ion-card,
+  ion-card-content,
+  ion-accordion-group,
+  ion-accordion,
+  ion-list,
+  ion-item {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure accordions are expanded for print */
+  ion-accordion {
+    --ion-item-background: transparent !important;
+  }
+
+  ion-accordion ion-item[slot="header"] {
+    background: #f8f9fa !important;
+  }
+
+  ion-accordion .ion-padding {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Format cards for print */
+  ion-card {
+    margin: 16px 0 !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid !important;
+  }
+
+  ion-card-header {
+    padding: 16px !important;
+    background: #f8f9fa !important;
+  }
+
+  ion-card-content {
+    padding: 16px !important;
+  }
+
+  /* Format accordions for print */
+  ion-accordion-group {
+    border: none !important;
+  }
+
+  ion-accordion {
+    border: 1px solid #ddd !important;
+    margin: 8px 0 !important;
+  }
+
+  ion-accordion ion-item[slot="header"] {
+    background: #f8f9fa !important;
+    border-bottom: 1px solid #ddd !important;
+  }
+
+  /* Format lists and items for print */
+  ion-list {
+    padding: 0 !important;
+  }
+
+  ion-item {
+    --padding-start: 0 !important;
+    --padding-end: 0 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  ion-label {
+    color: #000 !important;
+  }
+
+  /* Format progress bars and other elements */
+  ion-progress-bar {
+    border: 1px solid #ddd !important;
+  }
+
+  ion-note {
+    color: #666 !important;
+  }
+
+  ion-chip {
+    border: 1px solid #ddd !important;
+    background: #f8f9fa !important;
+  }
+
+  /* Format grid for print */
+  ion-grid {
+    padding: 0 !important;
+  }
+
+  ion-col {
+    padding: 8px !important;
+  }
+
+  /* Format search and segment controls */
+  ion-searchbar,
+  ion-segment {
+    display: none !important;
+  }
+
+  /* Format images for print */
+  .sage-cover-illustration {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Ensure all page sections are visible */
+  div[v-if] {
+    display: block !important;
+  }
+
+  /* Show the currently active page content */
+  div[v-if="route.params.id === 'Home'"],
+  div[v-if="route.params.id === 'About'"],
+  div[v-if="route.params.id === 'Resources'"],
+  div[v-if="route.params.id === 'Contact'"],
+  div[v-if="route.params.id === 'Quiz'"] {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure all cards and content are visible */
+  ion-card,
+  ion-card-content,
+  ion-accordion-group,
+  ion-accordion {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure content scroll host is visible */
+  .ion-content-scroll-host {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+
+  /* Add footer for print */
+  body::after {
+    content: "Printed from SAGE - Supporting Accessible and Inclusive Education | Date: " attr(data-print-date);
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+    color: #666;
+  }
+}
+</style>
+
+<style>
+/* Global print styles - not scoped */
+@media print {
+/* Debug: Add a visible border to see if content is there */
+#container {
+    border: 2px solid red !important;
+  }
+  
+/* Debug: Make sure content is visible */
+  ion-content {
+    background: white !important;
+  }
+/* Hide only navigation elements, not content */
+  ion-header, 
+  ion-toolbar, 
+  ion-buttons, 
+  ion-menu-button,
+  ion-fab,
+  ion-fab-button {
+    display: none !important;
+  }
+  
+/* Ensure content is visible */
+  ion-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+  
+/* Ensure page container is visible */
+  ion-page {
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+  
+/* Ensure the main container is visible */
+#container {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 20px !important;
+  }
+  
+/* Ensure all divs with content are visible */
+div {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+/* Ensure cards are visible */
+ion-card {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 }
 </style>

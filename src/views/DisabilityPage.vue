@@ -32,19 +32,19 @@
                 <ion-card-subtitle>Test Your Understanding of Communication Disabilities</ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
-                <div v-if="!quizCompleted">
+                <div v-if="!quizCompleted && quizQuestions.length > 0">
                   <ion-card>
                     <ion-card-header>
                       <ion-card-title>Question {{ currentQuizQuestion + 1 }} of {{ quizQuestions.length }}</ion-card-title>
                       <ion-progress-bar :value="(currentQuizQuestion + 1) / quizQuestions.length" color="primary"></ion-progress-bar>
                     </ion-card-header>
                     <ion-card-content>
-                      <h4>{{ quizQuestions[currentQuizQuestion].question }}</h4>
+                      <h4 v-if="quizQuestions[currentQuizQuestion]">{{ quizQuestions[currentQuizQuestion].question }}</h4>
                       
                       <!-- Multiple Choice Questions -->
-                      <div v-if="!quizQuestions[currentQuizQuestion].type || quizQuestions[currentQuizQuestion].type === 'multiple-choice'">
+                      <div v-if="quizQuestions[currentQuizQuestion] && (!quizQuestions[currentQuizQuestion].type || quizQuestions[currentQuizQuestion].type === 'multiple-choice')">
                         <ion-radio-group v-model="currentQuizAnswer">
-                          <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
+                          <ion-item v-for="(option, index) in (quizQuestions[currentQuizQuestion].options || [])" :key="index">
                             <ion-radio :value="option.value" slot="start"></ion-radio>
                             <ion-label>{{ option.text }}</ion-label>
                           </ion-item>
@@ -52,9 +52,9 @@
                       </div>
                       
                       <!-- True/False Questions -->
-                      <div v-else-if="quizQuestions[currentQuizQuestion].type === 'true-false'">
+                      <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'true-false'">
                         <ion-radio-group v-model="currentQuizAnswer">
-                          <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
+                          <ion-item v-for="(option, index) in (quizQuestions[currentQuizQuestion].options || [])" :key="index">
                             <ion-radio :value="option.value" slot="start"></ion-radio>
                             <ion-label>{{ option.text }}</ion-label>
                           </ion-item>
@@ -62,14 +62,14 @@
                       </div>
                       
                       <!-- Matching Questions -->
-                      <div v-else-if="quizQuestions[currentQuizQuestion].type === 'matching'">
+                      <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'matching'">
                         <div class="matching-instructions">
                           <ion-note color="primary">
                             <strong>Instructions:</strong> Match each communication support strategy (A, B, C) with its correct purpose (1, 2, 3) using the dropdown menus.
                           </ion-note>
                         </div>
                         <ion-list>
-                          <ion-item v-for="strategy in quizQuestions[currentQuizQuestion].strategies" :key="strategy.id" class="matching-item">
+                          <ion-item v-for="strategy in (quizQuestions[currentQuizQuestion].strategies || [])" :key="strategy.id" class="matching-item">
                             <ion-label>
                               <h4><strong>{{ strategy.id }}.</strong> {{ strategy.text }}</h4>
                             </ion-label>
@@ -82,7 +82,7 @@
                             >
                               <ion-select-option value="">Select purpose</ion-select-option>
                               <ion-select-option 
-                                v-for="purpose in quizQuestions[currentQuizQuestion].purposes" 
+                                v-for="purpose in (quizQuestions[currentQuizQuestion].purposes || [])" 
                                 :key="purpose.id" 
                                 :value="purpose.id"
                               >
@@ -102,7 +102,7 @@
                   </ion-card>
                 </div>
                 
-                <div v-if="quizCompleted">
+                <div v-if="quizCompleted && quizQuestions.length > 0">
                   <ion-card>
                     <ion-card-header>
                       <ion-card-title>Quiz Results</ion-card-title>
@@ -113,25 +113,62 @@
                       <ion-note>{{ getQuizScoreMessage() }}</ion-note>
                       
                       <!-- Detailed Results -->
-                      <div class="quiz-results-details">
+                      <div class="quiz-results-details" v-if="quizCompleted && quizQuestions.length > 0">
                         <h4>Question Results:</h4>
-                        <ion-list>
-                          <ion-item v-for="(question, index) in quizQuestions" :key="index">
-                            <ion-icon 
-                              :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle" 
-                              :color="isQuestionCorrect(index) ? 'success' : 'danger'"
-                              slot="start"
-                            ></ion-icon>
-                            <ion-label>
-                              <h5>Question {{ index + 1 }}</h5>
-                              <p>{{ question.question }}</p>
-                              <ion-note color="medium">
-                                <strong>Your answer:</strong> {{ formatUserAnswer(index) }} | 
-                                <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
-                              </ion-note>
-                            </ion-label>
-                          </ion-item>
-                        </ion-list>
+                        <div v-for="(question, index) in quizQuestions" :key="index" class="question-result-item">
+                          <div class="question-content">
+                            <ion-item class="question-item">
+                              <ion-label>
+                                <h5 class="question-heading">
+                                  <ion-icon 
+                                    :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle" 
+                                    :color="isQuestionCorrect(index) ? 'success' : 'danger'"
+                                    class="question-status-icon"
+                                  ></ion-icon>
+                                  Question {{ index + 1 }}
+                                </h5>
+                                <p>{{ question.question }}</p>
+                                <ion-note color="medium">
+                                  <strong>Your answer:</strong> {{ formatUserAnswer(index) }} | 
+                                  <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                                </ion-note>
+                                
+                                <!-- Learning Tip for Wrong Answers - appears inside the ion-label -->
+                                <div v-if="!isQuestionCorrect(index)" class="learning-tip-container">
+                                  <ion-accordion-group>
+                                    <ion-accordion>
+                                      <ion-item slot="header" class="learning-tip-header">
+                                        <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
+                                        <ion-label>
+                                          <p>Learning tip</p>
+                                        </ion-label>
+                                      </ion-item>
+                                      <div slot="content" class="ion-padding">
+                                        <div class="tip-content">
+                                          <h6>Why this answer was incorrect:</h6>
+                                          <p>{{ getQuestionTip(index) }}</p>
+                                          
+                                          <div class="correct-answer-explanation">
+                                            <h6>Correct Answer Explanation:</h6>
+                                            <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                          </div>
+                                          
+                                          <div class="learning-point">
+                                            <ion-icon :icon="school" color="primary"></ion-icon>
+                                            <span><strong>Key Learning Point:</strong> {{ getLearningPoint(index) }}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </ion-accordion>
+                                  </ion-accordion-group>
+                                </div>
+                              </ion-label>
+                            </ion-item>
+                          </div>
+                          
+                          <!-- Manual divider after learning tip -->
+                          <div class="question-divider"></div>
+                        </div>
                       </div>
                       
                       <ion-button expand="block" color="primary" @click="retakeQuiz">
@@ -594,6 +631,40 @@
                   class="reflection-textarea"
                   @ionInput="autoSaveReflection"
                 ></ion-textarea>
+                
+                <!-- Prompt Accordion for Case Study Reflection -->
+                <ion-accordion-group>
+                  <ion-accordion value="case-study-prompts">
+                    <ion-item slot="header" color="light">
+                      <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                      <ion-label>Think about...</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How could you adapt the visual supports mentioned in the case study for your own students?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>What additional resources or technologies might you need to implement similar strategies?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How would you involve other staff members or specialists in supporting your student?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>What barriers might exist in your current environment and how could you overcome them?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How would you measure the success of these adaptations in your context?</ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
               </div>
 
               <div class="reflection-section">
@@ -615,6 +686,44 @@
                   class="reflection-textarea"
                   @ionInput="autoSaveReflection"
                 ></ion-textarea>
+                
+                <!-- Prompt Accordion for Practice Reflection -->
+                <ion-accordion-group>
+                  <ion-accordion value="practice-prompts">
+                    <ion-item slot="header" color="light">
+                      <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                      <ion-label>Think about...</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>Could you offer your student some extra support with visual materials?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>Would you try using a new support such as text with more pictures?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>How do you think your student would react to these changes?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>What visual content in your lessons could be made more accessible?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>How could you improve the lighting and contrast in your learning environment?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>What assistive technologies could benefit your students?</ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
               </div>
 
               <div class="reflection-section">
@@ -636,6 +745,44 @@
                   class="reflection-textarea"
                   @ionInput="autoSaveReflection"
                 ></ion-textarea>
+                
+                <!-- Prompt Accordion for Next Steps -->
+                <ion-accordion-group>
+                  <ion-accordion value="next-steps-prompts">
+                    <ion-item slot="header" color="light">
+                      <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                      <ion-label>Think about...</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>What specific resources do you need to acquire or develop?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>Who else needs to be involved in implementing these changes?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>What training or professional development might you need?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>How will you measure the impact of these changes on student learning?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>What timeline is realistic for implementing these improvements?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>How will you ensure these changes are sustainable and ongoing?</ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
               </div>
 
               <!-- Action Buttons -->
@@ -664,6 +811,44 @@
                 ></ion-progress-bar>
                 <ion-note>{{ Math.round(reflectionProgress * 100) }}% Complete</ion-note>
               </div>
+              
+              <!-- General Reflection Prompts Accordion -->
+              <ion-accordion-group>
+                <ion-accordion value="general-prompts">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="helpCircle" slot="start" color="primary"></ion-icon>
+                    <ion-label>General Reflection Prompts</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
+                        <ion-label>What are your student's strengths and how can you build on them?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                        <ion-label>How can you involve the student's family and support network?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
+                        <ion-label>What environmental changes would make the biggest difference?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="school" slot="start" color="primary"></ion-icon>
+                        <ion-label>How can you collaborate with other professionals and specialists?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="heart" slot="start" color="danger"></ion-icon>
+                        <ion-label>What would help your student feel more confident and included?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                        <ion-label>How will you know if your interventions are working?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </ion-card-content>
           </ion-card>
 
@@ -828,6 +1013,7 @@ import {
   IonTextarea
 } from '@ionic/vue';
 import { actionSheetController, toastController } from '@ionic/vue';
+import { ProgressService } from '../services/ProgressService';
 import { 
   documentOutline,
   videocamOutline,
@@ -862,8 +1048,10 @@ import {
   eyeOutline,
   chatbubbleOutline,
   save,
-  trash,
-  arrowForward
+  trash,  arrowForward,
+  settings,
+  printOutline,
+  accessibilityOutline
 } from 'ionicons/icons';
 
 const route = useRoute();
@@ -921,6 +1109,10 @@ onMounted(() => {
   // Load existing reflection versions from localStorage
   loadExistingReflectionVersions();
   console.log('Reflection loading completed');
+  
+  // Load quiz completion state from localStorage
+  loadQuizState();
+  console.log('Quiz state loading completed');
   
   // Handle anchor scrolling after a delay to ensure DOM is ready
   const storedAnchor = sessionStorage.getItem('scrollToAnchor');
@@ -992,6 +1184,27 @@ const loadExistingReflectionVersions = () => {
   }
 };
 
+// Add this new function to load quiz state
+const loadQuizState = () => {
+  const pageId = route.params.id as string;
+  
+  // Check if quiz is completed for this page
+  const isCompleted = ProgressService.isQuizCompleted(pageId);
+  if (isCompleted) {
+    quizCompleted.value = true;
+    quizScore.value = ProgressService.getQuizScore(pageId) || 0;
+    const savedAnswers = ProgressService.getQuizAnswers(pageId);
+    if (savedAnswers) {
+      quizAnswers.value = savedAnswers;
+      console.log(`Quiz for ${pageId} is already completed with score: ${quizScore.value}% and answers loaded`);
+    } else {
+      console.log(`Quiz for ${pageId} is completed but no answers found`);
+    }
+  } else {
+    console.log(`Quiz for ${pageId} is not completed yet`);
+  }
+};
+
 // State variables
 const selectedUnderstandingSection = ref('strengths');
 const selectedResourceType = ref('electronic');
@@ -1006,9 +1219,15 @@ const quizAnswers = ref<{ [key: number]: string | { [key: string]: string } }>({
 const canProceedToNextQuestion = computed(() => {
   const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
   
+  if (!currentQuestion) {
+    return false;
+  }
+  
   if (currentQuestion.type === 'matching' && currentQuestion.strategies) {
     // Check if all strategies have been matched
-    return currentQuestion.strategies.every(strategy => matchingAnswers.value[strategy.id]);
+    return currentQuestion.strategies.every(strategy => 
+      matchingAnswers.value && matchingAnswers.value[strategy.id]
+    );
   }
   
   // For other question types, check if an answer is selected
@@ -1425,7 +1644,7 @@ const getPageTitle = () => {
   if (id === 'multiple-disabilities') {
     return 'Multiple Disabilities';
   }
-  return disabilityData[id as keyof typeof disabilityData]?.title || id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  return disabilityData[id as keyof typeof disabilityData]?.title || (id ? id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Unknown Page');
 };
 
 const getCategoryTitle = () => {
@@ -2128,6 +2347,9 @@ const saveReflectionToStorage = () => {
     
     // Also save the versions list
     localStorage.setItem(`sage-reflection-versions-${pageId}`, JSON.stringify(reflectionVersions.value));
+    
+    // Update progress tracking
+    ProgressService.saveReflectionCompletion(pageId as string);
   }
 };
 
@@ -2202,6 +2424,10 @@ const nextQuizQuestion = () => {
   // Save current answer before moving to next question
   const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
   
+  if (!currentQuestion) {
+    return;
+  }
+  
   if (currentQuestion.type === 'matching') {
     // Save matching answers
     quizAnswers.value[currentQuizQuestion.value] = { ...matchingAnswers.value };
@@ -2227,6 +2453,8 @@ const nextQuizQuestion = () => {
         // Check if all matching answers are correct
         const userMatchingAnswers = userAnswer as { [key: string]: string };
         const allCorrect = question.strategies?.every(strategy => 
+          userMatchingAnswers && userMatchingAnswers[strategy.id] && 
+          question.correctAnswers && question.correctAnswers[strategy.id] &&
           userMatchingAnswers[strategy.id] === question.correctAnswers[strategy.id]
         );
         if (allCorrect) {
@@ -2242,6 +2470,10 @@ const nextQuizQuestion = () => {
     
     quizScore.value = Math.round((correctAnswers / totalQuestions) * 100);
     quizCompleted.value = true;
+    
+    // Save quiz completion to progress tracking
+    const pageId = route.params.id as string;
+    ProgressService.saveQuizCompletion(pageId, quizScore.value, quizAnswers.value);
   }
 };
 
@@ -2252,6 +2484,10 @@ const retakeQuiz = () => {
   quizScore.value = 0;
   matchingAnswers.value = {};
   quizAnswers.value = {};
+  
+  // Reset quiz completion in progress tracking
+  const pageId = route.params.id as string;
+  ProgressService.resetQuizCompletion(pageId);
 };
 
 // Helper functions for quiz results
@@ -2262,6 +2498,8 @@ const isQuestionCorrect = (index: number) => {
   if (question.type === 'matching') {
     const userMatchingAnswers = userAnswer as { [key: string]: string };
     return question.strategies?.every(strategy => 
+      userMatchingAnswers && userMatchingAnswers[strategy.id] && 
+      question.correctAnswers && question.correctAnswers[strategy.id] &&
       userMatchingAnswers[strategy.id] === question.correctAnswers[strategy.id]
     ) || false;
   } else {
@@ -2275,7 +2513,7 @@ const formatUserAnswer = (index: number) => {
   
   if (question.type === 'matching') {
     const userMatchingAnswers = userAnswer as { [key: string]: string };
-    if (userMatchingAnswers) {
+    if (userMatchingAnswers && Object.keys(userMatchingAnswers).length > 0) {
       return Object.entries(userMatchingAnswers)
         .map(([strategy, purpose]) => `${strategy}${purpose}`)
         .join(', ');
@@ -2293,7 +2531,7 @@ const formatCorrectAnswer = (index: number) => {
   const question = quizQuestions.value[index];
   
   if (question.type === 'matching') {
-    if (question.correctAnswers) {
+    if (question.correctAnswers && Object.keys(question.correctAnswers).length > 0) {
       return Object.entries(question.correctAnswers)
         .map(([strategy, purpose]) => `${strategy}${purpose}`)
         .join(', ');
@@ -2307,32 +2545,218 @@ const formatCorrectAnswer = (index: number) => {
   }
 };
 
+// Check if there are any wrong answers to show tips
+const hasWrongAnswers = computed(() => {
+  return quizQuestions.value.some((_, index) => !isQuestionCorrect(index));
+});
+
+// Get questions that were answered incorrectly
+const wrongAnswerQuestions = computed(() => {
+  return quizQuestions.value
+    .map((question, index) => ({ question, index }))
+    .filter(({ index }) => !isQuestionCorrect(index));
+});
+
+// Get tip for a specific question
+const getQuestionTip = (index: number) => {
+  const question = quizQuestions.value[index];
+  const userAnswer = quizAnswers.value[index];
+  
+  if (question.type === 'matching') {
+    return "In matching questions, each strategy must be correctly paired with its purpose. Review the communication support strategies and their intended outcomes.";
+  } else if (question.type === 'true-false') {
+    if (userAnswer === 'true' && question.correctAnswer === 'false') {
+      return "This statement is false. Consider the complexity and individual nature of communication needs - they vary greatly between individuals and contexts.";
+    } else {
+      return "This statement is true. Communication abilities and needs are diverse and individual-specific.";
+    }
+  } else {
+    // Multiple choice questions
+    const userOption = question.options?.find(opt => opt.value === userAnswer);
+    const correctOption = question.options?.find(opt => opt.value === question.correctAnswer);
+    
+    if (userOption && correctOption) {
+      return `You selected "${userOption.text}" but the correct answer is "${correctOption.text}". Consider the most inclusive and respectful language when discussing communication needs.`;
+    }
+    return "Review the question carefully and consider which answer best reflects inclusive, person-first language and respectful communication practices.";
+  }
+};
+
+// Get explanation for the correct answer
+const getCorrectAnswerExplanation = (index: number) => {
+  const question = quizQuestions.value[index];
+  
+  if (question.type === 'matching') {
+    return "Each communication support strategy has a specific purpose. Visual timetables help with structure, clear seating plans support concentration, and noise-cancelling headphones reduce sensory input.";
+  } else if (question.type === 'true-false') {
+    if (question.correctAnswer === 'false') {
+      return "Communication needs are highly individual and vary between home and school environments. What works in one context may not work in another.";
+    } else {
+      return "This statement accurately reflects the reality of communication abilities and the importance of recognizing individual differences.";
+    }
+  } else {
+    // Multiple choice explanations
+    const correctOption = question.options?.find(opt => opt.value === question.correctAnswer);
+    if (correctOption) {
+      return `"${correctOption.text}" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive communication practices.`;
+    }
+    return "The correct answer reflects best practices in inclusive communication and respectful language use.";
+  }
+};
+
+// Get key learning point for the question
+const getLearningPoint = (index: number) => {
+  const question = quizQuestions.value[index];
+  
+  if (question.type === 'matching') {
+    return "Understanding the purpose of different communication support strategies helps in providing appropriate accommodations for students with communication needs.";
+  } else if (question.type === 'true-false') {
+    return "Communication needs are individual and contextual - avoid making assumptions about what works for all students in all situations.";
+  } else {
+    return "Use person-first language and respect individual preferences when discussing communication needs. Focus on abilities and support rather than limitations.";
+  }
+};
+
 const presentActionSheet = async () => {
-  const actionSheet = await actionSheetController.create({
-    header: 'Options',
-    buttons: [
-      {
-        text: 'Share',
-        icon: 'share-outline',
-        handler: () => {
-          console.log('Share clicked');
+  try {
+    const actionSheet = await actionSheetController.create({
+      header: 'Page Options',
+      buttons: [
+        {
+          text: 'Print Page',
+          icon: 'print-outline',
+          handler: () => {
+            printPage();
+          }
+        },
+        {
+          text: 'Accessibility',
+          icon: 'accessibility-outline',
+          handler: () => {
+            openAccessibilitySettings();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
         }
-      },
-      {
-        text: 'Bookmark',
-        icon: 'bookmark-outline',
-        handler: () => {
-          console.log('Bookmark clicked');
-        }
-      },
-      {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel'
-      }
-    ]
-  });
-  await actionSheet.present();
+      ]
+    });
+    await actionSheet.present();
+  } catch (error) {
+    console.error('Error presenting action sheet:', error);
+    // Fallback: show a simple alert with options
+    showFallbackOptions();
+  }
+};
+
+const printPage = () => {
+  console.log('Print function called');
+  
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    console.warn('Print function called in non-browser environment');
+    return;
+  }
+  
+  try {
+    // Get the current page content
+    const container = globalThis.document.querySelector('#container');
+    if (!container) {
+      console.error('Container not found');
+      globalThis.window.print(); // Fallback
+      return;
+    }
+    
+    console.log('Container found:', container);
+    console.log('Container content:', container.innerHTML);
+    
+    // Create a new window with the content
+    const printWindow = globalThis.window.open('', '_blank');
+    if (!printWindow) {
+      console.error('Could not open print window');
+      globalThis.window.print(); // Fallback
+      return;
+    }
+    
+    // Write the content to the new window
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>SAGE - ${globalThis.document.title}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .print-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+            .print-content { margin: 20px 0; }
+            .print-footer { text-align: center; margin-top: 30px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 12px; color: #666; }
+            @media print {
+              body { margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-header">
+            <h1>SAGE - Supporting Accessible and Inclusive Education</h1>
+            <p>Printed on: ${new Date().toLocaleDateString()}</p>
+          </div>
+          <div class="print-content">
+            ${container.innerHTML}
+          </div>
+          <div class="print-footer">
+            SAGE - Supporting Accessible and Inclusive Education
+          </div>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    
+    // Wait for content to load then print
+    printWindow.onload = () => {
+      console.log('Print window loaded, triggering print...');
+      printWindow.print();
+      printWindow.close();
+    };
+    
+  } catch (error) {
+    console.error('Error during print:', error);
+    // Fallback to simple print
+    window.print();
+  }
+};
+
+const openAccessibilitySettings = () => {
+  // Open accessibility settings modal or navigate to settings page
+  console.log('Opening accessibility settings');
+  showToast('Accessibility settings coming soon!');
+};
+
+const showFallbackOptions = () => {
+  // Simple alert as fallback
+  const options = [
+    'Print Page',
+    'Accessibility'
+  ];
+  
+  const choice = prompt(`Choose an option:\n${options.map((opt, i) => `${i + 1}. ${opt}`).join('\n')}`);
+  
+  switch(choice) {
+    case '1': printPage(); break;
+    case '2': openAccessibilitySettings(); break;
+  }
+};
+
+const showToast = (message: string) => {
+  if (typeof toastController !== 'undefined') {
+    toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    }).then(toast => toast.present());
+  }
 };
 </script>
 
@@ -2362,6 +2786,74 @@ ion-tab-bar {
 ion-range {
   --bar-background: var(--ion-color-light);
   --bar-background-active: var(--ion-color-primary);
+}
+
+/* Quiz Results Styles */
+.question-heading {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ion-color-dark);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.question-status-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Learning Tip Styles */
+.learning-tip-container {
+  margin-top: 4px;
+  margin-left: 0;
+  margin-bottom: 0;
+  width: 100%;
+  background-color: #e3f2fd;
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid #2196f3;
+}
+
+.tip-content {
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 4px 0;
+}
+
+.tip-content h6 {
+  color: var(--ion-color-warning);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.correct-answer-explanation {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ion-color-light-shade);
+}
+
+.correct-answer-explanation h6 {
+  color: var(--ion-color-success);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.learning-point {
+  margin-top: 12px;
+  padding: 8px;
+  background: var(--ion-color-primary-tint);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 ion-toggle {
@@ -2514,6 +3006,333 @@ ion-spinner {
   
   .reflection-actions {
     gap: 8px;
+  }
+}
+
+/* Print styles */
+@media print {
+  ion-header, ion-toolbar, ion-buttons, ion-menu-button {
+    display: none !important;
+  }
+  
+  ion-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  #container {
+    padding: 20px !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+  }
+  
+  ion-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin: 16px 0 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+  
+  ion-card-header {
+    border-bottom: 1px solid #eee !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  ion-card-title {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #2c3e50 !important;
+    margin: 0 !important;
+  }
+  
+  ion-card-subtitle {
+    color: #666 !important;
+    font-size: 14px !important;
+    margin: 4px 0 0 0 !important;
+  }
+  
+  .reflection-section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    background: #f8f9fa !important;
+    border-left: 4px solid #007bff !important;
+    padding: 16px !important;
+    margin: 16px 0 !important;
+    border-radius: 4px !important;
+  }
+  
+  .reflection-textarea {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 12px !important;
+    min-height: 100px !important;
+    width: 100% !important;
+    font-family: Arial, sans-serif !important;
+  }
+  
+  ion-accordion-group {
+    margin: 16px 0 !important;
+  }
+  
+  ion-accordion ion-item[slot="header"] {
+    background: #f8f9fa !important;
+    padding: 12px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  ion-accordion .ion-padding {
+    padding: 12px !important;
+    border: 1px solid #ddd !important;
+    border-top: none !important;
+    border-radius: 0 0 4px 4px !important;
+    background: white !important;
+  }
+  
+  ion-segment {
+    display: flex !important;
+    background: #f8f9fa !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+    margin: 16px 0 !important;
+  }
+  
+  ion-segment-button {
+    flex: 1 !important;
+    text-align: center !important;
+    padding: 8px !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 4px !important;
+  }
+  
+  ion-segment-button.ion-selected {
+    background: #007bff !important;
+    color: white !important;
+  }
+  
+  ion-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  ion-item {
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    background: transparent !important;
+  }
+  
+  ion-item:last-child {
+    border-bottom: none !important;
+  }
+  
+  ion-label {
+    margin: 0 !important;
+    color: #333 !important;
+  }
+  
+  ion-note {
+    color: #666 !important;
+    font-size: 12px !important;
+  }
+  
+  ion-chip {
+    display: inline-block !important;
+    background: #e3f2fd !important;
+    color: #1976d2 !important;
+    padding: 4px 8px !important;
+    border-radius: 16px !important;
+    font-size: 12px !important;
+    margin: 2px !important;
+  }
+  
+  ion-progress-bar {
+    background: #e9ecef !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    margin: 8px 0 !important;
+  }
+  
+  ion-progress-bar::part(progress) {
+    background: #28a745 !important;
+  }
+  
+  ion-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 16px !important;
+    margin: 16px 0 !important;
+  }
+  
+  ion-col {
+    padding: 0 !important;
+  }
+  
+  ion-icon {
+    display: none !important;
+  }
+  
+  ion-button {
+    display: none !important;
+  }
+  
+  ion-fab {
+    display: none !important;
+  }
+
+  /* Quiz Results Styles */
+  .question-result-item {
+    margin-bottom: 0;
+  }
+
+  .question-content {
+    border-bottom: 1px solid var(--ion-color-light-shade);
+    padding-bottom: 16px;
+  }
+
+  .question-item {
+    --border-style: none;
+  }
+
+  .question-heading {
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+    color: var(--ion-color-dark) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  .question-status-icon {
+    font-size: 1.8rem !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .learning-tip-container {
+    margin-top: 8px;
+    margin-left: 16px;
+    margin-bottom: 0;
+    width: calc(100% - 32px);
+  }
+
+  .question-divider {
+    height: 1px;
+    background-color: var(--ion-color-light-shade);
+    margin: 16px 0;
+  }
+
+  .learning-tip-header {
+    --background: linear-gradient(135deg, #ff6b35, #f7931e);
+    --color: white;
+    border-radius: 12px;
+    margin: 8px 0;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    border: 2px solid #ff6b35;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  .learning-tip-header:hover {
+    --background: linear-gradient(135deg, #ff5722, #ff9800);
+    box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+    transform: translateY(-2px);
+  }
+
+.learning-tip-container {
+  margin-top: 8px !important;
+  margin-left: 16px !important;
+  margin-bottom: 0 !important;
+  width: calc(100% - 32px) !important;
+  background-color: #e3f2fd !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  border: 1px solid #2196f3 !important;
+}
+
+/* Target the learning tip container specifically within ion-label */
+ion-label .learning-tip-container {
+  background-color: #e3f2fd !important;
+  border: 1px solid #2196f3 !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  margin-top: 8px !important;
+  margin-left: 16px !important;
+  margin-bottom: 0 !important;
+  width: calc(100% - 32px) !important;
+}
+
+  .tip-content {
+    background: var(--ion-color-light);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px 0;
+  }
+
+  .tip-content h6 {
+    color: var(--ion-color-warning);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .correct-answer-explanation {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ion-color-light-shade);
+  }
+
+  .correct-answer-explanation h6 {
+    color: var(--ion-color-success);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .learning-point {
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--ion-color-primary-tint);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .learning-point ion-icon {
+    color: var(--ion-color-primary);
+    font-size: 18px;
+  }
+
+  .learning-point span {
+    color: var(--ion-color-primary);
+    font-size: 14px;
+  }
+  
+  /* Add footer for print */
+  body::after {
+    content: "Printed from SAGE - Supporting Accessible and Inclusive Education | Date: " attr(data-print-date);
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+    color: #666;
   }
 }
 </style> 

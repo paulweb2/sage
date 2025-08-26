@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAGE Progress Tracking Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #28a745 calc(var(--progress) * 3.6deg),
+                #e9ecef calc(var(--progress) * 3.6deg)
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 20px auto;
+        }
+        .progress-circle-inner {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #007bff;
+        }
+        .progress-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .progress-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .achievement {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .achievement.master { background: #ffc107; }
+        .achievement.advanced { background: #28a745; }
+        .achievement.intermediate { background: #007bff; }
+        .achievement.beginner { background: #6c757d; }
+        .achievement.getting-started { background: #6c757d; }
+    </style>
+</head>
+<body>
+    <h1>SAGE Progress Tracking Test</h1>
+    
+    <div class="test-section">
+        <h2>Progress Tracking Demo</h2>
+        <p>This demonstrates the progress tracking functionality for the SAGE app.</p>
+        
+        <div class="progress-circle" id="progressCircle" style="--progress: 0">
+            <div class="progress-circle-inner">
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+                <div class="progress-label">Complete</div>
+            </div>
+        </div>
+        
+        <div id="achievement" class="achievement getting-started">Getting Started</div>
+        <p id="achievementMessage">Welcome to SAGE! Start your learning journey by exploring the disability categories.</p>
+        
+        <div>
+            <h3>Test Actions:</h3>
+            <button onclick="simulateQuizCompletion('physical-disabilities', 85)">Complete Visual Needs Quiz (85%)</button>
+            <button onclick="simulateQuizCompletion('hearing-needs', 92)">Complete Hearing Needs Quiz (92%)</button>
+            <button onclick="simulateReflectionCompletion('physical-disabilities')">Complete Visual Needs Reflection</button>
+            <button onclick="simulateReflectionCompletion('hearing-needs')">Complete Hearing Needs Reflection</button>
+            <button onclick="resetAllProgress()">Reset All Progress</button>
+        </div>
+        
+        <div>
+            <h3>Current Progress:</h3>
+            <div id="progressDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate the ProgressService functionality
+        const DISABILITY_PAGES = [
+            'physical-disabilities',
+            'hearing-needs', 
+            'physical-sensory-needs',
+            'cognitive-intellectual-needs',
+            'speech-language-needs',
+            'communication',
+            'multiple-disabilities'
+        ];
+
+        function getOverallProgress() {
+            const items = [];
+            
+            DISABILITY_PAGES.forEach(pageId => {
+                // Check quiz completion
+                const quizData = localStorage.getItem(`sage-quiz-${pageId}`);
+                const quizCompleted = quizData ? JSON.parse(quizData).completed : false;
+                const quizScore = quizData ? JSON.parse(quizData).score : undefined;
+                
+                items.push({
+                    id: `${pageId}-quiz`,
+                    title: `${getPageTitle(pageId)} - Quiz`,
+                    type: 'quiz',
+                    completed: quizCompleted,
+                    score: quizScore
+                });
+
+                // Check reflection completion
+                const reflectionData = localStorage.getItem(`sage-reflection-${pageId}-current`);
+                const reflectionCompleted = reflectionData ? 
+                    (JSON.parse(reflectionData).caseStudyReflection?.trim() && 
+                     JSON.parse(reflectionData).practiceReflection?.trim() && 
+                     JSON.parse(reflectionData).nextSteps?.trim()) : false;
+                
+                items.push({
+                    id: `${pageId}-reflection`,
+                    title: `${getPageTitle(pageId)} - Reflection`,
+                    type: 'reflection',
+                    completed: reflectionCompleted
+                });
+            });
+
+            const completedItems = items.filter(item => item.completed).length;
+            const totalItems = items.length;
+            const percentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+
+            return {
+                totalItems,
+                completedItems,
+                percentage,
+                items
+            };
+        }
+
+        function getAchievementLevel(percentage) {
+            if (percentage === 100) {
+                return {
+                    level: 'Master',
+                    color: 'warning',
+                    icon: 'star',
+                    message: 'Congratulations! You\'ve completed all quizzes and reflections. You\'re a SAGE Master!'
+                };
+            } else if (percentage >= 80) {
+                return {
+                    level: 'Advanced',
+                    color: 'success',
+                    icon: 'checkmark-circle',
+                    message: 'Excellent progress! You\'re well on your way to becoming a SAGE expert.'
+                };
+            } else if (percentage >= 60) {
+                return {
+                    level: 'Intermediate',
+                    color: 'primary',
+                    icon: 'school',
+                    message: 'Good work! Keep going to strengthen your understanding.'
+                };
+            } else if (percentage >= 40) {
+                return {
+                    level: 'Beginner',
+                    color: 'secondary',
+                    icon: 'bulb',
+                    message: 'You\'re making good progress. Continue exploring the materials.'
+                };
+            } else {
+                return {
+                    level: 'Getting Started',
+                    color: 'medium',
+                    icon: 'play',
+                    message: 'Welcome to SAGE! Start your learning journey by exploring the disability categories.'
+                };
+            }
+        }
+
+        function getPageTitle(pageId) {
+            const titles = {
+                'physical-disabilities': 'Visual Needs',
+                'hearing-needs': 'Hearing Needs',
+                'physical-sensory-needs': 'Physical and Sensory Needs',
+                'cognitive-intellectual-needs': 'Cognitive and Intellectual Needs',
+                'speech-language-needs': 'Speech and Language Needs',
+                'communication': 'Communication',
+                'multiple-disabilities': 'Multiple Disabilities'
+            };
+            return titles[pageId] || pageId;
+        }
+
+        function updateProgressDisplay() {
+            const progress = getOverallProgress();
+            const achievement = getAchievementLevel(progress.percentage);
+            
+            // Update progress circle
+            document.getElementById('progressCircle').style.setProperty('--progress', progress.percentage);
+            document.getElementById('progressPercentage').textContent = progress.percentage + '%';
+            
+            // Update achievement
+            const achievementEl = document.getElementById('achievement');
+            achievementEl.textContent = achievement.level;
+            achievementEl.className = `achievement ${achievement.level.toLowerCase().replace(' ', '-')}`;
+            
+            // Update message
+            document.getElementById('achievementMessage').textContent = achievement.message;
+            
+            // Update details
+            const detailsEl = document.getElementById('progressDetails');
+            detailsEl.innerHTML = `
+                <p><strong>Total Items:</strong> ${progress.totalItems}</p>
+                <p><strong>Completed:</strong> ${progress.completedItems}</p>
+                <p><strong>Percentage:</strong> ${progress.percentage}%</p>
+                <h4>Completed Items:</h4>
+                <ul>
+                    ${progress.items.filter(item => item.completed).map(item => 
+                        `<li>${item.title}${item.score ? ` (Score: ${item.score}%)` : ''}</li>`
+                    ).join('')}
+                </ul>
+            `;
+        }
+
+        function simulateQuizCompletion(pageId, score) {
+            const data = {
+                completed: true,
+                score,
+                lastCompleted: new Date().toISOString()
+            };
+            localStorage.setItem(`sage-quiz-${pageId}`, JSON.stringify(data));
+            updateProgressDisplay();
+        }
+
+        function simulateReflectionCompletion(pageId) {
+            const data = {
+                caseStudyReflection: 'Sample case study reflection content.',
+                practiceReflection: 'Sample practice reflection content.',
+                nextSteps: 'Sample next steps content.'
+            };
+            localStorage.setItem(`sage-reflection-${pageId}-current`, JSON.stringify(data));
+            updateProgressDisplay();
+        }
+
+        function resetAllProgress() {
+            DISABILITY_PAGES.forEach(pageId => {
+                localStorage.removeItem(`sage-quiz-${pageId}`);
+                localStorage.removeItem(`sage-reflection-${pageId}-current`);
+            });
+            updateProgressDisplay();
+        }
+
+        // Initialize display
+        updateProgressDisplay();
+    </script>
+</body>
+</html> 
