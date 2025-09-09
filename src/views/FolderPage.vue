@@ -1333,14 +1333,34 @@ const filteredResources = computed(() => {
 
 const getPageTitle = () => {
   const id = route.params.id as string;
+  console.log('Route ID:', id); // Debug logging
+  
+  // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Disability v0.0.2',
+    'Home': 'SAGE Disability v0.0.5',
+    'home': 'SAGE Disability v0.0.5', // Add lowercase version
     'General': 'General Information',
     'Screening': 'Screening Tool',
     'Resources': 'Resources',
     'About': 'About SAGE'
   };
-  return titles[id] || id;
+  
+  // Try exact match first, then case-insensitive
+  let title = titles[id];
+  if (!title) {
+    // Try to find a case-insensitive match
+    const lowerId = id.toLowerCase();
+    for (const [key, value] of Object.entries(titles)) {
+      if (key.toLowerCase() === lowerId) {
+        title = value;
+        break;
+      }
+    }
+  }
+  
+  const finalTitle = title || id;
+  console.log('Page title:', finalTitle); // Debug logging
+  return finalTitle;
 };
 
 const startScreening = () => {

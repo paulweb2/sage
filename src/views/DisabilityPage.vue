@@ -41,6 +41,22 @@
                     <ion-card-content>
                       <h4 v-if="quizQuestions[currentQuizQuestion]">{{ quizQuestions[currentQuizQuestion].question }}</h4>
                       
+                      <!-- Debug: Show current question info -->
+                      <ion-note color="danger" style="font-size: 16px; margin-bottom: 20px; display: block;">
+                        DEBUG: Current question index: {{ currentQuizQuestion }}<br>
+                        Question exists: {{ !!quizQuestions[currentQuizQuestion] }}<br>
+                        Question type: {{ quizQuestions[currentQuizQuestion]?.type }}<br>
+                        Is select-all: {{ quizQuestions[currentQuizQuestion]?.type === 'select-all' }}
+                      </ion-note>
+                      
+                      <!-- Simple test div that should always show -->
+                      <div style="background: red; color: white; padding: 20px; margin: 20px 0; border: 3px solid black; font-size: 18px; font-weight: bold;">
+                        🔴 THIS RED BOX SHOULD ALWAYS BE VISIBLE! 🔴<br>
+                        If you can see this, basic template rendering works.<br>
+                        Question index: {{ currentQuizQuestion }}<br>
+                        Question type: {{ quizQuestions[currentQuizQuestion]?.type }}
+                      </div>
+                      
                       <!-- Multiple Choice Questions -->
                       <div v-if="quizQuestions[currentQuizQuestion] && (!quizQuestions[currentQuizQuestion].type || quizQuestions[currentQuizQuestion].type === 'multiple-choice')">
                         <ion-radio-group v-model="currentQuizAnswer">
@@ -61,18 +77,129 @@
                         </ion-radio-group>
                       </div>
                       
-                      <!-- Matching Questions -->
+                                              <!-- Multi True/False Questions -->
+                        <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'multi-true-false'">
+                          <div class="multi-true-false-instructions">
+                            <ion-note color="primary">
+                              <strong>Instructions:</strong> Answer each statement as True or False using the dropdown menus.
+                            </ion-note>
+                          </div>
+                          <ion-list>
+                            <ion-item v-for="(subQ, subIndex) in (quizQuestions[currentQuizQuestion].subQuestions || [])" :key="subQ.id" class="multi-true-false-item">
+                              <ion-label>
+                                <h4><strong>{{ getQuestionLetter(subIndex) }})</strong> {{ subQ.text }}</h4>
+                              </ion-label>
+                              <ion-select 
+                                v-model="matchingAnswers[subQ.id]" 
+                                interface="popover" 
+                                placeholder="True or False"
+                                :value="matchingAnswers[subQ.id]"
+                                class="multi-true-false-select"
+                              >
+                                <ion-select-option value="">Select answer</ion-select-option>
+                                <ion-select-option value="true">True</ion-select-option>
+                                <ion-select-option value="false">False</ion-select-option>
+                              </ion-select>
+                            </ion-item>
+                          </ion-list>
+                        </div>
+                        
+                                                <!-- Fill-in-the-Blank Questions -->
+                        <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'fill-in-blank'">
+                          <div class="fill-in-blank-instructions">
+                            <ion-note color="primary">
+                              <strong>Instructions:</strong> Complete each sentence by selecting the most appropriate word or phrase from the dropdown menus.
+                            </ion-note>
+                          </div>
+                          <ion-list>
+                            <ion-item v-for="(sentence, sentenceIndex) in (quizQuestions[currentQuizQuestion].sentences || [])" :key="sentence.id" class="fill-in-blank-item">
+                              <ion-label>
+                                <h4>
+                                  <strong>{{ getQuestionLetter(sentenceIndex) }})</strong> 
+                                  <span class="fill-in-blank-text">{{ sentence.textBefore }}</span>
+                                  <ion-select 
+                                    v-model="matchingAnswers[sentence.id]" 
+                                    interface="popover" 
+                                    placeholder="Select answer"
+                                    :value="matchingAnswers[sentence.id]"
+                                    class="fill-in-blank-select"
+                                  >
+                                    <ion-select-option value="">Select answer</ion-select-option>
+                                    <ion-select-option 
+                                      v-for="option in sentence.options" 
+                                      :key="option" 
+                                      :value="option"
+                                    >
+                                      {{ option }}
+                                    </ion-select-option>
+                                  </ion-select>
+                                  <span class="fill-in-blank-text">{{ sentence.textAfter }}</span>
+                                </h4>
+                              </ion-label>
+                            </ion-item>
+                          </ion-list>
+                        </div>
+                        
+                                                <!-- Select All That Apply Questions -->
+                        <div v-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'select-all'">
+                          <!-- Simple test to see if template renders -->
+                          <ion-note color="danger" style="font-size: 20px; font-weight: bold;">
+                            🎯 SELECT-ALL TEMPLATE IS RENDERING! 🎯
+                          </ion-note>
+                          
+                          <div class="select-all-instructions">
+                            <ion-note color="primary">
+                              <strong>Instructions:</strong> Select all options that apply. You can either select "All of these" OR select all the individual options.
+                            </ion-note>
+                          </div>
+                          <!-- Debug info -->
+                          <ion-note color="warning">
+                            Debug: Question type = {{ quizQuestions[currentQuizQuestion]?.type }}, 
+                            Options length = {{ quizQuestions[currentQuizQuestion]?.options?.length }},
+                            Current question index = {{ currentQuizQuestion }}
+                          </ion-note>
+                          <ion-note color="warning">
+                            Full question object: {{ JSON.stringify(quizQuestions[currentQuizQuestion]) }}
+                          </ion-note>
+                          <ion-note color="warning">
+                            Template condition met: YES, rendering select-all template
+                          </ion-note>
+                          <ion-list>
+                            <!-- Debug: Show options being iterated -->
+                            <ion-note color="warning">
+                              Options to iterate: {{ quizQuestions[currentQuizQuestion].options?.length }} options
+                            </ion-note>
+                            <ion-item v-for="option in quizQuestions[currentQuizQuestion].options" :key="option.value" class="select-all-item">
+                              <!-- Debug: Show each option -->
+                              <ion-note color="warning" slot="start">
+                                Option: {{ option.value }} - {{ option.text }}
+                              </ion-note>
+                              <!-- Test with regular HTML checkbox first -->
+                              <input 
+                                type="checkbox" 
+                                :value="option.value" 
+                                v-model="checkboxAnswers[option.value]"
+                                style="margin-right: 10px;"
+                              />
+                              <ion-label>
+                                <h4><strong>{{ option.value }})</strong> {{ option.text }}</h4>
+                              </ion-label>
+                            </ion-item>
+                          </ion-list>
+                        </div>
+                        
+                        <!-- Matching Questions -->
                       <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'matching'">
                         <div class="matching-instructions">
                           <ion-note color="primary">
-                            <strong>Instructions:</strong> Match each communication support strategy (A, B, C) with its correct purpose (1, 2, 3) using the dropdown menus.
+                            <strong>Instructions:</strong> Match each communication support strategy (a, b, c) with its correct purpose (a, b, c) using the dropdown menus.
                           </ion-note>
                         </div>
                         <ion-list>
-                          <ion-item v-for="strategy in (quizQuestions[currentQuizQuestion].strategies || [])" :key="strategy.id" class="matching-item">
-                            <ion-label>
-                              <h4><strong>{{ strategy.id }}.</strong> {{ strategy.text }}</h4>
-                            </ion-label>
+                                                  <ion-item v-for="(strategy, strategyIndex) in (quizQuestions[currentQuizQuestion].strategies || [])" :key="strategy.id" class="matching-item">
+                          <ion-label>
+                            <h4><strong>{{ getQuestionLetter(strategyIndex) }})</strong> {{ strategy.text }}</h4>
+                          </ion-label>
                             <ion-select 
                               v-model="matchingAnswers[strategy.id]" 
                               interface="popover" 
@@ -82,11 +209,11 @@
                             >
                               <ion-select-option value="">Select purpose</ion-select-option>
                               <ion-select-option 
-                                v-for="purpose in (quizQuestions[currentQuizQuestion].purposes || [])" 
+                                v-for="(purpose, purposeIndex) in (quizQuestions[currentQuizQuestion].purposes || [])" 
                                 :key="purpose.id" 
                                 :value="purpose.id"
                               >
-                                {{ purpose.id }}. {{ purpose.text }}
+                                {{ getQuestionLetter(purposeIndex) }}) {{ purpose.text }}
                               </ion-select-option>
                             </ion-select>
                           </ion-item>
@@ -94,9 +221,18 @@
                       </div>
                       
                       <div class="ion-padding-top">
-                        <ion-button expand="block" color="primary" @click="nextQuizQuestion" :disabled="!canProceedToNextQuestion">
+                        <ion-button 
+                          expand="block" 
+                          color="primary"
+                          @click="nextQuizQuestion" 
+                          :disabled="!canProceedToNextQuestion"
+                        >
                           {{ currentQuizQuestion === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
                         </ion-button>
+                        <!-- Debug info -->
+                        <div class="ion-padding-top">
+                          <ion-note>Debug: allQuestionsAnswered = {{ allQuestionsAnswered }}, canProceedToNextQuestion = {{ canProceedToNextQuestion }}, disabled = {{ !canProceedToNextQuestion }}</ion-note>
+                        </div>
                       </div>
                     </ion-card-content>
                   </ion-card>
@@ -133,31 +269,23 @@
                                   <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                                 </ion-note>
                                 
-                                <!-- Learning Tip for Wrong Answers - appears inside the ion-label -->
-                                <div v-if="!isQuestionCorrect(index)" class="learning-tip-container">
+                                <!-- Learning Tip for All Answers - appears inside the ion-label -->
+                                <div class="learning-tip-container">
                                   <ion-accordion-group>
                                     <ion-accordion>
                                       <ion-item slot="header" class="learning-tip-header">
                                         <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                                         <ion-label>
-                                          <p>Learning tip</p>
+                                          <p>Explanation</p>
                                         </ion-label>
                                       </ion-item>
                                       <div slot="content" class="ion-padding">
-                                        <div class="tip-content">
-                                          <h6>Why this answer was incorrect:</h6>
-                                          <p>{{ getQuestionTip(index) }}</p>
-                                          
-                                          <div class="correct-answer-explanation">
-                                            <h6>Correct Answer Explanation:</h6>
-                                            <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                          </div>
-                                          
-                                          <div class="learning-point">
-                                            <ion-icon :icon="school" color="primary"></ion-icon>
-                                            <span><strong>Key Learning Point:</strong> {{ getLearningPoint(index) }}</span>
-                                          </div>
-                                        </div>
+                                        <p>{{ getQuestionTip(index) }}</p>
+                                        
+                                        <div class="explanation-divider"></div>
+                                        
+                                        <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                        <p>{{ getLearningPoint(index) }}</p>
                                       </div>
                                     </ion-accordion>
                                   </ion-accordion-group>
@@ -178,19 +306,17 @@
                     </ion-card-content>
                   </ion-card>
                 </div>
-              </ion-card-content>
-            </ion-card>
-          </div>
-          
-          <!-- For other pages, show all content -->
-          <div v-else>
-            <!-- 1. Main Content Card -->
-            <ion-card>
-              <ion-card-content>
-                <p>{{ disabilityContent.description }}</p>
-                
-                <!-- Add key considerations for Visual Needs -->
-                <div v-if="route.params.id === 'physical-disabilities'">
+                                  </ion-card-content>
+        </ion-card>
+      </div>
+      
+      <!-- For other pages, show all content -->
+      <div v-else>
+            
+            <!-- Key Considerations Card - Controlled by pageSections -->
+            <div v-if="pageSections.showKeyConsiderations">
+              <ion-card>
+                <ion-card-content>
                   <h4>Key Considerations:</h4>
                   <ion-list>
                     <ion-item>
@@ -210,32 +336,9 @@
                       <ion-label>Include student in all group activities with appropriate support</ion-label>
                     </ion-item>
                   </ion-list>
-                </div>
-                
-                <!-- Add key considerations for Hearing Needs -->
-                <div v-if="route.params.id === 'hearing-needs'">
-                  <h4>Key Considerations:</h4>
-                  <ion-list>
-                    <ion-item>
-                      <ion-icon :icon="earOutline" slot="start" color="primary"></ion-icon>
-                      <ion-label>Provide written materials alongside all verbal content</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>Use captions and subtitles for all video and audio content</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="home" slot="start" color="warning"></ion-icon>
-                      <ion-label>Reduce background noise and ensure good acoustics in learning environments</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
-                      <ion-label>Face the student when speaking and use clear visual cues</ion-label>
-                    </ion-item>
-                  </ion-list>
-                </div>
-              </ion-card-content>
-            </ion-card>
+                </ion-card-content>
+              </ion-card>
+            </div>
 
             <!-- Show detailed content only if it exists and has subheadings -->
             <div v-if="hasSubheadings">
@@ -248,41 +351,79 @@
             </ion-card-header>
             <ion-card-content>
               <ion-accordion-group>
-                <ion-accordion value="words-to-avoid">
-                  <ion-item slot="header" color="danger">
-                    <ion-icon :icon="closeCircle" slot="start" color="danger"></ion-icon>
-                    <ion-label>Words Not to Use</ion-label>
-                  </ion-item>
-                  <div class="ion-padding" slot="content">
-                    <ion-list>
-                      <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
-                        <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
-                        <ion-label>
-                          <h4>{{ word.term }}</h4>
-                          <p>{{ word.reason }}</p>
-                        </ion-label>
-                      </ion-item>
-                    </ion-list>
-                  </div>
-                </ion-accordion>
+                <!-- For hearing-needs page: Green block first, then red block -->
+                <template v-if="route.params.id === 'hearing-needs'">
+                  <ion-accordion value="words-to-use">
+                    <ion-item slot="header" color="success">
+                      <ion-icon :icon="checkmarkCircle" slot="start" color="success"></ion-icon>
+                      <ion-label>Respectful language for referring to individuals with hearing difficulties</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item v-for="(word, index) in disabilityContent.language.wordsToUse" :key="index">
+                          <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                          <ion-label>
+                            <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
 
-                <ion-accordion value="words-to-use">
-                  <ion-item slot="header" color="success">
-                    <ion-icon :icon="checkmarkCircle" slot="start" color="success"></ion-icon>
-                    <ion-label>Words to Use</ion-label>
-                  </ion-item>
-                  <div class="ion-padding" slot="content">
-                    <ion-list>
-                      <ion-item v-for="(word, index) in disabilityContent.language.wordsToUse" :key="index">
-                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>
-                          <h4>{{ word.term }}</h4>
-                          <p>{{ word.explanation }}</p>
-                        </ion-label>
-                      </ion-item>
-                    </ion-list>
-                  </div>
-                </ion-accordion>
+                  <ion-accordion value="words-to-avoid">
+                    <ion-item slot="header" color="danger">
+                      <ion-icon :icon="closeCircle" slot="start" color="danger"></ion-icon>
+                      <ion-label>Language to be avoided when referring to individuals with hearing difficulties</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
+                          <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
+                          <ion-label>
+                            <h4>{{ word.term }} - {{ word.reason }}</h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </template>
+
+                <!-- For other pages: Red block first, then green block (original order) -->
+                <template v-else>
+                  <ion-accordion value="words-to-avoid">
+                    <ion-item slot="header" color="danger">
+                      <ion-icon :icon="closeCircle" slot="start" color="danger"></ion-icon>
+                      <ion-label>Words Not to Use</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
+                          <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
+                          <ion-label>
+                            <h4>{{ word.term }} - {{ word.reason }}</h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+
+                  <ion-accordion value="words-to-use">
+                    <ion-item slot="header" color="success">
+                      <ion-icon :icon="checkmarkCircle" slot="start" color="success"></ion-icon>
+                      <ion-label>Words to Use</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item v-for="(word, index) in disabilityContent.language.wordsToUse" :key="index">
+                          <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                          <ion-label>
+                            <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </template>
               </ion-accordion-group>
             </ion-card-content>
           </ion-card>
@@ -315,7 +456,8 @@
 
               <div class="ion-padding">
                 <div v-if="selectedUnderstandingSection === 'strengths'">
-                  <h3>Understanding Strengths</h3>
+                  <h3 v-if="route.params.id === 'hearing-needs'">Some questions and prompts to support an understanding of the strengths of the learner from their own perspective:</h3>
+                  <h3 v-else>Understanding Strengths</h3>
                   <ion-list>
                     <ion-item v-for="(question, index) in disabilityContent.understanding.strengths" :key="index">
                       <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
@@ -325,7 +467,8 @@
                 </div>
 
                 <div v-else-if="selectedUnderstandingSection === 'challenges'">
-                  <h3>Understanding Challenges</h3>
+                  <h3 v-if="route.params.id === 'hearing-needs'">Some questions and prompts to support an understanding of the challenges the learner has encountered from their own perspective</h3>
+                  <h3 v-else>Understanding Challenges</h3>
                   <ion-list>
                     <ion-item v-for="(question, index) in disabilityContent.understanding.challenges" :key="index">
                       <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
@@ -335,7 +478,8 @@
                 </div>
 
                 <div v-else-if="selectedUnderstandingSection === 'strategies'">
-              <h3>Support Strategies</h3>
+                  <h3 v-if="route.params.id === 'hearing-needs'">Some questions and prompts to support an understanding of strategies that will support learning</h3>
+                  <h3 v-else>Support Strategies</h3>
                   <ion-list>
                     <ion-item v-for="(question, index) in disabilityContent.understanding.strategies" :key="index">
                       <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
@@ -345,7 +489,8 @@
                 </div>
 
                 <div v-else-if="selectedUnderstandingSection === 'advocacy'">
-                  <h3>Supporting Self-Advocacy</h3>
+                  <h3 v-if="route.params.id === 'hearing-needs'">Some statements which will indicate that the learner should advocate for what will help her</h3>
+                  <h3 v-else>Supporting Self-Advocacy</h3>
                   <ion-list>
                     <ion-item v-for="(statement, index) in disabilityContent.understanding.advocacy" :key="index">
                       <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -457,8 +602,8 @@
                 </ion-accordion>
 
                 <ion-accordion value="social-enabling">
-                  <ion-item slot="header" color="secondary">
-                    <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                  <ion-item slot="header" color="success">
+                    <ion-icon :icon="people" slot="start" color="success"></ion-icon>
                     <ion-label>Social Environment</ion-label>
                   </ion-item>
                   <div class="ion-padding" slot="content">
@@ -472,8 +617,8 @@
                 </ion-accordion>
 
                 <ion-accordion value="tasks-enabling">
-                  <ion-item slot="header" color="tertiary">
-                    <ion-icon :icon="document" slot="start" color="tertiary"></ion-icon>
+                  <ion-item slot="header" color="danger">
+                    <ion-icon :icon="document" slot="start" color="danger"></ion-icon>
                     <ion-label>Tasks</ion-label>
                   </ion-item>
                   <div class="ion-padding" slot="content">
@@ -596,11 +741,14 @@
                   </ion-item>
                 </ion-list>
 
-                <h4>Key Learning Points</h4>
-                <ion-chip v-for="(point, index) in disabilityContent.caseStudy.learningPoints" :key="index" color="success">
-                  <ion-icon :icon="checkmark"></ion-icon>
-                  <ion-label>{{ point }}</ion-label>
-                </ion-chip>
+                <!-- Only show Key Learning Points for pages other than hearing-needs -->
+                <div v-if="route.params.id !== 'hearing-needs'">
+                  <h4>Key Learning Points</h4>
+                  <ion-chip v-for="(point, index) in disabilityContent.caseStudy.learningPoints" :key="index" color="success">
+                    <ion-icon :icon="checkmark"></ion-icon>
+                    <ion-label>{{ point }}</ion-label>
+                  </ion-chip>
+                </div>
               </div>
             </ion-card-content>
           </ion-card>
@@ -666,7 +814,8 @@
                       <ion-list>
                         <ion-item>
                           <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                          <ion-label>How could you adapt the visual supports mentioned in the case study for your own students?</ion-label>
+                          <ion-label v-if="route.params.id === 'hearing-needs'">How could you adapt the hearing supports mentioned in the case study for your own students?</ion-label>
+                          <ion-label v-else>How could you adapt the visual supports mentioned in the case study for your own students?</ion-label>
                         </ion-item>
                         <ion-item>
                           <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
@@ -695,7 +844,10 @@
                   <ion-icon :icon="bulb" slot="start" color="secondary"></ion-icon>
                   Practice Reflection
                 </h4>
-                <p class="reflection-prompt">
+                <p class="reflection-prompt" v-if="route.params.id === 'hearing-needs'">
+                  Thinking about the lesson you taught recently, how might it be made more accessible to learners with hearing needs?
+                </p>
+                <p class="reflection-prompt" v-else>
                   Think about your current teaching practice. What aspects of your approach could be made more accessible 
                   for students with visual needs? What barriers might exist and how could you remove them?
                 </p>
@@ -718,7 +870,21 @@
                       <ion-label>Think about...</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
-                      <ion-list>
+                      <ion-list v-if="route.params.id === 'hearing-needs'">
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>Have you considered the use of picture prompt?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>Could you use technology to support learners with hearing needs? E.G captioning on videos, speech to text software?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>How could the learning environment be improved? Consider background noise, seating positions.</ion-label>
+                        </ion-item>
+                      </ion-list>
+                      <ion-list v-else>
                         <ion-item>
                           <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
                           <ion-label>Could you offer your student some extra support with visual materials?</ion-label>
@@ -754,7 +920,10 @@
                   <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
                   Next Steps Action Plan
                 </h4>
-                <p class="reflection-prompt">
+                <p class="reflection-prompt" v-if="route.params.id === 'hearing-needs'">
+                  How could hearing learners support the learning of learners with hearing needs in your classroom?
+                </p>
+                <p class="reflection-prompt" v-else>
                   Based on your reflections, what specific actions will you take to improve your practice? 
                   Set concrete, achievable goals with timelines for implementation.
                 </p>
@@ -777,7 +946,21 @@
                       <ion-label>Think about...</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
-                      <ion-list>
+                      <ion-list v-if="route.params.id === 'hearing-needs'">
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>What rules for communicating might help hearing learners support those with hearing needs?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>What basic Zimbabwean sign language signs would be useful to teach all learners?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                          <ion-label>How might you intervene to ensure learners with hearing needs are included in social activities?</ion-label>
+                        </ion-item>
+                      </ion-list>
+                      <ion-list v-else>
                         <ion-item>
                           <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
                           <ion-label>What specific resources do you need to acquire or develop?</ion-label>
@@ -876,7 +1059,7 @@
           </ion-card>
 
           <!-- 9. Quiz -->
-          <ion-card id="knowledge-check">
+          <ion-card id="knowledge-check" v-if="pageSections.showQuiz">
             <ion-card-header>
               <ion-card-title>Knowledge Check</ion-card-title>
               <ion-card-subtitle>Test Your Understanding</ion-card-subtitle>
@@ -911,17 +1094,83 @@
                       </ion-radio-group>
                     </div>
                     
-                    <!-- Matching Questions -->
-                    <div v-else-if="quizQuestions[currentQuizQuestion].type === 'matching'">
-                      <div class="matching-instructions">
+                    <!-- Multi True/False Questions -->
+                    <div v-else-if="quizQuestions[currentQuizQuestion].type === 'multi-true-false'">
+                      <div class="multi-true-false-instructions">
                         <ion-note color="primary">
-                          <strong>Instructions:</strong> Match each communication support strategy (A, B, C) with its correct purpose (1, 2, 3) using the dropdown menus.
+                          <strong>Instructions:</strong> Answer each statement as True or False using the dropdown menus.
                         </ion-note>
                       </div>
                       <ion-list>
-                        <ion-item v-for="strategy in quizQuestions[currentQuizQuestion].strategies" :key="strategy.id" class="matching-item">
+                        <ion-item v-for="(subQ, subIndex) in quizQuestions[currentQuizQuestion].subQuestions" :key="subQ.id" class="multi-true-false-item">
                           <ion-label>
-                            <h4><strong>{{ strategy.id }}.</strong> {{ strategy.text }}</h4>
+                            <h4><strong>{{ getQuestionLetter(subIndex) }})</strong> {{ subQ.text }}</h4>
+                          </ion-label>
+                          <ion-select 
+                            v-model="matchingAnswers[subQ.id]" 
+                            interface="popover" 
+                            placeholder="True or False"
+                            :value="matchingAnswers[subQ.id]"
+                            class="multi-true-false-select"
+                          >
+                            <ion-select-option value="">Select answer</ion-select-option>
+                            <ion-select-option value="true">True</ion-select-option>
+                            <ion-select-option value="false">False</ion-select-option>
+                          </ion-select>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                    
+                    <!-- Fill-in-the-Blank Questions -->
+                    <div v-else-if="quizQuestions[currentQuizQuestion].type === 'fill-in-blank'">
+                      <div class="fill-in-blank-instructions">
+                        <ion-note color="primary">
+                          <strong>Instructions:</strong> Complete each sentence by selecting the most appropriate word or phrase from the dropdown menus.
+                        </ion-note>
+                      </div>
+                      <ion-list>
+                        <ion-item v-for="(sentence, sentenceIndex) in quizQuestions[currentQuizQuestion].sentences" :key="sentence.id" class="fill-in-blank-item">
+                          <ion-label>
+                            <h4>
+                              <strong>{{ getQuestionLetter(sentenceIndex) }})</strong> 
+                              <span class="fill-in-blank-text">{{ sentence.textBefore }}</span>
+                              <ion-select 
+                                v-model="matchingAnswers[sentence.id]" 
+                                interface="popover" 
+                                placeholder="Select answer"
+                                :value="matchingAnswers[sentence.id]"
+                                class="fill-in-blank-select"
+                              >
+                                <ion-select-option value="">Select answer</ion-select-option>
+                                <ion-select-option 
+                                  v-for="option in sentence.options" 
+                                  :key="option" 
+                                  :value="option"
+                                >
+                                  {{ option }}
+                                </ion-select-option>
+                              </ion-select>
+                              <span class="fill-in-blank-text">{{ sentence.textAfter }}</span>
+                            </h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                    
+                    <!-- Matching Questions -->
+                  <div v-else-if="quizQuestions[currentQuizQuestion].type === 'matching'">
+                    <div class="matching-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> Match each 
+                        <span v-if="route.params.id === 'hearing-needs'">hearing support strategy</span>
+                        <span v-else>communication support strategy</span>
+                        (a, b, c) with its correct purpose (a, b, c) using the dropdown menus.
+                      </ion-note>
+                    </div>
+                      <ion-list>
+                        <ion-item v-for="(strategy, strategyIndex) in quizQuestions[currentQuizQuestion].strategies" :key="strategy.id" class="matching-item">
+                          <ion-label>
+                            <h4><strong>{{ getQuestionLetter(strategyIndex) }})</strong> {{ strategy.text }}</h4>
                           </ion-label>
                           <ion-select 
                             v-model="matchingAnswers[strategy.id]" 
@@ -932,19 +1181,47 @@
                           >
                             <ion-select-option value="">Select purpose</ion-select-option>
                             <ion-select-option 
-                              v-for="purpose in quizQuestions[currentQuizQuestion].purposes" 
+                              v-for="(purpose, purposeIndex) in quizQuestions[currentQuizQuestion].purposes" 
                               :key="purpose.id" 
                               :value="purpose.id"
                             >
-                              {{ purpose.id }}. {{ purpose.text }}
+                              {{ getQuestionLetter(purposeIndex) }}) {{ purpose.text }}
                             </ion-select-option>
                           </ion-select>
                         </ion-item>
                       </ion-list>
                     </div>
                     
+                    <!-- Select All That Apply Questions -->
+                    <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'select-all'">
+                      <div class="select-all-instructions">
+                        <ion-note color="primary">
+                          <strong>Instructions:</strong> Select all options that apply. You can either select "All of these" OR select all the individual options.
+                        </ion-note>
+                      </div>
+                      <ion-list>
+                        <ion-item v-for="option in quizQuestions[currentQuizQuestion].options" :key="option.value" class="select-all-item">
+                          <!-- Test with regular HTML checkbox first -->
+                          <input 
+                            type="checkbox" 
+                            :value="option.value" 
+                            v-model="checkboxAnswers[option.value]"
+                            style="margin-right: 10px;"
+                          />
+                          <ion-label>
+                            <h4><strong>{{ option.value }})</strong> {{ option.text }}</h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                    
                     <div class="ion-padding-top">
-                      <ion-button expand="block" color="primary" @click="nextQuizQuestion" :disabled="!currentQuizAnswer && quizQuestions[currentQuizQuestion].type !== 'matching'">
+                      <ion-button 
+                        expand="block" 
+                        color="primary"
+                        @click="nextQuizQuestion" 
+                        :disabled="!canProceedToNextQuestion"
+                      >
                         {{ currentQuizQuestion === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
                       </ion-button>
                     </div>
@@ -961,6 +1238,57 @@
                   <ion-card-content>
                     <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
                     <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+                    
+                    <!-- Detailed Results -->
+                    <div class="quiz-results-details" v-if="quizCompleted && quizQuestions.length > 0">
+                      <h4>Question Results:</h4>
+                      <div v-for="(question, index) in quizQuestions" :key="index" class="question-result-item">
+                        <div class="question-content">
+                          <ion-item class="question-item">
+                            <ion-label>
+                              <h5 class="question-heading">
+                                <ion-icon 
+                                  :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle" 
+                                  :color="isQuestionCorrect(index) ? 'success' : 'danger'"
+                                  class="question-status-icon"
+                                ></ion-icon>
+                                Question {{ index + 1 }}
+                              </h5>
+                              <p>{{ question.question }}</p>
+                              <ion-note color="medium">
+                                <strong>Your answer:</strong> {{ formatUserAnswer(index) }} | 
+                                <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              </ion-note>
+                              
+                                                            <!-- Learning Tip for All Answers - appears inside the ion-label -->
+                              <div class="learning-tip-container">
+                                <ion-accordion-group>
+                                <ion-accordion>
+                                  <ion-item slot="header" class="learning-tip-header">
+                                    <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
+                                    <ion-label>
+                                      <p>Explanation</p>
+                                    </ion-label>
+                                  </ion-item>
+                                  <div slot="content" class="ion-padding">
+                                    <p>{{ getQuestionTip(index) }}</p>
+                                    
+                                    <div class="explanation-divider"></div>
+                                    
+                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                    <p>{{ getLearningPoint(index) }}</p>
+                                  </div>
+                                </ion-accordion>
+                              </ion-accordion-group>
+                            </div>
+                            </ion-label>
+                          </ion-item>
+                        </div>
+                        
+                        <!-- Manual divider after learning tip -->
+                        <div class="question-divider"></div>
+                      </div>
+                    </div>
                     
                     <ion-button expand="block" color="primary" @click="retakeQuiz">
                       <ion-icon :icon="refresh" slot="start"></ion-icon>
@@ -994,7 +1322,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { 
   IonButtons, 
   IonContent, 
@@ -1080,6 +1408,54 @@ import {
 
 const route = useRoute();
 
+// Quiz question interfaces
+interface BaseQuestion {
+  question: string;
+  type?: string;
+}
+
+interface MultipleChoiceQuestion extends BaseQuestion {
+  options: { value: string; text: string }[];
+  correctAnswer: string;
+}
+
+interface MultiTrueFalseQuestion extends BaseQuestion {
+  type: 'multi-true-false';
+  subQuestions: { id: string; text: string; correctAnswer: string; explanation: string }[];
+}
+
+interface FillInBlankQuestion extends BaseQuestion {
+  type: 'fill-in-blank';
+  sentences: { id: string; textBefore: string; textAfter: string; correctAnswer: string; options: string[] }[];
+}
+
+interface MatchingQuestion extends BaseQuestion {
+  type: 'matching';
+  strategies: { id: string; text: string }[];
+  purposes: { id: string; text: string }[];
+  correctAnswers: { [key: string]: string };
+}
+
+interface SelectAllQuestion extends BaseQuestion {
+  type: 'select-all';
+  options: { value: string; text: string }[];
+  correctAnswers: string[];
+  alternativeCorrectAnswers: string[];
+}
+
+interface TrueFalseQuestion extends BaseQuestion {
+  type: 'true-false';
+  options: { value: string; text: string }[];
+  correctAnswer: string;
+}
+
+type QuizQuestion = MultipleChoiceQuestion | MultiTrueFalseQuestion | FillInBlankQuestion | MatchingQuestion | SelectAllQuestion | TrueFalseQuestion;
+
+// Helper function to convert question index to letter (0 = a, 1 = b, etc.)
+const getQuestionLetter = (index: number): string => {
+  return String.fromCharCode(97 + index); // 97 is ASCII for 'a'
+};
+
 // Reflective Writing State
 const selectedReflectionVersion = ref('current');
 const reflectionVersions = ref([
@@ -1130,6 +1506,13 @@ const autoSaveReflection = () => {
 onMounted(() => {
   console.log('DisabilityPage mounted, loading reflections...');
   
+  // Clear any existing hearing-needs quiz data to ensure fresh start
+  const pageId = route.params.id as string;
+  if (pageId === 'hearing-needs') {
+    ProgressService.resetQuizCompletion(pageId);
+    console.log('Cleared existing hearing-needs quiz data');
+  }
+  
   // Load existing reflection versions from localStorage
   loadExistingReflectionVersions();
   console.log('Reflection loading completed');
@@ -1137,6 +1520,16 @@ onMounted(() => {
   // Load quiz completion state from localStorage
   loadQuizState();
   console.log('Quiz state loading completed');
+  
+  // Debug: Log quiz questions for hearing-needs page
+  if (pageId === 'hearing-needs') {
+    setTimeout(() => {
+      console.log('Quiz questions on mount:', quizQuestions.value);
+      console.log('Question 4 details:', quizQuestions.value[3]);
+      console.log('Question 4 type:', quizQuestions.value[3]?.type);
+      console.log('Question 4 options:', quizQuestions.value[3]?.options);
+    }, 100);
+  }
   
   // Handle anchor scrolling after a delay to ensure DOM is ready
   const storedAnchor = sessionStorage.getItem('scrollToAnchor');
@@ -1238,25 +1631,133 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const matchingAnswers = ref<{ [key: string]: string }>({});
 const quizAnswers = ref<{ [key: number]: string | { [key: string]: string } }>({});
+const checkboxAnswers = ref<{ [key: string]: boolean }>({});
 
-// Computed property to check if user can proceed to next question
-const canProceedToNextQuestion = computed(() => {
+// Simple computed property to check if all questions are answered
+const allQuestionsAnswered = computed(() => {
   const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
   
-  if (!currentQuestion) {
-    return false;
-  }
+  console.log('=== allQuestionsAnswered Debug ===');
+  console.log('Current question:', currentQuestion);
+  console.log('Question type:', currentQuestion?.type);
+  console.log('Question options:', currentQuestion?.options);
   
-  if (currentQuestion.type === 'matching' && currentQuestion.strategies) {
-    // Check if all strategies have been matched
-    return currentQuestion.strategies.every(strategy => 
-      matchingAnswers.value && matchingAnswers.value[strategy.id]
+  if (currentQuestion?.type === 'multi-true-false' && 'subQuestions' in currentQuestion) {
+    return currentQuestion.subQuestions.every(subQ => 
+      matchingAnswers.value && matchingAnswers.value[subQ.id] !== undefined && matchingAnswers.value[subQ.id] !== ''
     );
   }
   
-  // For other question types, check if an answer is selected
-  return !!currentQuizAnswer.value;
+  if (currentQuestion?.type === 'select-all' && 'options' in currentQuestion) {
+    // Check if at least one option is selected
+    const hasSelection = Object.values(checkboxAnswers.value).some(checked => checked);
+    console.log('Select-all validation - hasSelection:', hasSelection, 'checkboxAnswers:', checkboxAnswers.value);
+    return hasSelection;
+  }
+  
+  return false;
 });
+
+// Manual validation function for debugging
+const checkButtonState = () => {
+  console.log('=== Manual Button State Check ===');
+  console.log('matchingAnswers.value:', matchingAnswers.value);
+  console.log('currentQuizQuestion.value:', currentQuizQuestion.value);
+  
+  const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
+  console.log('Current question:', currentQuestion);
+  
+  if (currentQuestion?.type === 'multi-true-false' && 'subQuestions' in currentQuestion) {
+    const allAnswered = currentQuestion.subQuestions.every(subQ => {
+      const hasAnswer = matchingAnswers.value && matchingAnswers.value[subQ.id] !== undefined && matchingAnswers.value[subQ.id] !== '';
+      console.log(`Sub-question ${subQ.id} has answer:`, hasAnswer, 'Value:', matchingAnswers.value?.[subQ.id]);
+      return hasAnswer;
+    });
+    console.log('Manual check - All answered:', allAnswered);
+    return allAnswered;
+  }
+  
+  return false;
+};
+
+// Debug: Watch for changes to matchingAnswers
+watch(matchingAnswers, (newVal) => {
+  console.log('matchingAnswers changed:', newVal);
+  // Manually check button state when answers change
+  setTimeout(() => {
+    checkButtonState();
+  }, 100);
+}, { deep: true });
+
+// Watch for question changes and clear answers
+watch(currentQuizQuestion, (newVal) => {
+  console.log('Question changed to:', newVal);
+  // Clear checkbox answers when moving to a new question
+  checkboxAnswers.value = {};
+  // Clear matching answers when moving to a new question
+  matchingAnswers.value = {};
+}, { immediate: false });
+
+// Computed property to check if user can proceed to next question
+const canProceedToNextQuestion = computed(() => {
+  // Force reactivity by explicitly accessing the ref values
+  const currentIndex = currentQuizQuestion.value;
+  const answers = matchingAnswers.value;
+  const currentAnswer = currentQuizAnswer.value;
+  
+  const currentQuestion = quizQuestions.value[currentIndex];
+  
+  console.log('=== canProceedToNextQuestion Debug ===');
+  console.log('Current question index:', currentIndex);
+  console.log('Current question:', currentQuestion);
+  console.log('Current question type:', currentQuestion?.type);
+  console.log('matchingAnswers.value:', answers);
+  console.log('currentQuizAnswer.value:', currentAnswer);
+  
+  if (!currentQuestion) {
+    console.log('No current question, returning false');
+    return false;
+  }
+  
+  if (currentQuestion.type === 'matching' && 'strategies' in currentQuestion) {
+    // Check if all strategies have been matched
+    const result = currentQuestion.strategies.every(strategy => 
+      answers && answers[strategy.id] !== undefined && answers[strategy.id] !== ''
+    );
+    console.log('Matching question validation result:', result);
+    return result;
+  }
+  
+  if (currentQuestion.type === 'multi-true-false' && 'subQuestions' in currentQuestion) {
+    // Use our simple computed property
+    const result = allQuestionsAnswered.value;
+    console.log('Multi-true-false using allQuestionsAnswered:', result);
+    return result;
+  }
+  
+  if (currentQuestion.type === 'select-all' && 'options' in currentQuestion) {
+    // Check if at least one checkbox is selected
+    const hasSelection = Object.values(checkboxAnswers.value).some(checked => checked);
+    console.log('Select-all validation - hasSelection:', hasSelection, 'checkboxAnswers:', checkboxAnswers.value);
+    return hasSelection;
+  }
+  
+  if (currentQuestion.type === 'fill-in-blank' && 'sentences' in currentQuestion) {
+    // Check if all sentences have been completed
+    const result = currentQuestion.sentences.every(sentence => 
+      answers && answers[sentence.id] !== undefined && answers[sentence.id] !== ''
+    );
+    console.log('Fill-in-blank validation result:', result);
+    return result;
+  }
+  
+  // For other question types, check if an answer is selected
+  const result = !!currentAnswer;
+  console.log('Regular question validation result:', result);
+  return result;
+});
+
+
 
 // Comprehensive disability content data following the specified structure
 const disabilityData = {
@@ -1529,64 +2030,119 @@ const disabilityData = {
 };
 
 // Quiz questions for each disability
-const quizQuestions = computed(() => {
+const quizQuestions = computed((): QuizQuestion[] => {
   const id = route.params.id as string;
   
   if (id === 'hearing-needs') {
     return [
       {
-        question: "Which of the following is the most appropriate way to describe a student with hearing loss?",
+        question: "What is an example of respectful language to use when describing a learner who has hearing needs?",
         options: [
-          { value: 'a', text: 'Deaf and dumb' },
-          { value: 'b', text: 'Student with hearing loss' },
-          { value: 'c', text: 'Hearing impaired person' },
-          { value: 'd', text: 'Partially deaf student' }
+          { value: 'a', text: 'Deaf or has hearing loss' },
+          { value: 'b', text: 'Deaf and dumb' },
+          { value: 'c', text: 'Handicapped' }
         ],
-        correctAnswer: 'b'
+        correctAnswer: 'a'
       },
       {
-        question: "What is the most effective strategy for supporting students with hearing needs in group discussions?",
-        options: [
-          { value: 'a', text: 'Speaking louder and more slowly' },
-          { value: 'b', text: 'Providing written summaries and visual aids' },
-          { value: 'c', text: 'Asking them to sit at the front' },
-          { value: 'd', text: 'Using only verbal instructions' }
-        ],
-        correctAnswer: 'b'
+        question: "True or false:",
+        type: 'multi-true-false',
+        subQuestions: [
+          {
+            id: 'a',
+            text: "Low lighting can be problematic in classrooms for learners with hearing needs",
+            correctAnswer: 'true',
+            explanation: "True because learners with hearing needs will need to rely on their vision and will need to see speakers faces, mouths clearly as well as visual prompts and captions."
+          },
+          {
+            id: 'b',
+            text: "Learners with hearing needs may need extra time to process information",
+            correctAnswer: 'true',
+            explanation: "True because of the extra cognitive demands involved in processing information."
+          },
+          {
+            id: 'c',
+            text: "Dictation exercises are suitable for all deaf learners",
+            correctAnswer: 'false',
+            explanation: "False because learners with hearing needs may struggle to hear spoken information."
+          }
+        ]
       },
       {
-        question: "Students with hearing loss cannot participate effectively in classroom activities.",
+        question: "Complete the following sentences:",
+        type: 'fill-in-blank',
+        sentences: [
+          {
+            id: 'a',
+            textBefore: "Video content will be more accessible to learners with hearing needs if it includes",
+            textAfter: "",
+            correctAnswer: 'captions or subtitles',
+            options: [
+              'captions or subtitles',
+              'background music',
+              'fast speech',
+              'no sound',
+              'whispering',
+              'echo effects',
+              'foreign language',
+              'technical jargon'
+            ]
+          },
+          {
+            id: 'b',
+            textBefore: "Learners with hearing needs may",
+            textAfter: "information if they are not facing the teacher",
+            correctAnswer: 'miss',
+            options: [
+              'miss',
+              'hear clearly',
+              'understand better',
+              'focus more',
+              'learn faster',
+              'remember everything',
+              'enjoy the lesson',
+              'participate actively'
+            ]
+          },
+          {
+            id: 'c',
+            textBefore: "To reduce fatigue, learners with hearing needs may need regular",
+            textAfter: "",
+            correctAnswer: 'breaks or rest breaks',
+            options: [
+              'breaks or rest breaks',
+              'homework assignments',
+              'test questions',
+              'group discussions',
+              'written exercises',
+              'oral presentations',
+              'listening activities',
+              'noise exposure'
+            ]
+          }
+        ]
+      },
+      {
+        question: "Which resources may support the learning for learners with hearing needs - select all that apply.",
+        type: 'select-all',
+        options: [
+          { value: 'a', text: 'Sign language charts and posters' },
+          { value: 'b', text: 'Captions on videos' },
+          { value: 'c', text: 'Speech to text software' },
+          { value: 'd', text: 'Written materials' },
+          { value: 'e', text: 'All of these' }
+        ],
+        correctAnswers: ['e'],
+        alternativeCorrectAnswers: ['a', 'b', 'c', 'd'] // Alternative way to get it right
+      },
+      {
+        question: "True or false: it is important to face a learner with hearing needs, when you are speaking to them.",
         type: 'true-false',
         options: [
           { value: 'true', text: 'True' },
           { value: 'false', text: 'False' }
         ],
-        correctAnswer: 'false'
-      },
-      {
-        question: "Match the hearing support strategy to its purpose:",
-        type: 'matching',
-        strategies: [
-          { id: 'A', text: 'Captions on videos' },
-          { id: 'B', text: 'Peer note-taking' },
-          { id: 'C', text: 'Assistive listening devices' }
-        ],
-        purposes: [
-          { id: '1', text: 'Amplify speech and reduce background noise' },
-          { id: '2', text: 'Provide visual access to audio content' },
-          { id: '3', text: 'Support participation in discussions' }
-        ],
-        correctAnswers: { 'A': '2', 'B': '3', 'C': '1' } as { [key: string]: string }
-      },
-      {
-        question: "What is the best approach for providing feedback to a student with hearing needs?",
-        options: [
-          { value: 'a', text: 'Only give verbal feedback' },
-          { value: 'b', text: 'Provide written feedback alongside verbal' },
-          { value: 'c', text: 'Use gestures only' },
-          { value: 'd', text: 'Avoid giving feedback altogether' }
-        ],
-        correctAnswer: 'b'
+        correctAnswer: 'true'
       }
     ];
   }
@@ -1598,7 +2154,7 @@ const quizQuestions = computed(() => {
         options: [
           { value: 'a', text: 'Mute' },
           { value: 'b', text: 'Non-verbal' },
-          { value: 'c', text: 'Can\'t communicate' },
+          { value: 'c', text: 'Cannot communicate' },
           { value: 'd', text: 'Non-speaking' }
         ],
         correctAnswer: 'd'
@@ -1616,16 +2172,16 @@ const quizQuestions = computed(() => {
         question: "Match the communication support strategy to its purpose:",
         type: 'matching',
         strategies: [
-          { id: 'A', text: 'Visual timetable' },
-          { id: 'B', text: 'Clear seating plan' },
-          { id: 'C', text: 'Noise-cancelling headphones' }
+          { id: 'a', text: 'Visual timetable' },
+          { id: 'b', text: 'Clear seating plan' },
+          { id: 'c', text: 'Noise-cancelling headphones' }
         ],
         purposes: [
-          { id: '1', text: 'Reduce sensory input to support regulation' },
-          { id: '2', text: 'Help understand daily structure and transitions' },
-          { id: '3', text: 'Support concentration and communication access' }
+          { id: 'a', text: 'Reduce sensory input to support regulation' },
+          { id: 'b', text: 'Help understand daily structure and transitions' },
+          { id: 'c', text: 'Support concentration and communication access' }
         ],
-        correctAnswers: { 'A': '2', 'B': '3', 'C': '1' } as { [key: string]: string }
+        correctAnswers: { 'a': 'b', 'b': 'c', 'c': 'a' } as { [key: string]: string }
       },
       {
         question: "Children who cannot speak cannot learn.",
@@ -1735,11 +2291,113 @@ const getCategoryTitle = () => {
   return disabilityData[id as keyof typeof disabilityData]?.category || 'Disability Category';
 };
 
-const hasSubheadings = computed(() => {
+// Flexible section control for each disability page
+const pageSections = computed(() => {
   const id = route.params.id as string;
-  // Pages with subheadings: physical-disabilities (Visual Needs), hearing-needs, communication
-  // Pages without subheadings: physical-sensory-needs, cognitive-intellectual-needs, speech-language-needs, multiple-disabilities
-  return id === 'physical-disabilities' || id === 'hearing-needs' || id === 'communication';
+  
+  const sections: { [key: string]: {
+    hasSubheadings: boolean;
+    showKeyConsiderations: boolean;
+    showLanguage: boolean;
+    showUnderstanding: boolean;
+    showChallenges: boolean;
+    showEnabling: boolean;
+    showResources: boolean;
+    showCaseStudy: boolean;
+    showReflectiveTasks: boolean;
+    showQuiz: boolean;
+  }} = {
+    'physical-disabilities': {
+      hasSubheadings: true,
+      showKeyConsiderations: true,
+      showLanguage: true,
+      showUnderstanding: true,
+      showChallenges: true,
+      showEnabling: true,
+      showResources: true,
+      showCaseStudy: true,
+      showReflectiveTasks: true,
+      showQuiz: true
+    },
+    'hearing-needs': {
+      hasSubheadings: true,
+      showKeyConsiderations: false, // No key considerations for hearing needs
+      showLanguage: true,
+      showUnderstanding: true,
+      showChallenges: true,
+      showEnabling: true,
+      showResources: true,
+      showCaseStudy: true,
+      showReflectiveTasks: true,
+      showQuiz: true
+    },
+    'communication': {
+      hasSubheadings: true,
+      showKeyConsiderations: false,
+      showLanguage: true,
+      showUnderstanding: true,
+      showChallenges: true,
+      showEnabling: true,
+      showResources: true,
+      showCaseStudy: true,
+      showReflectiveTasks: true,
+      showQuiz: true
+    },
+    'physical-sensory-needs': {
+      hasSubheadings: false,
+      showKeyConsiderations: false,
+      showLanguage: false,
+      showUnderstanding: false,
+      showChallenges: false,
+      showEnabling: false,
+      showResources: false,
+      showCaseStudy: false,
+      showReflectiveTasks: false,
+      showQuiz: false
+    },
+    'cognitive-intellectual-needs': {
+      hasSubheadings: false,
+      showKeyConsiderations: false,
+      showLanguage: false,
+      showUnderstanding: false,
+      showChallenges: false,
+      showEnabling: false,
+      showResources: false,
+      showCaseStudy: false,
+      showReflectiveTasks: false,
+      showQuiz: false
+    },
+    'speech-language-needs': {
+      hasSubheadings: false,
+      showKeyConsiderations: false,
+      showLanguage: false,
+      showUnderstanding: false,
+      showChallenges: false,
+      showEnabling: false,
+      showResources: false,
+      showCaseStudy: false,
+      showReflectiveTasks: false,
+      showQuiz: false
+    },
+    'multiple-disabilities': {
+      hasSubheadings: false,
+      showKeyConsiderations: false,
+      showLanguage: false,
+      showUnderstanding: false,
+      showChallenges: false,
+      showEnabling: false,
+      showResources: false,
+      showCaseStudy: false,
+      showReflectiveTasks: false,
+      showQuiz: false
+    }
+  };
+  
+  return sections[id] || sections['physical-disabilities']; // Default fallback
+});
+
+const hasSubheadings = computed(() => {
+  return pageSections.value.hasSubheadings;
 });
 
 const disabilityContent = computed(() => {
@@ -1748,148 +2406,130 @@ const disabilityContent = computed(() => {
     return {
       title: 'Hearing Needs',
       category: 'Hearing Needs',
-      description: 'Hearing needs encompass a range of conditions that may affect a student\'s ability to process auditory information, including speech, audio content, and environmental sounds. This comprehensive guide provides information and strategies for supporting students with various hearing needs.',
+      description: '',
       language: {
         wordsToAvoid: [
-          { term: 'Deaf and dumb', reason: 'Offensive and inaccurate - people with hearing loss can communicate' },
-          { term: 'Hearing impaired person', reason: 'Some prefer "deaf person" or "person with hearing loss"' },
-          { term: 'Suffers from hearing loss', reason: 'Implies illness or tragedy rather than a difference' },
-          { term: 'Partially deaf', reason: 'Vague term that doesn\'t describe specific needs' }
+          { term: 'Deaf and dumb/deaf-mute', reason: 'Can suggest problems with intelligence' },
+          { term: 'Suffers from hearing loss', reason: 'Implies suffering' },
+          { term: 'Handicapped person', reason: 'Outdated and offensive' },
+          { term: 'Normal hearing child', reason: 'Implies individuals with hearing loss are "abnormal." Use "hearing child."' }
         ],
         wordsToUse: [
-          { term: 'Student with hearing loss', explanation: 'Person-first language that respects individual identity' },
-          { term: 'Deaf student', explanation: 'Identity-first language preferred by many in the Deaf community' },
-          { term: 'Student with hearing impairment', explanation: 'Alternative acceptable terminology' },
-          { term: 'Student who is hard of hearing', explanation: 'Clear description of moderate hearing loss' }
+          { term: 'Deaf', explanation: 'Refers to the condition of profound or complete hearing loss' },
+          { term: 'Deaf', explanation: 'Many individuals with hearing needs prefer a capital D to be used when referring to being part of the Deaf community' },
+          { term: 'Hearing loss', explanation: 'Refers to individuals with some hearing loss-they may use hearing aids and/or speech' },
+          { term: 'Person with hearing loss', explanation: 'Does not depend on the severity' },
+          { term: 'Uses sign language', explanation: 'Describes communication method' },
+          { term: 'Non-verbal', explanation: 'Only to be used if the person does not use speech. They may communicate in different ways- i.e sign language' }
         ]
       },
       understanding: {
         strengths: [
-          'What communication methods work best for you?',
-          'Which assistive technologies do you find most helpful?',
-          'What are your preferred learning activities?',
-          'How do you like to receive information?',
-          'What visual cues help you understand conversations?'
+          'What is your preferred way to communicate—signing, speaking, writing, drawing, or something else?',
+          'What is the best position for you in the classroom in relation to the person speaking?',
+          'What helps you understand things best e.g. seeing, doing, reading, or hearing?',
+          'When learning new things, how do you prefer teachers to explain things to you?'
         ],
         challenges: [
-          'What sounds or speech are most difficult to understand?',
-          'How do you handle group conversations?',
-          'What barriers do you face in noisy environments?',
-          'Which learning situations are most challenging?',
-          'How do you manage when multiple people speak at once?'
+          'What challenges do you have during class discussions, group work or when your teacher is instructing the class?',
+          'Is there anything you would like your classmates or teachers to do differently when communicating with you?',
+          'Do you have any problems using your hearing aids/apps or other tools?'
         ],
         strategies: [
-          'What support strategies have been most effective?',
-          'How do you prefer to access audio content?',
-          'What environmental adjustments help you most?',
-          'Which communication methods work best for you?',
-          'What technology supports your learning best?'
+          'What helps your learning in the classroom (seating, pictures, slides, things written on the board or spoken?',
+          'Do you prefer quiet spaces or smaller group sizes?',
+          'How is your learning affected by lighting or background noise?',
+          'What communication methods work best for you (sign language, lip reading, something else?'
         ],
         advocacy: [
-          'I need captions for all videos',
-          'Please face me when speaking',
-          'I prefer written instructions alongside verbal ones',
-          'Background noise makes it difficult to concentrate',
-          'I may need to ask for clarification or repetition'
+          'I found these parts of the lesson easy/hard to understand.',
+          'Please do something differently, that will help me to...',
+          'I need to sit somewhere else',
+          'I need some equipment to help with my learning.'
         ]
       },
       challenges: {
         physical: [
-          'Difficulty hearing in noisy environments',
-          'Struggling with audio-only content',
-          'Missing parts of conversations',
-          'Fatigue from concentrating on listening',
-          'Difficulty with phone or video calls'
+          'Background noise (AC systems, chatter, outside noise)',
+          'Poor acoustics- can create echoes, making speech harder to understand',
+          'Low or flickering lighting can interfere with learners\' ability to lip read or see key visuals',
+          'Learners faced away from the teacher or visual cues may miss information',
+          'The absence of written instructions, captions, or visual cues can make following verbal lessons difficult'
         ],
         social: [
-          'Feeling isolated in group discussions',
-          'Missing social cues and context',
-          'Difficulty participating in fast-paced conversations',
-          'Embarrassment about asking for repetition',
-          'Struggling with multiple speakers'
+          'Noisy environments can make it difficult to follow instruction or group discussions',
+          'Missed social cues, such as tone of voice, humour, nuance—leading to confusion or social misunderstandings',
+          'Without understanding how to include and communicate with deaf or hard-of-hearing peers, classmates may unintentionally exclude them'
         ],
         tasks: [
-          'Following verbal instructions',
-          'Participating in class discussions',
-          'Understanding audio recordings',
-          'Working in noisy group settings',
-          'Accessing multimedia content'
+          'Verbal explanations and examples can be limiting if not supported by visuals or gestures',
+          'Listening and dictation tasks can disadvantage learners',
+          'In longer tasks, learners may struggle with extra effort involved in listening, processing and concentrating',
+          'Information shared informally through peer or teacher talk may be missed, reducing understanding'
         ],
         assessment: [
-          'Oral presentations and discussions',
-          'Listening comprehension tests',
-          'Group work assessments',
-          'Audio-based learning activities',
-          'Verbal feedback and instructions'
+          'Verbal Instructions without written or visual support can limit understanding',
+          'Listening-based assessments can be inaccessible, even with hearing aids',
+          'Learners with hearing needs may struggle to show their knowledge in formats like oral presentations or spoken responses',
+          'Time Pressure- learners with hearing needs may need extra time for processing, interpreting and understanding tasks'
         ]
       },
       enabling: {
         physical: [
-          'Provide written materials alongside verbal content',
-          'Use visual aids and diagrams',
-          'Ensure good lighting for lip reading',
-          'Reduce background noise and distractions',
-          'Use assistive listening devices'
+          'Reduce background noise by ensuring one person speaks at time',
+          'Move learners with hearing needs away from AC systems or other noise sources',
+          'Use carpets and curtains to reduce echoes',
+          'Position learners so they can clearly see the teacher, board, and interpreter (if applicable)',
+          'Provide visual instructions and/or pictures and lesson objectives in writing',
+          'Ensure lighting is even for better visibility of facial expressions and to aid lip-reading'
         ],
         social: [
-          'Assign peer note-takers for discussions',
-          'Create small group discussion opportunities',
-          'Use visual cues and gestures',
-          'Provide written summaries of conversations',
-          'Encourage inclusive communication practices'
+          'Foster a deaf-aware classroom through peer education and empathy-building activities',
+          'Use rules for communication- such as speaking one at a time, getting attention of person with hearing needs before speaking and facing the person you are talking to. Peers could be taught basic signs',
+          'Encourage peer buddies or promote social inclusion activities'
         ],
         tasks: [
-          'Offer alternative formats for audio content',
-          'Provide written instructions and checklists',
-          'Use visual timetables and schedules',
-          'Create quiet spaces for focused work',
-          'Offer extended time for audio-based tasks'
+          'Gain the attention of a learner with hearing needs before speaking',
+          'Provide written instructions and visual aids alongside spoken directions',
+          'Offer captioned or transcribed materials for any audio or video-based content',
+          'Build in short breaks to reduce fatigue during longer tasks'
         ],
         assessment: [
-          'Provide written assessment instructions',
-          'Offer alternative assessment formats',
-          'Use visual and written feedback',
-          'Allow extra time for audio comprehension',
-          'Provide written summaries of oral content'
+          'Ensure access to assistive listening technology or captioning',
+          'Provide all instructions in clear, written format alongside verbal explanations',
+          'Allow extra time and provide breaks to reduce fatigue',
+          'Focus on assessing conceptual understanding rather than language expression',
+          'Include formative assessments by evaluating the learner\'s everyday understanding'
         ]
       },
       resources: {
         electronic: [
-          { title: 'Captioning Guidelines', description: 'How to create effective captions for educational videos', url: 'www.captioning.org/guidelines' },
-          { title: 'Assistive Listening Technology', description: 'Overview of hearing assistive technologies', url: 'www.hearinglink.org/technology' },
-          { title: 'Sign Language Learning Apps', description: 'Digital resources for learning sign language', url: 'www.british-sign.co.uk/apps' },
-          { title: 'Audio Description Services', description: 'Services for making audio content accessible', url: 'www.audiodescription.org.uk' }
+          { title: 'Google Live Transcribe', description: 'Transcribes speech into text in real time', url: 'https://play.google.com/store/apps/details?id=com.google.audio.hearing.visualization.accessibility.scribe' },
+          { title: 'YouTube with Auto-Captions', description: 'Video platform with automatic captioning features', url: 'https://www.youtube.com' },
+          { title: 'BBC Bitesize', description: 'Offers captioned videos and structured learning content from KS1 to GCSE', url: 'https://www.bbc.co.uk/bitesize' },
+          { title: 'Kahoot!', description: 'Interactive learning tool (Free Version)', url: 'https://kahoot.com' },
+          { title: 'Quizlet', description: 'Interactive learning tool (Free Version)', url: 'https://quizlet.com' },
+          { title: 'Nearpod', description: 'Interactive learning tool (Free Version)', url: 'https://nearpod.com' },
+          { title: 'Zimbabwean Sign Language Resources', description: 'YouTube resources to learn Zimbabwean sign language', url: 'https://www.youtube.com/watch?v=Tf0ZlEmmcBc' },
+          { title: 'PECS Cards', description: 'Picture Exchange Communication System - support learners who are non-verbal', url: 'https://www.leicspart.nhs.uk/wp-content/uploads/2024/02/PECS-advanced-information-sheet-final-2nd-Jan-2024.pdf' },
+          { title: 'Storybooks with Deaf Characters', description: 'Use storybooks that include characters with hearing needs', url: 'https://www.perkins.org/books-about-deafness-or-with-deaf-characters/' }
         ],
         paper: [
-          { title: 'Communication Strategies Guide', description: 'Best practices for communicating with hearing-impaired students', availability: 'Available from local hearing services' },
-          { title: 'Lip Reading Manual', description: 'Guide to lip reading techniques and support', availability: 'Available from specialist organizations' },
-          { title: 'Classroom Acoustics Guide', description: 'How to improve classroom sound quality', availability: 'Available from educational resource centers' },
-          { title: 'Hearing Support Handbook', description: 'Comprehensive guide for educators', availability: 'Available from hearing support services' }
+          { title: 'Zimbabwean Sign Language Dictionary', description: 'King George VI Centre and School by Sindile Kevin Mhlanga', availability: 'Available from King George VI Centre and School' },
+          { title: 'Visual Flashcards', description: 'With images, symbols, written words, or sign language illustrations to support development of vocabulary and conceptual understanding and to support routines', availability: 'Available from educational resource centers' },
+          { title: 'Sign Language Charts and Posters', description: 'Displaying commonly used signs for classroom use', availability: 'Available from educational resource centers' }
         ],
         organizations: [
-          { name: 'National Deaf Children\'s Society', description: 'Supporting deaf children and their families', contact: '0808 800 8880' },
-          { name: 'Action on Hearing Loss', description: 'Supporting people with hearing loss and tinnitus', contact: '0808 808 0123' },
-          { name: 'British Deaf Association', description: 'Promoting sign language and Deaf culture', contact: '0121 450 7711' },
-          { name: 'Hearing Link', description: 'Supporting people with hearing loss', contact: 'www.hearinglink.org' }
+          { name: 'The Deaf Zimbabwe Trust', description: 'Includes resources for learning Zimbabwean sign language', contact: 'https://deafzimbabwetrust.org/' },
+          { name: 'National Deaf Children\'s Society (NDCS)', description: 'Provides educational resources and teacher guidance', contact: 'https://www.ndcs.org.uk' },
+          { name: 'Deaf Child Worldwide', description: 'Supports inclusive education in low-resource settings', contact: 'https://www.deafchildworldwide.org' }
         ]
       },
       caseStudy: {
-        title: 'Supporting Sarah in Science Class',
-        scenario: 'Sarah is a 14-year-old student with moderate hearing loss who loves science but struggles with group discussions and audio-visual content in her biology class.',
-        details: [
-          'Sarah uses hearing aids and prefers visual learning materials',
-          'She misses parts of group discussions and feels left out',
-          'Audio recordings of experiments are difficult to access',
-          'She excels at written work but struggles with oral presentations',
-          'Background noise in the lab makes it hard to hear instructions'
-        ],
-        learningPoints: [
-          'Written summaries help clarify complex discussions',
-          'Peer note-taking supports active participation',
-          'Alternative formats make content accessible to all',
-          'Visual aids enhance understanding for hearing-impaired students',
-          'Quiet spaces support focused learning and communication'
-        ]
+        title: 'To be developed by CBM',
+        scenario: '',
+        details: [],
+        learningPoints: []
       },
       reflectiveTasks: [
         { title: 'Case Study Reflection', description: 'How would you adapt your teaching methods to support Sarah\'s learning needs?', completed: false },
@@ -2462,6 +3102,10 @@ const completeTask = (index: number) => {
 
 const openResource = (resource: any) => {
   console.log(`Opening resource: ${resource.title}`);
+  if (resource.url) {
+    // Open URL in new window/tab - works in both web browsers and mobile apps
+    window.open(resource.url, '_blank', 'noopener,noreferrer');
+  }
 };
 
 const downloadResource = (resource: any) => {
@@ -2614,6 +3258,13 @@ const clearReflection = () => {
 
 const contactOrganization = (org: any) => {
   console.log(`Contacting organization: ${org.name}`);
+  if (org.contact && org.contact.startsWith('http')) {
+    // If contact is a URL, open it in new window/tab
+    window.open(org.contact, '_blank', 'noopener,noreferrer');
+  } else if (org.contact) {
+    // If contact is a phone number or other contact info, could show it in a toast or modal
+    console.log(`Contact information: ${org.contact}`);
+  }
 };
 
 const nextQuizQuestion = () => {
@@ -2624,19 +3275,25 @@ const nextQuizQuestion = () => {
     return;
   }
   
-  if (currentQuestion.type === 'matching') {
-    // Save matching answers
+  if (currentQuestion.type === 'matching' || currentQuestion.type === 'multi-true-false' || currentQuestion.type === 'fill-in-blank') {
+    // Save matching answers, multi-true-false answers, or fill-in-blank answers
     quizAnswers.value[currentQuizQuestion.value] = { ...matchingAnswers.value };
+  } else if (currentQuestion.type === 'select-all') {
+    // Save checkbox answers for select-all questions
+    quizAnswers.value[currentQuizQuestion.value] = { ...checkboxAnswers.value };
   } else {
     // Save regular answer
     quizAnswers.value[currentQuizQuestion.value] = currentQuizAnswer.value;
   }
   
   if (currentQuizQuestion.value < quizQuestions.value.length - 1) {
+    // Move to next question first
     currentQuizQuestion.value++;
     currentQuizAnswer.value = '';
     // Reset matching answers for next question
     matchingAnswers.value = {};
+    // Reset checkbox answers for next question
+    checkboxAnswers.value = {};
   } else {
     // Calculate score based on correct answers
     let correctAnswers = 0;
@@ -2652,6 +3309,26 @@ const nextQuizQuestion = () => {
           userMatchingAnswers && userMatchingAnswers[strategy.id] && 
           question.correctAnswers && question.correctAnswers[strategy.id] &&
           userMatchingAnswers[strategy.id] === question.correctAnswers[strategy.id]
+        );
+        if (allCorrect) {
+          correctAnswers++;
+        }
+      } else if (question.type === 'multi-true-false') {
+        // Check if all multi-true-false answers are correct
+        const userMultiAnswers = userAnswer as { [key: string]: string };
+        const allCorrect = question.subQuestions?.every(subQ => 
+          userMultiAnswers && userMultiAnswers[subQ.id] && 
+          userMultiAnswers[subQ.id] === subQ.correctAnswer
+        );
+        if (allCorrect) {
+          correctAnswers++;
+        }
+      } else if (question.type === 'fill-in-blank') {
+        // Check if all fill-in-blank answers are correct
+        const userFillAnswers = userAnswer as { [key: string]: string };
+        const allCorrect = question.sentences?.every(sentence => 
+          userFillAnswers && userFillAnswers[sentence.id] && 
+          userFillAnswers[sentence.id] === sentence.correctAnswer
         );
         if (allCorrect) {
           correctAnswers++;
@@ -2684,6 +3361,12 @@ const retakeQuiz = () => {
   // Reset quiz completion in progress tracking
   const pageId = route.params.id as string;
   ProgressService.resetQuizCompletion(pageId);
+  
+  // For hearing-needs page, also clear localStorage to ensure fresh start
+  if (pageId === 'hearing-needs') {
+    localStorage.removeItem(`sage-quiz-${pageId}`);
+    console.log('Cleared hearing-needs quiz data from localStorage');
+  }
 };
 
 // Helper functions for quiz results
@@ -2698,6 +3381,37 @@ const isQuestionCorrect = (index: number) => {
       question.correctAnswers && question.correctAnswers[strategy.id] &&
       userMatchingAnswers[strategy.id] === question.correctAnswers[strategy.id]
     ) || false;
+  } else if (question.type === 'multi-true-false') {
+    const userMultiAnswers = userAnswer as { [key: string]: string };
+    if (!userMultiAnswers || !question.subQuestions) return false;
+    
+    return question.subQuestions.every(subQ => 
+      userMultiAnswers[subQ.id] === subQ.correctAnswer
+    );
+  } else if (question.type === 'fill-in-blank') {
+    const userFillAnswers = userAnswer as { [key: string]: string };
+    if (!userFillAnswers || !question.sentences) return false;
+    
+    return question.sentences.every(sentence => 
+      userFillAnswers[sentence.id] === sentence.correctAnswer
+    );
+  } else if (question.type === 'select-all') {
+    const userCheckboxAnswers = userAnswer as { [key: string]: boolean };
+    if (!userCheckboxAnswers || Object.keys(userCheckboxAnswers).length === 0) return false;
+    
+    // Check if user selected 'e' (All of these) - that's always correct
+    if (userCheckboxAnswers['e']) return true;
+    
+    // Check if user selected all individual options (a, b, c, d) - that's also correct
+    const selectedOptions = Object.entries(userCheckboxAnswers)
+      .filter(([_, checked]) => checked)
+      .map(([key, _]) => key);
+    
+    return selectedOptions.length === 4 && 
+           selectedOptions.includes('a') && 
+           selectedOptions.includes('b') && 
+           selectedOptions.includes('c') && 
+           selectedOptions.includes('d');
   } else {
     return userAnswer === question.correctAnswer;
   }
@@ -2715,8 +3429,39 @@ const formatUserAnswer = (index: number) => {
         .join(', ');
     }
     return 'Not answered';
+  } else if (question.type === 'multi-true-false') {
+    const userMultiAnswers = userAnswer as { [key: string]: string };
+    if (!userMultiAnswers || Object.keys(userMultiAnswers).length === 0) {
+      return 'Not answered';
+    }
+    return Object.entries(userMultiAnswers)
+      .map(([id, answer]) => `${id}: ${answer === 'true' ? 'True' : 'False'}`)
+      .join(', ');
+  } else if (question.type === 'fill-in-blank') {
+    const userFillAnswers = userAnswer as { [key: string]: string };
+    if (!userFillAnswers || Object.keys(userFillAnswers).length === 0) {
+      return 'Not answered';
+    }
+    return Object.entries(userFillAnswers)
+      .map(([id, answer]) => `${id}: ${answer}`)
+      .join(', ');
   } else if (question.type === 'true-false') {
     return userAnswer === 'true' ? 'True' : 'False';
+  } else if (question.type === 'select-all') {
+    const userCheckboxAnswers = userAnswer as { [key: string]: boolean };
+    if (!userCheckboxAnswers || Object.keys(userCheckboxAnswers).length === 0) {
+      return 'Not answered';
+    }
+    
+    const selectedOptions = Object.entries(userCheckboxAnswers)
+      .filter(([_, checked]) => checked)
+      .map(([key, _]) => key);
+    
+    if (selectedOptions.includes('e')) {
+      return 'e) All of these';
+    } else {
+      return selectedOptions.map(key => `${key}) ${question.options?.find(opt => opt.value === key)?.text}`).join(', ');
+    }
   } else {
     const option = question.options?.find(opt => opt.value === userAnswer);
     return option ? option.text : 'Not answered';
@@ -2729,12 +3474,25 @@ const formatCorrectAnswer = (index: number) => {
   if (question.type === 'matching') {
     if (question.correctAnswers && Object.keys(question.correctAnswers).length > 0) {
       return Object.entries(question.correctAnswers)
-        .map(([strategy, purpose]) => `${strategy}${purpose}`)
+        .map(([strategy, purpose]) => `${strategy}: ${purpose}`)
         .join(', ');
     }
     return 'Unknown';
+  } else if (question.type === 'multi-true-false') {
+    if (!question.subQuestions) return 'Unknown';
+    return question.subQuestions
+      .map(subQ => `${subQ.id}: ${subQ.correctAnswer === 'true' ? 'True' : 'False'}`)
+      .join(', ');
+  } else if (question.type === 'fill-in-blank') {
+    if (!question.sentences) return 'Unknown';
+    return question.sentences
+      .map(sentence => `${sentence.id}: ${sentence.correctAnswer}`)
+      .join(', ');
   } else if (question.type === 'true-false') {
     return question.correctAnswer === 'true' ? 'True' : 'False';
+  } else if (question.type === 'select-all') {
+    // For select-all, show both correct answer paths
+    return 'e) All of these (OR select a, b, c, d individually)';
   } else {
     const option = question.options?.find(opt => opt.value === question.correctAnswer);
     return option ? option.text : 'Unknown';
@@ -2757,14 +3515,39 @@ const wrongAnswerQuestions = computed(() => {
 const getQuestionTip = (index: number) => {
   const question = quizQuestions.value[index];
   const userAnswer = quizAnswers.value[index];
+  const pageId = route.params.id as string;
   
   if (question.type === 'matching') {
-    return "In matching questions, each strategy must be correctly paired with its purpose. Review the communication support strategies and their intended outcomes.";
-  } else if (question.type === 'true-false') {
-    if (userAnswer === 'true' && question.correctAnswer === 'false') {
-      return "This statement is false. Consider the complexity and individual nature of communication needs - they vary greatly between individuals and contexts.";
+    if (pageId === 'hearing-needs') {
+      return "In matching questions, each strategy must be correctly paired with its purpose. Review the hearing support strategies and their intended outcomes.";
     } else {
-      return "This statement is true. Communication abilities and needs are diverse and individual-specific.";
+      return "In matching questions, each strategy must be correctly paired with its purpose. Review the communication support strategies and their intended outcomes.";
+    }
+  } else if (question.type === 'multi-true-false') {
+    if (pageId === 'hearing-needs') {
+      return "For multi-part true/false questions, consider each statement individually. Think about the specific needs and challenges that learners with hearing needs face in educational settings.";
+    } else {
+      return "For multi-part true/false questions, consider each statement individually. Think about the specific needs and challenges that learners with communication needs face in educational settings.";
+    }
+  } else if (question.type === 'fill-in-blank') {
+    if (pageId === 'hearing-needs') {
+      return "For fill-in-the-blank questions, think about what makes content accessible and supportive for learners with hearing needs. Consider both environmental factors and learning strategies.";
+    } else {
+      return "For fill-in-the-blank questions, think about what makes content accessible and supportive for learners with communication needs. Consider both environmental factors and learning strategies.";
+    }
+  } else if (question.type === 'true-false') {
+    if (pageId === 'hearing-needs') {
+      if (userAnswer === 'true' && question.correctAnswer === 'false') {
+        return "This statement is false. Consider the complexity and individual nature of hearing needs - they vary greatly between individuals and contexts.";
+      } else {
+        return "This statement is true. Hearing abilities and needs are diverse and individual-specific.";
+      }
+    } else {
+      if (userAnswer === 'true' && question.correctAnswer === 'false') {
+        return "This statement is false. Consider the complexity and individual nature of communication needs - they vary greatly between individuals and contexts.";
+      } else {
+        return "This statement is true. Communication abilities and needs are diverse and individual-specific.";
+      }
     }
   } else {
     // Multiple choice questions
@@ -2772,44 +3555,146 @@ const getQuestionTip = (index: number) => {
     const correctOption = question.options?.find(opt => opt.value === question.correctAnswer);
     
     if (userOption && correctOption) {
-      return `You selected "${userOption.text}" but the correct answer is "${correctOption.text}". Consider the most inclusive and respectful language when discussing communication needs.`;
+      if (pageId === 'hearing-needs') {
+        // Special handling for question 1 (index 0)
+        if (index === 0) {
+          if (userAnswer === 'b') {
+            return "The term 'Deaf and dumb' is offensive and outdated. It incorrectly suggests that people with hearing loss cannot communicate or think clearly.";
+          } else if (userAnswer === 'c') {
+            return "The term 'Handicapped' is considered outdated and offensive. It focuses on limitations rather than abilities and individual identity.";
+          }
+        }
+        return `You selected "${userOption.text}" but the correct answer is "${correctOption.text}". Consider the most inclusive and respectful language when discussing hearing needs.`;
+      } else {
+        return `You selected "${userOption.text}" but the correct answer is "${correctOption.text}". Consider the most inclusive and respectful language when discussing communication needs.`;
+      }
     }
-    return "Review the question carefully and consider which answer best reflects inclusive, person-first language and respectful communication practices.";
+    if (pageId === 'hearing-needs') {
+      return "Review the question carefully and consider which answer best reflects inclusive, person-first language and respectful communication practices for hearing needs.";
+    } else {
+      return "Review the question carefully and consider which answer best reflects inclusive, person-first language and respectful communication practices.";
+    }
   }
 };
 
 // Get explanation for the correct answer
 const getCorrectAnswerExplanation = (index: number) => {
   const question = quizQuestions.value[index];
+  const pageId = route.params.id as string;
   
   if (question.type === 'matching') {
-    return "Each communication support strategy has a specific purpose. Visual timetables help with structure, clear seating plans support concentration, and noise-cancelling headphones reduce sensory input.";
-  } else if (question.type === 'true-false') {
-    if (question.correctAnswer === 'false') {
-      return "Communication needs are highly individual and vary between home and school environments. What works in one context may not work in another.";
+    if (pageId === 'hearing-needs') {
+      return "Each hearing support strategy has a specific purpose. Captions on videos provide visual access to audio content, assistive listening devices amplify speech and reduce background noise, and visual aids support understanding through multiple modalities.";
     } else {
-      return "This statement accurately reflects the reality of communication abilities and the importance of recognizing individual differences.";
+      return "Each communication support strategy has a specific purpose. Visual timetables help with structure, clear seating plans support concentration, and noise-cancelling headphones reduce sensory input.";
+    }
+  } else if (question.type === 'multi-true-false') {
+    if (pageId === 'hearing-needs') {
+      // Special handling for question 2 (index 1)
+      if (index === 1) {
+        return "I. True - Low lighting affects visual communication which is crucial for learners with hearing needs. II. True - Processing information requires additional cognitive effort. III. False - Dictation relies on hearing which can be challenging for learners with hearing needs.";
+      }
+      return "For multi-part true/false questions, each statement must be evaluated based on the specific needs and challenges that learners with hearing needs face.";
+    } else {
+      return "For multi-part true/false questions, each statement must be evaluated based on the specific needs and challenges that learners with communication needs face.";
+    }
+  } else if (question.type === 'fill-in-blank') {
+    if (pageId === 'hearing-needs') {
+      // Special handling for question 3 (index 2)
+      if (index === 2) {
+        return "A. Captions or subtitles provide visual access to audio content. B. Missing information occurs when visual cues are not available. C. Regular breaks help reduce cognitive fatigue from processing information.";
+      }
+      return "Fill-in-the-blank questions test understanding of accessibility features and support strategies for learners with hearing needs.";
+    } else {
+      return "Fill-in-the-blank questions test understanding of accessibility features and support strategies for learners with communication needs.";
+    }
+  } else if (question.type === 'true-false') {
+    if (pageId === 'hearing-needs') {
+      // Special handling for question 5 (index 4)
+      if (index === 4) {
+        return "True because they will be able to use visual cues such as mouth shapes and facial expressions which may aid their understanding.";
+      }
+      if (question.correctAnswer === 'false') {
+        return "Hearing needs are highly individual and vary between home and school environments. What works in one context may not work in another.";
+      } else {
+        return "This statement accurately reflects the reality of hearing abilities and the importance of recognizing individual differences.";
+      }
+    } else {
+      if (question.correctAnswer === 'false') {
+        return "Communication needs are highly individual and vary between home and school environments. What works in one context may not work in another.";
+      } else {
+        return "This statement accurately reflects the reality of communication abilities and the importance of recognizing individual differences.";
+      }
     }
   } else {
     // Multiple choice explanations
     const correctOption = question.options?.find(opt => opt.value === question.correctAnswer);
     if (correctOption) {
-      return `"${correctOption.text}" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive communication practices.`;
+      if (pageId === 'hearing-needs') {
+        // Special handling for question 1 (index 0)
+        if (index === 0) {
+          return `"${correctOption.text}" is the correct answer because it uses respectful, inclusive language that focuses on the person first and avoids offensive or outdated terms. Terms like 'Deaf and dumb' and 'Handicapped' are considered offensive and perpetuate harmful stereotypes.`;
+        }
+        return `"${correctOption.text}" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive practices for hearing needs.`;
+      } else {
+        return `"${correctOption.text}" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive communication practices.`;
+      }
     }
-    return "The correct answer reflects best practices in inclusive communication and respectful language use.";
+    if (pageId === 'hearing-needs') {
+      return "The correct answer reflects best practices in inclusive education and respectful language use for hearing needs.";
+    } else {
+      return "The correct answer reflects best practices in inclusive communication and respectful language use.";
+    }
   }
 };
 
 // Get key learning point for the question
 const getLearningPoint = (index: number) => {
   const question = quizQuestions.value[index];
+  const pageId = route.params.id as string;
   
   if (question.type === 'matching') {
-    return "Understanding the purpose of different communication support strategies helps in providing appropriate accommodations for students with communication needs.";
+    if (pageId === 'hearing-needs') {
+      return "Understanding the purpose of different hearing support strategies helps in providing appropriate accommodations for students with hearing needs.";
+    } else {
+      return "Understanding the purpose of different communication support strategies helps in providing appropriate accommodations for students with communication needs.";
+    }
+  } else if (question.type === 'multi-true-false') {
+    if (pageId === 'hearing-needs') {
+      // Special handling for question 2 (index 1)
+      if (index === 1) {
+        return "Understanding the specific environmental and cognitive needs of learners with hearing needs helps create more inclusive and supportive learning environments.";
+      }
+      return "Multi-part questions help assess understanding of different aspects of supporting learners with hearing needs.";
+    } else {
+      return "Multi-part questions help assess understanding of different aspects of supporting learners with communication needs.";
+    }
+  } else if (question.type === 'fill-in-blank') {
+    if (pageId === 'hearing-needs') {
+      // Special handling for question 3 (index 2)
+      if (index === 2) {
+        return "Understanding accessibility features and support strategies helps create inclusive learning environments that accommodate the diverse needs of learners with hearing needs.";
+      }
+      return "Fill-in-the-blank questions help assess practical knowledge of accessibility features and support strategies.";
+    } else {
+      return "Fill-in-the-blank questions help assess practical knowledge of accessibility features and support strategies.";
+    }
   } else if (question.type === 'true-false') {
-    return "Communication needs are individual and contextual - avoid making assumptions about what works for all students in all situations.";
+    if (pageId === 'hearing-needs') {
+      return "Hearing needs are individual and contextual - avoid making assumptions about what works for all students in all situations.";
+    } else {
+      return "Communication needs are individual and contextual - avoid making assumptions about what works for all students in all situations.";
+    }
   } else {
-    return "Use person-first language and respect individual preferences when discussing communication needs. Focus on abilities and support rather than limitations.";
+    if (pageId === 'hearing-needs') {
+      // Special handling for question 1 (index 0)
+      if (index === 0) {
+        return "Language matters in creating inclusive environments. Using respectful terms like 'Deaf' or 'has hearing loss' shows respect for individual identity and helps create a culture of acceptance and understanding.";
+      }
+      return "Use person-first language and respect individual preferences when discussing hearing needs. Focus on abilities and support rather than limitations.";
+    } else {
+      return "Use person-first language and respect individual preferences when discussing communication needs. Focus on abilities and support rather than limitations.";
+    }
   }
 };
 
@@ -3015,6 +3900,27 @@ ion-range {
   border-radius: 8px;
   padding: 4px;
   border: 1px solid #2196f3;
+}
+
+/* Explanation divider between feedback and answer */
+.explanation-divider {
+  height: 1px;
+  background-color: var(--ion-color-light-shade);
+  margin: 16px 0;
+  opacity: 0.6;
+}
+
+/* Fill-in-blank inline styling */
+.fill-in-blank-text {
+  display: inline;
+  margin: 0 4px;
+}
+
+.fill-in-blank-select {
+  display: inline-block;
+  min-width: 180px;
+  margin: 0 4px;
+  vertical-align: middle;
 }
 
 .tip-content {
