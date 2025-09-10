@@ -29,6 +29,41 @@
             <img src="/SAGE cover illustration disability.jpg" alt="Illustration of a diverse group of girls and community members, including a girl in a wheelchair, in a rural Zimbabwean setting" class="sage-cover-illustration" />
           </div>
 
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Government Introduction</ion-card-title>
+              <ion-card-subtitle>Official foreword</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p>
+                This is a placeholder introductory message from the Ministry, outlining the importance of inclusive
+                education and our shared commitment to supporting every learner. Further details and the final
+                approved text will be added here.
+              </p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Programme Partners</ion-card-title>
+              <ion-card-subtitle>Sponsors and supporting organisations</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="partners-strip" role="group" aria-label="Programme sponsors and partners">
+                <img src="/CBM_logo.png" alt="CBM" />
+                <img src="/GEC_UKaid_lockup_RGB.jpg" alt="Girls' Education Challenge / UK Aid" />
+                <img src="/PLAN_logo.png" alt="Plan International" />
+                <img src="/sage-logo.png" alt="SAGE" />
+              </div>
+              <p>
+                SAGE (Supporting Adolescent Girls' Education) is a UK Aid-funded programme through the UK's Foreign,
+                Commonwealth and Development Office's Girls' Education Challenge initiative, led by Plan International
+                and involving a consortium of six partners and the Ministry of Primary and Secondary Education, Zimbabwe
+                (MoPSE).
+              </p>
+            </ion-card-content>
+          </ion-card>
+
           <!-- Demo Video Player with Transcript -->
           <ion-card>
             <ion-card-header>
@@ -172,30 +207,6 @@
           </ion-card>
 
           <!-- Feature Grid -->
-          <ion-grid>
-            <ion-row>
-              <ion-col size="6">
-                <ion-card @click="navigateTo('General')">
-                  <ion-card-content>
-                    <ion-icon :icon="informationCircleOutline" size="large" color="primary"></ion-icon>
-                    <h3>General Information</h3>
-                    <p>Universal Design for Learning principles and OU policies</p>
-                    <ion-badge color="primary">New</ion-badge>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-              <ion-col size="6">
-                <ion-card @click="navigateTo('Resources')">
-                  <ion-card-content>
-                    <ion-icon :icon="schoolOutline" size="large" color="secondary"></ion-icon>
-                    <h3>Resources</h3>
-                    <p>PDFs, videos, and practical tools for educators</p>
-                    <ion-badge color="secondary">Updated</ion-badge>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
 
           <!-- Media Players Section -->
           <ion-card>
@@ -334,721 +345,74 @@
           </ion-card>
         </div>
 
-        <!-- General Information Page -->
-        <div v-else-if="route.params.id === 'General'">
-          <!-- How to Use This APP -->
+        <!-- Enhanced Screening Tool/Quiz -->
+        <div v-else-if="route.params.id === 'Screening'">
           <ion-card>
             <ion-card-header>
-              <ion-card-title>How to Use This APP</ion-card-title>
-              <ion-card-subtitle>Getting Started with SAGE</ion-card-subtitle>
+              <ion-card-title>Screening Tool</ion-card-title>
+              <ion-card-subtitle>Identify areas where support may be needed</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <h3>Overview of Functionality</h3>
-              <p>The SAGE (Supporting Adolescent Girls' Education) app is your comprehensive digital toolkit for understanding and supporting students with disabilities in educational settings. This mobile application provides educators, parents, and support staff with practical guidance, resources, and tools to create inclusive learning environments.</p>
-              
-              <h3>Key Features</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="informationCircle" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h4>Screening Tool</h4>
-                    <p>Interactive assessment to identify specific disability categories and get personalized recommendations</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="schoolOutline" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h4>Resource Library</h4>
-                    <p>Comprehensive collection of guides, videos, audio resources, and practical tools</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="accessibilityOutline" slot="start" color="tertiary"></ion-icon>
-                  <ion-label>
-                    <h4>Disability-Specific Information</h4>
-                    <p>Detailed guidance for different categories of disabilities and learning needs</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>Navigation Guide</h3>
-              <p>Use the menu to navigate between different sections. The app is organized into seven main areas of needs: Visual Needs, Hearing Needs, Physical and Sensory Needs, Cognitive and Intellectual Needs, Speech and Language Needs, Communication, and Multiple Disabilities. Each section contains specific information, strategies, and resources relevant to that category.</p>
-            </ion-card-content>
-          </ion-card>
+              <p>Answer each question. There are no right or wrong answers. Selecting an option will reveal guidance.</p>
 
-          <!-- Introduction to the Toolkit -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Introduction to the Toolkit</ion-card-title>
-              <ion-card-subtitle>Background and Purpose</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Background to the Toolkit</h3>
-              <p>The SAGE toolkit was developed by The Open University's Access & Success Team in response to the growing need for comprehensive, accessible guidance on supporting students with disabilities in educational settings. Drawing from years of experience working with diverse learners, this toolkit represents a collaborative effort to bridge the gap between policy and practice.</p>
-              
-              <h3>Why This Toolkit is Important</h3>
-              <p>Inclusive education is not just a legal requirement—it's a fundamental human right. Every student deserves access to quality education that meets their individual needs. However, many educators feel unprepared to support students with disabilities effectively. This toolkit addresses this gap by providing practical, evidence-based guidance that can be immediately applied in educational settings.</p>
-              
-              <h3>Why a Digital Toolkit?</h3>
-              <p>The digital format offers several advantages: accessibility across devices, easy updates to reflect current best practices, multimedia content including videos and audio resources, and interactive features like the screening tool and quizzes. This ensures the toolkit remains current and accessible to all users.</p>
-              
-              <h3>Objectives of the Toolkit</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Increase awareness and understanding of different disabilities and learning needs</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Provide practical strategies for creating inclusive learning environments</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Support educators in making reasonable adjustments</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Promote partnership working with learners, parents, and other stakeholders</ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>Who This Toolkit is Aimed At</h3>
-              <p>This toolkit is designed for educators at all levels, including teachers, teaching assistants, support staff, and educational leaders. It's also valuable for parents, caregivers, and anyone involved in supporting students with disabilities. The content is structured to be accessible to both experienced practitioners and those new to inclusive education.</p>
-              
-              <h3>Understanding Impairments and Needs</h3>
-              <p>Throughout this toolkit, we use the terms "impairments" and "needs" carefully. An impairment refers to a physical, sensory, cognitive, or mental health condition that may impact learning. However, we focus on the needs that arise from these impairments rather than defining students by their conditions. This person-centered approach emphasizes what students can do and what support they need to succeed.</p>
-            </ion-card-content>
-          </ion-card>
+              <div class="question-block" v-for="q in screeningQuestions" :key="q.id">
+                <h4 class="question-title">{{ q.title }}</h4>
+                <p class="question-prompt">{{ q.prompt }}</p>
+                <ion-radio-group v-model="responses[q.id]">
+                  <ion-item v-for="opt in q.options" :key="opt.value" lines="none">
+                    <ion-radio :value="opt.value" slot="start"></ion-radio>
+                    <ion-label>{{ opt.label }}</ion-label>
+                  </ion-item>
+                </ion-radio-group>
 
-          <!-- Reflective Tasks and Quizzes -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Reflective Tasks, Case Studies and Quizzes</ion-card-title>
-              <ion-card-subtitle>Interactive Learning Elements</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Why We Include Interactive Elements</h3>
-              <p>Learning is most effective when it's active and engaging. The reflective tasks, case studies, and quizzes in this toolkit are designed to help you apply theoretical knowledge to real-world situations, test your understanding, and develop practical skills.</p>
-              
-              <h3>Types of Interactive Content</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="bulbOutline" slot="start" color="warning"></ion-icon>
-                  <ion-label>
-                    <h4>Reflective Tasks</h4>
-                    <p>Questions that encourage you to think about your current practice and consider how you might adapt your approach</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="people" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h4>Case Studies</h4>
-                    <p>Real-world scenarios that demonstrate how different strategies work in practice</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="helpCircleOutline" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h4>Quizzes</h4>
-                    <p>Knowledge checks that help you assess your understanding and identify areas for further learning</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>How to Complete Interactive Elements</h3>
-              <p>Take your time with each interactive element. There are no right or wrong answers for reflective tasks—they're designed to prompt thinking and discussion. For case studies, consider multiple perspectives and how different approaches might work in your context. Quizzes provide immediate feedback to help you track your learning progress.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Language of Disability -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Language of Disability</ion-card-title>
-              <ion-card-subtitle>Why Words Matter</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Why Choice of Words Matters</h3>
-              <p>Language shapes our understanding of the world and influences how we treat others. The words we use to describe disability can either promote inclusion and respect or perpetuate stereotypes and discrimination. Thoughtful language choices demonstrate respect for individual dignity and promote positive attitudes toward disability.</p>
-              
-              <h3>How Language Changes Over Time</h3>
-              <p>Disability language has evolved significantly over the past century. Terms that were once considered acceptable are now recognized as outdated or offensive. This evolution reflects broader social changes in how we understand and value human diversity. Staying current with language preferences shows respect for the disability community and demonstrates cultural competence.</p>
-              
-              <h3>General Guidance on Disability Language</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Use person-first language (e.g., "student with dyslexia" rather than "dyslexic student")</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Avoid outdated terms like "handicapped," "crippled," or "mentally retarded"</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Respect individual preferences—some people prefer identity-first language</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Focus on abilities and needs rather than limitations</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>Use neutral, descriptive language that doesn't carry negative connotations</ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Working in Partnership -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Working in Partnership with Learners with Disabilities</ion-card-title>
-              <ion-card-subtitle>Collaborative Approaches</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Partnership with Learners</h3>
-              <p>Students with disabilities are experts in their own experiences and needs. Effective support begins with listening to and respecting their perspectives. Involve students in decisions about their learning, accommodations, and support strategies. This collaborative approach promotes self-advocacy and builds confidence.</p>
-              
-              <h3>Partnership with Parents</h3>
-              <p>Parents and caregivers often have valuable insights into their child's needs, preferences, and effective strategies. Regular communication with families helps ensure consistency between home and school support. Respect family expertise while providing professional guidance on educational approaches.</p>
-              
-              <h3>Partnership with Community</h3>
-              <p>Local disability organizations, advocacy groups, and community resources can provide valuable support and expertise. Building relationships with these organizations helps create a network of support for students and families. Community partnerships also help educators stay current with best practices and available resources.</p>
-              
-              <h3>Partnership with Other Stakeholders</h3>
-              <p>Effective support often requires collaboration with multiple professionals, including special education teachers, therapists, medical professionals, and support staff. Clear communication and shared goals ensure coordinated support that meets all aspects of a student's needs.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Tensions and Complexities -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Tensions and Complexities of Working with Learners with Disabilities</ion-card-title>
-              <ion-card-subtitle>Navigating Challenges</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Learners Do Not Fall Neatly into Single Categories</h3>
-              <p>Many students have multiple disabilities or learning needs that overlap and interact in complex ways. A student might have both dyslexia and ADHD, or a physical disability combined with learning difficulties. This complexity requires flexible, individualized approaches rather than one-size-fits-all solutions.</p>
-              
-              <h3>Can't Do Everything - Reasonable Adjustments</h3>
-              <p>While we strive to meet all student needs, practical constraints mean we must prioritize and make reasonable adjustments. This involves balancing individual needs with available resources, legal requirements, and the needs of other students. The goal is to provide meaningful support within realistic parameters.</p>
-              
-              <h3>Resource Constraints: Funds, Staffing, Expertise</h3>
-              <p>Limited funding, insufficient staffing, and gaps in expertise are common challenges in inclusive education. These constraints can create tension between ideal support and what's practically achievable. Creative problem-solving, professional development, and advocacy for additional resources are essential strategies for addressing these challenges.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Screening and Referring -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Screening and Referring Learners with Disabilities</ion-card-title>
-              <ion-card-subtitle>Identification and Support Pathways</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>The Screening Process</h3>
-              <p>Screening is the first step in identifying students who may need additional support. This toolkit includes a comprehensive screening tool that helps educators identify potential areas of need across different disability categories. The screening process should be ongoing, as needs may change over time.</p>
-              
-              <h3>When to Refer</h3>
-              <p>Referral to specialist services should be considered when: screening indicates significant areas of concern, current support strategies are not meeting the student's needs, or there are concerns about the student's safety or well-being. Early referral can prevent problems from escalating and ensure timely access to appropriate support.</p>
-              
-              <h3>Referral Pathways</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="medicalOutline" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h4>Educational Psychology Services</h4>
-                    <p>For learning difficulties, behavioral concerns, and cognitive assessments</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="bodyOutline" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h4>Occupational Therapy</h4>
-                    <p>For physical difficulties, sensory processing issues, and daily living skills</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="chatbubbleOutline" slot="start" color="tertiary"></ion-icon>
-                  <ion-label>
-                    <h4>Speech and Language Therapy</h4>
-                    <p>For communication difficulties and language development</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Useful Contacts -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Useful Contacts</ion-card-title>
-              <ion-card-subtitle>Support Organizations and Resources</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>National Organizations</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="people" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h4>British Dyslexia Association</h4>
-                    <p>Support and information for dyslexia</p>
-                    <ion-note>www.bdadyslexia.org.uk</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="eyeOutline" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h4>Royal National Institute of Blind People (RNIB)</h4>
-                    <p>Support for visual impairments</p>
-                    <ion-note>www.rnib.org.uk</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="earOutline" slot="start" color="tertiary"></ion-icon>
-                  <ion-label>
-                    <h4>National Deaf Children's Society</h4>
-                    <p>Support for hearing impairments</p>
-                    <ion-note>www.ndcs.org.uk</ion-note>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>Educational Support</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="school" slot="start" color="success"></ion-icon>
-                  <ion-label>
-                    <h4>Special Educational Needs and Disability Information, Advice and Support Services (SENDIASS)</h4>
-                    <p>Free, impartial information and advice about SEN and disability</p>
-                    <ion-note>Available in all local authorities</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="shieldCheckmark" slot="start" color="warning"></ion-icon>
-                  <ion-label>
-                    <h4>Equality and Human Rights Commission</h4>
-                    <p>Information about disability rights and discrimination</p>
-                    <ion-note>www.equalityhumanrights.com</ion-note>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>Technology and Assistive Devices</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="bulbOutline" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h4>AbilityNet</h4>
-                    <p>Technology support for disabled people</p>
-                    <ion-note>www.abilitynet.org.uk</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="medicalOutline" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h4>Disabled Living Foundation</h4>
-                    <p>Information about equipment and adaptations</p>
-                    <ion-note>www.dlf.org.uk</ion-note>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Video Tutorials -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Video Tutorials</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-segment v-model="selectedVideo" :scrollable="true">
-                <ion-segment-button value="udl-video">
-                  <ion-label>UDL Overview</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="tech-video">
-                  <ion-label>Assistive Tech</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="policy-video">
-                  <ion-label>OU Policy</ion-label>
-                </ion-segment-button>
-              </ion-segment>
-
-              <div class="ion-padding">
-                <div v-if="selectedVideo === 'udl-video'">
-                  <h4>Universal Design for Learning</h4>
-                  <p>Learn about the three principles of UDL and how to apply them in your teaching.</p>
-                  <ion-button expand="block" @click="playVideo('udl')">
-                    <ion-icon :icon="play" slot="start"></ion-icon>
-                    Watch Video
-                  </ion-button>
+                <div class="guidance" v-if="responses[q.id]">
+                  <div class="guidance-badge">Guidance</div>
+                  <div v-html="optContent(q, responses[q.id])"></div>
                 </div>
-                <div v-else-if="selectedVideo === 'tech-video'">
-                  <h4>Assistive Technologies</h4>
-                  <p>Explore various assistive technologies and how they support different learning needs.</p>
-                  <ion-button expand="block" @click="playVideo('tech')">
-                    <ion-icon :icon="play" slot="start"></ion-icon>
-                    Watch Video
-                  </ion-button>
-                </div>
-                <div v-else-if="selectedVideo === 'policy-video'">
-                  <h4>OU Accessibility Policy</h4>
-                  <p>Understand The Open University's commitment to accessibility and inclusion.</p>
-                  <ion-button expand="block" @click="playVideo('policy')">
-                    <ion-icon :icon="play" slot="start"></ion-icon>
-                    Watch Video
-                  </ion-button>
-                </div>
+
+                <div class="divider"></div>
               </div>
             </ion-card-content>
           </ion-card>
         </div>
 
-        <!-- Enhanced Screening Tool/Quiz -->
-        <div v-else-if="route.params.id === 'Screening'">
-          <ion-card v-if="!screeningStarted">
-            <ion-card-header>
-              <ion-card-title>Screening Tool</ion-card-title>
-              <ion-card-subtitle>Disability Awareness Assessment</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <p>This comprehensive questionnaire helps identify which disability categories might be most relevant 
-              for your current situation. Answer questions to get personalized guidance and recommendations.</p>
-              
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="informationCircle" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h3>What you'll learn:</h3>
-                    <p>• Your knowledge level in different disability areas</p>
-                    <p>• Personalized recommendations for further study</p>
-                    <p>• Practical strategies for your teaching context</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <ion-button expand="block" color="primary" @click="startScreening">
-                <ion-icon :icon="play" slot="start"></ion-icon>
-                Start Screening Assessment
-              </ion-button>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Quiz Questions -->
-          <div v-if="screeningStarted && currentQuestion < questions.length">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Question {{ currentQuestion + 1 }} of {{ questions.length }}</ion-card-title>
-                <ion-progress-bar :value="(currentQuestion + 1) / questions.length" color="primary"></ion-progress-bar>
-              </ion-card-header>
-              <ion-card-content>
-                <h3>{{ currentQuizQuestionObj.question }}</h3>
-                
-                <div v-if="currentQuizQuestionObj.type === 'radio'">
-                  <ion-radio-group v-model="currentAnswer">
-                    <ion-item v-for="(option, index) in (currentQuizQuestionObj.type === 'radio' ? currentQuizQuestionObj.options : [])" :key="index">
-                      <ion-radio :value="option.value" slot="start"></ion-radio>
-                      <ion-label>{{ option.text }}</ion-label>
-                    </ion-item>
-                  </ion-radio-group>
-                </div>
-                <div v-else-if="currentQuizQuestionObj.type === 'select'">
-                  <ion-item>
-                    <ion-label>Select an option</ion-label>
-                    <ion-select v-model="currentAnswer" interface="popover" placeholder="Choose one">
-                      <ion-select-option v-for="option in (currentQuizQuestionObj.type === 'select' ? currentQuizQuestionObj.options : [])" :key="option.value" :value="option.value">
-                        {{ option.text }}
-                      </ion-select-option>
-                    </ion-select>
-                  </ion-item>
-                </div>
-                <div v-else-if="currentQuizQuestionObj.type === 'input'">
-                  <ion-item>
-                    <ion-label position="stacked">Your Answer</ion-label>
-                    <ion-input v-model="currentAnswer" :placeholder="currentQuizQuestionObj.type === 'input' ? currentQuizQuestionObj.placeholder : ''" clear-input></ion-input>
-                  </ion-item>
-                </div>
-                <div v-else-if="currentQuizQuestionObj.type === 'checkbox'">
-                  <ion-list>
-                    <ion-item v-for="option in (currentQuizQuestionObj.type === 'checkbox' ? currentQuizQuestionObj.options : [])" :key="option.value">
-                      <ion-checkbox v-model="checkboxAnswers[option.value]" slot="start"></ion-checkbox>
-                      <ion-label>{{ option.text }}</ion-label>
-                    </ion-item>
-                  </ion-list>
-                </div>
-                <div v-else-if="currentQuizQuestionObj.type === 'toggle'">
-                  <ion-item>
-                    <ion-label>{{ currentQuizQuestionObj.question }}</ion-label>
-                    <ion-toggle v-model="currentAnswer" slot="end"></ion-toggle>
-                  </ion-item>
-                </div>
-                <div v-else-if="currentQuizQuestionObj.type === 'range'">
-                  <ion-item>
-                    <ion-label position="stacked">{{ currentQuizQuestionObj.question }}</ion-label>
-                    <ion-range
-                      v-model="currentAnswer"
-                      :min="currentQuizQuestionObj.type === 'range' ? currentQuizQuestionObj.min : 0"
-                      :max="currentQuizQuestionObj.type === 'range' ? currentQuizQuestionObj.max : 10"
-                      :step="currentQuizQuestionObj.type === 'range' ? currentQuizQuestionObj.step || 1 : 1"
-                      :snaps="true"
-                      :ticks="true"
-                      :pin="true"
-                    >
-                      <ion-label slot="start">{{ currentQuizQuestionObj.type === 'range' ? currentQuizQuestionObj.min : 0 }}</ion-label>
-                      <ion-label slot="end">{{ currentQuizQuestionObj.type === 'range' ? currentQuizQuestionObj.max : 10 }}</ion-label>
-                    </ion-range>
-                  </ion-item>
-                  <ion-note>Selected: {{ currentAnswer }}</ion-note>
-                </div>
-                <div v-else-if="currentQuizQuestionObj.type === 'textarea'">
-                  <ion-item>
-                    <ion-label position="stacked">{{ currentQuizQuestionObj.question }}</ion-label>
-                    <ion-textarea
-                      v-model="currentAnswer"
-                      :placeholder="currentQuizQuestionObj.type === 'textarea' ? currentQuizQuestionObj.placeholder : ''"
-                      :rows="currentQuizQuestionObj.type === 'textarea' ? currentQuizQuestionObj.rows || 4 : 4"
-                      :auto-grow="true"
-                      :maxlength="1000"
-                      :counter="true"
-                    ></ion-textarea>
-                  </ion-item>
-                </div>
-                
-                <div class="ion-padding-top">
-                  <ion-button expand="block" color="primary" @click="nextQuestion" :disabled="!currentAnswer">
-                    {{ currentQuestion === questions.length - 1 ? 'Finish Assessment' : 'Next Question' }}
-                  </ion-button>
-                </div>
-              </ion-card-content>
-            </ion-card>
-          </div>
-
-          <!-- Quiz Results -->
-          <div v-if="screeningCompleted">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Assessment Results</ion-card-title>
-                <ion-card-subtitle>Your Personalized Recommendations</ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list>
-                  <ion-item v-for="(category, index) in results" :key="index">
-                    <ion-icon :icon="category.icon" slot="start" :color="category.color"></ion-icon>
-                    <ion-label>
-                      <h3>{{ category.name }}</h3>
-                      <p>{{ category.description }}</p>
-                      <ion-progress-bar :value="category.score / 100" :color="category.color"></ion-progress-bar>
-                      <ion-note>{{ category.score }}% - {{ category.level }}</ion-note>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-                
-                <ion-button expand="block" color="primary" @click="resetScreening">
-                  <ion-icon :icon="refresh" slot="start"></ion-icon>
-                  Retake Assessment
-                </ion-button>
-              </ion-card-content>
-            </ion-card>
-          </div>
-        </div>
-
-        <!-- Enhanced Resources Page -->
-        <div v-else-if="route.params.id === 'Resources'">
-          <!-- Search Bar -->
-          <ion-searchbar 
-            v-model="searchTerm" 
-            placeholder="Search resources..."
-            :debounce="300"
-            @ionInput="filterResources">
-          </ion-searchbar>
-
-          <!-- Resource Categories -->
-                     <ion-segment v-model="selectedCategory" :scrollable="true">
-             <ion-segment-button value="all">
-               <ion-label>All</ion-label>
-             </ion-segment-button>
-             <ion-segment-button value="videos">
-               <ion-label>Videos</ion-label>
-             </ion-segment-button>
-             <ion-segment-button value="audio">
-               <ion-label>Audio</ion-label>
-             </ion-segment-button>
-             <ion-segment-button value="documents">
-               <ion-label>Documents</ion-label>
-             </ion-segment-button>
-           </ion-segment>
-
-          <!-- Filtered Resources -->
-          <ion-list>
-            <ion-item v-for="resource in filteredResources" :key="resource.id" button @click="openResource(resource)">
-              <ion-thumbnail slot="start">
-                <ion-icon :icon="resource.icon" size="large" :color="resource.color"></ion-icon>
-              </ion-thumbnail>
-              <ion-label>
-                <h3>{{ resource.title }}</h3>
-                <p>{{ resource.description }}</p>
-                <ion-chip :color="resource.category" size="small">
-                  <ion-label>{{ resource.category }}</ion-label>
-                </ion-chip>
-              </ion-label>
-              <ion-button fill="clear" slot="end" @click="downloadResource(resource)">
-                <ion-icon :icon="download"></ion-icon>
-              </ion-button>
-            </ion-item>
-          </ion-list>
-
-          <!-- Quick Actions -->
-          <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-            <ion-fab-button @click="presentActionSheet">
-              <ion-icon :icon="add"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-        </div>
-
         <!-- Enhanced About Page -->
-        <div v-else-if="route.params.id === 'About'">
-          <!-- Project Overview -->
+        <div v-else-if="route.params.id === 'Contacts'">
+          <!-- Contacts -->
           <ion-card>
             <ion-card-header>
-              <ion-card-title>About SAGE</ion-card-title>
-              <ion-card-subtitle>Supporting Adolescent Girls' Education</ion-card-subtitle>
+              <ion-card-title>Organizations and key contacts</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <h3>Project Mission</h3>
-              <p>SAGE (Supporting Adolescent Girls' Education) is a comprehensive digital toolkit developed by The Open University's Access & Success Team. Our mission is to bridge the gap between policy and practice in inclusive education, providing educators with practical, evidence-based guidance to support students with disabilities effectively.</p>
-              
-              <h3>Our Approach</h3>
-              <p>We believe that every student deserves access to quality education that meets their individual needs. Our approach is grounded in the principles of Universal Design for Learning (UDL), which emphasizes creating learning experiences that work for everyone from the start, rather than retrofitting accommodations for specific students.</p>
-              
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="people" slot="start" color="primary"></ion-icon>
-                  <ion-label>
-                    <h3>Project Team</h3>
-                    <p>Access & Success Team, The Open University</p>
-                    <ion-note>Comprised of educational specialists, disability experts, and technology professionals</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="calendar" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h3>Version</h3>
-                    <p>1.0.0 - Initial Release</p>
-                    <ion-note>Released: December 2024</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="mail" slot="start" color="tertiary"></ion-icon>
-                  <ion-label>
-                    <h3>Contact</h3>
-                    <p>access-success@open.ac.uk</p>
-                    <ion-note>We welcome feedback and suggestions for improvement</ion-note>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
+              <ion-grid class="contacts-table">
+                <ion-row class="contacts-header" hidden="false">
+                  <ion-col size="12" size-md="4"><strong>Organization</strong></ion-col>
+                  <ion-col size="12" size-md="5"><strong>Details</strong></ion-col>
+                  <ion-col size="12" size-md="3"><strong>Website</strong></ion-col>
+                </ion-row>
 
-          <!-- Project Scope -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Project Scope</ion-card-title>
-              <ion-card-subtitle>Comprehensive Coverage of Disability Categories</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Disability Categories Covered</h3>
-              <p>This first release focuses on four key disability categories, each representing different areas of need and requiring specific approaches to support:</p>
-              
-              <!-- Numbered List -->
-              <ion-list>
-                <ion-item>
-                  <ion-label>
-                    <h4>1. Visual Needs</h4>
-                    <p>Visual, hearing, mobility, and speech impairments</p>
-                    <ion-note>Focus on accessibility, assistive technologies, and environmental adaptations</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>2. Cognition & Learning</h4>
-                    <p>Dyslexia, dyscalculia, ADHD, and memory issues</p>
-                    <ion-note>Emphasis on multi-sensory approaches and cognitive support strategies</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>3. Communication & Interaction</h4>
-                    <p>Autism spectrum, social anxiety, language barriers</p>
-                    <ion-note>Focus on social communication, sensory needs, and structured learning environments</ion-note>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>4. Multiple Impairments</h4>
-                    <p>Complex needs and combined disabilities</p>
-                    <ion-note>Integrated approaches addressing multiple areas of need simultaneously</ion-note>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Development Process -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Development Process</ion-card-title>
-              <ion-card-subtitle>How SAGE Was Created</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Research and Consultation</h3>
-              <p>The development of SAGE involved extensive research, consultation with disability experts, educators, and students with disabilities. We reviewed current best practices, evidence-based interventions, and gathered feedback from the educational community to ensure the toolkit meets real-world needs.</p>
-              
-              <h3>Content Development</h3>
-              <p>All content was developed by educational specialists with expertise in inclusive education and disability support. We worked closely with disability organizations and advocacy groups to ensure accuracy, sensitivity, and relevance to current educational contexts.</p>
-              
-              <h3>Technology and Accessibility</h3>
-              <p>The digital platform was designed with accessibility in mind from the start. We followed Web Content Accessibility Guidelines (WCAG) 2.1 standards and tested the app with users who have various disabilities to ensure it works for everyone.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Future Plans -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Future Development</ion-card-title>
-              <ion-card-subtitle>What's Next for SAGE</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Planned Updates</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="add" slot="start" color="success"></ion-icon>
-                  <ion-label>
-                    <h4>Additional Disability Categories</h4>
-                    <p>Expanding coverage to include more specific conditions and learning differences</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="videocamOutline" slot="start" color="secondary"></ion-icon>
-                  <ion-label>
-                    <h4>Enhanced Multimedia Content</h4>
-                    <p>More video case studies, interactive simulations, and audio resources</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="people" slot="start" color="tertiary"></ion-icon>
-                  <ion-label>
-                    <h4>Community Features</h4>
-                    <p>Forums for educators to share experiences and best practices</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>Feedback and Improvement</h3>
-              <p>We are committed to continuous improvement based on user feedback and emerging research. Your input helps us make SAGE more effective and relevant for educators and students.</p>
-              
-              <ion-button expand="block" color="primary" @click="contactTeam">
-                <ion-icon :icon="mail" slot="start"></ion-icon>
-                Contact the Team
-              </ion-button>
+                <ion-row class="contacts-row" v-for="org in orgs" :key="org.name">
+                  <ion-col size="12" size-md="4">
+                    <ion-item lines="none">
+                      <ion-icon :icon="org.icon" slot="start" :color="org.color"></ion-icon>
+                      <ion-label>
+                        <h3>{{ org.name }}</h3>
+                        <ion-note color="medium">{{ org.type }}</ion-note>
+                      </ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="12" size-md="5">
+                    <p>{{ org.description }}</p>
+                    <ion-note color="medium">{{ org.contact }}</ion-note>
+                  </ion-col>
+                  <ion-col size="12" size-md="3">
+                    <ion-button fill="clear" :href="org.url" target="_blank" rel="noopener noreferrer">
+                      Visit Site
+                      <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
             </ion-card-content>
           </ion-card>
         </div>
@@ -1143,9 +507,11 @@ import {
   earOutline,
   printOutline,
   trophy,
-  arrowForward
+  arrowForward,
+  openOutline
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';
+import { ref as vueRef } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -1332,17 +698,20 @@ const filteredResources = computed(() => {
 });
 
 const getPageTitle = () => {
-  const id = route.params.id as string;
+  const rawId = route.params.id;
+  if (rawId === undefined || rawId === null) {
+    return 'SAGE Disability v0.0.7';
+  }
+  const id = String(rawId);
   console.log('Route ID:', id); // Debug logging
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Disability v0.0.5',
-    'home': 'SAGE Disability v0.0.5', // Add lowercase version
-    'General': 'General Information',
+    'Home': 'SAGE Disability v0.0.7',
+    'home': 'SAGE Disability v0.0.7', // Add lowercase version
+    'Introduction': 'Introduction',
     'Screening': 'Screening Tool',
-    'Resources': 'Resources',
-    'About': 'About SAGE'
+    'Contacts': 'Contacts'
   };
   
   // Try exact match first, then case-insensitive
@@ -1358,7 +727,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id;
+  const finalTitle = title || id || 'SAGE Disability v0.0.7';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };
@@ -1639,6 +1008,201 @@ const contactTeam = async () => {
   //   position: 'bottom'
   // });
   // await toast.present();
+};
+
+const orgs = ref([
+  {
+    name: 'Ministry of Primary and Secondary Education (MoPSE)',
+    type: 'Government Ministry',
+    description: 'Leads Zimbabwe\'s primary and secondary education policy, curriculum and services.',
+    contact: 'Government Portal',
+    url: 'https://www.zim.gov.zw/index.php/en/my-government/government-ministries/primary-and-secondary-education',
+    icon: school,
+    color: 'primary'
+  },
+  {
+    name: 'Ministry of Health and Child Care (MoHCC)',
+    type: 'Government Ministry',
+    description: 'Health services including rehabilitation, audiology, vision and assistive devices.',
+    contact: 'Official site',
+    url: 'http://www.mohcc.gov.zw/',
+    icon: medicalOutline,
+    color: 'danger'
+  },
+  {
+    name: 'UNICEF Zimbabwe',
+    type: 'UN Agency',
+    description: 'Supports inclusive education, child protection and Learning Passport with MoPSE.',
+    contact: 'unicef.org/zimbabwe',
+    url: 'https://www.unicef.org/zimbabwe/',
+    icon: people,
+    color: 'tertiary'
+  },
+  {
+    name: 'Plan International Zimbabwe (SAGE Lead)',
+    type: 'International NGO',
+    description: 'Leads SAGE consortium; programmes on girls\' education and protection.',
+    contact: 'plan-international.org/zimbabwe',
+    url: 'https://plan-international.org/zimbabwe/',
+    icon: people,
+    color: 'secondary'
+  },
+  {
+    name: 'Deaf Zimbabwe Trust (DZT)',
+    type: 'Disabled Persons Organisation (Deaf)',
+    description: 'Advocacy and support for deaf children and youth; promotes Zim Sign Language.',
+    contact: 'deafzimbabwetrust.org',
+    url: 'https://deafzimbabwetrust.org/',
+    icon: earOutline,
+    color: 'primary'
+  },
+  {
+    name: 'Jairos Jiri Association',
+    type: 'Rehabilitation & Support',
+    description: 'Rehabilitation, education and vocational training for persons with disabilities.',
+    contact: 'Official site',
+    url: '#',
+    icon: medicalOutline,
+    color: 'secondary'
+  },
+  {
+    name: 'Federation of Organizations of Disabled People in Zimbabwe (FODPZ)',
+    type: 'Federation of DPOs',
+    description: 'Umbrella body coordinating DPOs and national advocacy on disability rights.',
+    contact: 'Official site',
+    url: '#',
+    icon: people,
+    color: 'warning'
+  },
+  {
+    name: 'MoPSE Learning Passport',
+    type: 'e-Learning Platform',
+    description: 'Digital learning platform by MoPSE in partnership with UNICEF and Microsoft.',
+    contact: 'learningpassport.unicef.org',
+    url: 'https://mopsezw.learningpassport.unicef.org/',
+    icon: school,
+    color: 'success'
+  }
+]);
+
+const screeningQuestions = vueRef([
+  {
+    id: 'vision',
+    title: 'VISION',
+    prompt: 'Does your learner have difficulty seeing, even if wearing glasses? Would you say…',
+    options: [
+      { value: 'none', label: 'No difficulty' },
+      { value: 'some', label: 'Some difficulty' },
+      { value: 'lot', label: 'A lot of difficulty' },
+      { value: 'cannot', label: 'Cannot do at all' }
+    ]
+  },
+  {
+    id: 'hearing',
+    title: 'HEARING',
+    prompt: 'Does your learner have difficulty hearing, even if using a hearing aid(s)? Would you say…',
+    options: [
+      { value: 'none', label: 'No difficulty' },
+      { value: 'some', label: 'Some difficulty' },
+      { value: 'lot', label: 'A lot of difficulty' },
+      { value: 'cannot', label: 'Cannot do at all' }
+    ]
+  },
+  {
+    id: 'mobility',
+    title: 'MOBILITY',
+    prompt: 'Does your learner have difficulty walking or climbing steps? Would you say…',
+    options: [
+      { value: 'none', label: 'No difficulty' },
+      { value: 'some', label: 'Some difficulty' },
+      { value: 'lot', label: 'A lot of difficulty' },
+      { value: 'cannot', label: 'Cannot do at all' }
+    ]
+  },
+  {
+    id: 'cognition',
+    title: 'COGNITION (REMEMBERING)',
+    prompt: 'Does your learner have difficulty remembering or concentrating? Would you say…',
+    options: [
+      { value: 'none', label: 'No difficulty' },
+      { value: 'some', label: 'Some difficulty' },
+      { value: 'lot', label: 'A lot of difficulty' },
+      { value: 'cannot', label: 'Cannot do at all' }
+    ]
+  },
+  {
+    id: 'selfcare',
+    title: 'SELF-CARE',
+    prompt: 'Does your learner have difficulty with self-care, such as washing all over or dressing? Would you say…',
+    options: [
+      { value: 'none', label: 'No difficulty' },
+      { value: 'some', label: 'Some difficulty' },
+      { value: 'lot', label: 'A lot of difficulty' },
+      { value: 'cannot', label: 'Cannot do at all' }
+    ]
+  },
+  {
+    id: 'communication',
+    title: 'COMMUNICATION',
+    prompt: 'Using their usual language, does your learner have difficulty communicating, for example understanding or being understood? Would you say…',
+    options: [
+      { value: 'none', label: 'No difficulty' },
+      { value: 'some', label: 'Some difficulty' },
+      { value: 'lot', label: 'A lot of difficulty' },
+      { value: 'cannot', label: 'Cannot do at all' }
+    ]
+  }
+]);
+
+const responses = vueRef<Record<string, string>>({});
+
+const directoryInfo = {
+  vision: {
+    support: [
+      {
+        name: 'Dorothy Duncan Centre',
+        address: '119 Fife Avenue 3rd/4th Street, Harare, Box 4489 Harare',
+        services: 'Provision of reading and educational materials for the blind and partially sighted',
+        phone: '+263 242 251117 / 496667'
+      }
+    ],
+    urgent: [
+      {
+        name: 'Council for the Blind',
+        address: 'Fife St / 15th Avenue, Bulawayo',
+        services: 'Eye Health services and spectacles.',
+        phone: '+263 712 209 822'
+      }
+    ]
+  }
+};
+
+const optContent = (q: any, value: string) => {
+  if (q.id === 'vision') {
+    if (value === 'none') {
+      return '<p>Answer: Your learner does not need additional support for their vision.</p>';
+    }
+    if (value === 'some') {
+      return `<p>Answer: Find out how you can support your learner in the Visual Needs section <a href=\"/disability/xxxxxxx\">here</a>.</p>`;
+    }
+    if (value === 'lot') {
+      const orgsHtml = directoryInfo.vision.support.map(o => `<div class=\"org-card\"><strong>${o.name}</strong><br/><small>${o.address}</small><br/>${o.services}<br/><em>${o.phone}</em></div>`).join('');
+      return `<p>Answer: Find out how you can support your learner in the Visual Needs section <a href=\"/disability/xxxxxxx\">here</a> and contact an organisation for more support and resources.</p>${orgsHtml}`;
+    }
+    if (value === 'cannot') {
+      const orgsHtml = directoryInfo.vision.urgent.map(o => `<div class=\"org-card\"><strong>${o.name}</strong><br/><small>${o.address}</small><br/>${o.services}<br/><em>${o.phone}</em></div>`).join('');
+      return `<p>Answer: Find out how you can support your learner in the Visual Needs section <a href=\"/disability/xxxxxxx\">here</a> and contact an organisation for an urgent referral and diagnosis.</p>${orgsHtml}`;
+    }
+  }
+  if (q.id === 'hearing') {
+    if (value === 'none') return '<p>Your learner does not need additional support for their hearing.</p>';
+    if (value === 'some' || value === 'lot' || value === 'cannot') {
+      return `<p>Find out how you can support your learner in the Hearing Needs section <a href=\"/needs/hearing\">here</a>.</p>`;
+    }
+  }
+  // For other categories, simple generic message
+  if (value === 'none') return '<p>No additional support indicated at this time.</p>';
+  return '<p>Consider support strategies in the relevant section of this toolkit and consult local services if needed.</p>';
 };
 </script>
 
@@ -1988,8 +1552,7 @@ ion-badge {
 
   /* Show the currently active page content */
   div[v-if="route.params.id === 'Home'"],
-  div[v-if="route.params.id === 'About'"],
-  div[v-if="route.params.id === 'Resources'"],
+  div[v-if="route.params.id === 'Contacts'"],
   div[v-if="route.params.id === 'Contact'"],
   div[v-if="route.params.id === 'Quiz'"] {
     display: block !important;
@@ -2089,5 +1652,110 @@ ion-card {
     height: auto !important;
     overflow: visible !important;
   }
+}
+</style>
+
+<style scoped>
+.sponsors-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  margin: 8px 0 12px 0;
+}
+
+.partners-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.partners-strip img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: transparent;
+}
+
+@media (max-width: 720px) {
+  .partners-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .partners-strip {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+
+.contacts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contacts-header {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.contacts-row {
+  border-bottom: 1px solid #ddd;
+}
+
+.contacts-header,
+.contacts-row {
+  padding: 8px;
+  text-align: left;
+}
+
+.contacts-header {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .contacts-header {
+    display: table-row;
+  }
+}
+.question-block { margin: 16px 0; }
+.question-title { margin: 0 0 6px 0; font-size: 16px; font-weight: 600; }
+.question-prompt { margin: 0 0 8px 0; color: var(--ion-color-medium); }
+.question-block ion-item { --background: transparent; border-radius: 8px; }
+.question-block ion-item:hover { --background: rgba(var(--ion-color-primary-rgb), 0.06); }
+
+.guidance {
+  margin: 10px 0 0 0;
+  padding: 12px;
+  background: rgba(var(--ion-color-primary-rgb), 0.06);
+  border-left: 4px solid var(--ion-color-primary);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.guidance-badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+.divider { height: 1px; background: var(--ion-color-light); opacity: 0.6; margin-top: 12px; }
+.org-card {
+  padding: 10px;
+  margin-top: 8px;
+  background: #fff;
+  border: 1px solid var(--ion-color-light);
+  border-left: 3px solid var(--ion-color-medium);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 </style>

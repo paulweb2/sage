@@ -17,6 +17,23 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/progress',
     component: () => import ('../views/ProgressPage.vue')
+  },
+  {
+    path: '/needs/hearing',
+    component: () => import ('../views/HearingNeedsPage.vue')
+  },
+  {
+    path: '/working/:id',
+    component: () => import ('../views/WorkingWithLearnersPage.vue')
+  },
+
+  {
+    path: '/introduction',
+    component: () => import ('../views/IntroductionPage.vue')
+  },
+  {
+    path: '/working-with-learners',
+    component: () => import ('../views/WorkingWithLearnersPage.vue')
   }
 ]
 
