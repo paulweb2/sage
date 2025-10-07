@@ -49,11 +49,8 @@
               <ion-card-subtitle>Sponsors and supporting organisations</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <div class="partners-strip" role="group" aria-label="Programme sponsors and partners">
-                <img src="/CBM_logo.png" alt="CBM" />
-                <img src="/GEC_UKaid_lockup_RGB.jpg" alt="Girls' Education Challenge / UK Aid" />
-                <img src="/PLAN_logo.png" alt="Plan International" />
-                <img src="/sage-logo.png" alt="SAGE" />
+              <div class="partners-strip single" role="img" aria-label="Programme sponsors and partners">
+                <img src="/sage_logo_strip.png" alt="Programme partners" class="partners-strip-img" />
               </div>
               <p>
                 SAGE (Supporting Adolescent Girls' Education) is a UK Aid-funded programme through the UK's Foreign,
@@ -700,15 +697,15 @@ const filteredResources = computed(() => {
 const getPageTitle = () => {
   const rawId = route.params.id;
   if (rawId === undefined || rawId === null) {
-    return 'SAGE Disability v0.0.7';
+    return 'SAGE Disability v0.0.9';
   }
   const id = String(rawId);
   console.log('Route ID:', id); // Debug logging
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Disability v0.0.7',
-    'home': 'SAGE Disability v0.0.7', // Add lowercase version
+    'Home': 'SAGE Disability v0.0.9',
+    'home': 'SAGE Disability v0.0.9', // Add lowercase version
     'Introduction': 'Introduction',
     'Screening': 'Screening Tool',
     'Contacts': 'Contacts'
@@ -727,7 +724,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id || 'SAGE Disability v0.0.7';
+  const finalTitle = title || id || 'SAGE Disability v0.0.9';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };
@@ -1664,33 +1661,21 @@ ion-card {
   margin: 8px 0 12px 0;
 }
 
-.partners-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+.partners-strip.single {
+  display: flex;
   align-items: center;
+  justify-content: flex-start;
   margin-bottom: 12px;
 }
 
-.partners-strip img {
+.partners-strip-img {
   width: 100%;
+  max-width: 840px;
   height: auto;
   object-fit: contain;
-  background: transparent;
-}
-
-@media (max-width: 720px) {
-  .partners-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-}
-
-@media (max-width: 420px) {
-  .partners-strip {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .contacts-table {

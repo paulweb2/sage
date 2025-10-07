@@ -1,2 +1,32 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
+/* Make hamburger menu icon larger and black globally */
+ion-menu-button {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  min-width: 44px; /* larger touch target */
+  min-height: 44px; /* larger touch target */
+  /* Apply size/color at host so it inherits into shadow children */
+  --color: #000; /* icon color */
+  font-size: 40px; /* enlarge icon more */
+  transform: scale(1.4);
+  transform-origin: left center;
+}
+
+ion-menu-button::part(icon) {
+  font-size: 40px; /* bigger icon => thicker bars */
+  color: #000;
+  --ionicon-stroke-width: 64px; /* make outline-style bars fatter */
+}
+
+/* Enlarge custom labeled Menu button too */
+.menu-button {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  transform: scale(1.2);
+  transform-origin: left center;
+}
+.menu-button ion-icon {
+  font-size: 28px;
+}

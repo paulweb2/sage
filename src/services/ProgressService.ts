@@ -30,9 +30,9 @@ export class ProgressService {
   // TEMPORARY: Currently implemented tasks for celebration trigger
   // TODO: Remove this when all tasks are implemented and use full progress instead
   private static readonly IMPLEMENTED_TASKS = [
-    'physical-disabilities-quiz',      // Visual Needs Quiz
-    'physical-disabilities-reflection', // Visual Needs Reflection  
-    'communication-quiz'               // Communication Quiz
+    'hearing-needs-quiz',        // Hearing Needs Quiz
+    'hearing-needs-reflection',  // Hearing Needs Reflection
+    'communication-quiz'         // Communication Quiz
   ];
 
   /**

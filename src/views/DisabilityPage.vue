@@ -41,21 +41,7 @@
                     <ion-card-content>
                       <h4 v-if="quizQuestions[currentQuizQuestion]">{{ quizQuestions[currentQuizQuestion].question }}</h4>
                       
-                      <!-- Debug: Show current question info -->
-                      <ion-note color="danger" style="font-size: 16px; margin-bottom: 20px; display: block;">
-                        DEBUG: Current question index: {{ currentQuizQuestion }}<br>
-                        Question exists: {{ !!quizQuestions[currentQuizQuestion] }}<br>
-                        Question type: {{ quizQuestions[currentQuizQuestion]?.type }}<br>
-                        Is select-all: {{ quizQuestions[currentQuizQuestion]?.type === 'select-all' }}
-                      </ion-note>
                       
-                      <!-- Simple test div that should always show -->
-                      <div style="background: red; color: white; padding: 20px; margin: 20px 0; border: 3px solid black; font-size: 18px; font-weight: bold;">
-                        🔴 THIS RED BOX SHOULD ALWAYS BE VISIBLE! 🔴<br>
-                        If you can see this, basic template rendering works.<br>
-                        Question index: {{ currentQuizQuestion }}<br>
-                        Question type: {{ quizQuestions[currentQuizQuestion]?.type }}
-                      </div>
                       
                       <!-- Multiple Choice Questions -->
                       <div v-if="quizQuestions[currentQuizQuestion] && (!quizQuestions[currentQuizQuestion].type || quizQuestions[currentQuizQuestion].type === 'multiple-choice')">

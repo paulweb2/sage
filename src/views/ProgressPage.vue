@@ -172,7 +172,8 @@
                       v-if="!item.completed" 
                       fill="clear" 
                       size="small" 
-                      :router-link="`/disability/${item.id.split('-')[0]}`"
+                      :router-link="isItemEnabled(item.id) ? getItemRoute(item.id) : undefined"
+                      :disabled="!isItemEnabled(item.id)"
                       :router-direction="'forward'"
                     >
                       Start
@@ -268,7 +269,14 @@
             :total-items="progress.totalItems"
             :average-score="progressStats.averageQuizScore"
             :certificate-number="certificateNumber"
+            :recipient-name="recipientName"
           />
+          <div class="certificate-name-input">
+            <ion-item lines="full">
+              <ion-label position="stacked">Name on certificate</ion-label>
+              <ion-input v-model="recipientName" placeholder="Enter your name"></ion-input>
+            </ion-item>
+          </div>
           <div class="certificate-actions">
             <ion-button expand="block" color="primary" @click="printCertificate">
               <ion-icon :icon="print" slot="start"></ion-icon>
@@ -316,10 +324,11 @@ import {
   IonChip,
   IonAccordionGroup,
   IonAccordion,
-  IonMenuButton,
   IonToast,
-  IonModal
+  IonModal,
+  IonInput
 } from '@ionic/vue';
+import { menuController } from '@ionic/vue';
 import {
   trophy,
   refresh,
@@ -342,6 +351,7 @@ import {
   printOutline,
   accessibilityOutline
 } from 'ionicons/icons';
+
 import { ProgressService, type ProgressData, type ProgressItem } from '../services/ProgressService';
 import SageCertificate from '../components/SageCertificate.vue';
 import { actionSheetController, toastController } from '@ionic/vue';
@@ -363,6 +373,7 @@ const toastColor = ref('success');
 const isLoading = ref(false);
 const showCertificateModal = ref(false);
 const certificateRef = ref<InstanceType<typeof SageCertificate> | null>(null);
+const recipientName = ref('');
 
 const progressStats = ref<{
   totalQuizzes: number;
@@ -433,6 +444,30 @@ const certificateNumber = computed(() => {
   const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
   return `${year}${month}${day}-${random}`;
 });
+
+// Only enable hearing quiz, hearing reflection, and communication quiz
+const ENABLED_IDS = new Set([
+  'hearing-needs-quiz',
+  'hearing-needs-reflection',
+  'communication-quiz'
+]);
+
+function isItemEnabled(id: string): boolean {
+  return ENABLED_IDS.has(id);
+}
+
+function getItemRoute(id: string): string {
+  // id pattern: `${pageId}-quiz` or `${pageId}-reflection`
+  const pageId = id.replace(/-(quiz|reflection)$/,'');
+  if (pageId === 'hearing-needs') {
+    return '/needs/hearing'; // dedicated hearing route
+  }
+  if (pageId === 'communication') {
+    return '/disability/communication';
+  }
+  // Fallback (should be disabled for others): keep existing pattern
+  return `/disability/${pageId}`;
+}
 
 const loadProgress = async () => {
   isLoading.value = true;

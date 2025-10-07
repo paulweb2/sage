@@ -27,7 +27,7 @@
           </div>
           
           <div class="recipient-name">
-            <span class="name-placeholder">[Your Name]</span>
+            <span class="name-placeholder">{{ recipientName || '[Your Name]' }}</span>
           </div>
           
           <div class="achievement-text">
@@ -79,6 +79,7 @@ const props = defineProps<{
   totalItems: number
   averageScore: number
   certificateNumber: string
+  recipientName?: string
 }>();
 
 const certificateRef = ref<HTMLElement | null>(null);
