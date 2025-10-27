@@ -697,15 +697,15 @@ const filteredResources = computed(() => {
 const getPageTitle = () => {
   const rawId = route.params.id;
   if (rawId === undefined || rawId === null) {
-    return 'SAGE Disability v0.0.9';
+    return 'SAGE Disability v0.0.10';
   }
   const id = String(rawId);
   console.log('Route ID:', id); // Debug logging
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Disability v0.0.9',
-    'home': 'SAGE Disability v0.0.9', // Add lowercase version
+    'Home': 'SAGE Disability v0.0.10',
+    'home': 'SAGE Disability v0.0.10', // Add lowercase version
     'Introduction': 'Introduction',
     'Screening': 'Screening Tool',
     'Contacts': 'Contacts'
@@ -724,7 +724,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id || 'SAGE Disability v0.0.9';
+  const finalTitle = title || id || 'SAGE Disability v0.0.10';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };

@@ -302,7 +302,7 @@
                     <ion-label>
                       <h4>{{ r.title }}</h4>
                       <p>{{ r.description }}</p>
-                      <p v-if="r.url">{{ r.url }}</p>
+                      <p v-if="r.url"><a :href="r.url" target="_blank" rel="noopener noreferrer">{{ r.url }}</a></p>
                     </ion-label>
                   </ion-item>
                 </ion-list>
