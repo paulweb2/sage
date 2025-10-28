@@ -20,7 +20,6 @@
         <ion-card id="intro">
           <ion-card-content>
             <p>{{ pageIntro }}</p>
-            <p class="intro-note">This section provides context and practical considerations for your work. Use the reflection tool below to capture your ideas and next steps.</p>
           </ion-card-content>
         </ion-card>
 
@@ -120,7 +119,7 @@ const route = useRoute();
 const pageId = computed(() => (route.params.id as string) || 'working-partnership');
 
 const pageTitle = computed(() => {
-  if (pageId.value === 'working-partnership') return 'Working in partnership with learners';
+  if (pageId.value === 'working-partnership') return 'Working in partnership with learners with disabilities';
   if (pageId.value === 'working-language') return 'Language of disability';
   if (pageId.value === 'working-tensions') return 'Tensions and complexity';
   return 'Working with learners with disabilities';
@@ -128,7 +127,7 @@ const pageTitle = computed(() => {
 
 const pageSubtitle = computed(() => '');
 const pageIntro = computed(() => {
-  if (pageId.value === 'working-partnership') return 'Engage learners as partners in planning, adjusting supports and reviewing progress.';
+  if (pageId.value === 'working-partnership') return 'Inclusive education works best when everyone plays a role; no one person or group can achieve it alone. Partnerships between learners, parents, communities and other stakeholders help remove barriers and create supportive environments.';
   if (pageId.value === 'working-language') return 'Use respectful, person-centred language and identity-first terms where preferred.';
   if (pageId.value === 'working-tensions') return 'Balance needs, resources and contexts; recognise intersecting needs and evolving support.';
   return '';

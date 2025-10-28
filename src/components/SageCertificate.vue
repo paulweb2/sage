@@ -15,7 +15,7 @@
             <div class="logo-subtitle">Supporting Accessible and Inclusive Education</div>
           </div>
           <div class="certificate-title">
-            <h1>Certificate of Completion</h1>
+            <h1>Certificate of Participation</h1>
             <div class="title-underline"></div>
           </div>
         </div>

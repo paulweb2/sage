@@ -21,7 +21,7 @@
             <div>
               <ion-item lines="none" @click="handleIntroductionClick" class="category-item" router-direction="root" :class="{ selected: activeSection === 'top' && activeIndex === introductionIndex }">
                 <ion-icon aria-hidden="true" slot="start" :ios="informationCircleOutline" :md="informationCircleSharp"></ion-icon>
-                <ion-label>Introduction</ion-label>
+                <ion-label>General Information</ion-label>
                 <ion-icon :icon="chevronDown" slot="end" :class="{ 'rotated': introductionExpanded }"></ion-icon>
               </ion-item>
               <div v-show="introductionExpanded" class="submenu-container">
@@ -35,10 +35,10 @@
                   <ion-label>Toolkit as an information source</ion-label>
                 </ion-item>
                 <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-pd-resource')">
-                  <ion-label>Toolkit as a professional development resource</ion-label>
+                  <ion-label>Toolkit as a professional learning resource</ion-label>
                 </ion-item>
                 <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-certificate')">
-                  <ion-label>Certificate of Completion</ion-label>
+                  <ion-label>Certificate of Participation</ion-label>
                 </ion-item>
               </div>
             </div>
@@ -50,7 +50,7 @@
               <ion-menu-toggle :auto-hide="false">
                 <ion-item router-direction="root" :router-link="'/working/working-partnership'" lines="none" :detail="false" class="hydrated category-item">
                   <ion-icon aria-hidden="true" slot="start" :ios="handLeftOutline" :md="handLeftSharp"></ion-icon>
-                  <ion-label>Working in partnership with learners</ion-label>
+                  <ion-label>Working in partnership with learners with disabilities</ion-label>
                 </ion-item>
               </ion-menu-toggle>
               <ion-menu-toggle :auto-hide="false">
@@ -183,7 +183,7 @@ const appPages = [
     mdIcon: trophySharp,
   },
   {
-    title: 'Introduction',
+    title: 'General Information',
     url: '/introduction',
     iosIcon: informationCircleOutline,
     mdIcon: informationCircleSharp,
@@ -211,7 +211,7 @@ const appPages = [
 const progressIndex = appPages.findIndex(page => page.title === 'My Progress');
 const progressUrl = progressIndex !== -1 ? appPages[progressIndex].url : '/progress';
 
-const introductionIndex = appPages.findIndex(page => page.title === 'Introduction');
+const introductionIndex = appPages.findIndex(page => page.url === '/introduction');
 const introductionExpanded = ref(false);
 
 const workingIndex = appPages.findIndex(page => page.title === 'Working with learners with disabilities');
@@ -224,12 +224,12 @@ const topHome = computed(() => appPages
 
 const topRest = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My Progress' && page.title !== 'Introduction' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My Progress' && page.url !== '/introduction' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
 );
 
 const topPages = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My Progress' && page.title !== 'Introduction' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My Progress' && page.url !== '/introduction' && page.title !== 'Working with learners with disabilities')
 );
 
 const disabilityCategories = ref([

@@ -26,28 +26,17 @@
         <div v-if="route.params.id === 'Home'">
           <!-- SAGE Cover Illustration -->
           <div class="sage-cover-illustration-wrapper">
-            <img src="/SAGE cover illustration disability.jpg" alt="Illustration of a diverse group of girls and community members, including a girl in a wheelchair, in a rural Zimbabwean setting" class="sage-cover-illustration" />
+            <img src="/Letwin_Gwambura_Danda.jpg" alt="Classroom scene of learners studying together, including a learner using a wheelchair" class="sage-cover-illustration" />
           </div>
 
           <ion-card>
-            <ion-card-header>
-              <ion-card-title>Government Introduction</ion-card-title>
-              <ion-card-subtitle>Official foreword</ion-card-subtitle>
-            </ion-card-header>
             <ion-card-content>
-              <p>
-                This is a placeholder introductory message from the Ministry, outlining the importance of inclusive
-                education and our shared commitment to supporting every learner. Further details and the final
-                approved text will be added here.
-              </p>
+              <p>This digital disability toolkit has been developed in collaboration with the Ministry of Primary and Secondary Education, Plan International, CBM Global, AWET and The Open University.</p>
+              <p>This toolkit is designed to support teachers working with learners with disabilities in formal and non-formal education settings. It offers educators practical information and signposts to sources of further support for working with learners with disabilities. The toolkit includes classroom examples of good practice in educational settings in Zimbabwe. Educators will be able to use the toolkit, adapting the resources for their own settings to empower learners with disabilities and to promote a culture of understanding and inclusion among all learners, their families and communities.</p>
             </ion-card-content>
           </ion-card>
 
           <ion-card>
-            <ion-card-header>
-              <ion-card-title>Programme Partners</ion-card-title>
-              <ion-card-subtitle>Sponsors and supporting organisations</ion-card-subtitle>
-            </ion-card-header>
             <ion-card-content>
               <div class="partners-strip single" role="img" aria-label="Programme sponsors and partners">
                 <img src="/sage_logo_strip.png" alt="Programme partners" class="partners-strip-img" />
@@ -61,8 +50,17 @@
             </ion-card-content>
           </ion-card>
 
-          <!-- Demo Video Player with Transcript -->
           <ion-card>
+            <ion-card-header>
+              <ion-card-title>Acknowledgments</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>With thanks to all authors, partners and schools who took part in the creation and testing of this toolkit</p>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Demo Video Player with Transcript -->
+<!--           <ion-card>
             <ion-card-header>
               <ion-card-title>Demo Video: Inclusive Education</ion-card-title>
               <ion-card-subtitle>Sample video with transcript</ion-card-subtitle>
@@ -86,10 +84,10 @@
                 </ion-accordion>
               </ion-accordion-group>
             </ion-card-content>
-          </ion-card>
+          </ion-card> -->
 
           <!-- Demo Audio Player with Transcript -->
-          <ion-card>
+<!--           <ion-card>
             <ion-card-header>
               <ion-card-title>Demo Audio: Welcome Message</ion-card-title>
               <ion-card-subtitle>Sample audio with transcript</ion-card-subtitle>
@@ -111,102 +109,10 @@
                 </ion-accordion>
               </ion-accordion-group>
             </ion-card-content>
-          </ion-card>
-          <!-- Hero Section with Video -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Welcome to SAGE</ion-card-title>
-              <ion-card-subtitle>Supporting Adolescent Girls' Education</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <p>SAGE is your mobile learning companion for understanding and supporting students with disabilities. 
-              Get practical guidance, case studies, and resources to help create inclusive learning environments.</p>
-              
-              <!-- Video Component -->
-              <ion-item>
-                <ion-label>Introduction Video</ion-label>
-                <ion-button fill="clear" @click="playVideo">
-                  <ion-icon :icon="playCircle" slot="start"></ion-icon>
-                  Play Video
-                </ion-button>
-              </ion-item>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Progress Summary Card -->
-          <ion-card v-if="overallProgress.percentage > 0" class="progress-summary-card">
-            <ion-card-header>
-              <ion-card-title>
-                <ion-icon :icon="trophy" slot="start" :color="achievementLevel.color"></ion-icon>
-                Your Learning Progress
-              </ion-card-title>
-              <ion-card-subtitle>Track your SAGE journey</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="progress-summary-content">
-                <div class="progress-circle-small" :style="{ '--progress': overallProgress.percentage }">
-                  <div class="progress-circle-inner-small">
-                    <div class="progress-percentage-small">{{ overallProgress.percentage }}%</div>
-                  </div>
-                </div>
-                <div class="progress-details">
-                  <ion-chip :color="achievementLevel.color" class="achievement-chip-small">
-                    <ion-icon :icon="achievementLevel.icon"></ion-icon>
-                    <ion-label>{{ achievementLevel.level }}</ion-label>
-                  </ion-chip>
-                  <p class="progress-stats-small">
-                    {{ overallProgress.completedItems }} of {{ overallProgress.totalItems }} activities completed
-                  </p>
-                  <ion-button 
-                    fill="clear" 
-                    size="small" 
-                    router-link="/progress" 
-                    router-direction="forward"
-                    class="view-progress-btn"
-                  >
-                    View Full Progress
-                    <ion-icon :icon="arrowForward" slot="end"></ion-icon>
-                  </ion-button>
-                </div>
-              </div>
-            </ion-card-content>
-          </ion-card>
-              
-              <ion-button expand="block" fill="outline" class="ion-margin-top" @click="startScreening">
-                <ion-icon :icon="accessibilityOutline" slot="start"></ion-icon>
-                Start Screening Tool
-              </ion-button>
-
-          <!-- Quick Stats with Progress -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Your Progress</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-progress-bar :value="0.3" color="primary"></ion-progress-bar>
-              <ion-note>30% of content completed</ion-note>
-              
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="checkmarkCircle" slot="start" color="success"></ion-icon>
-                  <ion-label>Completed: General Information</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="time" slot="start" color="warning"></ion-icon>
-                  <ion-label>In Progress: Screening Tool</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="ellipse" slot="start" color="medium"></ion-icon>
-                  <ion-label>Not Started: Resources</ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Feature Grid -->
+          </ion-card> -->
 
           <!-- Media Players Section -->
-          <ion-card>
+<!--           <ion-card>
             <ion-card-header>
               <ion-card-title>Media Resources</ion-card-title>
             </ion-card-header>
@@ -251,95 +157,7 @@
                 </ion-accordion>
               </ion-accordion-group>
             </ion-card-content>
-          </ion-card>
-
-          <!-- Quick Reference Guide -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Quick Reference Guide</ion-card-title>
-              <ion-card-subtitle>Essential Information at Your Fingertips</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Key Principles of Inclusive Education</h3>
-              <p>Inclusive education is based on the fundamental principle that all students have the right to participate in and benefit from education. This approach recognizes and values diversity, ensuring that every student feels welcomed, supported, and challenged to reach their full potential.</p>
-              
-              <h3>Universal Design for Learning (UDL)</h3>
-              <p>UDL is a framework that guides the design of learning experiences to proactively meet the needs of all learners. It provides multiple means of engagement, representation, and action & expression, ensuring that learning is accessible to everyone.</p>
-              
-              <h3>Reasonable Adjustments</h3>
-              <p>Reasonable adjustments are changes made to remove or reduce barriers that disabled students face in education. These adjustments are legally required and should be made in consultation with the student and their family.</p>
-              
-              <ion-list>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>
-                    <h4>Individualized Approach</h4>
-                    <p>Every student is unique and requires personalized support strategies</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>
-                    <h4>Collaborative Planning</h4>
-                    <p>Involve students, parents, and professionals in decision-making</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                  <ion-label>
-                    <h4>Continuous Assessment</h4>
-                    <p>Regularly evaluate and adjust support strategies based on progress</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-
-          <!-- Getting Started Tips -->
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Getting Started Tips</ion-card-title>
-              <ion-card-subtitle>Making the Most of SAGE</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <h3>Step-by-Step Guide</h3>
-              <ion-list>
-                <ion-item>
-                  <ion-label>
-                    <h4>1. Complete the Screening Tool</h4>
-                    <p>Start by taking the comprehensive assessment to identify your knowledge gaps and get personalized recommendations</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>2. Explore General Information</h4>
-                    <p>Read through the foundational content to understand key concepts and principles</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>3. Focus on Specific Areas</h4>
-                    <p>Use the menu to navigate to specific disability categories relevant to your context</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>4. Access Resources</h4>
-                    <p>Download practical tools, watch videos, and listen to audio guides</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h4>5. Apply and Reflect</h4>
-                    <p>Use the interactive elements to test your understanding and reflect on your practice</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              
-              <h3>Best Practices</h3>
-              <p>Take your time exploring the content. The app is designed to be used at your own pace, allowing you to revisit sections as needed. Use the interactive features to engage actively with the material, and don't hesitate to contact the team if you have questions or suggestions for improvement.</p>
-            </ion-card-content>
-          </ion-card>
+          </ion-card> -->
         </div>
 
         <!-- Enhanced Screening Tool/Quiz -->
@@ -697,15 +515,15 @@ const filteredResources = computed(() => {
 const getPageTitle = () => {
   const rawId = route.params.id;
   if (rawId === undefined || rawId === null) {
-    return 'SAGE Disability v0.0.10';
+    return 'SAGE Home v0.0.11';
   }
   const id = String(rawId);
   console.log('Route ID:', id); // Debug logging
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Disability v0.0.10',
-    'home': 'SAGE Disability v0.0.10', // Add lowercase version
+    'Home': 'SAGE Home v0.0.11',
+    'home': 'SAGE Home v0.0.11', // Add lowercase version
     'Introduction': 'Introduction',
     'Screening': 'Screening Tool',
     'Contacts': 'Contacts'
@@ -724,7 +542,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id || 'SAGE Disability v0.0.10';
+  const finalTitle = title || id || 'SAGE Home v0.0.11';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };
@@ -1260,8 +1078,10 @@ ion-badge {
 }
 
 .sage-cover-illustration {
-  max-width: 100%;
+  width: 100%;
   height: auto;
+  max-height: clamp(260px, 55vh, 640px);
+  object-fit: contain; /* show whole image, no cropping */
   display: block;
   border-radius: 8px;
 }
