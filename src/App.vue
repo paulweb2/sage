@@ -56,13 +56,13 @@
               <ion-menu-toggle :auto-hide="false">
                 <ion-item router-direction="root" :router-link="'/working/working-language'" lines="none" :detail="false" class="hydrated category-item">
                   <ion-icon aria-hidden="true" slot="start" :ios="bookOutline" :md="bookSharp"></ion-icon>
-                  <ion-label>Language of disability</ion-label>
+                  <ion-label>Language</ion-label>
                 </ion-item>
               </ion-menu-toggle>
               <ion-menu-toggle :auto-hide="false">
                 <ion-item router-direction="root" :router-link="'/working/working-tensions'" lines="none" :detail="false" class="hydrated category-item">
                   <ion-icon aria-hidden="true" slot="start" :ios="constructOutline" :md="constructSharp"></ion-icon>
-                  <ion-label>Tensions and complexity</ion-label>
+                  <ion-label>Challenges and enablers when working with learners with disabilities</ion-label>
                 </ion-item>
               </ion-menu-toggle>
             </ion-list>
@@ -162,7 +162,9 @@ import {
   bookOutline,
   bookSharp,
   constructOutline,
-  constructSharp
+  constructSharp,
+  navigateOutline,
+  navigateSharp
 } from 'ionicons/icons';
 
 const route = useRoute();
@@ -189,10 +191,10 @@ const appPages = [
     mdIcon: informationCircleSharp,
   },
   {
-    title: 'Screening Tool',
+    title: 'Signposting Tool: screening, supporting and referring learners with disabilities',
     url: '/folder/Screening',
-    iosIcon: accessibilityOutline,
-    mdIcon: accessibilitySharp,
+    iosIcon: navigateOutline,
+    mdIcon: navigateSharp,
   },
   {
     title: 'Contacts',

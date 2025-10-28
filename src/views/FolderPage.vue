@@ -164,7 +164,32 @@
         <div v-else-if="route.params.id === 'Screening'">
           <ion-card>
             <ion-card-header>
-              <ion-card-title>Screening Tool</ion-card-title>
+              <ion-card-title>Background</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Learners with disabilities are not all the same; they have different strengths and challenges. Because of this diversity, educators need simple but reliable ways to identify learners who may require extra support.</p>
+              <p>One recognised tool is the Washington Group Short Set of Questions (WGSSQ). These six questions are used worldwide to screen learners for possible difficulties in seeing, hearing, walking, remembering, communicating and self-care. The results can guide teachers in referring learners for further assessment by specialists such as doctors, psychologists or therapists, and/or in putting in place a strategy to support the learner in the classroom.</p>
+              <p>There is an interactive version of the six questions in the toolkit — the Signposting Tool — which points you in the direction of specialist support, organisations that might be of assistance and aspects of the toolkit that will be of use.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Recommended steps for posing questions in the Signposting Tool</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ol type="i">
+                <li><strong>Introduce yourself clearly</strong> - Begin by greeting the learner and telling them your name. This helps to build trust and respect.</li>
+                <li><strong>Explain the purpose</strong> - Tell the learner why you are asking the questions. For example, ‘These questions help us understand if you need extra support in learning.’ This reassures the learner that the process is meant to help them, not to judge them.</li>
+                <li><strong>Ask the six questions</strong> - Use the WGSSQ on the Signposting Tool tab to check whether the learner has any difficulty in the key areas (seeing, hearing, walking, remembering, communicating and self-care). Ask in simple and clear language.</li>
+                <li><strong>Ensure confidentiality</strong> - The answers must be kept private and only shared with relevant professionals. Learners should feel safe knowing their information will not be misused.</li>
+                <li><strong>Refer for assessment and support and/or put strategies in place to support the learner</strong> - If the tool shows possible challenges, refer the learner to the right specialists or services for further assessment. Work with parents, community health workers or organisations of persons with disabilities to identify support needed. If the Signposting Tool suggests some adjustments to your practice might be needed, draw on your experience and what you have learned from the information and activities in the toolkit to put strategies in place to support the learner.</li>
+              </ol>
+            </ion-card-content>
+          </ion-card>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Washington Group Short Set of Questions (WGSSQ)</ion-card-title>
               <ion-card-subtitle>Identify areas where support may be needed</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -187,6 +212,15 @@
 
                 <div class="divider"></div>
               </div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Summary</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Screening using the WGSSQ is the first step in identifying learners who may need extra support. By handling the process with care, respect and confidentiality, educators can ensure that learners with disabilities are supported and where appropriate referred for further help they need to succeed in school.</p>
             </ion-card-content>
           </ion-card>
         </div>
@@ -525,7 +559,7 @@ const getPageTitle = () => {
     'Home': 'SAGE Home v0.0.11',
     'home': 'SAGE Home v0.0.11', // Add lowercase version
     'Introduction': 'Introduction',
-    'Screening': 'Screening Tool',
+    'Screening': 'Signposting Tool: screening, supporting and referring learners with disabilities',
     'Contacts': 'Contacts'
   };
   

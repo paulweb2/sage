@@ -17,20 +17,162 @@
       </ion-header>
 
       <div id="container">
-        <ion-card id="intro">
+        <ion-card id="intro" v-if="pageId !== 'working-language'">
           <ion-card-content>
             <p>{{ pageIntro }}</p>
           </ion-card-content>
         </ion-card>
 
+        <div v-if="pageId === 'working-partnership'">
+          <ion-card id="learners">
+            <ion-card-header>
+              <ion-card-title>Learners</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Learners with disabilities are at the centre of inclusion; they must be given a voice in their own education. Listening to their experiences and respecting their choices helps educators understand the support these learners need.</p>
+              <p>When learners are involved in decision-making, they gain confidence, independence and a stronger sense of belonging.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="parents">
+            <ion-card-header>
+              <ion-card-title>Parents</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Parents and caregivers know their children well in contexts that differ from school. They can, therefore, provide valuable information about their child’s strengths, challenges and preferred ways of learning.</p>
+              <p>Teachers working closely with parents ensures that support at home and at school complement each other. Parents can also be advocates for better resources, accessibility and teacher training.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="communities">
+            <ion-card-header>
+              <ion-card-title>Communities</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Communities influence how learners with disabilities are accepted and supported; raising awareness in the community helps reduce stigma and negative attitudes.</p>
+              <p>Local leaders, faith groups and organisations can play an important role in encouraging families to send children with disabilities to school, as well as in mobilising resources to support inclusive learning environments.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="other-stakeholders">
+            <ion-card-header>
+              <ion-card-title>Other stakeholders</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Inclusion also requires collaboration with wider stakeholders such as Organisations of Persons with Disabilities (OPDs), government ministries, education authorities, Non-government Organisations (NGOs) and donors.</p>
+              <p>These groups can provide training, assistive technology, funding and technical expertise. Working together ensures that policies and practices are aligned and that learners with disabilities benefit from a coordinated support system.</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div v-if="pageId === 'working-language'">
+          <ion-card id="language-why-words">
+            <ion-card-header>
+              <ion-card-title>Why choice of words matters</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Language shapes how society sees persons with disabilities. The words we use can show respect and promote inclusion, or they can spread stigma and exclusion.</p>
+              <p>For example, saying ‘a child with a disability’ puts the child first, while ‘a disabled child’ suggests the disability is their main identity. Respectful language reminds us that people with disabilities are people first. The United Nations Convention on the Rights of Persons with Disabilities (CRPD) reaffirms calls for the use of respectful and dignified language.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="language-change-over-time">
+            <ion-card-header>
+              <ion-card-title>How language changes over time</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Language is not fixed. Words that were once commonly used can later be seen as offensive. Terms such as ‘crippled’, ‘handicapped’ or ‘mentally retarded’ are now considered disrespectful.</p>
+              <p>Today, we use terms like ‘persons with disabilities’, ‘learners with disabilities’ or ‘people with psychosocial impairments’. This change reflects growing respect for rights and dignity, and a shift in focus from the impairment to the barriers created by society.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="language-definitions">
+            <ion-card-header>
+              <ion-card-title>Defining impairment, disability and need</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Impairment:</strong> condition, absence of a body part or difficulties in body or mind functions (for example, seeing, hearing, walking, learning).</p>
+              <p><strong>Disability:</strong> what happens when people with impairments face barriers in society that stop them from taking part fully and equally.</p>
+              <p><strong>Needs:</strong> the support or adjustments a person may require because of an impairment (for example, Braille books, ramps, sign language).</p>
+              <p>In the toolkit you will focus on needs and the support and adjustments required in your work as an educator.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="language-respectful">
+            <ion-card-header>
+              <ion-card-title>Respectful language</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ul>
+                <li>Learners with impairments / learners with disabilities</li>
+                <li>Learners without disability</li>
+              </ul>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="language-avoid">
+            <ion-card-header>
+              <ion-card-title>Language to avoid</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ul>
+                <li>The disabled / handicapped / people living with disabilities</li>
+                <li>Normal people / able-bodied people / non-disabled people</li>
+              </ul>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div v-if="pageId === 'working-tensions'">
+          <ion-card id="tensions-multiple-needs-2">
+            <ion-card-header>
+              <ion-card-title>Learners do not fall neatly into single categories</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Each learner with a disability is unique; some may have multiple needs, while others may face challenges that are not always visible. For example, a learner could be both deaf and have a cognitive learning difficulty, or they may also come from a disadvantaged background.</p>
+              <p>This means educators cannot rely on ‘one-size-fits-all’ approaches. Instead, they need to adopt flexible methods that respond to individual differences.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="tensions-reasonable-adjustments">
+            <ion-card-header>
+              <ion-card-title>Educators cannot do everything</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Schools and educators may not be able to meet every need for everyone, all the time. This is why the idea of ‘reasonable adjustments’ is important.</p>
+              <p>Reasonable adjustments are changes that remove barriers to learning and participation while remaining practical within the school’s circumstances. Examples include giving extra time in examinations, seating a learner at the front of the class, or using larger print materials. The focus of reasonable adjustments is on doing what is possible and practical within the available resources.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="tensions-resources">
+            <ion-card-header>
+              <ion-card-title>Resources: funds, staffing, expertise</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>One of the biggest challenges to a genuinely inclusive education system is a lack of resources. Schools may struggle with limited budgets, not enough staff, or a shortage of teachers trained in inclusive education. Assistive devices and accessible learning materials may be expensive or unavailable. These gaps can make it harder to provide the right support.</p>
+              <p>However, partnerships with parents, communities, government and organisations can help to close some of these gaps and share responsibility.</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
         <ion-card id="reflective-task">
           <ion-card-header>
-            <ion-card-title>Reflective Writing Journal</ion-card-title>
-            <ion-card-subtitle>Deepen Your Learning Through Reflection</ion-card-subtitle>
+            <ion-card-title>Reflection</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div class="reflection-section">
-              <h4>Reflection</h4>
+              <template v-if="pageId === 'working-language'">
+                <p>What key points are important for you to take from this section about respectful language?</p>
+              </template>
+              <template v-else-if="pageId === 'working-partnership'">
+                <p>What key points are important for you to take from this section about working in partnership with learners?</p>
+              </template>
+              <template v-else-if="pageId === 'working-tensions'">
+                <p>What key points are important for you to take from this section about challenges and enablers?</p>
+              </template>
+              <template v-else>
+                <h4>Reflection</h4>
+              </template>
               <ion-textarea
                 v-model="reflectionText"
                 placeholder="Write your reflection..."
@@ -103,6 +245,39 @@
             </ion-accordion-group>
           </ion-card-content>
         </ion-card>
+
+        <div v-if="pageId === 'working-partnership'">
+          <ion-card id="summary">
+            <ion-card-header>
+              <ion-card-title>Summary</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Building strong partnerships among learners, parents, communities and stakeholders ensures that learners with disabilities are not only included in education but also thrive and reach their full potential.</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div v-if="pageId === 'working-language'">
+          <ion-card id="language-summary">
+            <ion-card-header>
+              <ion-card-title>Summary</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>For each of the disabilities in the toolkit you will find advice about respectful language and language to avoid.</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div v-if="pageId === 'working-tensions'">
+          <ion-card id="tensions-summary">
+            <ion-card-header>
+              <ion-card-title>Summary</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Working with learners with disabilities is complex because every learner is different, resources are limited and not all needs can be met fully. But through reasonable adjustments, creativity and collaboration, schools can still create more inclusive learning environments. You will find information about reasonable adjustments, resources and organisations for different learning needs in this toolkit.</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -120,8 +295,8 @@ const pageId = computed(() => (route.params.id as string) || 'working-partnershi
 
 const pageTitle = computed(() => {
   if (pageId.value === 'working-partnership') return 'Working in partnership with learners with disabilities';
-  if (pageId.value === 'working-language') return 'Language of disability';
-  if (pageId.value === 'working-tensions') return 'Tensions and complexity';
+  if (pageId.value === 'working-language') return 'Language';
+  if (pageId.value === 'working-tensions') return 'Challenges and enablers when working with learners with disabilities';
   return 'Working with learners with disabilities';
 });
 
@@ -129,7 +304,7 @@ const pageSubtitle = computed(() => '');
 const pageIntro = computed(() => {
   if (pageId.value === 'working-partnership') return 'Inclusive education works best when everyone plays a role; no one person or group can achieve it alone. Partnerships between learners, parents, communities and other stakeholders help remove barriers and create supportive environments.';
   if (pageId.value === 'working-language') return 'Use respectful, person-centred language and identity-first terms where preferred.';
-  if (pageId.value === 'working-tensions') return 'Balance needs, resources and contexts; recognise intersecting needs and evolving support.';
+  if (pageId.value === 'working-tensions') return 'Creating an inclusive learning environment is important, but it also comes with challenges. Teachers, parents, and schools often face tensions when trying to balance the needs of learners with disabilities with the resources available.';
   return '';
 });
 
