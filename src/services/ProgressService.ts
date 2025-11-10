@@ -33,6 +33,7 @@ export class ProgressService {
   private static readonly IMPLEMENTED_TASKS = [
     'hearing-needs-quiz',        // Hearing Needs Quiz
     'hearing-needs-reflection',  // Hearing Needs Reflection
+    'hearing-needs-case-study',  // Hearing Needs Case Study note
     'communication-quiz',        // Communication Quiz
     'signposting-reflection'     // Signposting Reflection
   ];
@@ -66,6 +67,18 @@ export class ProgressService {
         completed: reflectionCompleted,
         lastCompleted: reflectionCompleted ? this.getReflectionLastCompleted(pageId) : undefined
       });
+
+      // Hearing Needs: add Case Study note as a separate tracked item
+      if (pageId === 'hearing-needs') {
+        const csCompleted = this.isCaseStudyCompleted(pageId);
+        items.push({
+          id: `${pageId}-case-study`,
+          title: `${this.getPageTitle(pageId)} - Case Study`,
+          type: 'reflection',
+          completed: csCompleted,
+          lastCompleted: csCompleted ? this.getCaseStudyLastCompleted(pageId) : undefined
+        });
+      }
     });
 
     const completedItems = items.filter(item => item.completed).length;
@@ -159,11 +172,18 @@ export class ProgressService {
     
     try {
       const data = JSON.parse(reflectionData);
-      // Check if all three reflection fields have content
+      // Check reflection fields
       const hasCaseStudy = data.caseStudyReflection?.trim();
       const hasPractice = data.practiceReflection?.trim();
       const hasNextSteps = data.nextSteps?.trim();
-      
+      // Hearing Needs page now has two reflection fields
+      if (pageId === 'hearing-needs') {
+        return !!(hasCaseStudy && hasPractice);
+      }
+      // Default: require three if nextSteps exists, otherwise consider two sufficient
+      if (typeof hasNextSteps === 'undefined') {
+        return !!(hasCaseStudy && hasPractice);
+      }
       return !!(hasCaseStudy && hasPractice && hasNextSteps);
     } catch {
       return false;
@@ -184,6 +204,64 @@ export class ProgressService {
     } catch {
       return undefined;
     }
+  }
+
+  /**
+   * Case Study note: check completion (non-empty)
+   */
+  static isCaseStudyCompleted(pageId: string): boolean {
+    const data = localStorage.getItem(`sage-cs-${pageId}-current`);
+    if (!data) return false;
+    try {
+      const parsed = JSON.parse(data);
+      const text = typeof parsed?.text === 'string' ? parsed.text.trim() : '';
+      return text.length > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Case Study note: get last completed date
+   */
+  static getCaseStudyLastCompleted(pageId: string): string | undefined {
+    const versionsData = localStorage.getItem(`sage-cs-versions-${pageId}`);
+    if (!versionsData) return undefined;
+    try {
+      const versions = JSON.parse(versionsData);
+      const currentVersion = versions.find((v: any) => v.id === 'current');
+      return currentVersion?.lastModified;
+    } catch {
+      return undefined;
+    }
+  }
+
+  /**
+   * Case Study note: save completion data and trigger update
+   */
+  static saveCaseStudyCompletion(pageId: string): void {
+    const versionsData = localStorage.getItem(`sage-cs-versions-${pageId}`);
+    let versions = [];
+    if (versionsData) {
+      try {
+        versions = JSON.parse(versionsData);
+      } catch {
+        versions = [];
+      }
+    }
+    const currentVersionIndex = versions.findIndex((v: any) => v.id === 'current');
+    const currentVersion = {
+      id: 'current',
+      lastModified: new Date().toISOString(),
+      completed: this.isCaseStudyCompleted(pageId)
+    };
+    if (currentVersionIndex >= 0) {
+      versions[currentVersionIndex] = currentVersion;
+    } else {
+      versions.push(currentVersion);
+    }
+    localStorage.setItem(`sage-cs-versions-${pageId}`, JSON.stringify(versions));
+    this.triggerProgressUpdate();
   }
 
   /**

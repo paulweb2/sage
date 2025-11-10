@@ -648,15 +648,15 @@ const filteredResources = computed(() => {
 const getPageTitle = () => {
   const rawId = route.params.id;
   if (rawId === undefined || rawId === null) {
-    return 'Home v0.0.12';
+    return 'Home';
   }
   const id = String(rawId);
   console.log('Route ID:', id); // Debug logging
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'Home v0.0.12',
-    'home': 'Home v0.0.12', // Add lowercase version
+    'Home': 'Home',
+    'home': 'Home', // Add lowercase version
     'Introduction': 'Introduction',
     'Screening': 'Signposting Tool',
     'Contacts': 'Contacts'
@@ -675,7 +675,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id || 'Home v0.0.12';
+  const finalTitle = title || id || 'Home';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };

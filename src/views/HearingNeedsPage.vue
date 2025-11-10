@@ -27,14 +27,13 @@
         <ion-card id="language">
           <ion-card-header>
             <ion-card-title>Language</ion-card-title>
-            <ion-card-subtitle>Using Respectful and Appropriate Language</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <ion-accordion-group>
               <ion-accordion value="hearing-lang-use">
                 <ion-item slot="header" color="success">
                   <ion-icon :icon="checkmarkCircle" slot="start" color="success"></ion-icon>
-                  <ion-label>Respectful language for referring to individuals with hearing difficulties</ion-label>
+                  <ion-label>Respectful language</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -51,7 +50,7 @@
               <ion-accordion value="hearing-lang-avoid">
                 <ion-item slot="header" color="danger">
                   <ion-icon :icon="closeCircle" slot="start" color="danger"></ion-icon>
-                  <ion-label>Language to be avoided when referring to individuals with hearing difficulties</ion-label>
+                  <ion-label>Language to avoid</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -72,7 +71,6 @@
         <ion-card id="understanding">
           <ion-card-header>
             <ion-card-title>Understanding the Learner</ion-card-title>
-            <ion-card-subtitle>Questions and prompts</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <ion-segment v-model="selectedUnderstanding" :scrollable="true">
@@ -96,6 +94,7 @@
 
             <div class="ion-padding">
               <div v-if="selectedUnderstanding === 'strengths'">
+                <p>Using the learner’s preferred communication method, questions and prompts help to find about a learner’s <strong>strengths</strong>:</p>
                 <ion-list>
                   <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
@@ -104,6 +103,7 @@
                 </ion-list>
               </div>
               <div v-else-if="selectedUnderstanding === 'challenges'">
+                <p>Using the learner’s preferred communication method, questions and prompts help to find about <strong>challenges</strong> a learner may encounter:</p>
                 <ion-list>
                   <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
@@ -112,14 +112,21 @@
                 </ion-list>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
+                <p>Using the learner’s preferred communication method, questions and prompts help to understand strategies that can support the learner:</p>
                 <ion-list>
-                  <ion-item v-for="(q, i) in understanding.strategies" :key="`strat-` + i + '-' + q">
+                  <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>
+                      <h4>{{ item.question }}</h4>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                        <li>Prompts: {{ item.prompts.join(', ') }}</li>
+                      </ul>
+                    </ion-label>
                   </ion-item>
                 </ion-list>
               </div>
               <div v-else-if="selectedUnderstanding === 'advocacy'">
+                <p>Sentence starters to support learners to share their needs:</p>
                 <ion-list>
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -135,7 +142,6 @@
         <ion-card id="challenges">
           <ion-card-header>
             <ion-card-title>Challenges to Learning</ion-card-title>
-            <ion-card-subtitle>Common barriers</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <ion-grid>
@@ -211,7 +217,6 @@
         <ion-card id="enabling">
           <ion-card-header>
             <ion-card-title>Enabling Learning</ion-card-title>
-            <ion-card-subtitle>Support strategies</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <ion-accordion-group>
@@ -233,7 +238,7 @@
               <ion-accordion value="hearing-enable-social">
                 <ion-item slot="header" color="success">
                   <ion-icon :icon="people" slot="start" color="success"></ion-icon>
-                  <ion-label>Social Environment</ion-label>
+                  <ion-label>Social</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -282,7 +287,6 @@
         <ion-card id="resources">
           <ion-card-header>
             <ion-card-title>Resources to Support Learning</ion-card-title>
-            <ion-card-subtitle>Key resources and organizations</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <ion-segment v-model="selectedResourceType" :scrollable="true">
@@ -292,7 +296,7 @@
               </ion-segment-button>
               <ion-segment-button value="paper">
                 <ion-icon :icon="documentIcon"></ion-icon>
-                <ion-label>Paper</ion-label>
+                <ion-label>Concrete resources</ion-label>
               </ion-segment-button>
               <ion-segment-button value="organizations">
                 <ion-icon :icon="business"></ion-icon>
@@ -303,12 +307,10 @@
             <div class="ion-padding">
               <div v-if="selectedResourceType === 'electronic'">
                 <ion-list>
-                  <ion-item v-for="(r, i) in resources.electronic" :key="`res-elec-` + i + '-' + r.title">
+                  <ion-item v-for="(line, i) in electronicLines" :key="`res-elec-` + i">
                     <ion-icon :icon="laptop" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ r.title }}</h4>
-                      <p>{{ r.description }}</p>
-                      <p v-if="r.url"><a :href="r.url" target="_blank" rel="noopener noreferrer">{{ r.url }}</a></p>
+                      <p style="white-space: pre-wrap; margin: 0;" v-html="linkifyElectronicLine(line)"></p>
                     </ion-label>
                   </ion-item>
                 </ion-list>
@@ -318,7 +320,7 @@
                   <ion-item v-for="(r, i) in resources.paper" :key="`res-paper-` + i + '-' + r.title">
                     <ion-icon :icon="documentIcon" slot="start" color="secondary"></ion-icon>
                     <ion-label>
-                      <h4>{{ r.title }}</h4>
+                      <h4 v-html="linkifyText(r.title)"></h4>
                       <p>{{ r.description }}</p>
                       <p v-if="r.availability">{{ r.availability }}</p>
                     </ion-label>
@@ -327,12 +329,10 @@
               </div>
               <div v-else-if="selectedResourceType === 'organizations'">
                 <ion-list>
-                  <ion-item v-for="(r, i) in resources.organizations" :key="`res-org-` + i + '-' + r.name">
+                  <ion-item v-for="(line, i) in organizationsLines" :key="`res-org-` + i">
                     <ion-icon :icon="business" slot="start" color="tertiary"></ion-icon>
                     <ion-label>
-                      <h4>{{ r.name }}</h4>
-                      <p>{{ r.description }}</p>
-                      <p v-if="r.contact">{{ r.contact }}</p>
+                      <p v-html="linkifyText(line)" style="white-space: pre-wrap; margin: 0;"></p>
                     </ion-label>
                   </ion-item>
                 </ion-list>
@@ -348,20 +348,101 @@
             <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <h4>{{ caseStudy.title }}</h4>
-            <p>{{ caseStudy.scenario }}</p>
+            <div class="case-study-images">
+              <img :src="getPublicUrl('hearing_casestudy_image1.png')" alt="Case study image 1" class="case-study-image" />
+              <img :src="getPublicUrl('hearing_casestudy_image2.png')" alt="Case study image 2" class="case-study-image" />
+              <img :src="getPublicUrl('hearing_casestudy_image3.png')" alt="Case study image 3" class="case-study-image" />
+            </div>
+
+            <div class="case-study-text">
+              <p>
+                A class consists of 10 learners (3 boys, 7 girls) who use Zimbabwe Sign Language (ZSL) for
+                communication.
+              </p>
+
+              <p>Learners are grouped into two levels:</p>
+              <ul>
+                <li>working with numbers 1-10</li>
+                <li>working with numbers to 20.</li>
+              </ul>
+
+              <p>
+                The lesson was designed to connect images of different amounts or sets of objects with
+                written numbers. The teacher engaged learners in number-counting activities using a mix of
+                tools and communication approaches:
+              </p>
+              <ul>
+                <li>objects, dice, abacus, number lines</li>
+                <li>games, visual aids and charts to reinforce number concepts</li>
+                <li>blocks and abacus for learners working with 2-digit numbers</li>
+                <li>
+                  total communication approach: ZSL, gestures, voice for lip-readers, concrete objects,
+                  pictures and spoken English.
+                </li>
+              </ul>
+
+              <h4 class="case-study-subheading">Questions</h4>
+              <ul>
+                <li>
+                  How has the teacher positioned the learner’s so they can access the total
+                  communication approach?
+                </li>
+                <li>
+                  What else might the teacher need to consider when putting children into pairs to play
+                  a game or complete a task?
+                </li>
+                <li>
+                  How are the concrete objects and games supporting access and participation in a
+                  lesson about number?
+                </li>
+              </ul>
+            </div>
+            <div class="case-study-note">
+              <ion-textarea
+                v-model="caseStudyNote"
+                placeholder="Write your case study notes here..."
+                :rows="6"
+                :auto-grow="true"
+                :maxlength="2000"
+                :counter="true"
+                class="reflection-textarea"
+                @ionInput="autoSaveCaseStudyNote"
+              ></ion-textarea>
+              <div class="reflection-actions">
+                <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
+                  <ion-icon :icon="save" slot="start"></ion-icon>
+                  Save
+                </ion-button>
+                <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
+                  <ion-icon :icon="download" slot="start"></ion-icon>
+                  Export as TXT
+                </ion-button>
+                <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
+                  <ion-icon :icon="trash" slot="start"></ion-icon>
+                  Clear
+                </ion-button>
+              </div>
+              <ul class="case-study-prompts">
+                <li>Have you thought about the table arrangements?</li>
+                <li>Have you thought about the position of the teacher or any other adults?</li>
+                <li>Have you considered grouping learners who communicate in the same ways or pairing learners with different ways of communicating?</li>
+                <li>How does the use of games support participation?</li>
+                <li>How does the use of dice or dominoes support an understanding of number?</li>
+              </ul>
+            </div>
           </ion-card-content>
         </ion-card>
 
         <!-- Reflection Tool -->
         <ion-card id="reflective-task">
           <ion-card-header>
-            <ion-card-title>Reflective Writing Journal</ion-card-title>
-            <ion-card-subtitle>Deepen Your Learning Through Reflection</ion-card-subtitle>
+            <ion-card-title>Reflective task</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div class="reflection-section">
-              <h4>Case Study Reflection</h4>
+              <p class="reflection-prompt">
+                1) Thinking about a lesson you have taught recently, how might it be made more accessible to learners with hearing needs?
+              </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
                 placeholder="How could you adapt the hearing supports mentioned in the case study for your own students?"
@@ -382,23 +463,15 @@
                     <ion-list>
                       <ion-item>
                         <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                        <ion-label>How could you adapt the hearing supports mentioned in the case study for your own students?</ion-label>
+                        <ion-label>Have you considered the use of visual and written resources?</ion-label>
                       </ion-item>
                       <ion-item>
                         <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                        <ion-label>What additional resources or technologies might you need to implement similar strategies?</ion-label>
+                        <ion-label>Could you think about the role of technology, for example, captioning on videos, speech to text software?</ion-label>
                       </ion-item>
                       <ion-item>
                         <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                        <ion-label>How would you involve other staff members or specialists in supporting your student?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                        <ion-label>What barriers might exist in your current environment and how could you overcome them?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                        <ion-label>How would you measure the success of these adaptations in your context?</ion-label>
+                        <ion-label>How could the learning environment be improved? Consider background noise, seating positions.</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>
@@ -406,10 +479,7 @@
               </ion-accordion-group>
             </div>
             <div class="reflection-section">
-              <h4>Practice Reflection</h4>
-              <p class="reflection-prompt">
-                Thinking about the lesson you taught recently, how might it be made more accessible to learners with hearing needs?
-              </p>
+              <h4>2) How could you help hearing children communicate with those with a hearing need?</h4>
               <ion-textarea
                 v-model="reflection.practiceReflection"
                 placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
@@ -430,54 +500,18 @@
                     <ion-list>
                       <ion-item>
                         <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
-                        <ion-label>Have you considered the use of picture prompt?</ion-label>
+                        <ion-label>Have you considered how all learners will know how to communicate with a peer with a hearing need, for example, preferred positions, gaining attention of the listener?</ion-label>
                       </ion-item>
                       <ion-item>
                         <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
-                        <ion-label>Could you use technology to support learners with hearing needs? E.G captioning on videos, speech to text software?</ion-label>
+                        <ion-label>Could you teach all learners basic sign language?</ion-label>
                       </ion-item>
                       <ion-item>
                         <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
-                        <ion-label>How could the learning environment be improved? Consider background noise, seating positions.</ion-label>
-                      </ion-item>
-                    </ion-list>
-                  </div>
-                </ion-accordion>
-              </ion-accordion-group>
-            </div>
-            <div class="reflection-section">
-              <h4>Next Steps Action Plan</h4>
-              <p class="reflection-prompt">
-                How could hearing learners support the learning of learners with hearing needs in your classroom?
-              </p>
-              <ion-textarea
-                v-model="reflection.nextSteps"
-                placeholder="Outline your specific action plan with timelines and measurable goals..."
-                :rows="6"
-                :auto-grow="true"
-                :maxlength="2000"
-                :counter="true"
-                class="reflection-textarea"
-                @ionInput="autoSaveReflection"
-              ></ion-textarea>
-              <ion-accordion-group>
-                <ion-accordion value="next-think">
-                  <ion-item slot="header" color="light">
-                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
-                    <ion-label>Think about...</ion-label>
-                  </ion-item>
-                  <div class="ion-padding" slot="content">
-                    <ion-list>
-                      <ion-item>
-                        <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                        <ion-label>What rules for communicating might help hearing learners support those with hearing needs?</ion-label>
+                        <ion-label>What basic Zimbabwean sign language signs would be useful to teach the children?</ion-label>
                       </ion-item>
                       <ion-item>
-                        <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                        <ion-label>What basic Zimbabwean sign language signs would be useful to teach all learners?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
                         <ion-label>How might you intervene to ensure learners with hearing needs are included in social activities?</ion-label>
                       </ion-item>
                     </ion-list>
@@ -549,8 +583,7 @@
         <!-- Knowledge Check (Quiz) -->
         <ion-card id="knowledge-check">
           <ion-card-header>
-            <ion-card-title>Knowledge Check</ion-card-title>
-            <ion-card-subtitle>Test Your Understanding</ion-card-subtitle>
+            <ion-card-title>Quiz</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div v-if="!quizCompleted">
@@ -646,7 +679,7 @@
             <div v-else>
               <ion-card>
                 <ion-card-header>
-                  <ion-card-title>Quiz Results</ion-card-title>
+                  <ion-card-title>Results</ion-card-title>
                   <ion-card-subtitle>Your Score: {{ quizScore }}%</ion-card-subtitle>
                 </ion-card-header>
                 <ion-card-content>
@@ -776,46 +809,124 @@ import { toastController } from '@ionic/vue';
 
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
+const getPublicUrl = (filename: string): string => {
+  const base = (import.meta as any).env?.BASE_URL || '/';
+  const normalizedBase = typeof base === 'string' ? base.replace(/\/$/, '') : '';
+  return `${normalizedBase}/${filename}`;
+};
+const linkifyElectronicLine = (line: string): string => {
+  const escapeHtml = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const replaceOutsideAnchors = (html: string, targetEscaped: string, replacementHtml: string): string => {
+    // Split by existing <a>...</a> to avoid replacing inside links
+    const parts = html.split(/(<a\b[^>]*>.*?<\/a>)/gi);
+    for (let i = 0; i < parts.length; i++) {
+      // Only replace in non-anchor segments (even indices)
+      if (i % 2 === 0) {
+        parts[i] = parts[i].split(targetEscaped).join(replacementHtml);
+      }
+    }
+    return parts.join('');
+  };
+  let result = escapeHtml(line);
+  // Handle Google Play URL that is split across a newline in the provided text
+  const googleDisplay =
+    'https://play.google.com/store/apps/details?id=com.google.audio.hearing.visualization.access\nibility.scribe';
+  const googleHref =
+    'https://play.google.com/store/apps/details?id=com.google.audio.hearing.visualization.accessibility.scribe';
+  const escapedGoogleDisplay = escapeHtml(googleDisplay);
+  result = replaceOutsideAnchors(
+    result,
+    escapedGoogleDisplay,
+    `<a href="${googleHref}" target="_blank" rel="noopener noreferrer">${googleDisplay}</a>`
+  );
+  // Linkify standard URLs while keeping visible text exactly the same
+  const urls = [
+    'https://www.bbc.co.uk/bitesize',
+    'https://www.youtube.com/watch?v=Tf0ZlEmmcBc',
+    'https://www.youtube.com',
+    'https://kahoot.com',
+    'https://quizlet.com',
+    'https://nearpod.com'
+  ];
+  // Ensure longer URLs (e.g., full YouTube watch URL) are linkified before shorter base URLs
+  const sortedUrls = urls.slice().sort((a, b) => b.length - a.length);
+  sortedUrls.forEach((u) => {
+    const escaped = escapeHtml(u);
+    result = replaceOutsideAnchors(
+      result,
+      escaped,
+      `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`
+    );
+  });
+  return result;
+};
+
+const linkifyText = (text: string): string => {
+  const escapeHtml = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  let result = escapeHtml(text);
+  // Simple URL regex for http/https
+  const urlRegex = /(https?:\/\/[^\s)]+)/g;
+  result = result.replace(urlRegex, (m) => {
+    const href = m;
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${m}</a>`;
+  });
+  return result;
+};
 
 const wordsToUse = [
-  { term: 'Deaf', explanation: 'Refers to the condition of profound or complete hearing loss' },
-  { term: 'Deaf', explanation: 'Many individuals with hearing needs prefer a capital D to be used when referring to being part of the Deaf community' },
-  { term: 'Hearing loss', explanation: 'Refers to individuals with some hearing loss-they may use hearing aids and/or speech' },
-  { term: 'Person with hearing loss', explanation: 'Does not depend on the severity' },
-  { term: 'Uses sign language', explanation: 'Describes communication method' },
-  { term: 'Non-verbal', explanation: 'Only to be used if the person does not use speech. They may communicate in different ways- i.e sign language' }
+  { term: 'D/deaf', explanation: 'Refers to the condition of profound or complete hearing loss; lower or upper case D/d can be used. Check with the learner for their preference.' },
+  { term: 'Hearing impairment / hearing loss', explanation: 'These terms are also used. Again, check with the learner for their preference.' },
+  { term: 'Non-verbal', explanation: 'Should only be used if the person does not use speech. Learners may communicate in different ways, for example, sign language and gestures.' },
+  { term: 'Person-first language', explanation: "For example, 'person with hearing loss', 'a person who uses sign language'." }
 ];
 
 const wordsToAvoid = [
-  { term: 'Deaf and dumb/deaf-mute', reason: 'Can suggest problems with intelligence' },
-  { term: 'Suffers from hearing loss', reason: 'Implies suffering' },
-  { term: 'Handicapped person', reason: 'Outdated and offensive' },
-  { term: 'Normal hearing child', reason: 'Implies individuals with hearing loss are "abnormal." Use "hearing child."' }
+  { term: '‘deaf’ and ‘dumb/deaf-mute’', reason: 'can suggest problems with intelligence.' },
+  { term: '‘suffers from hearing loss’', reason: 'implies suffering.' },
+  { term: '‘normal hearing learner’', reason: 'implies that individuals with hearing loss are ‘abnormal’; use ‘hearing learner’.' }
 ];
 
 const understanding = {
   strengths: [
-    'What is your preferred way to communicate—signing, speaking, writing, drawing, or something else?',
+    'What is your preferred way to communicate – signing, speaking, writing, drawing or something else?',
     'What is the best position for you in the classroom in relation to the person speaking?',
-    'What helps you understand things best e.g. seeing, doing, reading, or hearing?',
+    'What helps you understand things best, for example, seeing, doing, reading or hearing?',
     'When learning new things, how do you prefer teachers to explain things to you?'
   ],
   challenges: [
-    'What challenges do you have during class discussions, group work or when your teacher is instructing the class?',
+    'What challenges do you have during class discussions, group work or when your teacher is instructing you?',
     'Is there anything you would like your classmates or teachers to do differently when communicating with you?',
-    'Do you have any problems using your hearing aids/apps or other tools?'
+    'Do you have any problems using your hearing aids/assistive devices or other tools?'
   ],
   strategies: [
-    'What helps your learning in the classroom (seating, pictures, slides, things written on the board or spoken?',
-    'Do you prefer quiet spaces or smaller group sizes?',
-    'How is your learning affected by lighting or background noise?',
-    'What communication methods work best for you (sign language, lip reading, something else?'
+    {
+      question: 'What helps your learning in the classroom?',
+      prompts: ['seating', 'pictures', 'slides', 'things written on the board or spoken']
+    },
+    {
+      question: 'Where do you prefer to learn?',
+      prompts: ['space', 'group size']
+    },
+    {
+      question: 'Are there environmental factors that are difficult for you?',
+      prompts: ['lighting', 'sound']
+    },
+    {
+      question: 'Is your learning affected by lighting or background noise, and in what ways?',
+      prompts: []
+    },
+    {
+      question: 'How do you prefer to communicate?',
+      prompts: ['sign language', 'lip-reading', 'technology']
+    }
   ],
   advocacy: [
-    'I found these parts of the lesson easy/hard to understand.',
-    'Please do something differently, that will help me to...',
-    'I need to sit somewhere else',
-    'I need some equipment to help with my learning.'
+    'I understand you more when …',
+    'It would help me if you …',
+    'I prefer to sit …',
+    'I need to use … to help my learning.'
   ]
 };
 
@@ -861,78 +972,113 @@ const openAccessibilitySettings = () => {
   console.log('Accessibility settings coming soon!');
 };
 
+// Case Study note state
+const caseStudyNote = ref('');
+const autoSaveCaseStudyNote = () => {
+  try {
+    localStorage.setItem(`sage-cs-hearing-needs-current`, JSON.stringify({ text: caseStudyNote.value }));
+    ProgressService.saveCaseStudyCompletion('hearing-needs');
+  } catch {}
+};
+const saveCaseStudyNote = () => {
+  try {
+    localStorage.setItem(`sage-cs-hearing-needs-current`, JSON.stringify({ text: caseStudyNote.value }));
+  } finally {
+    ProgressService.saveCaseStudyCompletion('hearing-needs');
+    toastController.create({ message: 'Case study note saved!', duration: 2000, position: 'bottom', color: 'success' }).then(t => t.present());
+  }
+};
+
+const exportCaseStudyNote = () => {
+  const content = `Case Study Note - Hearing Needs\n\n${caseStudyNote.value || 'No notes written yet.'}`;
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = window.document.createElement('a');
+  a.href = url;
+  a.download = 'case-study-hearing-needs.txt';
+  window.document.body.appendChild(a);
+  a.click();
+  window.document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toastController.create({ message: 'Case study note exported successfully!', duration: 2000, position: 'bottom', color: 'success' }).then(t => t.present());
+};
+
+const clearCaseStudyNote = () => {
+  if (confirm('Are you sure you want to clear your case study note? This action cannot be undone.')) {
+    caseStudyNote.value = '';
+    localStorage.setItem(`sage-cs-hearing-needs-current`, JSON.stringify({ text: '' }));
+    ProgressService.saveCaseStudyCompletion('hearing-needs');
+    toastController.create({ message: 'Case study note cleared.', duration: 2000, position: 'bottom', color: 'warning' }).then(t => t.present());
+  }
+};
+
 const challenges = {
   physical: [
-    'Background noise (AC systems, chatter, outside noise)',
-    'Poor acoustics- can create echoes, making speech harder to understand',
-    "Low or flickering lighting can interfere with learners' ability to lip read or see key visuals",
-    'Learners faced away from the teacher or visual cues may miss information',
-    'The absence of written instructions, captions, or visual cues can make following verbal lessons difficult'
+    'Noise in the learning environment such as background, for example, AC systems, chatter, outside noise, or echoes can make speech harder to understand.',
+    'Low or flickering lighting can interfere with learner’s ability to lip read or see resources.',
+    'Learners facing away from the educator, peers or visual cues may miss information.',
+    'The absence of written instructions, captions or visual cues can make following verbal lessons difficult.'
   ],
   social: [
-    'Noisy environments can make it difficult to follow instruction or group discussions',
-    'Missed social cues, such as tone of voice, humour, nuance—leading to confusion or social misunderstandings',
-    'Without understanding how to include and communicate with deaf or hard-of-hearing peers, classmates may unintentionally exclude them'
+    'Knowing what and who to pay attention to in busy environments can be hard to work out.',
+    'Teachers or other children do not gain the attention of the learner before communicating with them.',
+    'Missed social cues, such as tone of voice or humour, can lead to confusion or social misunderstandings.'
   ],
   tasks: [
-    'Verbal explanations and examples can be limiting if not supported by visuals or gestures',
-    'Listening and dictation tasks can disadvantage learners',
-    'In longer tasks, learners may struggle with extra effort involved in listening, processing and concentrating',
-    'Information shared informally through peer or teacher talk may be missed, reducing understanding'
+    'Verbal explanations may not be fully understood without visual support.',
+    'Listening and dictation tasks can be difficult and require more time.',
+    'Longer or more complex tasks may be tiring due to the extra effort required to understand and process information.',
+    'Information shared informally through peer or teacher talk may be missed.'
   ],
   assessment: [
-    'Verbal Instructions without written or visual support can limit understanding',
-    'Listening-based assessments can be inaccessible, even with hearing aids',
-    'Learners with hearing needs may struggle to show their knowledge in formats like oral presentations or spoken responses',
-    'Time Pressure- learners with hearing needs may need extra time for processing, interpreting and understanding tasks'
+    'Verbal Instructions without written or visual support can limit understanding for the learner.',
+    'Listening-based assessments can be inaccessible to the learner even with hearing aids.',
+    'Learners with hearing needs may struggle to show their knowledge in formats such as oral presentations or spoken responses.',
+    'Learners with hearing needs may need extra time for processing, interpreting and understanding tasks.'
   ]
 };
 
 const enabling = {
   physical: [
-    'Reduce background noise by ensuring one person speaks at time',
-    'Move learners with hearing needs away from AC systems or other noise sources',
-    'Use carpets and curtains to reduce echoes',
-    'Position learners so they can clearly see the teacher, board, and interpreter (if applicable)',
-    'Provide visual instructions and/or pictures and lesson objectives in writing',
-    'Ensure lighting is even for better visibility of facial expressions and to aid lip-reading'
+    'Reduce background noise by ensuring one person speaks at a time. Move learners with hearing needs away from AC systems or other noise sources. Consider the need for carpets and curtains to reduce echoes.',
+    'Ensure lighting allows for the visibility of facial expressions and to aid lip-reading.',
+    'Position learners to clearly see the teacher, board and where necessary the interpreter.',
+    'Provide visual instructions and/or pictures and lesson objectives in written formats that are accessible to the learner.'
   ],
   social: [
-    'Foster a deaf-aware classroom through peer education and empathy-building activities',
-    'Use rules for communication- such as speaking one at a time, getting attention of person with hearing needs before speaking and facing the person you are talking to. Peers could be taught basic signs',
-    'Encourage peer buddies or promote social inclusion activities'
+    'Teach ways to communicate learners with hearing needs to staff and learners. For example, speaking one at a time, gaining the attention of a person with hearing needs before speaking, and facing the person you are talking to. Peers could be taught basic signs.',
+    'Foster a ‘deaf-aware’ classroom through peer education and empathy-building activities.',
+    'Encourage peer buddies or promote social inclusion activities.',
+    'Use home language where appropriate.'
   ],
   tasks: [
-    'Gain the attention of a learner with hearing needs before speaking',
-    'Provide written instructions and visual aids alongside spoken directions',
-    'Offer captioned or transcribed materials for any audio or video-based content',
-    'Build in short breaks to reduce fatigue during longer tasks'
+    'Provide written instructions and visual aids alongside spoken directions.',
+    'Instructions should be short and precise.',
+    'Offer captioned, subtitled or transcribed materials for any audio- or video-based content.',
+    'Build in short breaks to reduce fatigue during longer or more demanding tasks.'
   ],
   assessment: [
-    'Ensure access to assistive listening technology or captioning',
-    'Provide all instructions in clear, written format alongside verbal explanations',
-    'Allow extra time and provide breaks to reduce fatigue',
-    "Focus on assessing conceptual understanding rather than language expression",
-    "Include formative assessments by evaluating the learner's everyday understanding"
+    'Support verbal Instructions with written or visual aids.',
+    'Use home language where appropriate.',
+    'Provide alternatives to listening-based assessments where appropriate,',
+    'Provide alternatives, where appropriate, to oral presentations or spoken responses.',
+    'Allow extra time and provide breaks to reduce fatigue.',
+    'Learners with hearing needs may need extra time for processing, interpreting and understanding tasks.',
+    'Focus on assessing conceptual understanding rather than use of language. For example, learners can demonstrate an understanding of a triangle by sorting shapes into sets without needing to say the word triangle.'
   ]
 };
 
 const resources = {
   electronic: [
-    { title: 'Google Live Transcribe', description: 'Transcribes speech into text in real time', url: 'https://play.google.com/store/apps/details?id=com.google.audio.hearing.visualization.accessibility.scribe' },
-    { title: 'YouTube with Auto-Captions', description: 'Video platform with automatic captioning features', url: 'https://www.youtube.com' },
-    { title: 'BBC Bitesize', description: 'Offers captioned videos and structured learning content from KS1 to GCSE', url: 'https://www.bbc.co.uk/bitesize' },
-    { title: 'Kahoot!', description: 'Interactive learning tool (Free Version)', url: 'https://kahoot.com' },
-    { title: 'Quizlet', description: 'Interactive learning tool (Free Version)', url: 'https://quizlet.com' },
-    { title: 'Nearpod', description: 'Interactive learning tool (Free Version)', url: 'https://nearpod.com' },
-    { title: 'Zimbabwean Sign Language Resources', description: 'YouTube resources to learn Zimbabwean sign language', url: 'https://www.youtube.com/watch?v=Tf0ZlEmmcBc' },
-    { title: 'PECS Cards', description: 'Picture Exchange Communication System - support learners who are non-verbal', url: 'https://www.leicspart.nhs.uk/wp-content/uploads/2024/02/PECS-advanced-information-sheet-final-2nd-Jan-2024.pdf' },
-    { title: 'Storybooks with Deaf Characters', description: 'Use storybooks that include characters with hearing needs', url: 'https://www.perkins.org/books-about-deafness-or-with-deaf-characters/' }
+    // Unused for electronic rendering on this page; kept for structure consistency
   ],
   paper: [
-    { title: "Zimbabwean Sign Language Dictionary", description: 'King George VI Centre and School by Sindile Kevin Mhlanga', availability: 'Available from King George VI Centre and School' },
-    { title: 'Visual Flashcards', description: 'With images, symbols, written words, or sign language illustrations to support development of vocabulary and conceptual understanding and to support routines', availability: 'Available from educational resource centers' },
-    { title: 'Sign Language Charts and Posters', description: 'Displaying commonly used signs for classroom use', availability: 'Available from educational resource centers' }
+    { title: 'Zimbabwean sign language dictionary. King George VI Centre and School by Sindile Kevin Mhlanga' },
+    { title: 'Sign language charts and posters' },
+    { title: 'Visual – flashcards with images, symbols, written words, or sign language illustrations to support development of vocabulary and conceptual understanding and to support routines.' },
+    { title: 'Sign language charts and posters displaying commonly used signs for classroom use.' },
+    { title: 'PECS (Picture Exchange Communication System) Cards – support learners who are non-verbal.' },
+    { title: 'Storybooks that include characters with hearing needs, for example, https://www.perkins.org/books-about-deafness-or-with-deaf-characters/' }
   ],
   organizations: [
     { name: "National Deaf Children's Society", description: 'Supporting deaf children and their families', contact: '0808 800 8880' },
@@ -940,6 +1086,20 @@ const resources = {
     { name: 'British Deaf Association', description: 'Promoting sign language and Deaf culture', contact: '0121 450 7711' }
   ]
 };
+const electronicLines = [
+  'https://www.bbc.co.uk/bitesize offers captioned videos and structured learning\ncontent from KS1 to GCSE.',
+  'https://play.google.com/store/apps/details?id=com.google.audio.hearing.visualization.access\nibility.scribe Google Live, transcribes speech into text in real time.',
+  'https://www.youtube.com YouTube with auto-captions.',
+  'https://www.bbc.co.uk/bitesize offers captioned videos and structured learning\ncontent from KS1 to GCSE.',
+  'https://kahoot.com | https://quizlet.com | https://nearpod.com Kahoot! Quizlet, and\nNearpod (Free Versions) Interactive learning tools.',
+  'https://www.youtube.com/watch?v=Tf0ZlEmmcBc YouTube resources to learn\nZimbabwean sign language.'
+];
+
+const organizationsLines = [
+  'https://deafzimbabwetrust.org/ – includes resources for learning Zimbabwean\nsign language.',
+  'https://www.ndcs.org.uk – the National Deaf Children’s Society (NDCS)\nprovides educational resources and teacher guidance.',
+  'https://www.deafchildworldwide.org – supports inclusive education in low-\nresource settings.'
+];
 
 const caseStudy = {
   title: 'To be developed by CBM',
@@ -948,16 +1108,14 @@ const caseStudy = {
 
 const reflection = ref({
   caseStudyReflection: '',
-  practiceReflection: '',
-  nextSteps: ''
+  practiceReflection: ''
 });
 
 const reflectionProgress = computed(() => {
-  const total = 3;
+  const total = 2;
   const completed = [
     reflection.value.caseStudyReflection.trim(),
-    reflection.value.practiceReflection.trim(),
-    reflection.value.nextSteps.trim()
+    reflection.value.practiceReflection.trim()
   ].filter(Boolean).length;
   return completed / total;
 });
@@ -984,7 +1142,7 @@ const saveReflection = () => {
 };
 
 const exportReflection = () => {
-  const content = `Reflective Writing Journal - Hearing Needs\n\nCASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\nPRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}\n\nNEXT STEPS ACTION PLAN:\n${reflection.value.nextSteps || 'No action plan written yet.'}`;
+  const content = `Reflective task - Hearing Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = window.document.createElement('a');
@@ -999,7 +1157,7 @@ const exportReflection = () => {
 
 const clearReflection = () => {
   if (confirm('Are you sure you want to clear all your reflections? This action cannot be undone.')) {
-    reflection.value = { caseStudyReflection: '', practiceReflection: '', nextSteps: '' };
+    reflection.value = { caseStudyReflection: '', practiceReflection: '' };
     localStorage.setItem(`sage-reflection-hearing-needs-current`, JSON.stringify(reflection.value));
     ProgressService.saveReflectionCompletion('hearing-needs');
     toastController.create({ message: 'Reflection cleared successfully!', duration: 2000, position: 'bottom', color: 'warning' }).then(t => t.present());
@@ -1010,6 +1168,14 @@ onMounted(() => {
   try {
     const saved = localStorage.getItem('hearing-reflection');
     if (saved) reflection.value = JSON.parse(saved);
+  } catch {}
+
+  try {
+    const csSaved = localStorage.getItem('sage-cs-hearing-needs-current');
+    if (csSaved) {
+      const parsed = JSON.parse(csSaved);
+      caseStudyNote.value = typeof parsed?.text === 'string' ? parsed.text : '';
+    }
   } catch {}
 
   const storedAnchor = sessionStorage.getItem('scrollToAnchor');
@@ -1047,7 +1213,7 @@ const questions = ref<HearingQuestion[]>([
   {
     question: "What is an example of respectful language to use when describing a learner who has hearing needs?",
     options: [
-      { value: 'a', text: 'Deaf or has hearing loss' },
+      { value: 'a', text: 'D/deaf or has hearing loss' },
       { value: 'b', text: 'Deaf and dumb' },
       { value: 'c', text: 'Handicapped' }
     ],
@@ -1085,48 +1251,33 @@ const questions = ref<HearingQuestion[]>([
         id: 'a',
         textBefore: 'Video content will be more accessible to learners with hearing needs if it includes',
         textAfter: '',
-        correctAnswer: 'captions or subtitles',
+        correctAnswer: 'subtitles',
         options: [
-          'captions or subtitles',
-          'background music',
-          'fast speech',
-          'no sound',
-          'whispering',
-          'echo effects',
-          'foreign language',
-          'technical jargon'
+          'facing',
+          'breaks',
+          'subtitles'
         ]
       },
       {
         id: 'b',
-        textBefore: 'Learners with hearing needs may',
-        textAfter: 'information if they are not facing the teacher',
-        correctAnswer: 'miss',
+        textBefore: 'Learners with hearing needs may need to be',
+        textAfter: 'the teacher to better access information',
+        correctAnswer: 'facing',
         options: [
-          'miss',
-          'hear clearly',
-          'understand better',
-          'focus more',
-          'learn faster',
-          'remember everything',
-          'enjoy the lesson',
-          'participate actively'
+          'facing',
+          'breaks',
+          'subtitles'
         ]
       },
       {
         id: 'c',
         textBefore: 'To reduce fatigue, learners with hearing needs may need regular',
         textAfter: '',
-        correctAnswer: 'breaks or rest breaks',
+        correctAnswer: 'breaks',
         options: [
-          'breaks or rest breaks',
-          'homework assignments',
-          'test questions',
-          'group discussions',
-          'written exercises',
-          'oral presentations',
-          'listening activities',
-          'noise exposure'
+          'facing',
+          'breaks',
+          'subtitles'
         ]
       }
     ]
@@ -1145,7 +1296,7 @@ const questions = ref<HearingQuestion[]>([
     alternativeCorrectAnswers: ['a', 'b', 'c', 'd']
   },
   {
-    question: 'True or false: it is important to face a learner with hearing needs, when you are speaking to them.',
+    question: 'Focus assessments on conceptual understanding rather than use of language.',
     type: 'true-false',
     options: [
       { value: 'true', text: 'True' },
@@ -1370,12 +1521,12 @@ const getCorrectAnswerExplanation = (index: number): string => {
     return 'For multi-part true/false questions, each statement must be evaluated based on the specific needs and challenges that learners with hearing needs face.';
   } else if (question.type === 'fill-in-blank') {
     if (index === 2) {
-      return 'A. Captions or subtitles provide visual access to audio content. B. Missing information occurs when visual cues are not available. C. Regular breaks help reduce cognitive fatigue from processing information.';
+      return 'A. Subtitles provide visual access to audio content. B. Facing the teacher supports access to visual cues and speechreading. C. Regular breaks help reduce cognitive fatigue from processing information.';
     }
     return 'Fill-in-the-blank questions test understanding of accessibility features and support strategies for learners with hearing needs.';
   } else if (question.type === 'true-false') {
     if (index === 4) {
-      return 'True because they will be able to use visual cues such as mouth shapes and facial expressions which may aid their understanding.';
+      return 'True because prioritising conceptual understanding allows learners to demonstrate knowledge without relying on specific language forms.';
     }
     if (question.correctAnswer === 'false') {
       return 'Hearing needs are highly individual and vary between home and school environments. What works in one context may not work in another.';
@@ -1432,4 +1583,13 @@ ion-card { margin: 16px; }
 .correct-answer-explanation { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ion-color-light-shade); }
 .correct-answer-explanation h6 { color: var(--ion-color-success); margin-bottom: 6px; font-weight: 600; }
 .learning-tip-header { --background: var(--ion-color-light); }
+.case-study-images { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
+.case-study-image { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+@media (min-width: 768px) {
+  .case-study-images { grid-template-columns: repeat(3, 1fr); }
+}
+.case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
+.case-study-prompts { margin-top: 12px; margin-left: 20px; }
+.case-study-prompts li { margin-bottom: 6px; }
 </style> 
