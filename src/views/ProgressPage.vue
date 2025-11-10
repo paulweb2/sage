@@ -7,9 +7,7 @@
         </ion-buttons>
         <ion-title>My Progress</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="refreshProgress" :disabled="isLoading">
-            <ion-icon :icon="refresh" :class="{ 'ion-spin': isLoading }"></ion-icon>
-          </ion-button>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -331,7 +329,6 @@ import {
 import { menuController } from '@ionic/vue';
 import {
   trophy,
-  refresh,
   time,
   list,
   star,
@@ -512,9 +509,7 @@ const loadProgress = async () => {
   }
 };
 
-const refreshProgress = async () => {
-  await loadProgress();
-};
+// Removed manual refresh button; auto-refresh remains via route change and interval
 
 // Auto-refresh when returning to this page
 const handleRouteChange = () => {

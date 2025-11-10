@@ -6,7 +6,7 @@
           <ion-list id="inbox-list">
             <div class="sage-logo-wrapper">
               <img src="/sage-logo.svg" alt="SAGE logo" class="sage-logo-img" />
-              <div class="sage-logo-text">Disability<br>Toolkit App</div>
+              <div class="sage-logo-text">Disability<br>Toolkit</div>
             </div>
             <ion-menu-toggle :auto-hide="false" v-if="topHome">
               <ion-item @click="setActivePage('top', topHome.index)" router-direction="root" :router-link="topHome.page.url" lines="none" :detail="false" class="hydrated" :class="{ selected: activeSection === 'top' && activeIndex === topHome.index }">
@@ -17,31 +17,13 @@
 
             <div class="menu-divider"></div>
 
-            <!-- Introduction expandable block -->
-            <div>
-              <ion-item lines="none" @click="handleIntroductionClick" class="category-item" router-direction="root" :class="{ selected: activeSection === 'top' && activeIndex === introductionIndex }">
+            <!-- Introduction as a simple link (no subitems) -->
+            <ion-menu-toggle :auto-hide="false">
+              <ion-item router-direction="root" router-link="/introduction" lines="none" :detail="false" class="hydrated" :class="{ selected: route.path === '/introduction' }">
                 <ion-icon aria-hidden="true" slot="start" :ios="informationCircleOutline" :md="informationCircleSharp"></ion-icon>
                 <ion-label>General Information</ion-label>
-                <ion-icon :icon="chevronDown" slot="end" :class="{ 'rotated': introductionExpanded }"></ion-icon>
               </ion-item>
-              <div v-show="introductionExpanded" class="submenu-container">
-                <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-background')">
-                  <ion-label>Background</ion-label>
-                </ion-item>
-                <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-objectives')">
-                  <ion-label>Objectives</ion-label>
-                </ion-item>
-                <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-info-source')">
-                  <ion-label>Toolkit as an information source</ion-label>
-                </ion-item>
-                <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-pd-resource')">
-                  <ion-label>Toolkit as a professional learning resource</ion-label>
-                </ion-item>
-                <ion-item lines="none" class="submenu-item" @click="scrollToIntroSection('introduction-certificate')">
-                  <ion-label>Certificate of Participation</ion-label>
-                </ion-item>
-              </div>
-            </div>
+            </ion-menu-toggle>
 
             <div class="menu-divider"></div>
 
@@ -50,7 +32,7 @@
               <ion-menu-toggle :auto-hide="false">
                 <ion-item router-direction="root" :router-link="'/working/working-partnership'" lines="none" :detail="false" class="hydrated category-item">
                   <ion-icon aria-hidden="true" slot="start" :ios="handLeftOutline" :md="handLeftSharp"></ion-icon>
-                  <ion-label>Working in partnership with learners with disabilities</ion-label>
+                  <ion-label>Working in partnership</ion-label>
                 </ion-item>
               </ion-menu-toggle>
               <ion-menu-toggle :auto-hide="false">
@@ -62,7 +44,7 @@
               <ion-menu-toggle :auto-hide="false">
                 <ion-item router-direction="root" :router-link="'/working/working-tensions'" lines="none" :detail="false" class="hydrated category-item">
                   <ion-icon aria-hidden="true" slot="start" :ios="constructOutline" :md="constructSharp"></ion-icon>
-                  <ion-label>Challenges and enablers when working with learners with disabilities</ion-label>
+                  <ion-label>Challenges and enablers</ion-label>
                 </ion-item>
               </ion-menu-toggle>
             </ion-list>
@@ -191,7 +173,7 @@ const appPages = [
     mdIcon: informationCircleSharp,
   },
   {
-    title: 'Signposting Tool: screening, supporting and referring learners with disabilities',
+    title: 'Signposting Tool',
     url: '/folder/Screening',
     iosIcon: navigateOutline,
     mdIcon: navigateSharp,
@@ -214,7 +196,6 @@ const progressIndex = appPages.findIndex(page => page.title === 'My Progress');
 const progressUrl = progressIndex !== -1 ? appPages[progressIndex].url : '/progress';
 
 const introductionIndex = appPages.findIndex(page => page.url === '/introduction');
-const introductionExpanded = ref(false);
 
 const workingIndex = appPages.findIndex(page => page.title === 'Working with learners with disabilities');
 const workingExpanded = ref(false);
@@ -375,53 +356,7 @@ const setActivePage = (section: 'top' | 'bottom', index: number) => {
   activeIndex.value = index;
 };
 
-const handleIntroductionClick = () => {
-  if (introductionExpanded.value) {
-    introductionExpanded.value = false;
-    return;
-  }
-  if (introductionIndex !== -1) {
-    setActivePage('top', introductionIndex);
-  }
-  router.push('/introduction');
-  introductionExpanded.value = true;
-};
-
-const scrollToIntroSection = (anchor: string) => {
-  // Close the menu first
-  const menu = document.querySelector('ion-menu') as any;
-  if (menu) {
-    menu.close();
-  }
-
-  const currentPath = window.location.pathname;
-  const targetPage = '/introduction';
-
-  if (currentPath !== targetPage) {
-    window.location.href = targetPage;
-    sessionStorage.setItem('scrollToAnchor', anchor);
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const element = document.getElementById(anchor);
-        if (element) {
-          const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
-          const targetElement = cardHeader || element;
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        sessionStorage.removeItem('scrollToAnchor');
-      }, 500);
-    }, { once: true });
-  } else {
-    setTimeout(() => {
-      const element = document.getElementById(anchor);
-      if (element) {
-        const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
-        const targetElement = cardHeader || element;
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 300);
-  }
-};
+// General Information has no expandable submenu; simple navigation via router-link
 
 const handleWorkingClick = () => {
   if (workingExpanded.value) {
@@ -477,8 +412,6 @@ watch(() => route.path, () => {
 
 const updateActiveState = () => {
   const path = route.path;
-  // Auto-collapse/expand Introduction based on current path
-  introductionExpanded.value = (path === '/introduction');
   workingExpanded.value = (path === '/working-with-learners');
   
   // Check if we're on a top-level page by matching the full URL

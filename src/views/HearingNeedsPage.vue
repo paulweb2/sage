@@ -6,6 +6,12 @@
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
         <ion-title>Hearing Needs</ion-title>
+        <ion-buttons slot="end">
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
+          <ion-button @click="presentActionSheet">
+            <ion-icon :icon="ellipsisVertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
@@ -737,7 +743,8 @@ import {
   IonChip,
   IonCheckbox,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  actionSheetController
 } from '@ionic/vue';
 import {
   checkmarkCircle,
@@ -761,7 +768,8 @@ import {
   trash,
   settings,
   heart,
-  refresh
+  refresh,
+  ellipsisVertical
 } from 'ionicons/icons';
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';
@@ -809,6 +817,48 @@ const understanding = {
     'I need to sit somewhere else',
     'I need some equipment to help with my learning.'
   ]
+};
+
+const presentActionSheet = async () => {
+  try {
+    const actionSheet = await actionSheetController.create({
+      header: 'Page Options',
+      buttons: [
+        {
+          text: 'Print Page',
+          icon: 'print-outline',
+          handler: () => {
+            printPage();
+          }
+        },
+        {
+          text: 'Accessibility',
+          icon: 'accessibility-outline',
+          handler: () => {
+            openAccessibilitySettings();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  } catch (error) {
+    printPage();
+  }
+};
+
+const printPage = () => {
+  if (typeof window !== 'undefined') {
+    window.print();
+  }
+};
+
+const openAccessibilitySettings = () => {
+  console.log('Accessibility settings coming soon!');
 };
 
 const challenges = {

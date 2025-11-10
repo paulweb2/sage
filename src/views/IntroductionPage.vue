@@ -6,6 +6,12 @@
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
         <ion-title>General Information</ion-title>
+        <ion-buttons slot="end">
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
+          <ion-button @click="presentActionSheet">
+            <ion-icon :icon="ellipsisVertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
@@ -84,7 +90,52 @@
 </template>
 
 <script setup lang="ts">
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
+import { IonButtons, IonButton, IonIcon, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, actionSheetController } from '@ionic/vue';
+import { ellipsisVertical } from 'ionicons/icons';
+
+const presentActionSheet = async () => {
+  try {
+    const actionSheet = await actionSheetController.create({
+      header: 'Page Options',
+      buttons: [
+        {
+          text: 'Print Page',
+          icon: 'print-outline',
+          handler: () => {
+            printPage();
+          }
+        },
+        {
+          text: 'Accessibility',
+          icon: 'accessibility-outline',
+          handler: () => {
+            openAccessibilitySettings();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  } catch (error) {
+    // Fallback: simple print
+    printPage();
+  }
+};
+
+const printPage = () => {
+  if (typeof window !== 'undefined') {
+    window.print();
+  }
+};
+
+const openAccessibilitySettings = () => {
+  // Placeholder for future accessibility settings
+  console.log('Accessibility settings coming soon!');
+};
 </script>
 
 <style scoped>

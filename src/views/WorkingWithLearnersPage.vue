@@ -6,6 +6,12 @@
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
         <ion-title>{{ pageTitle }}</ion-title>
+        <ion-buttons slot="end">
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
+          <ion-button @click="presentActionSheet">
+            <ion-icon :icon="ellipsisVertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
@@ -286,17 +292,17 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonTextarea, IonButton, IonIcon, IonProgressBar, IonNote, IonAccordionGroup, IonAccordion, IonItem, IonLabel, IonList } from '@ionic/vue';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonTextarea, IonButton, IonIcon, IonProgressBar, IonNote, IonAccordionGroup, IonAccordion, IonItem, IonLabel, IonList, actionSheetController } from '@ionic/vue';
 import { toastController } from '@ionic/vue';
-import { save, download, trash, helpCircle, star, people, settings, school, heart, checkmark } from 'ionicons/icons';
+import { save, download, trash, helpCircle, star, people, settings, school, heart, checkmark, ellipsisVertical } from 'ionicons/icons';
 
 const route = useRoute();
 const pageId = computed(() => (route.params.id as string) || 'working-partnership');
 
 const pageTitle = computed(() => {
-  if (pageId.value === 'working-partnership') return 'Working in partnership with learners with disabilities';
+  if (pageId.value === 'working-partnership') return 'Working in partnership';
   if (pageId.value === 'working-language') return 'Language';
-  if (pageId.value === 'working-tensions') return 'Challenges and enablers when working with learners with disabilities';
+  if (pageId.value === 'working-tensions') return 'Challenges and enablers';
   return 'Working with learners with disabilities';
 });
 
@@ -362,6 +368,48 @@ onMounted(() => {
     }
   } catch {}
 });
+
+const presentActionSheet = async () => {
+  try {
+    const actionSheet = await actionSheetController.create({
+      header: 'Page Options',
+      buttons: [
+        {
+          text: 'Print Page',
+          icon: 'print-outline',
+          handler: () => {
+            printPage();
+          }
+        },
+        {
+          text: 'Accessibility',
+          icon: 'accessibility-outline',
+          handler: () => {
+            openAccessibilitySettings();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  } catch (error) {
+    printPage();
+  }
+};
+
+const printPage = () => {
+  if (typeof window !== 'undefined') {
+    window.print();
+  }
+};
+
+const openAccessibilitySettings = () => {
+  console.log('Accessibility settings coming soon!');
+};
 </script>
 
 <style scoped>

@@ -7,6 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -162,6 +163,11 @@
 
         <!-- Enhanced Screening Tool/Quiz -->
         <div v-else-if="route.params.id === 'Screening'">
+          <ion-card>
+            <ion-card-content>
+              <p>Screening, supporting and referring learners with disabilities.</p>
+            </ion-card-content>
+          </ion-card>
           <ion-card>
             <ion-card-header>
               <ion-card-title>Background</ion-card-title>
@@ -642,17 +648,17 @@ const filteredResources = computed(() => {
 const getPageTitle = () => {
   const rawId = route.params.id;
   if (rawId === undefined || rawId === null) {
-    return 'SAGE Home v0.0.11';
+    return 'Home v0.0.12';
   }
   const id = String(rawId);
   console.log('Route ID:', id); // Debug logging
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'SAGE Home v0.0.11',
-    'home': 'SAGE Home v0.0.11', // Add lowercase version
+    'Home': 'Home v0.0.12',
+    'home': 'Home v0.0.12', // Add lowercase version
     'Introduction': 'Introduction',
-    'Screening': 'Signposting Tool: screening, supporting and referring learners with disabilities',
+    'Screening': 'Signposting Tool',
     'Contacts': 'Contacts'
   };
   
@@ -669,7 +675,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id || 'SAGE Home v0.0.11';
+  const finalTitle = title || id || 'Home v0.0.12';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };
