@@ -215,6 +215,39 @@
             </ion-card-content>
           </ion-card>
 
+          <ion-card id="signposting-reflection">
+            <ion-card-header>
+              <ion-card-title>Reflection</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="reflection-section">
+                <p>What key points are important for you to take from this section challenges about screening and referring learners?</p>
+                <ion-textarea
+                  v-model="signpostingReflectionText"
+                  placeholder="Write your reflection..."
+                  :rows="6"
+                  :auto-grow="true"
+                  :maxlength="2000"
+                  :counter="true"
+                  class="reflection-textarea"
+                  @ionInput="autoSaveSignpostingReflection"
+                ></ion-textarea>
+              </div>
+
+              <div class="reflection-actions">
+                <ion-button expand="block" color="primary" @click="saveSignpostingReflection">
+                  <ion-icon :icon="save" slot="start"></ion-icon>
+                  Save Reflection
+                </ion-button>
+
+                <ion-button expand="block" fill="outline" color="warning" @click="clearSignpostingReflection">
+                  <ion-icon :icon="trash" slot="start"></ion-icon>
+                  Clear All
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
           <ion-card>
             <ion-card-header>
               <ion-card-title>Summary</ion-card-title>
@@ -344,6 +377,12 @@ import {
   informationCircle,
   refresh,
   download,
+  save,
+  trash,
+  helpCircle,
+  star,
+  settings,
+  heart,
   add,
   calendar,
   mail,
@@ -373,6 +412,60 @@ const currentAnswer = ref<any>('');
 const selectedVideo = ref('udl-video');
 const searchTerm = ref('');
 const selectedCategory = ref('all');
+
+// Signposting reflection state
+const signpostingReflectionText = ref('');
+const signpostingStorageKey = 'signposting-reflection';
+
+let signpostingSaveTimer: ReturnType<typeof setTimeout> | null = null;
+const autoSaveSignpostingReflection = () => {
+  if (signpostingSaveTimer) clearTimeout(signpostingSaveTimer);
+  signpostingSaveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem(signpostingStorageKey, JSON.stringify({ reflection: signpostingReflectionText.value }));
+      // Mark as completed if non-empty using ProgressService reflection API with a custom pageId
+      if (signpostingReflectionText.value.trim()) {
+        // Persist completion meta so it appears in progress
+        localStorage.setItem('sage-reflection-signposting-current', JSON.stringify({
+          caseStudyReflection: signpostingReflectionText.value,
+          practiceReflection: 'n/a',
+          nextSteps: 'n/a'
+        }));
+        ProgressService.saveReflectionCompletion('signposting');
+      }
+    } catch {}
+  }, 400);
+};
+
+const saveSignpostingReflection = () => {
+  try {
+    localStorage.setItem(signpostingStorageKey, JSON.stringify({ reflection: signpostingReflectionText.value }));
+    if (signpostingReflectionText.value.trim()) {
+      localStorage.setItem('sage-reflection-signposting-current', JSON.stringify({
+        caseStudyReflection: signpostingReflectionText.value,
+        practiceReflection: 'n/a',
+        nextSteps: 'n/a'
+      }));
+      ProgressService.saveReflectionCompletion('signposting');
+    }
+  } finally {
+    if (typeof toastController !== 'undefined') {
+      toastController.create({ message: 'Reflection saved successfully!', duration: 2000, position: 'bottom', color: 'success' }).then(t => t.present());
+    }
+  }
+};
+
+const clearSignpostingReflection = () => {
+  if (confirm('Are you sure you want to clear your reflection? This action cannot be undone.')) {
+    signpostingReflectionText.value = '';
+    localStorage.setItem(signpostingStorageKey, JSON.stringify({ reflection: '' }));
+    localStorage.removeItem('sage-reflection-signposting-current');
+    // Progress will update on next save if needed
+    if (typeof toastController !== 'undefined') {
+      toastController.create({ message: 'Reflection cleared successfully!', duration: 2000, position: 'bottom', color: 'warning' }).then(t => t.present());
+    }
+  }
+};
 
 // Add separate state for checkbox options
 const checkboxAnswers = ref<{ [key: string]: boolean }>({});

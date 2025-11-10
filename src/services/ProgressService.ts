@@ -24,7 +24,8 @@ export class ProgressService {
     'cognitive-intellectual-needs',
     'speech-language-needs',
     'communication',
-    'multiple-disabilities'
+    'multiple-disabilities',
+    'signposting'
   ];
 
   // TEMPORARY: Currently implemented tasks for celebration trigger
@@ -32,7 +33,8 @@ export class ProgressService {
   private static readonly IMPLEMENTED_TASKS = [
     'hearing-needs-quiz',        // Hearing Needs Quiz
     'hearing-needs-reflection',  // Hearing Needs Reflection
-    'communication-quiz'         // Communication Quiz
+    'communication-quiz',        // Communication Quiz
+    'signposting-reflection'     // Signposting Reflection
   ];
 
   /**
@@ -342,7 +344,8 @@ export class ProgressService {
       'cognitive-intellectual-needs': 'Cognitive and Intellectual Needs',
       'speech-language-needs': 'Speech and Language Needs',
       'communication': 'Communication',
-      'multiple-disabilities': 'Multiple Disabilities'
+      'multiple-disabilities': 'Multiple Disabilities',
+      'signposting': 'Signposting Tool'
     };
     return titles[pageId] || pageId;
   }
