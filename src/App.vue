@@ -220,8 +220,17 @@ const disabilityCategories = ref([
     title: 'Visual Needs',
     icon: eyeOutline,
     expanded: false,
-    url: '/disability/xxxxxxx',
-    subItems: []
+    url: '/needs/visual',
+    subItems: [
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+    ]
   },
   {
     title: 'Hearing Needs',
@@ -243,22 +252,49 @@ const disabilityCategories = ref([
     title: 'Physical and Sensory Needs',
     icon: bodyOutline,
     expanded: false,
-    url: '/disability/physical-sensory-needs',
-    subItems: []
+    url: '/needs/physical-sensory',
+    subItems: [
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+    ]
   },
   {
     title: 'Cognitive and Intellectual Needs',
     icon: bulbOutline,
     expanded: false,
-    url: '/disability/cognitive-intellectual-needs',
-    subItems: []
+    url: '/needs/cognitive-intellectual',
+    subItems: [
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+    ]
   },
   {
     title: 'Speech and Language Needs',
     icon: chatboxEllipsesOutline,
     expanded: false,
-    url: '/disability/speech-language-needs',
-    subItems: []
+    url: '/needs/speech-language',
+    subItems: [
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+    ]
   },
   {
     title: 'Communication',
@@ -266,15 +302,31 @@ const disabilityCategories = ref([
     expanded: false,
     url: '/disability/communication',
     subItems: [
-      { title: 'Quiz', anchor: 'knowledge-check' },
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
   {
     title: 'Multiple Disabilities',
     icon: medicalOutline,
     expanded: false,
-    url: '/disability/multiple-disabilities',
-    subItems: []
+    url: '/needs/multiple-disabilities',
+    subItems: [
+      { title: 'Language', anchor: 'language' },
+      { title: 'Understanding the Learner', anchor: 'understanding' },
+      { title: 'Challenges to Learning', anchor: 'challenges' },
+      { title: 'Enabling Learning', anchor: 'enabling' },
+      { title: 'Resources to Support Learning', anchor: 'resources' },
+      { title: 'Case Study', anchor: 'case-study' },
+      { title: 'Reflective Task', anchor: 'reflective-task' },
+      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+    ]
   },
 ]);
 
@@ -298,54 +350,36 @@ const handleCategoryClick = (index: number) => {
   }
 };
 
-const scrollToSection = (anchor: string, categoryIndex: number) => {
+const scrollToSection = async (anchor: string, categoryIndex: number) => {
   // Close the menu first
-  const menu = document.querySelector('ion-menu');
-  if (menu) {
-    menu.close();
+  const menuEl = document.querySelector('ion-menu') as any;
+  if (menuEl && typeof menuEl.close === 'function') {
+    try { await menuEl.close(); } catch {}
   }
-  
-  // Get the current page and target page
-  const currentPath = window.location.pathname;
+
+  const currentPath = route.path;
   const targetPage = disabilityCategories.value[categoryIndex].url;
-  
-  // If we're not on the target page, navigate there first
+
+  // If we're not on the target page, navigate there first via the router (SPA)
   if (currentPath !== targetPage) {
-    // Navigate to the target page
-    window.location.href = targetPage;
-    
-    // Store the anchor to scroll to after navigation
-    sessionStorage.setItem('scrollToAnchor', anchor);
-    
-    // Listen for the page to load and then scroll
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const element = document.getElementById(anchor);
-        if (element) {
-          const cardHeader = element.querySelector('ion-card-header');
-          const targetElement = cardHeader || element;
-          
-          targetElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
-        }
-        // Clear the stored anchor
-        sessionStorage.removeItem('scrollToAnchor');
-      }, 500);
-    }, { once: true });
+    // Store the anchor as a fallback for pages that handle scrolling on mount
+    try { sessionStorage.setItem('scrollToAnchor', anchor); } catch {}
+    try {
+      await router.push(targetPage);
+    } catch {
+      // As a fallback, perform a hard navigation
+      window.location.href = targetPage;
+      return;
+    }
+    // Do not attempt immediate scrolling here; pages scroll themselves on mount using sessionStorage
   } else {
-    // We're already on the correct page, just scroll to the section
+    // Already on the correct page; just scroll
     setTimeout(() => {
       const element = document.getElementById(anchor);
       if (element) {
-        const cardHeader = element.querySelector('ion-card-header');
+        const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
         const targetElement = cardHeader || element;
-        
-        targetElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 300);
   }

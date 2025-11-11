@@ -19,6 +19,7 @@ export class ProgressService {
   private static readonly PROGRESS_KEY = 'sage-overall-progress';
   private static readonly DISABILITY_PAGES = [
     'physical-disabilities',
+    'visual-needs',
     'hearing-needs', 
     'physical-sensory-needs',
     'cognitive-intellectual-needs',
@@ -68,8 +69,8 @@ export class ProgressService {
         lastCompleted: reflectionCompleted ? this.getReflectionLastCompleted(pageId) : undefined
       });
 
-      // Hearing Needs: add Case Study note as a separate tracked item
-      if (pageId === 'hearing-needs') {
+      // Add Case Study note as a separate tracked item for pages that include it
+      if (pageId === 'hearing-needs' || pageId === 'visual-needs' || pageId === 'physical-sensory-needs' || pageId === 'cognitive-intellectual-needs' || pageId === 'speech-language-needs' || pageId === 'multiple-disabilities') {
         const csCompleted = this.isCaseStudyCompleted(pageId);
         items.push({
           id: `${pageId}-case-study`,
@@ -417,6 +418,7 @@ export class ProgressService {
   private static getPageTitle(pageId: string): string {
     const titles: { [key: string]: string } = {
       'physical-disabilities': 'Visual Needs',
+      'visual-needs': 'Visual Needs',
       'hearing-needs': 'Hearing Needs',
       'physical-sensory-needs': 'Physical and Sensory Needs',
       'cognitive-intellectual-needs': 'Cognitive and Intellectual Needs',

@@ -23,6 +23,26 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import ('../views/HearingNeedsPage.vue')
   },
   {
+    path: '/needs/physical-sensory',
+    component: () => import ('../views/PhysicalSensoryNeedsPage.vue')
+  },
+  {
+    path: '/needs/visual',
+    component: () => import ('../views/VisualNeedsPage.vue')
+  },
+  {
+    path: '/needs/cognitive-intellectual',
+    component: () => import ('../views/CognitiveIntellectualNeedsPage.vue')
+  },
+  {
+    path: '/needs/speech-language',
+    component: () => import ('../views/SpeechLanguageNeedsPage.vue')
+  },
+  {
+    path: '/needs/multiple-disabilities',
+    component: () => import ('../views/MultipleDisabilitiesPage.vue')
+  },
+  {
     path: '/working/:id',
     component: () => import ('../views/WorkingWithLearnersPage.vue')
   },

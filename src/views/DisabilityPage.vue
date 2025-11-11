@@ -24,8 +24,8 @@
 
       <div id="container">
         <div v-if="disabilityContent && disabilityContent.title">
-          <!-- For communication page, only show the quiz -->
-          <div v-if="route.params.id === 'communication'">
+          <!-- Communication page previously rendered the quiz here; it's now shown in the Knowledge Check card to keep section order consistent -->
+          <div v-if="false">
             <!-- Quiz -->
             <ion-card id="knowledge-check">
               <ion-card-header>
@@ -297,8 +297,8 @@
         </ion-card>
       </div>
       
-      <!-- For other pages, show all content -->
-      <div v-else>
+      <!-- Show shared content (language, understanding, challenges, enabling, resources, case study, reflective tasks) for all pages -->
+      <div>
             
             <!-- Key Considerations Card - Controlled by pageSections -->
             <div v-if="pageSections.showKeyConsiderations">
