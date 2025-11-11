@@ -1353,6 +1353,7 @@ import {
 } from '@ionic/vue';
 import { actionSheetController, toastController } from '@ionic/vue';
 import { ProgressService } from '../services/ProgressService';
+import { consumePendingAnchor } from '@/utils/anchorScroll';
 import { 
   documentOutline,
   videocamOutline,
@@ -1492,6 +1493,7 @@ const autoSaveReflection = () => {
 
 // Check for stored anchor to scroll to after page load
 onMounted(() => {
+  console.log('[PageAnchor] DisabilityPage mounted', { path: route.path, id: route.params.id });
   console.log('DisabilityPage mounted, loading reflections...');
   
   // Clear any existing hearing-needs quiz data to ensure fresh start
@@ -1519,29 +1521,9 @@ onMounted(() => {
     }, 100);
   }
   
-  // Handle anchor scrolling after a delay to ensure DOM is ready
-  const storedAnchor = sessionStorage.getItem('scrollToAnchor');
-  if (storedAnchor) {
-    setTimeout(() => {
-      try {
-        if (typeof window !== 'undefined' && window.document) {
-          const element = window.document.getElementById(storedAnchor);
-          if (element) {
-            const cardHeader = element.querySelector('ion-card-header');
-            const targetElement = cardHeader || element;
-            
-            targetElement.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start' 
-            });
-          }
-        }
-      } catch (e) {
-        console.error('Error scrolling to anchor:', e);
-      }
-      sessionStorage.removeItem('scrollToAnchor');
-    }, 1000);
-  }
+  void consumePendingAnchor(route.path, { maxAttempts: 80 }).then((didScroll) => {
+    console.log('[PageAnchor] DisabilityPage consume result', { didScroll, pageId });
+  });
 });
 
 const loadExistingReflectionVersions = () => {

@@ -467,6 +467,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import {
   IonButtons,
   IonContent,
@@ -525,7 +526,9 @@ import {
 } from 'ionicons/icons';
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';
+import { consumePendingAnchor } from '@/utils/anchorScroll';
 
+const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
 
@@ -824,6 +827,7 @@ const clearReflection = () => {
 };
 
 onMounted(() => {
+  console.log('[PageAnchor] PhysicalSensoryNeeds mounted', { path: route.path });
   try {
     const saved = localStorage.getItem('physical-sensory-reflection');
     if (saved) reflection.value = JSON.parse(saved);
@@ -837,23 +841,9 @@ onMounted(() => {
     }
   } catch {}
 
-  const storedAnchor = sessionStorage.getItem('scrollToAnchor');
-  if (storedAnchor) {
-    setTimeout(() => {
-      try {
-        if (typeof window !== 'undefined' && window.document) {
-          const element = window.document.getElementById(storedAnchor);
-          if (element) {
-            const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
-            const targetElement = cardHeader || element;
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      } finally {
-        sessionStorage.removeItem('scrollToAnchor');
-      }
-    }, 300);
-  }
+  void consumePendingAnchor(route.path).then((didScroll) => {
+    console.log('[PageAnchor] PhysicalSensoryNeeds consume result', { didScroll });
+  });
 });
 </script>
 

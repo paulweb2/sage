@@ -113,6 +113,7 @@ import {
 } from '@ionic/vue';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { scrollAnchorIntoView, storePendingAnchor, clearPendingAnchor } from '@/utils/anchorScroll';
 import {
   homeOutline,
   homeSharp,
@@ -360,28 +361,29 @@ const scrollToSection = async (anchor: string, categoryIndex: number) => {
   const currentPath = route.path;
   const targetPage = disabilityCategories.value[categoryIndex].url;
 
-  // If we're not on the target page, navigate there first via the router (SPA)
   if (currentPath !== targetPage) {
-    // Store the anchor as a fallback for pages that handle scrolling on mount
-    try { sessionStorage.setItem('scrollToAnchor', anchor); } catch {}
+    console.log('[MenuScroll] Navigating to new page for anchor', { anchor, currentPath, targetPage });
+    storePendingAnchor(anchor, targetPage);
     try {
       await router.push(targetPage);
-    } catch {
-      // As a fallback, perform a hard navigation
-      window.location.href = targetPage;
-      return;
-    }
-    // Do not attempt immediate scrolling here; pages scroll themselves on mount using sessionStorage
-  } else {
-    // Already on the correct page; just scroll
-    setTimeout(() => {
-      const element = document.getElementById(anchor);
-      if (element) {
-        const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
-        const targetElement = cardHeader || element;
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const didScroll = await scrollAnchorIntoView(anchor);
+      if (didScroll) {
+        clearPendingAnchor();
+        console.log('[MenuScroll] Scrolled immediately after navigation', { anchor, targetPage });
       }
-    }, 300);
+    } catch {
+      window.location.href = `${targetPage}#${anchor}`;
+    }
+    return;
+  }
+
+  const didScroll = await scrollAnchorIntoView(anchor);
+  console.log('[MenuScroll] Attempted scroll on current page', { anchor, didScroll });
+  if (!didScroll) {
+    setTimeout(() => {
+      console.log('[MenuScroll] Retrying scroll after delay', { anchor });
+      void scrollAnchorIntoView(anchor);
+    }, 120);
   }
 };
 
@@ -404,34 +406,38 @@ const handleWorkingClick = () => {
   workingExpanded.value = true;
 };
 
-const scrollToWorkingSection = (anchor: string) => {
+const scrollToWorkingSection = async (anchor: string) => {
   const menu = document.querySelector('ion-menu') as any;
-  if (menu) menu.close();
-  const currentPath = window.location.pathname;
+  if (menu && typeof menu.close === 'function') {
+    try { await menu.close(); } catch {}
+  }
+
   const targetPage = '/working-with-learners';
+  const currentPath = route.path;
+
   if (currentPath !== targetPage) {
-    window.location.href = targetPage;
-    sessionStorage.setItem('scrollToAnchor', anchor);
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const element = document.getElementById(anchor);
-        if (element) {
-          const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
-          const targetElement = cardHeader || element;
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        sessionStorage.removeItem('scrollToAnchor');
-      }, 500);
-    }, { once: true });
-  } else {
-    setTimeout(() => {
-      const element = document.getElementById(anchor);
-      if (element) {
-        const cardHeader = element.querySelector('ion-card-header') as HTMLElement | null;
-        const targetElement = cardHeader || element;
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    console.log('[MenuScroll] Navigating to working page for anchor', { anchor });
+    storePendingAnchor(anchor, targetPage);
+    try {
+      await router.push(targetPage);
+      const didScroll = await scrollAnchorIntoView(anchor);
+      if (didScroll) {
+        clearPendingAnchor();
+        console.log('[MenuScroll] Scrolled immediately after navigation (working section)', { anchor });
       }
-    }, 300);
+    } catch {
+      window.location.href = `${targetPage}#${anchor}`;
+    }
+    return;
+  }
+
+  const didScroll = await scrollAnchorIntoView(anchor);
+  console.log('[MenuScroll] Attempted scroll on working page', { anchor, didScroll });
+  if (!didScroll) {
+    setTimeout(() => {
+      console.log('[MenuScroll] Retrying scroll for working page', { anchor });
+      void scrollAnchorIntoView(anchor);
+    }, 120);
   }
 };
 
