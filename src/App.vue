@@ -229,7 +229,7 @@ const disabilityCategories = ref([
       { title: 'Resources to Support Learning', anchor: 'resources' },
       { title: 'Case Study', anchor: 'case-study' },
       { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
   {
@@ -245,7 +245,7 @@ const disabilityCategories = ref([
       { title: 'Resources to Support Learning', anchor: 'resources' },
       { title: 'Case Study', anchor: 'case-study' },
       { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
   {
@@ -261,7 +261,7 @@ const disabilityCategories = ref([
       { title: 'Resources to Support Learning', anchor: 'resources' },
       { title: 'Case Study', anchor: 'case-study' },
       { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
   {
@@ -277,7 +277,7 @@ const disabilityCategories = ref([
       { title: 'Resources to Support Learning', anchor: 'resources' },
       { title: 'Case Study', anchor: 'case-study' },
       { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
   {
@@ -293,7 +293,7 @@ const disabilityCategories = ref([
       { title: 'Resources to Support Learning', anchor: 'resources' },
       { title: 'Case Study', anchor: 'case-study' },
       { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
   {
@@ -325,7 +325,7 @@ const disabilityCategories = ref([
       { title: 'Resources to Support Learning', anchor: 'resources' },
       { title: 'Case Study', anchor: 'case-study' },
       { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Knowledge Check', anchor: 'knowledge-check' }
+      { title: 'Quiz', anchor: 'knowledge-check' }
     ]
   },
 ]);

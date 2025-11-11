@@ -36,11 +36,11 @@
                   <ion-label>Respectful language</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list v-if="wordsToUse.length">
-                    <ion-item v-for="(word, index) in wordsToUse" :key="`use-` + word.term + '-' + index">
+                  <ion-list v-if="languageUseLines.length">
+                    <ion-item v-for="(line, index) in languageUseLines" :key="'use-' + index">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                        <h4 style="margin: 0; white-space: pre-wrap;">{{ line }}</h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -54,11 +54,11 @@
                   <ion-label>Language to avoid</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list v-if="wordsToAvoid.length">
-                    <ion-item v-for="(word, index) in wordsToAvoid" :key="`avoid-` + word.term + '-' + index">
+                  <ion-list v-if="languageAvoidLines.length">
+                    <ion-item v-for="(line, index) in languageAvoidLines" :key="'avoid-' + index">
                       <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.reason }}</h4>
+                        <h4 style="margin: 0; white-space: pre-wrap;">{{ line }}</h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -96,6 +96,7 @@
 
             <div class="ion-padding">
               <div v-if="selectedUnderstanding === 'strengths'">
+                <p>Questions to find about a learner’s <strong>strengths</strong>:</p>
                 <ion-list v-if="understanding.strengths.length">
                   <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
@@ -105,15 +106,22 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'challenges'">
+                <p>Questions and prompts find out about <strong>challenges</strong> a learner may encounter:</p>
                 <ion-list v-if="understanding.challenges.length">
-                  <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
+                  <ion-item v-for="(item, i) in understanding.challenges" :key="`chal-` + i">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>
+                      <h4>{{ item.question }}</h4>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`chalp-` + i + '-' + pi">{{ p }}</li>
+                      </ul>
+                    </ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
+                <p>Questions to understand strategies that can <strong>support</strong> the learner:</p>
                 <ion-list v-if="understanding.strategies.length">
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
@@ -128,6 +136,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'advocacy'">
+                <p>Sentence starters to support learners to <strong>share</strong> their needs</p>
                 <ion-list v-if="understanding.advocacy.length">
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -558,14 +567,51 @@ const linkifyText = (text: string): string => {
   return result;
 };
 
-const wordsToUse: { term: string; explanation: string }[] = [];
-const wordsToAvoid: { term: string; reason: string }[] = [];
+// Language content (exact wording preserved, bullets removed)
+const languageUseLines: string[] = [
+  'Person-first language, for instance, person with a prosthetic leg, or person with cerebral palsy, person using a wheelchair.'
+];
+const languageAvoidLines: string[] = [
+  '‘Disabled person’, instead use ‘person with disability’',
+  '‘Wheelchair-bound’, instead use ‘person in a wheelchair’',
+  'Avoid using ‘sit down/stand up’ as these terms are not applicable to learners in wheelchairs.'
+];
 
 const understanding = {
-  strengths: [] as string[],
-  challenges: [] as string[],
-  strategies: [] as { question: string; prompts: string[] }[],
-  advocacy: [] as string[]
+  strengths: [
+    'Describe your interests and talents.',
+    'Which subjects or kinds of activities do you enjoy in school?'
+  ] as string[],
+  challenges: [
+    { question: 'Can you always see/hear/access your learning?', prompts: [] },
+    { question: 'Do you feel part of class activities and decision-making?', prompts: [] },
+    { question: 'Are you comfortable in your wheelchair/the seat you use in the classroom?', prompts: [] },
+    { question: 'What are the physical barriers in the classroom?', prompts: [] },
+    {
+      question: 'Prompts:',
+      prompts: [
+        'height of the desk',
+        'access to sink or toilet',
+        'space to move and transition from one activity to another',
+        'moving from one classroom to another/in corridors?'
+      ]
+    }
+  ] as { question: string; prompts: string[] }[],
+  strategies: [
+    { question: 'If the learner with PD experience cognitive difficulties too, say ‘Tell me about how you prefer to communicate.’', prompts: [] },
+    { question: 'Tell me about good times of the day for you to learn.', prompts: [] },
+    { question: 'Work with parents to find out about effective strategies used at home and at school.', prompts: [] }
+  ] as { question: string; prompts: string[] }[],
+  advocacy: [
+    'It helps me when you …',
+    'It helps if I have adapted ... (pens, cutlery etc)',
+    'I can independently do …',
+    'I need help with …',
+    'I may need help with …',
+    'May I have more time to think please?',
+    'Can you ask me that again in a different way?',
+    'I would like to play this game but I’m not sure how I could be included.'
+  ] as string[]
 };
 
 const presentActionSheet = async () => {
@@ -647,26 +693,78 @@ const clearCaseStudyNote = () => {
 };
 
 const challenges = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Moving from one activity/space to another',
+    'Reaching and using equipment and resources if fine motor or gross motor skills are\nneeded',
+    'Teacher and teaching resources not being aligned with the line of learner’s line of\nvision or hearing',
+    'Time and access to personal care',
+    'Barriers to transition within the school environment.'
+  ] as string[],
+  social: [
+    'Being excluded from social interactions with peers due to the seating position',
+    'Barriers to participation in the classroom activities due to PD limiting opportunities to\nmove easily around the classroom; for example, if asked to select a group or find a\npartner may not be as fast or find it more challenging to move round the space',
+    'Not being asked for an opinion about what’s happening in the classroom leading to\nfeeling lonely and isolated and limiting a sense of belonging',
+    'If there is an assistant present, learner is sometimes not recognised and can feel\nignored if information always goes thought the assistant.'
+  ] as string[],
+  tasks: [
+    'Lower expectations from educators who only expect learners with PD to participate in\nsome areas of learning at school or who assume that learners with PD always also\nhave cognitive disabilities.',
+    'Problems using different resources caused by difficulties in fine and gross motor\nskills.',
+    'PDs can often impact on the levels of concentration and time to process information\ndue to medication and/or discomfort within the immediate environment.'
+  ] as string[],
+  assessment: [
+    'Learners with PD may often require flexibilities and specific adjustments on all forms\nof assessments.'
+  ] as string[]
 };
 
 const enabling = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Ensure passages between spaces/rooms/inside and outside are sufficient to\naccommodate wider frames of wheelchairs or walking frames to enable the learner’s\nsmooth movement between areas of learning.',
+    'Ensure pathways are clear as even without equipment, if a person is not too steady\nobstacles can be difficult to navigate.',
+    'Position educator and the resources so that they use are visible and audible to the\nlearner.',
+    'Ensure the learner is enabled to reach for materials they need for a task.'
+  ] as string[],
+  social: [
+    'Plan to include the learner in all class activities to foster a sense of belonging.',
+    'Celebrate learner strengths and showcase their abilities amongst their peers.',
+    'Encourage peers to learn the assistive tools that the learner might be using.',
+    'Enable agency and decision-making of learners with PD by always asking if they\nwould like support with moving, position, holding resources, etc.',
+    'Build in activities to develop and enhance social and emotional skills of self-esteem,\nindependence, and resilience.'
+  ] as string[],
+  tasks: [
+    'Consider physical, sensory, fine and gross motor needs of learners to enable\naccessibility of the tasks and resources to enable those with PD to participate in all\ntasks.',
+    'Allow additional time to process information and regular breaks to support concentration.',
+    'Collaborate work with multi-agency colleagues to incorporate therapeutic programmes into the learning throughout the day.',
+    'Strive to gain learners’ views on their experiences and sensations during class activities\nto involve them in the decision-making process and inform your planning for future\nactivities.'
+  ] as string[],
+  assessment: [
+    'Adjustments for assessment may include using a different room for a test to minimis distractions.',
+    'Adaptations of resources used in assessments should meet individual needs, such\nas using assistive technology or alternative modes of communication.',
+    'Ensure assistance is provided for practical tests.',
+    'Allowing extra time for processing of information.'
+  ] as string[]
 };
 
 const resources = {
   electronic: [] as any[],
-  paper: [] as Array<{ title: string; description?: string; availability?: string }>,
+  paper: [
+    { title: 'Depending on the level and variety of disability' },
+    { title: 'Pencil grips' },
+    { title: 'Paintbrush grips' },
+    { title: 'Larger print' },
+    { title: 'Clipboards to retain the paper in place may be needed.' }
+  ] as Array<{ title: string; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>
 };
-const electronicLines: string[] = [];
-const organizationsLines: string[] = [];
+const electronicLines: string[] = [
+  'Text-to-speech tools to adapt written aspects of tasks',
+  'Eye-gaze equipment, for individual and practical tasks and group work.'
+];
+const organizationsLines: string[] = [
+  'https://www.shinecharity.org.uk/ – a charity that supports individuals and families affected by\nspina bifida, microcephalus and hydrocephalus. It provides a range of specialist support\nservices, including information, advice and practical help for those living with these\nconditions, as well as guidance for educators.',
+  'https://www.scope.org.uk/ – a disability equality charity in England and Wales. Some of the\nsupport directed for families will also support educators in creating stimulating, inclusive and\nsupportive classroom environment.',
+  'https://pdnet.org.uk/ – a national network in the UK that provides support to professionals in\neducation who are working to promote positive outcomes for children and young people with\nphysical disabilities. It offers resources, training and a forum for sharing information and best\npractices among educators.',
+  'Also consider including repositories for local supportive information and detail.'
+];
 
 const reflection = ref({
   caseStudyReflection: '',

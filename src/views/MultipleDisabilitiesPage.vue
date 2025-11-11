@@ -36,11 +36,11 @@
                   <ion-label>Respectful language</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list v-if="wordsToUse.length">
-                    <ion-item v-for="(word, index) in wordsToUse" :key="`use-` + word.term + '-' + index">
+                  <ion-list v-if="languageUseLines.length">
+                    <ion-item v-for="(line, index) in languageUseLines" :key="'use-' + index">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                        <h4 style="margin: 0; white-space: pre-wrap;">{{ line }}</h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -54,11 +54,11 @@
                   <ion-label>Language to avoid</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list v-if="wordsToAvoid.length">
-                    <ion-item v-for="(word, index) in wordsToAvoid" :key="`avoid-` + word.term + '-' + index">
+                  <ion-list v-if="languageAvoidLines.length">
+                    <ion-item v-for="(line, index) in languageAvoidLines" :key="'avoid-' + index">
                       <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.reason }}</h4>
+                        <h4 style="margin: 0; white-space: pre-wrap;">{{ line }}</h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -96,24 +96,37 @@
 
             <div class="ion-padding">
               <div v-if="selectedUnderstanding === 'strengths'">
+                <p>Using the learner’s preferred way of communicating, questions and prompts help to find out about a learner’s <strong>strengths</strong>:</p>
                 <ion-list v-if="understanding.strengths.length">
-                  <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
+                  <ion-item v-for="(item, i) in understanding.strengths" :key="`str-` + i">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>
+                      <h4>{{ item.question }}</h4>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`strp-` + i + '-' + pi">{{ p }}</li>
+                      </ul>
+                    </ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'challenges'">
+                <p>Using the learner’s preferred method of communication, questions and prompts help find out about <strong>challenges</strong> a learner may encounter:</p>
                 <ion-list v-if="understanding.challenges.length">
-                  <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
+                  <ion-item v-for="(item, i) in understanding.challenges" :key="`chal-` + i">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>
+                      <h4>{{ item.question }}</h4>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`chalp-` + i + '-' + pi">{{ p }}</li>
+                      </ul>
+                    </ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
+                <p>Using the learner’s preferred method of communication, questions and prompts help to understand strategies that can <strong>support</strong> the learner:</p>
                 <ion-list v-if="understanding.strategies.length">
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
@@ -128,6 +141,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'advocacy'">
+                <p>Sentence starters to support learners to <strong>share</strong> their needs (supported by visual/auditory/sensory representations of the words/phrases):</p>
                 <ion-list v-if="understanding.advocacy.length">
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -558,14 +572,52 @@ const linkifyText = (text: string): string => {
   return result;
 };
 
-const wordsToUse: { term: string; explanation: string }[] = [];
-const wordsToAvoid: { term: string; reason: string }[] = [];
+// Language content (exact wording preserved, bullets removed)
+const languageUseLines: string[] = [
+  'Person-first language, for example person with cerebral palsy or person who has cerebral palsy.'
+];
+const languageAvoidLines: string[] = [
+  '‘Confined to a wheelchair’ suggests limited quality of life',
+  '‘Wheelchair-bound’ also suggests limited quality of life',
+  '‘Suffering with epilepsy’ suggests distress or hardship',
+  'Medicalised terms such as ‘patient’ or ‘service-user’',
+  'Do not use ‘sit down/stand up’ as these terms are not applicable for learners in wheelchairs.'
+];
 
 const understanding = {
-  strengths: [] as string[],
-  challenges: [] as string[],
-  strategies: [] as { question: string; prompts: string[] }[],
-  advocacy: [] as string[]
+  strengths: [
+    { question: 'What are you interested in?', prompts: [] },
+    {
+      question: 'Prompts:',
+      prompts: ['outside of school', 'in school']
+    },
+    { question: 'How do you prefer to communicate?', prompts: [] },
+    { question: 'Work with parents and carers to find out about the learner’s likes and dislikes, preferred means of communication, and crucial medical information.', prompts: [] }
+  ] as { question: string; prompts: string[] }[],
+  challenges: [
+    { question: 'What makes learning challenging for you?', prompts: [] },
+    {
+      question: 'Prompts:',
+      prompts: [
+        'Is it the set-up of the environment – position in the classroom, location of resources, sound, light, smells?',
+        'Is it an overstimulating environment – noise, smells, sounds, tastes, colours>',
+        'Teaching pace – is it too fast, too slow?',
+        'Are there changes you don’t understand?',
+        'Are there social situations such as …?'
+      ]
+    }
+  ] as { question: string; prompts: string[] }[],
+  strategies: [
+    { question: 'Tell me about how you prefer to communicate.', prompts: [] },
+    { question: 'Tell me about good times of the day for you to learn.', prompts: [] },
+    { question: 'Work with parents to find out about effective strategies used at home and at school to support their participation in learning,', prompts: [] }
+  ] as { question: string; prompts: string[] }[],
+  advocacy: [
+    'I like it when …',
+    'Stop, I don’t like …',
+    'More … please',
+    'No more … please'
+  ] as string[]
 };
 
 const presentActionSheet = async () => {

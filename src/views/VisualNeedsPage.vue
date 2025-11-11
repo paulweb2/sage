@@ -36,11 +36,11 @@
                   <ion-label>Respectful language</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list v-if="wordsToUse.length">
-                    <ion-item v-for="(word, index) in wordsToUse" :key="`use-` + word.term + '-' + index">
+                  <ion-list v-if="languageUseLines.length">
+                    <ion-item v-for="(line, index) in languageUseLines" :key="'use-' + index">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                        <h4 style="margin: 0; white-space: pre-wrap;">{{ line }}</h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -54,11 +54,11 @@
                   <ion-label>Language to avoid</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list v-if="wordsToAvoid.length">
-                    <ion-item v-for="(word, index) in wordsToAvoid" :key="`avoid-` + word.term + '-' + index">
+                  <ion-list v-if="languageAvoidLines.length">
+                    <ion-item v-for="(line, index) in languageAvoidLines" :key="'avoid-' + index">
                       <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.reason }}</h4>
+                        <h4 style="margin: 0; white-space: pre-wrap;">{{ line }}</h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -96,6 +96,7 @@
 
             <div class="ion-padding">
               <div v-if="selectedUnderstanding === 'strengths'">
+                <p>Questions and prompts to help find out about a learner’s <strong>strengths</strong>:</p>
                 <ion-list v-if="understanding.strengths.length">
                   <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
@@ -105,6 +106,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'challenges'">
+                <p>Questions and promptsto help find out about <strong>challenges</strong> a learner may encounter:</p>
                 <ion-list v-if="understanding.challenges.length">
                   <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
@@ -114,6 +116,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
+                <p>Questions and prompts to understand strategies that can <strong>support</strong> the learner:</p>
                 <ion-list v-if="understanding.strategies.length">
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
@@ -128,6 +131,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'advocacy'">
+                <p>Sentence starters to support learners to <strong>share</strong> their needs:</p>
                 <ion-list v-if="understanding.advocacy.length">
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -571,25 +575,11 @@ const selectedResourceType = ref('electronic');
 const linkifyElectronicLine = (line: string): string => {
   const escapeHtml = (s: string) =>
     s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const replaceOutsideAnchors = (html: string, targetEscaped: string, replacementHtml: string): string => {
-    const parts = html.split(/(<a\b[^>]*>.*?<\/a>)/gi);
-    for (let i = 0; i < parts.length; i++) {
-      if (i % 2 === 0) {
-        parts[i] = parts[i].split(targetEscaped).join(replacementHtml);
-      }
-    }
-    return parts.join('');
-  };
   let result = escapeHtml(line);
-  const urls: string[] = [];
-  const sortedUrls = urls.slice().sort((a, b) => b.length - a.length);
-  sortedUrls.forEach((u) => {
-    const escaped = escapeHtml(u);
-    result = replaceOutsideAnchors(
-      result,
-      escaped,
-      `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`
-    );
+  const urlRegex = /(https?:\/\/[^\s)]+)/g;
+  result = result.replace(urlRegex, (m) => {
+    const href = m;
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${m}</a>`;
   });
   return result;
 };
@@ -606,14 +596,53 @@ const linkifyText = (text: string): string => {
   return result;
 };
 
-const wordsToUse: { term: string; explanation: string }[] = [];
-const wordsToAvoid: { term: string; reason: string }[] = [];
+// Exact provided lines (kept as-is, including bullets, punctuation, and line breaks)
+const languageUseLines: string[] = [
+  'Partially sighted for a learner with some usable vision',
+  'Low vision for a visual impairment that cannot be corrected by standard spectacles',
+  'Person-first language, for example, a learner who is blind, learner who has difficulty\nseeing, child with low vision or person with a visual impairment.',
+];
+const languageAvoidLines: string[] = [
+  'Using the word blind as a metaphor, for example, ‘she was blind to her failings’ or\n‘the blind leading the blind’',
+  '‘Suffers from blindness’ implies suffering.',
+  '‘Afflicted with visual impairment’ suggests helplessness',
+  '‘Victim of visual impairment’ or ‘victim of vision loss’ suggests pity',
+  '‘Bind as a bat’ is considered disrespectful and dehumanising',
+  '‘Visually challenged’ is euphemistic and considered condescending.',
+];
+
+
 
 const understanding = {
-  strengths: [] as string[],
-  challenges: [] as string[],
-  strategies: [] as { question: string; prompts: string[] }[],
-  advocacy: [] as string[]
+  strengths: [
+    'What things are you really good at/and interested in?',
+    'How do you find your way around the school and classroom or what helps you to find your way around the school or classroom?',
+    'How do you like to receive instruction when you’re learning something new?',
+    'How do you like to receive written material for reading? Prompts: large, print, Braille, audio',
+    'Do you like working on your own or with other learners?'
+  ] as string[],
+  challenges: [
+    'What are some barriers you have experienced when doing classroom activities?',
+    'What challenges do you face with physical spaces at school – like hallways, cafeterias, or classrooms – and what challenges do you face?',
+    'What stops you from understanding the learning?',
+    'What stops you working on tasks with your friends?'
+  ] as string[],
+  strategies: [
+    {
+      question: 'How can an educator support your learning?',
+      prompts: ['demonstrations or instructions', 'group activities', 'written tasks', 'in different subjects.']
+    },
+    { question: 'In what ways can verbal description help you?', prompts: [] },
+    { question: 'What assistive technologies help you with your learning?', prompts: [] },
+    { question: 'In what ways to models and concrete images help you with your learning?', prompts: [] },
+    { question: 'How can collaborative group work be made more accessible and inclusive for you?', prompts: [] }
+  ] as { question: string; prompts: string[] }[],
+  advocacy: [
+    'I need this document in a different format (large print, Braille).',
+    'Please describe ...',
+    'Can you guide me around and talk to me about the classroom layout before the lesson?',
+    'Please can you enlarge/change …'
+  ] as string[]
 };
 
 const presentActionSheet = async () => {
@@ -695,26 +724,79 @@ const clearCaseStudyNote = () => {
 };
 
 const challenges = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Cluttered, frequently altered classroom layouts and uneven flooring can be hazardous.',
+    'Background noise or poor acoustics can disadvantage those relying on hearing information.',
+    'Lack of rails may hinder mobility.'
+  ] as string[],
+  social: [
+    'Students with visual needs may miss body language, facial expressions and non-\nverbal gestures during social interactions leading to feelings of social isolation.',
+    'Unhelpful assumptions, low expectations and stereotyping from peers and educators can mean they assume a student with visual needs is less able than their peers.',
+    'Learners with visual needs may not know who is speaking.',
+    'Learners with visual needs may talk while not facing the recipient.'
+  ] as string[],
+  tasks: [
+    'Important information and resources for learning or safety are only presented through inaccessible formats such as written materials small fonts, low contrast, no oral explanation.',
+    'Educators write on the board without reading aloud or providing alternative accessible formats.',
+    'Lack of access to electronic or adapted paper resources such as screen-readers, braille materials or large print or concrete materials.'
+  ] as string[],
+  assessment: [
+    'Inaccessible assessment formats such as visual and print based tasks can be a barrier for learners with visual needs.',
+    'Diagrams and charts can be inaccessible for learners with visual needs',
+    'Lack of adapted/accessible materials and additional time may hinder learners with visual needs from fully demonstrating their knowledge.'
+  ] as string[]
 };
 
 const enabling = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Ensure the classroom layout is predictable, consistent and clutter-free. Learners are\nmade aware of uneven flooring through tactile markers or easily visible tape.',
+    'Important information and resources for learning should be presented in accessible\nformats, such as large font or with verbal explanations.',
+    'Background noise is minimised to allow full concentration.',
+    'Use tactile materials to help a learner navigate different areas of the\nclassroom/school.'
+  ] as string[],
+  social: [
+    'Peers should be taught about communicating with learners with visual needs, such\nas saying their names before speaking and verbalising gestures.',
+    'With support and training, peer mentoring and buddy systems can be helpful for\nlearners with visual needs.',
+    'Ensure high expectations of learners with visual needs are upheld and adaptations\nmade that support independent learning.'
+  ] as string[],
+  tasks: [
+    'All materials should be in an accessible format. For example, check the learner’s\npreferred font and size.',
+    'Provide an oral commentary of the educator’s written demonstrations or instructions.',
+    'Add raised dots or a tab to mark the start/end of each task.',
+    'Allow extra time, where needed, to access and process alternative ways of\npresenting learning.'
+  ] as string[],
+  assessment: [
+    'Assessments should be in accessible formats (for example, large print, audio-\ndescribed, compatible with screen-reading software).',
+    'Diagrams and charts should be described and or raised.',
+    'Extra time may be needed for learners with visual needs to fully demonstrate their\nknowledge.'
+  ] as string[]
 };
 
 const resources = {
   electronic: [] as any[],
-  paper: [] as Array<{ title: string; description?: string; availability?: string }>,
+  paper: [
+    { title: 'Braille books and materials.' },
+    { title: 'Audio books – National Braille Printing Press.' },
+    { title: 'Tactile graphics – such as raised-line drawings for maps, graphs, diagrams, geometric figures – can be created using ‘swell paper’ in an ordinary printer.' },
+    { title: 'Books, worksheets, and handouts printed in a larger font size (typically 18-point or higher).' },
+    { title: '3D shapes, counting blocks, abacuses, based in blocks and 3D models E.G skeletons, solar systems' },
+    { title: 'Textured number lines, clocks, thermometers and rulers with Braille or raised markers.' }
+  ] as Array<{ title: string; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>
 };
-const electronicLines: string[] = [];
-const organizationsLines: string[] = [];
+const electronicLines: string[] = [
+  'https://www.nvaccess.org – NVDA (Non-Visual Desktop Access)- a free screen\nreader.',
+  'https://www.bookshare.org – bookshare (audio books for students with qualifying\ndisabilities.',
+  'https://support.microsoft.com/en-us/topic/use-immersive-reader-in-microsoft-edge-78a7a17d-52e1-47ee-b0ac-eff8539015e1 – Microsoft Immersive Reader (provides\naudio narration and accessible text.',
+  'VoiceOver – available on all Apple devices (built into iOS/macOS; no external link\nneeded).',
+  'https://www.bemyeyes.com – volunteers who provide visual assistance.',
+  'https://www.aph.org/resources/ – Tactile Graphic Image Library (free downloads for\ntactile graphics).'
+];
+const organizationsLines: string[] = [
+  'https://councilfortheblind.org.zw/ – Council for The Blind Zimbabwe offers support in\ncorrecting sight problems and integrating learners that are blind and partially sighted\ninto education.',
+  'https://www.perkins.org/international – Perkins School for the Blind provides support\nfor educators of students with visual needs.',
+  'Dorothy Duncan Centre provides reading and educational materials for the blind and\npartially sighted'
+];
 
 const reflection = ref({
   caseStudyReflection: '',
