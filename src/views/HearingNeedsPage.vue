@@ -1068,7 +1068,19 @@ const enabling = {
   ]
 };
 
-const resources = {
+interface PaperResource {
+  title: string;
+  description?: string;
+  availability?: string;
+}
+
+interface OrganizationResource {
+  name: string;
+  description?: string;
+  contact?: string;
+}
+
+const resources: { electronic: string[]; paper: PaperResource[]; organizations: OrganizationResource[] } = {
   electronic: [
     // Unused for electronic rendering on this page; kept for structure consistency
   ],

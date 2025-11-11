@@ -30,43 +30,73 @@
         </ion-card>
 
         <div v-if="pageId === 'working-partnership'">
-          <ion-card id="learners">
+          <ion-card id="partnership-cards">
             <ion-card-header>
-              <ion-card-title>Learners</ion-card-title>
+              <ion-card-title>Working in partnership</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <p>Learners with disabilities are at the centre of inclusion; they must be given a voice in their own education. Listening to their experiences and respecting their choices helps educators understand the support these learners need.</p>
-              <p>When learners are involved in decision-making, they gain confidence, independence and a stronger sense of belonging.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <ion-card id="parents">
-            <ion-card-header>
-              <ion-card-title>Parents</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p>Parents and caregivers know their children well in contexts that differ from school. They can, therefore, provide valuable information about their child’s strengths, challenges and preferred ways of learning.</p>
-              <p>Teachers working closely with parents ensures that support at home and at school complement each other. Parents can also be advocates for better resources, accessibility and teacher training.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <ion-card id="communities">
-            <ion-card-header>
-              <ion-card-title>Communities</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p>Communities influence how learners with disabilities are accepted and supported; raising awareness in the community helps reduce stigma and negative attitudes.</p>
-              <p>Local leaders, faith groups and organisations can play an important role in encouraging families to send children with disabilities to school, as well as in mobilising resources to support inclusive learning environments.</p>
-            </ion-card-content>
-          </ion-card>
-
-          <ion-card id="other-stakeholders">
-            <ion-card-header>
-              <ion-card-title>Other stakeholders</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p>Inclusion also requires collaboration with wider stakeholders such as Organisations of Persons with Disabilities (OPDs), government ministries, education authorities, Non-government Organisations (NGOs) and donors.</p>
-              <p>These groups can provide training, assistive technology, funding and technical expertise. Working together ensures that policies and practices are aligned and that learners with disabilities benefit from a coordinated support system.</p>
+              <ion-grid class="partner-grid">
+                <ion-row>
+                  <ion-col size="12" size-md="6">
+                    <ion-card class="partner-card partner-learners">
+                      <ion-card-header class="partner-card-header">
+                        <div class="partner-badge">
+                          <ion-icon :icon="school" color="primary"></ion-icon>
+                        </div>
+                        <ion-card-title>Learners</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <p>Learners with disabilities are at the centre of inclusion; they must be given a voice in their own education. Listening to their experiences and respecting their choices helps educators understand the support these learners need.</p>
+                        <p>When learners are involved in decision-making, they gain confidence, independence and a stronger sense of belonging.</p>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card class="partner-card partner-parents">
+                      <ion-card-header class="partner-card-header">
+                        <div class="partner-badge">
+                          <ion-icon :icon="heart" color="danger"></ion-icon>
+                        </div>
+                        <ion-card-title>Parents</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <p>Parents and caregivers know their children well in contexts that differ from school. They can, therefore, provide valuable information about their child’s strengths, challenges and preferred ways of learning.</p>
+                        <p>Teachers working closely with parents ensures that support at home and at school complement each other. Parents can also be advocates for better resources, accessibility and teacher training.</p>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12" size-md="6">
+                    <ion-card class="partner-card partner-communities">
+                      <ion-card-header class="partner-card-header">
+                        <div class="partner-badge">
+                          <ion-icon :icon="people" color="success"></ion-icon>
+                        </div>
+                        <ion-card-title>Communities</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <p>Communities influence how learners with disabilities are accepted and supported; raising awareness in the community helps reduce stigma and negative attitudes.</p>
+                        <p>Local leaders, faith groups and organisations can play an important role in encouraging families to send children with disabilities to school, as well as in mobilising resources to support inclusive learning environments.</p>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card class="partner-card partner-stakeholders">
+                      <ion-card-header class="partner-card-header">
+                        <div class="partner-badge">
+                          <ion-icon :icon="business" color="warning"></ion-icon>
+                        </div>
+                        <ion-card-title>Other stakeholders</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <p>Inclusion also requires collaboration with wider stakeholders such as Organisations of Persons with Disabilities (OPDs), government ministries, education authorities, Non-government Organisations (NGOs) and donors.</p>
+                        <p>These groups can provide training, assistive technology, funding and technical expertise. Working together ensures that policies and practices are aligned and that learners with disabilities benefit from a coordinated support system.</p>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
             </ion-card-content>
           </ion-card>
         </div>
@@ -104,27 +134,49 @@
             </ion-card-content>
           </ion-card>
 
-          <ion-card id="language-respectful">
+          <ion-card id="language-guidance">
             <ion-card-header>
-              <ion-card-title>Respectful language</ion-card-title>
+              <ion-card-title>Language guidance</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ul>
-                <li>Learners with impairments / learners with disabilities</li>
-                <li>Learners without disability</li>
-              </ul>
-            </ion-card-content>
-          </ion-card>
-
-          <ion-card id="language-avoid">
-            <ion-card-header>
-              <ion-card-title>Language to avoid</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ul>
-                <li>The disabled / handicapped / people living with disabilities</li>
-                <li>Normal people / able-bodied people / non-disabled people</li>
-              </ul>
+              <ion-accordion-group>
+                <ion-accordion value="language-respectful">
+                  <ion-item slot="header" color="success">
+                    <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                    <ion-label>Respectful language</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                        <ion-label>Learners with impairments / learners with disabilities</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                        <ion-label>Learners without disability</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+                <ion-accordion value="language-avoid">
+                  <ion-item slot="header" color="danger">
+                    <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
+                    <ion-label>Language to avoid</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
+                        <ion-label>The disabled / handicapped / people living with disabilities</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
+                        <ion-label>Normal people / able-bodied people / non-disabled people</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </ion-card-content>
           </ion-card>
         </div>
@@ -292,9 +344,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonTextarea, IonButton, IonIcon, IonProgressBar, IonNote, IonAccordionGroup, IonAccordion, IonItem, IonLabel, IonList, actionSheetController } from '@ionic/vue';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonTextarea, IonButton, IonIcon, IonProgressBar, IonNote, IonAccordionGroup, IonAccordion, IonItem, IonLabel, IonList, IonGrid, IonRow, IonCol, actionSheetController } from '@ionic/vue';
 import { toastController } from '@ionic/vue';
-import { save, download, trash, helpCircle, star, people, settings, school, heart, checkmark, ellipsisVertical } from 'ionicons/icons';
+import { save, download, trash, helpCircle, star, people, settings, school, heart, checkmark, ellipsisVertical, business, close } from 'ionicons/icons';
 
 const route = useRoute();
 const pageId = computed(() => (route.params.id as string) || 'working-partnership');
@@ -419,4 +471,59 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .intro-note { margin-top: 8px; color: var(--ion-color-medium); }
+
+/* Partnership grid styles */
+.partner-grid { --ion-grid-padding: 0; }
+.partner-card {
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* Use default card background (no transparency) */
+  --background: var(--ion-card-background, var(--ion-background-color));
+}
+.partner-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.partner-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 0;
+}
+.partner-badge {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.partner-badge ion-icon { font-size: 20px; }
+
+/* Themed backgrounds per partner */
+.partner-learners {
+  background: var(--ion-card-background, var(--ion-background-color));
+}
+.partner-parents {
+  background: var(--ion-card-background, var(--ion-background-color));
+}
+.partner-communities {
+  background: var(--ion-card-background, var(--ion-background-color));
+}
+.partner-stakeholders {
+  background: var(--ion-card-background, var(--ion-background-color));
+}
+
+/* Ensure readability uses Ionic defaults */
+
+@media (prefers-color-scheme: dark) {
+  .partner-badge {
+    background: rgba(255,255,255,0.15);
+    box-shadow: none;
+  }
+}
 </style> 
