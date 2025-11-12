@@ -702,17 +702,70 @@ const clearCaseStudyNote = () => {
 };
 
 const challenges = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Learners with multiple disabilities may have a number of physical challenges including sight, hearing and mobility, tactile preferences, coordination of speech and language, and speed of doing things.',
+    'Crowded rooms or narrow passages may mean there is limited space to move a wheelchair and position other adjustable pieces of furniture.',
+    'Lighting at different times of the day and different surroundings may interrupt clear vision.',
+    'Temperature, smells, sensory needs such as texture of the food, clothing, learning materials, unexpected or invisible sounds, and any other external considerations (e.g., flying insects, classroom displays, sounds coming from other learners and rooms/buildings) may all impact on a learner with multiple needs.',
+    'Moving from one activity/space to another may be difficult.',
+    'Reaching and using equipment and resources if fine motor or gross motor skills are needed.',
+    'The learner cannot easily see the teacher or the teaching materials due to their positioning, distance from the learner, print used in the material and light intensity of the environment.',
+    'The learner cannot hear the teacher due to sound intensity, distance from the sound source and the quality of the sound.',
+    'Time and access to personal and institutional/community care may be required.'
+  ] as string[],
+  social: [
+    'Learners with multiple disabilities may experience visual, sensory, hearing, physical, mental, emotional and social difficulties in interactions with peers and educators.',
+    'Learners may need specialised communication tools which require expert support from another educator, for example, sign language or Braille.',
+    'Not feeling part of the school and class community may result in feeling discriminated against, isolated or neglected.',
+    'Not feeling part of the decision-making process in social situations with peers and educators.'
+  ] as string[],
+  tasks: [
+    'Traditional resources and ways of learning may be inaccessible due to physical, emotional, social, sensory or cognitive barriers.',
+    'Unpredictable classroom routines limit understanding of expectations.',
+    'Medical needs may cause pain or discomfort during the school day and may affect learners’ levels of energy or concentration on tasks.'
+  ] as string[],
+  assessment: [
+    'If educators have not developed ways of communication that are suitable for the learners, assessment of their abilities will not be possible.',
+    'Assessments may have been designed to identify big changes in learning rather than small progress steps.'
+  ] as string[]
 };
 
 const enabling = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Ensure passages between spaces/rooms/inside and outside are sufficient to accommodate wider frames of wheelchairs or walking frames to enable the learner’s smooth transitions.',
+    'Position teacher and resources required for the tasks in accessible space, so they are visible and audible to the learner to enable full participation.',
+    'Where appropriate, hand over resources or place under the hand of the learner to explore the materials.',
+    'Label objects and furniture for additional visual support.'
+  ] as string[],
+  social: [
+    'Ensure the learner has access to their preferred communication tools and that all staff members know how to use them.',
+    'Model the use of the communication tools to other learners in the class so they can begin interacting with the learner, provided they have the ability to copy.',
+    'Enable smaller group or 1:1 interaction that would support learners to respond in their unique, often subtle and non-verbal ways of communication.',
+    'Be mindful of being at the learner’s line of vision in social situations.',
+    'Allow sufficient time for processing of ideas and a response, which may be a muscle twitch or a verbal sound.',
+    'Speak in short, clear sentences or one-word phrases, preferably with one person speaking at a time; touch to indicate interaction before using spoken words, whilst waiting for the response patiently.',
+    'Development of trust and positive interactions are crucial to build strong relationships with learners. Know sounds of distress.',
+    'Use light/sound/tapping the table to explore ways to focus attention.',
+    'Recognition and praise of the learner’s contributions to the class community form an essential part of socialisation.',
+    'Ensure the learner’s favourite characters/colours/objects form a part of the classroom environment to foster familiarity and a sense of belonging for the learner.',
+    'Collaborate with parents/carers and wider community members who know the learner to discover tools and strategies required to support their participation in social situations.'
+  ] as string[],
+  tasks: [
+    'Adapt resources and tasks to support the learner’s communication skills, and level of understanding/time required to process the information.',
+    'Adapt learning objectives to reflect relevant, timely and achievable targets.',
+    'Try different communication tools to find preferred means of communication.',
+    'Visual aids such as writing with symbols, or pictures of objects of reference can support writing activities.',
+    'Create a sensory environment to enhance the experience and understanding of learners. For example, bubbles, fans, water sprays can provide experiences where words may not be understood.',
+    'Build in time for medical needs to be attended to.',
+    'Allow rest breaks.',
+    'Predictability and consistency aid the learner’s understanding of expectations/routines within the classroom.',
+    'Parents/carers could become a sounding board for trying out different ways of completing tasks.'
+  ] as string[],
+  assessment: [
+    'Observations in different environments, at different times of the day will enable an understanding of a learner’s abilities and preferences.',
+    'Parents and carers can support an understanding of learners’ observed behaviours.',
+    'Assessment should explore very small steps in learning. For example, do the learners notice stimuli? Do they respond to a stimulus (pause, reject)? Do they communicate a preference of two, for instance, if you held up a rabbit and a cat – does the learner consistently look at a cat?'
+  ] as string[]
 };
 
 const resources = {
@@ -720,8 +773,37 @@ const resources = {
   paper: [] as Array<{ title: string; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>
 };
-const electronicLines: string[] = [];
-const organizationsLines: string[] = [];
+const electronicLines: string[] = [
+  'Eye-gaze technology or switch-enabled technology that supports communication for some learners.',
+  'PECS (Picture Exchange Communication System) to support communication.',
+  'Augmentative and Alternative Communication (AAC) tools such as touch screen activities and text-to-speech technologies.',
+  'Interactive boards to enhance teaching and learning (e.g., playing music, sharing images, showing videos).'
+];
+const organizationsLines: string[] = [
+  'https://www.mencap.org.uk/sites/default/files/2016-06/NHS%20EM%20-%20PMLD.pdf – Top tips for supporting and meeting the needs of people with PMLD.',
+  'https://www.mencap.org.uk/blog/how-communicate-me-amy-clarke – Person-centred communication and belonging to a local community.',
+  'https://www.thesensoryprojects.co.uk/sensory-stories – Examples of sensory stories activities.',
+  'https://apps.apple.com/gb/app/proloquo2go-aac/id308368164 – Proloquo2Go AAC app for people who cannot speak or need help being understood.',
+  'https://www.nacwellbeing.org/about/ – Well-being and mental health support for children and families with PMLD experiences.',
+  'https://hwb.gov.wales/curriculum-for-wales/routes-for-learning – Routes for Learning (Hwb) – Welsh curriculum materials for pupils with PMLD.',
+  'https://www.pmldlink.org.uk/wp-content/uploads/2021/10/Quest-for-learning-Guidance-amp-Assessment-Materials-Profound-amp-Multiple-Learning-Difficulties.pdf – Quest for Learning: Guidance & Assessment Materials (PMLD).'
+];
+
+// Populate concrete resources (paper/concrete)
+resources.paper = [
+  {
+    title: 'Concrete resources for painting, mark-making, and exploration of textures',
+    description: 'Hands-on materials to develop sensory exploration and fine motor engagement.'
+  },
+  {
+    title: 'Sensory stories for shared reading',
+    description: 'Stories enhanced through different senses to support comprehension and engagement.'
+  },
+  {
+    title: 'Puppetry during teaching and learning',
+    description: 'Use of puppets to model interaction, capture attention, and support communication.'
+  }
+];
 
 const reflection = ref({
   caseStudyReflection: '',
