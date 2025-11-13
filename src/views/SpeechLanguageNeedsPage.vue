@@ -40,7 +40,7 @@
                     <ion-item v-for="(word, index) in wordsToUse" :key="`use-` + word.term + '-' + index">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                        <h4>{{ word.term }}<template v-if="word.explanation"> - {{ word.explanation }}</template></h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -58,7 +58,7 @@
                     <ion-item v-for="(word, index) in wordsToAvoid" :key="`avoid-` + word.term + '-' + index">
                       <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.reason }}</h4>
+                        <h4>{{ word.term }}<template v-if="word.reason"> - {{ word.reason }}</template></h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -96,6 +96,7 @@
 
             <div class="ion-padding">
               <div v-if="selectedUnderstanding === 'strengths'">
+                <p>Questions to help find out about a learner’s <strong>strengths</strong>:</p>
                 <ion-list v-if="understanding.strengths.length">
                   <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
@@ -105,6 +106,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'challenges'">
+                <p>Questions to help find out about <strong>challenges</strong> a learner may encounter:</p>
                 <ion-list v-if="understanding.challenges.length">
                   <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
@@ -114,20 +116,25 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
+                <p>Questions and prompts to understand <strong>strategies</strong> that can support the learner:</p>
                 <ion-list v-if="understanding.strategies.length">
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
                       <h4>{{ item.question }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
-                        <li>Prompts: {{ item.prompts.join(', ') }}</li>
-                      </ul>
+                      <div v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">
+                        <template v-if="item.question !== 'Prompts:'"><strong>Prompts:</strong></template>
+                        <ul style="margin: 6px 0 0 6px; padding-left: 12px;">
+                          <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
+                        </ul>
+                      </div>
                     </ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'advocacy'">
+                <p>Sentence starters to support learners to <strong>share</strong> their needs:</p>
                 <ion-list v-if="understanding.advocacy.length">
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -526,25 +533,11 @@ const selectedResourceType = ref('electronic');
 const linkifyElectronicLine = (line: string): string => {
   const escapeHtml = (s: string) =>
     s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const replaceOutsideAnchors = (html: string, targetEscaped: string, replacementHtml: string): string => {
-    const parts = html.split(/(<a\b[^>]*>.*?<\/a>)/gi);
-    for (let i = 0; i < parts.length; i++) {
-      if (i % 2 === 0) {
-        parts[i] = parts[i].split(targetEscaped).join(replacementHtml);
-      }
-    }
-    return parts.join('');
-  };
   let result = escapeHtml(line);
-  const urls: string[] = [];
-  const sortedUrls = urls.slice().sort((a, b) => b.length - a.length);
-  sortedUrls.forEach((u) => {
-    const escaped = escapeHtml(u);
-    result = replaceOutsideAnchors(
-      result,
-      escaped,
-      `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`
-    );
+  const urlRegex = /(https?:\/\/[^\s)]+)/g;
+  result = result.replace(urlRegex, (m) => {
+    const href = m;
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${m}</a>`;
   });
   return result;
 };
@@ -561,14 +554,39 @@ const linkifyText = (text: string): string => {
   return result;
 };
 
-const wordsToUse: { term: string; explanation: string }[] = [];
-const wordsToAvoid: { term: string; reason: string }[] = [];
+const wordsToUse: { term: string; explanation: string }[] = [
+  { term: 'A learner with a stammer', explanation: '' },
+  { term: 'A learner who experiences speech difficulties, difference, variation, struggles to produce specific sounds.', explanation: '' }
+];
+const wordsToAvoid: { term: string; reason: string }[] = [
+  { term: 'Abnormal speech', reason: '' },
+  { term: 'Speech impediment or impairment (unless medically diagnosed)', reason: '' },
+  { term: 'Suffers from …', reason: '' },
+  { term: 'Has a lisp', reason: '' },
+  { term: 'Stammering girl/boy', reason: '' },
+  { term: 'Stammerer.', reason: '' }
+];
 
 const understanding = {
-  strengths: [] as string[],
-  challenges: [] as string[],
-  strategies: [] as { question: string; prompts: string[] }[],
-  advocacy: [] as string[]
+  strengths: [
+    'What do you like talking about?',
+    'What helps you feel confident when you speak?'
+  ] as string[],
+  challenges: [
+    'Is it difficult to find or order the words you want to say?',
+    'What makes you feel frustrated when speaking?',
+    'Do you have any hearing needs that impact your speech?'
+  ] as string[],
+  strategies: [
+    { question: 'What helps you when you’re trying to say something? Do you use anything to help you ?', prompts: [] },
+    { question: 'What is the easiest way for you to share your ideas?', prompts: [] },
+    { question: 'Prompts:', prompts: ['drawing', 'mind maps', 'demonstrating', 'singing', 'writing.'] }
+  ] as { question: string; prompts: string[] }[],
+  advocacy: [
+    'I need more time to speak.',
+    'It helps me when you write things down.',
+    'Please don’t interrupt. I need a moment to finish.'
+  ] as string[]
 };
 
 const presentActionSheet = async () => {
@@ -650,17 +668,61 @@ const clearCaseStudyNote = () => {
 };
 
 const challenges = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'In busy and rushed environments, learners may feel under pressure to speak quickly which may not be possible due to their speech needs.',
+    'In noisy and over-stimulating environments, learners may experience anxiety, find it hard to focus, or worry about being heard.'
+  ] as string[],
+  social: [
+    'Some learners struggle with expressive language. They find it difficult to convey their ideas due to challenges with word-finding. They might struggle to structure their language. This means others may not understand the learner’s speech.',
+    'Challenges with speech can cause social anxiety and isolation, distracted behaviour and frustration.',
+    'Some learners struggle with receptive language – understanding others.',
+    'Learners might be vulnerable if they misinterpret sarcasm, idioms or exaggeration.',
+    'Some learners may have slow processing speed or difficulties with auditory processing, so they may struggle to understand and join conversations.'
+  ] as string[],
+  tasks: [
+    'Learners who have speech sound delays and disorders may struggle to articulate specific sounds, making substitutions, distortions or lisps. These difficulties make discussion-based tasks challenging.',
+    'Learners who have motor language disorders may struggle to plan, sequence and conduct the movements needed to verbalise. These difficulties may make discussion-based tasks challenging.',
+    'Learners who stammer might need more time to speak when answering questions, especially when under pressure.',
+    'Learners may make spelling and grammatical errors in their writing because they struggle to spell phonetically or sequence language. Their writing might be overly simple if they struggle to find and order vocabulary.'
+  ] as string[],
+  assessment: [
+    'Learners may find assessments more challenging if tasks rely solely on speaking or writing to convey their knowledge.',
+    'Some children learn to use language in chunks/phrases rather than sounds, Gestalt Language Processing (GLP), so may struggle to respond to assessment questions unless they have been taught phrases to use.',
+    'Learners might struggle to read and interpret written language.'
+  ] as string[]
 };
 
 const enabling = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Reduce background auditory and visual noise.',
+    'Some learners may benefit from facing the speaker. For other learners, they may feel less pressured if they sit further away. Always ask the learner.'
+  ] as string[],
+  social: [
+    'Take time to explain sarcasm and non-specific language.',
+    'Teach and rehearse social scripts.',
+    'Slow the conversation and ensure learners know they have time to think and speak.',
+    'Be concise and specific.',
+    'Ensure one person speaks at a time.',
+    'Give learners equal opportunity to speak and participate.'
+  ] as string[],
+  tasks: [
+    'Allow extra processing time.',
+    'Provide structures/templates to help learners plan and sequence language.',
+    'Avoid telling a learner that they articulated a sound incorrectly. Instead, model the correct pronunciation through your speech.',
+    'Avoid finishing a leaners sentence. Instead, allow time for the learner to finish what they are saying.',
+    'Teach spelling using multiple approaches, including letter names, sounds, and rules for using units of words (for example, prefixes and suffixes).',
+    'Minimal pairs are two words that sound similar. They have one sound that is different. This different sound means that the word changes. An example could be ‘key and tea’ – they sound the same apart from the first sound. Minimal pairs games and activities help children to listen, and practise sounds they find tricky.',
+    'Model ways to add detail to spoken and written responses.',
+    'Pre-teach new vocabulary.'
+  ] as string[],
+  assessment: [
+    'Ensure that you are aware of a learner’s speech needs. They should not impact their ability to answer questions verbally, but they may impact their ability to read and spell aloud.',
+    'Diversify assessment approaches: do not solely rely on speaking and writing.',
+    'Allow extra time.',
+    'Explicitly teach strategies for interpreting written and spoken information.',
+    'Explicitly teach phrases to use when answering assessment questions.',
+    'A stammer is not an indication of a leaner’s level of intelligence.'
+  ] as string[]
 };
 
 const resources = {
@@ -668,8 +730,28 @@ const resources = {
   paper: [] as Array<{ title: string; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>
 };
-const electronicLines: string[] = [];
-const organizationsLines: string[] = [];
+const electronicLines: string[] = [
+  'Playing, Talking, Learning – a language progress checker used in Zimbabwe. Note that this resource is typically for younger girls, but it is relevant for those who struggle with speech and language at any age. https://playingtalkinglearning.org/product/traffic-light-profile/',
+  'Information sheet about Gestalt Language Processing. https://www.coventrychildrensslt.co.uk/wp-content/uploads/2023/10/Gestalt-Language-Processing.pdf',
+  'The Michael Palin Centre for Stammering – guidance for supporting learners who stammer. https://michaelpalincentreforstammering.org/wp-content/uploads/2023/11/MPC-School-Suggestions-Sheet.pdf',
+  'Nottingham Trent University DIY Toolkit for Alternative & Inclusive Assessment Practice – toolkit to support inclusive assessment practice. https://inclusioninhe.com/wp-content/uploads/2020/07/nottingham-trent-university-diy-toolkit-for-inclusive-assessment.pdf'
+];
+const organizationsLines: string[] = [
+  'NHS Speech, Language & Communication – information and advice about various speech and language needs. https://cambspborochildrenshealth.nhs.uk/speech-language-and-communication/',
+  'Zimbabwe Association of Audiology and Speech Pathology (ZAASP) – promoting inclusive practice and resources. https://www.facebook.com/p/Zimbabwe-Association-of-Audiology-and-Speech-Pathology-61557098333881/'
+];
+
+// Concrete resources
+resources.paper = [
+  {
+    title: 'Symbols to support communication. Learners might use these as physical cards, and others on devices. A speech therapist might provide symbols, or you may devise your own to support all pupils.',
+    description: ''
+  },
+  {
+    title: 'Storybooks – these include characters with a stammer. For examples, see https://stamma.org/get-help/parents/books-parents-children?gad_source=1&gad_campaignid=17747066382&gbraid=0AAAAADjl8m0K1kwZhfEOjGVJa_5xg_vmx&gclid=Cj0KCQjwtMHEBhC-ARIsABua5iQZfI4p_rVUFfwne91KSv22wDEtWLgJLrGbw_vECu5iw0ZmbgBhY6kaApobEALw_wcB',
+    description: ''
+  }
+];
 
 const reflection = ref({
   caseStudyReflection: '',

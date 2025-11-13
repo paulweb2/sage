@@ -40,7 +40,7 @@
                     <ion-item v-for="(word, index) in wordsToUse" :key="`use-` + word.term + '-' + index">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                        <h4>{{ word.term }}<template v-if="word.explanation"> - {{ word.explanation }}</template></h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -58,7 +58,7 @@
                     <ion-item v-for="(word, index) in wordsToAvoid" :key="`avoid-` + word.term + '-' + index">
                       <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                       <ion-label>
-                        <h4>{{ word.term }} - {{ word.reason }}</h4>
+                        <h4>{{ word.term }}<template v-if="word.reason"> - {{ word.reason }}</template></h4>
                       </ion-label>
                     </ion-item>
                   </ion-list>
@@ -96,38 +96,55 @@
 
             <div class="ion-padding">
               <div v-if="selectedUnderstanding === 'strengths'">
+                <p>Questions and prompts to help understand the <strong>strengths</strong> of the learner:</p>
                 <ion-list v-if="understanding.strengths.length">
-                  <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
+                  <ion-item v-for="(item, i) in understanding.strengths" :key="`str-` + i">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
-                  </ion-item>
-                </ion-list>
-                <ion-note v-else color="medium">Content coming soon.</ion-note>
-              </div>
-              <div v-else-if="selectedUnderstanding === 'challenges'">
-                <ion-list v-if="understanding.challenges.length">
-                  <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
-                    <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
-                  </ion-item>
-                </ion-list>
-                <ion-note v-else color="medium">Content coming soon.</ion-note>
-              </div>
-              <div v-else-if="selectedUnderstanding === 'strategies'">
-                <ion-list v-if="understanding.strategies.length">
-                  <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
-                    <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
                       <h4>{{ item.question }}</h4>
                       <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
-                        <li>Prompts: {{ item.prompts.join(', ') }}</li>
+                        <li v-for="(p, pi) in item.prompts" :key="`strp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
+              <div v-else-if="selectedUnderstanding === 'challenges'">
+                <p>Questions and prompts to help understand the <strong>challenges</strong> of the learner:</p>
+                <ion-list v-if="understanding.challenges.length">
+                  <ion-item v-for="(item, i) in understanding.challenges" :key="`chal-` + i">
+                    <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
+                    <ion-label>
+                      <h4>{{ item.question }}</h4>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`chalp-` + i + '-' + pi">{{ p }}</li>
+                      </ul>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+                <ion-note v-else color="medium">Content coming soon.</ion-note>
+              </div>
+              <div v-else-if="selectedUnderstanding === 'strategies'">
+                <p>Questions and prompts to help find <strong>strategies</strong> that can support the learner:</p>
+                <ion-list v-if="understanding.strategies.length">
+                  <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
+                    <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
+                    <ion-label>
+                      <h4>{{ item.question }}</h4>
+                      <div v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">
+                        <template v-if="item.question !== 'Prompts:'"><strong>Prompts:</strong></template>
+                        <ul style="margin: 6px 0 0 6px; padding-left: 12px;">
+                          <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
+                        </ul>
+                      </div>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+                <ion-note v-else color="medium">Content coming soon.</ion-note>
+              </div>
               <div v-else-if="selectedUnderstanding === 'advocacy'">
+                <p>Sentence starters to support learners to <strong>share</strong> their needs:</p>
                 <ion-list v-if="understanding.advocacy.length">
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
@@ -187,10 +204,25 @@
                     </ion-card-header>
                     <ion-card-content>
                       <ion-list>
-                        <ion-item v-for="(c, i) in challenges.tasks" :key="`task-` + i + '-' + c">
-                          <ion-icon :icon="documentIcon" slot="start" color="primary"></ion-icon>
-                          <ion-label>{{ c }}</ion-label>
-                        </ion-item>
+                        <template v-for="(c, i) in challenges.tasks" :key="`task-` + i">
+                          <ion-item v-if="typeof c === 'string'">
+                            <ion-icon :icon="documentIcon" slot="start" color="primary"></ion-icon>
+                            <ion-label>{{ c }}</ion-label>
+                          </ion-item>
+                          <template v-else>
+                            <ion-item-divider color="light">
+                              <ion-label><strong>{{ c.title }}</strong></ion-label>
+                            </ion-item-divider>
+                            <ion-item>
+                              <ion-icon :icon="documentIcon" slot="start" color="primary"></ion-icon>
+                              <ion-label>
+                                <ul style="margin: 0; padding-left: 16px;">
+                                  <li v-for="(p, pi) in c.items" :key="`taskp-` + i + '-' + pi">{{ p }}</li>
+                                </ul>
+                              </ion-label>
+                            </ion-item>
+                          </template>
+                        </template>
                       </ion-list>
                     </ion-card-content>
                   </ion-card>
@@ -298,7 +330,7 @@
                 <ion-icon :icon="laptop"></ion-icon>
                 <ion-label>Electronic</ion-label>
               </ion-segment-button>
-              <ion-segment-button value="paper">
+              <ion-segment-button value="paper" disabled>
                 <ion-icon :icon="documentIcon"></ion-icon>
                 <ion-label>Concrete resources</ion-label>
               </ion-segment-button>
@@ -474,6 +506,7 @@ import {
   IonCardContent,
   IonList,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonIcon,
   IonGrid,
@@ -561,14 +594,53 @@ const linkifyText = (text: string): string => {
   return result;
 };
 
-const wordsToUse: { term: string; explanation: string }[] = [];
-const wordsToAvoid: { term: string; reason: string }[] = [];
+const wordsToUse: { term: string; explanation: string }[] = [
+  { term: 'Person Person-centred language', explanation: 'a learner who is dyslexic or has dyslexia' },
+  { term: 'A leaner who experiences characteristics of dyslexia', explanation: 'who might need more time to process information/organise tasks.' }
+];
+const wordsToAvoid: { term: string; reason: string }[] = [
+  { term: 'Any language that suggests the learner indication that the person ‘suffers’ as a result of the disability', reason: '' },
+  { term: 'Slow learner', reason: '' },
+  { term: 'Not good at writing/mathematics/organisational skills.', reason: '' }
+];
 
 const understanding = {
-  strengths: [] as string[],
-  challenges: [] as string[],
-  strategies: [] as { question: string; prompts: string[] }[],
-  advocacy: [] as string[]
+  strengths: [
+    { question: 'What do you enjoy doing out of school?', prompts: [] },
+    { question: 'What kinds of activities do you enjoy in school?', prompts: [] },
+    { question: 'Which subjects do you enjoy in school?', prompts: [] },
+    { question: 'Which ways of communicating are best for you?', prompts: [] },
+    { question: 'How do you use mathematics/reading/writing in your hobbies or everyday life?', prompts: [] },
+    { question: 'Prompts:', prompts: ['playing games', 'counting money', 'reading or writing information for your work.'] },
+    { question: 'What resources support your learning in reading/writing/mathematics?', prompts: [] },
+    { question: 'What kind of lessons do you find easiest to participate in?', prompts: [] }
+  ] as { question: string; prompts: string[] }[],
+  challenges: [
+    { question: 'Can you give me an example of a challenge for you in your learning activities?', prompts: [] },
+    { question: 'Can you give me an example of a challenge for you when working with your peers?', prompts: [] },
+    { question: 'Can you give me an example of a challenge with your educators?', prompts: [] },
+    { question: 'Can you give me an example of a challenge for you in the learning environment?', prompts: [] },
+    { question: 'Prompts:', prompts: ['noise', 'distractions', 'the way that learning materials and resources are presented.'] }
+  ] as { question: string; prompts: string[] }[],
+  strategies: [
+    { question: 'Can I break these instructions into smaller steps for you?', prompts: [] },
+    { question: 'Can you complete one step at a time and check in with me?', prompts: [] },
+    { question: 'Can I create some different resources that you find helpful?', prompts: [] },
+    { question: 'Would you like to try another way to complete this task?', prompts: [] },
+    { question: 'Are there any other tools you used in the past that could help you here?', prompts: [] },
+    { question: 'Could you dictate your ideas, and I will write them/type them for you?', prompts: [] },
+    { question: 'Would a different way of communicating be helpful here?', prompts: [] },
+    {
+      question: 'Prompts:',
+      prompts: ['noise', 'spoken words', 'concrete resources', 'typing keyboard', 'flash cards with clearly numbered instructions.']
+    }
+  ] as { question: string; prompts: string[] }[],
+  advocacy: [
+    'It helps me when …',
+    'When I’m worried about work, I sometimes …',
+    'To help me understand the task, you could …',
+    'I prefer to write/say/act out/draw/ … my answers/ideas.'
+  ] as string[]
 };
 
 const presentActionSheet = async () => {
@@ -650,10 +722,61 @@ const clearCaseStudyNote = () => {
 };
 
 const challenges = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Noise, distractions or over-stimulation in the learning environment.',
+    'Inaccessible resources, cluttered classroom organisation.',
+    'Holding a pencil/pen/paintbrush.'
+  ] as string[],
+  social: [
+    'Anxiety in social situations.',
+    'Low self-esteem or belief in their ability to complete a task.',
+    'Lack of a sense of belonging and participation in decision-making in peer groups.',
+    'Difficulties in cognition may be translated into unsettled behaviour.'
+  ] as string[],
+  tasks: [
+    {
+      title: 'Dyslexia',
+      items: [
+        'Difficulty with phonological skills such as blending sounds and letters into words, verbal working memory and verbal information processing.',
+        'Difficulties with the organisation and planning of text.',
+        'Difficulties reading and writing may lead to avoidance of the writing/speaking/reading tasks.',
+        'Reading long passages of text combined with an expectation to comprehend it.',
+        'Following complex instructions.',
+        'High contrast in written text (black on white).'
+      ]
+    },
+    {
+      title: 'Dyscalculia',
+      items: [
+        'Remembering and repeating calculation procedures, possibly leading to a high number of errors.',
+        'Understanding and solving mathematical problems.',
+        'High level of anxiety about mathematics.'
+      ]
+    },
+    {
+      title: 'Dyspraxia',
+      items: [
+        'Everyday skills and tasks requiring fine and gross motor skills may be very challenging, for example, using scissors, tying shoelaces or doing buttons up on a coat.',
+        'For some learners, dyspraxia may affect speech.',
+        'As tasks require greater effort, learners can experience fatigue or appear demotivated.',
+        'Potential high levels of anxiety and/or depression.',
+        'Learners might generally feel unsuccessful in tasks that they observe and perceive their peers as finding easy.'
+      ]
+    },
+    {
+      title: 'Dysgraphia',
+      items: [
+        'Fine motor skills required to control a pen/pencil, which may lead to: irregular letter size and shape; incomplete letters; odd writing grip; frequent spelling mistakes; occasional pain when writing; decreased or increased speed of writing and copying; talking to self while writing; general illegibility and reluctance or refusal to complete writing tasks',
+        'Difficulty with mMemorisationing of words and processing the letters in those words',
+        'Fine motor skills required to control a pen/pencil.'
+      ]
+    }
+  ] as Array<string | { title: string; items: string[] }>,
+  assessment: [
+    'Difficulties in understanding written or verbal instruction, complex tasks or multiple elements of tasks.',
+    'Difficulties with working memory, organisational skills, and legibility of own handwriting.',
+    'High level of anxiety when faced with texts and examination.'
+  ] as string[]
 };
 
 const enabling = {
@@ -668,8 +791,17 @@ const resources = {
   paper: [] as Array<{ title: string; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>
 };
-const electronicLines: string[] = [];
-const organizationsLines: string[] = [];
+const electronicLines: string[] = [
+  'Text-to-speech and speech-to-text software',
+  'Tablets for typing rather than handwriting'
+];
+const organizationsLines: string[] = [
+  'https://www.bdadyslexia.org.uk/dyslexia/about-dyslexia/what-is-dyslexia – British Dyslexia Association – a group supporting people with dyslexia and co-ordinating with organisation to promote inclusion of dyslexia-friendly approaches.',
+  'https://www.madebydyslexia.org/workplace/?gad_source=1&gad_campaignid=21767874124&gclid=EAIaIQobChMIyvGp-6jOjgMVn4pQBh0yTxqrEAAYASAAEgJMkPD_BwE – a platform full of useful printable resources for people with dyslexia.',
+  'https://dyscalculianetwork.com/ – a not-for-profit community interest company, with a range of resources for educationalists, workforce and communities.',
+  'https://dyspraxiauk.com/dyspraxia-foundation – a platform providing assessment tools for dyspraxia, while also advising on extensive information about dyspraxia and some relevant resources/readings for educators, parents and employers.',
+  'https://dyslexiaida.org/understanding-dysgraphia/ – International Dyslexia Association offering six months free membership to classroom teachers to access resources.'
+];
 
 const reflection = ref({
   caseStudyReflection: '',
