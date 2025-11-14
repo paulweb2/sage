@@ -350,7 +350,7 @@
                         <ion-item v-for="(word, index) in disabilityContent.language.wordsToUse" :key="index">
                           <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                           <ion-label>
-                            <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                            <h4>{{ word.term }}<template v-if="word.explanation"> - {{ word.explanation }}</template></h4>
                           </ion-label>
                         </ion-item>
                       </ion-list>
@@ -367,7 +367,44 @@
                         <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
                           <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                           <ion-label>
-                            <h4>{{ word.term }} - {{ word.reason }}</h4>
+                            <h4>{{ word.term }}<template v-if="word.reason"> - {{ word.reason }}</template></h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </template>
+
+                <!-- For communication page: Green block first, then red block with generic labels -->
+                <template v-else-if="route.params.id === 'communication'">
+                  <ion-accordion value="words-to-use">
+                    <ion-item slot="header" color="success">
+                      <ion-icon :icon="checkmarkCircle" slot="start" color="success"></ion-icon>
+                      <ion-label>Respectful language</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item v-for="(word, index) in disabilityContent.language.wordsToUse" :key="index">
+                          <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                          <ion-label>
+                            <h4>{{ word.term }}<template v-if="word.explanation"> - {{ word.explanation }}</template></h4>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+
+                  <ion-accordion value="words-to-avoid">
+                    <ion-item slot="header" color="danger">
+                      <ion-icon :icon="closeCircle" slot="start" color="danger"></ion-icon>
+                      <ion-label>Language to avoid</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
+                          <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
+                          <ion-label>
+                            <h4>{{ word.term }}<template v-if="word.reason"> - {{ word.reason }}</template></h4>
                           </ion-label>
                         </ion-item>
                       </ion-list>
@@ -387,7 +424,7 @@
                         <ion-item v-for="(word, index) in (disabilityContent as any).language.wordsToAvoid" :key="index">
                           <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
                           <ion-label>
-                            <h4>{{ word.term }} - {{ word.reason }}</h4>
+                            <h4>{{ word.term }}<template v-if="word.reason"> - {{ word.reason }}</template></h4>
                           </ion-label>
                         </ion-item>
                       </ion-list>
@@ -404,7 +441,7 @@
                         <ion-item v-for="(word, index) in disabilityContent.language.wordsToUse" :key="index">
                           <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
                           <ion-label>
-                            <h4>{{ word.term }} - {{ word.explanation }}</h4>
+                            <h4>{{ word.term }}<template v-if="word.explanation"> - {{ word.explanation }}</template></h4>
                           </ion-label>
                         </ion-item>
                       </ion-list>
@@ -2692,110 +2729,108 @@ const disabilityContent = computed(() => {
     return {
       title: 'Communication',
       category: 'Communication & Interaction',
-      description: 'Communication disabilities encompass a range of conditions that may affect speech, language, and social interaction. This guide provides information and strategies for supporting students with communication needs.',
+      description: '',
       language: {
-        wordsToAvoid: [
-          { term: 'Handicapped', reason: 'Outdated and offensive term' },
-          { term: 'Crippled', reason: 'Derogatory and inappropriate' },
-          { term: 'Disabled person', reason: 'Person-first language is preferred' }
-        ],
         wordsToUse: [
-          { term: 'Student with communication needs', explanation: 'Person-first language that respects individual identity' },
-          { term: 'Non-speaking student', explanation: 'Respectful term for students who do not use speech' },
-          { term: 'Student with communication differences', explanation: 'Emphasizes diversity rather than deficits' }
+          { term: 'Learner who is non-speaking', explanation: '' },
+          { term: 'Learner who uses adaptive communication', explanation: '' },
+          { term: '‘Show me’ or ‘share with me’ instead of ‘tell me or talk to your partner’.', explanation: '' }
+        ],
+        wordsToAvoid: [
+          { term: 'Dumb', reason: '' },
+          { term: 'Mute', reason: '' },
+          { term: 'Non-verbal', reason: '' },
+          { term: 'Can’t communicate', reason: '' },
+          { term: 'Suffers from', reason: '' },
+          { term: 'Refuses to talk', reason: '' },
+          { term: 'Normal communication.', reason: '' }
         ]
       },
       understanding: {
         strengths: [
-          'What communication methods work best for you?',
-          'How do you prefer to express your thoughts and ideas?',
-          'What assistive communication technologies do you use?',
-          'Which social situations do you find most comfortable?'
+          'Show me how you prefer to communicate.',
+          'Who best understands you?'
         ],
         challenges: [
-          'What communication barriers do you face in learning environments?',
-          'How do you prefer to receive information and instructions?',
-          'What social situations are most challenging for you?',
-          'How do you handle group discussions and presentations?'
+          'Are there times when it’s hard to communicate?',
+          'Do you ever feel like others don’t understand?',
+          'What makes communication tricky or frustrating?'
         ],
         strategies: [
-          'What communication support strategies have been most helpful?',
-          'How do you prefer to participate in classroom activities?',
-          'What environmental factors help or hinder your communication?',
-          'Which technologies or tools support your communication best?'
+          'Is there anything we can do to make it easier for you to join in?',
+          'How would you like me to communicate with you? For example, would it help if I refer to symbols?'
         ],
         advocacy: [
-          'I need alternative ways to communicate my ideas',
-          'Please provide written instructions and information',
-          'I prefer to participate in discussions in smaller groups',
-          'I need extra time to process and respond to questions'
+          'I need my … to help me communicate.',
+          'Please listen. I have something to say.',
+          'Please check that you have understood me.',
+          'Please check that I have understood you.',
+          'Please give me choices.'
         ]
       },
       challenges: {
         physical: [
-          'Limited access to assistive communication technologies',
-          'Inadequate seating arrangements for communication devices',
-          'Poor acoustics and background noise in classrooms',
-          'Inaccessible communication tools and materials'
+          'Busy environments can make it challenging to know what/who to look at or listen to.',
+          'Distractions can include pictures on the walls, objects and the presence of other people. These distractions may have a greater impact on learners with ADHD.',
+          'Some learners may be hypersensitive to specific sensations. If they are in an environment containing sensations that cause them anxiety or distress, they may struggle to focus or to feel safe to communicate.'
         ],
         social: [
-          'Difficulty participating in group discussions and activities',
-          'Potential isolation from peer interactions',
-          'Misunderstandings about communication abilities',
-          'Limited opportunities for social communication practice'
+          'Learners may give too little or too much eye contact and can struggle to understand body language and facial expressions.',
+          'Learners may misunderstand social conventions, for example, waiting their turn to speak.',
+          'Learners may appear to ignore others.',
+          'Learners may not understand the need for personal space.',
+          'Learners may experience social isolation, frustration or anxiety due to struggles initiating and maintaining interactions or feeling that others misinterpret or ignore them.',
+          'There may be inconsistent interactions between home and school due to differences in communication styles, expectations and distractions.'
         ],
         tasks: [
-          'Completing oral presentations and assessments',
-          'Participating in classroom discussions',
-          'Accessing verbal instructions and information',
-          'Communicating needs and preferences effectively'
+          'Learners may have difficulty following instructions.',
+          'Non-speaking or minimally speaking learners may struggle to access speaking tasks.',
+          'Moving between tasks or environments may be challenging due to difficulties understanding transitions.'
         ],
         assessment: [
-          'Standard assessment formats may not accommodate communication needs',
-          'Oral components in assessments create barriers',
-          'Limited access to communication accommodations during testing',
-          'Difficulty with verbal presentation requirements'
+          'May appear to make less progress than peers. This could be because the learner needs to receive or express information using alternative methods.'
         ]
       },
       enabling: {
         physical: [
-          'Provide access to assistive communication technologies',
-          'Create quiet, distraction-free communication spaces',
-          'Ensure proper seating and positioning for communication devices',
-          'Use visual supports and written materials'
+          'Employ a total communication approach. This involves valuing, modelling and facilitating all communication modes, including verbal and non-verbal communication and Augmentative and Alternative Communication (AAC) devices, eye-tracking systems, symbols, gestures and speech.',
+          'Reduce distractions by simplifying classroom displays, reducing clutter and ensuring that the classroom is quiet.',
+          'Devise a seating plan: some learners may find it easier to engage when seated at the front of the classroom, whilst others might experience fewer distractions and less anxiety if they sit at the back.',
+          'Ensure that learners are given regular opportunities to move. ‘Fidget toys’ may help some learners.',
+          'Ensure individuals can access resources that help them, such as noise-cancelling headphones (or ear defenders), which support concentration and communication access.'
         ],
         social: [
-          'Include student in all activities with appropriate communication support',
-          'Provide alternative ways to participate in group work',
-          'Encourage peer support and understanding',
-          'Create opportunities for successful social interactions'
+          'Teach strategies for listening but respect variances, for example, eye contact is not compulsory).',
+          'Support the learner’s interactions with their peers by modelling phrases and demonstrating different ways to listen and respond.',
+          'Teach other children how to ‘listen’ to alternative communication methods such as symbols or sign language.',
+          'Always gain the learner’s attention before attempting to interact.',
+          'Help the learner to practise communicating in various situations in a way that is comfortable for them.'
         ],
         tasks: [
-          'Offer multiple ways to demonstrate understanding and knowledge',
-          'Provide written alternatives for oral assignments',
-          'Allow extra time for communication and responses',
-          'Use visual aids and written instructions'
+          'Establish consistent routines.',
+          'Use multi-sensory approaches (for example, see it, hear it, touch it, do it).',
+          'Allow extra time to understand communication and respond.',
+          'Model ways to request help, such as using a gesture, symbol or phrase.',
+          'Use visual timetables, now-and-next boards, and timers to support an understanding of daily routines and transitions.',
+          'Create structure in unpredictable times (for example, lunch) by providing clubs, leading games, and outlining clear expectations of what learners should do in these periods.'
         ],
         assessment: [
-          'Offer alternative assessment formats and methods',
-          'Provide communication accommodations during assessment',
-          'Allow use of assistive technologies during testing',
-          'Focus on content mastery rather than communication method'
+          'Clearly explain and model the task and ensure learners understand how to achieve the objectives.',
+          'Assess learning via the learner’s preferred communication method.'
         ]
       },
       resources: {
         electronic: [
-          { title: 'Communication Support Guidelines', description: 'Comprehensive guide to supporting communication needs', url: 'www.communicationmatters.org.uk' },
-          { title: 'Assistive Communication Technology', description: 'Guide to AAC devices and communication tools', url: 'www.isaac-online.org' },
-          { title: 'Inclusive Communication Resources', description: 'Resources for creating inclusive communication environments', url: 'www.inclusive-communication.org' }
+          { title: 'Australian Education Research Organisation: Communication needs. Supporting students’ diverse needs', description: 'Further guidance about supporting a range of communication needs.', url: 'https://www.edresearch.edu.au/sites/default/files/2025-02/classroom-management-supporting-students-diverse-needs-communication-needs-aa.pdf' },
+          { title: 'HPFT Total Communication – a guide to the Total Communication approach', description: '', url: 'https://www.youtube.com/watch?v=Au4wVMIAArI' }
         ],
         paper: [
-          { title: 'Communication Support Handbook', description: 'Printed guide to supporting communication needs in education', availability: 'Available from speech and language services' },
-          { title: 'AAC Device Catalog', description: 'Catalog of available augmentative and alternative communication devices', availability: 'Contact communication support services' }
+          { title: 'Using Lego therapy with autistic pupils – guidance about using Lego to support learners’ social communication skills. https://www.autism.org.uk/advice-and-guidance/professional-practice/lego-pilot', description: '' },
+          { title: 'Twinkl Symbols for AAC – Communication Pictures, Software & Resources – guidance and examples for using symbols to support communication. https://www.twinkl.co.uk/symbols', description: '' },
+          { title: 'What is a Social Story? – Carol Gray – a social learning tool that supports the safe and meaningful exchange of information between parents, professionals and learners with communication needs. https://carolgraysocialstories.com/social-stories/what-is-a-social-story/', description: '' }
         ],
         organizations: [
-          { name: 'Communication Matters', description: 'UK organization supporting people with communication needs', contact: 'www.communicationmatters.org.uk' },
-          { name: 'ISAAC', description: 'International Society for Augmentative and Alternative Communication', contact: 'www.isaac-online.org' }
+          { name: 'Able Child', description: 'A charity working with the Zimbabwe Parents of Handicapped Children Association (ZPHCA) to promote the inclusion of children with disabilities in Zimbabwe.', contact: 'https://www.ablechild.org.uk/where-we-work/zimbabwe/' }
         ]
       },
       caseStudy: {

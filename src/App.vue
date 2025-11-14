@@ -6,7 +6,7 @@
           <ion-list id="inbox-list">
             <div class="sage-logo-wrapper">
               <img src="/sage-logo.svg" alt="SAGE logo" class="sage-logo-img" />
-              <div class="sage-logo-text">Disability<br>Toolkit</div>
+              <div class="sage-logo-text">Zimbabwe Disability<br>Toolkit</div>
             </div>
             <ion-menu-toggle :auto-hide="false" v-if="topHome">
               <ion-item @click="setActivePage('top', topHome.index)" router-direction="root" :router-link="topHome.page.url" lines="none" :detail="false" class="hydrated" :class="{ selected: activeSection === 'top' && activeIndex === topHome.index }">
