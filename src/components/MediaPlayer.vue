@@ -152,6 +152,13 @@ const progress = computed(() => {
   return (currentTime.value / duration.value) * 100;
 });
 
+const pauseMedia = () => {
+  const player = props.type === 'video' ? videoPlayer.value : audioPlayer.value;
+  if (player) {
+    player.pause();
+  }
+};
+
 onMounted(() => {
   const player = props.type === 'video' ? videoPlayer.value : audioPlayer.value;
   if (player) {
@@ -179,10 +186,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  const player = props.type === 'video' ? videoPlayer.value : audioPlayer.value;
-  if (player) {
-    player.pause();
-  }
+  pauseMedia();
 });
 
 const togglePlay = () => {
@@ -195,6 +199,10 @@ const togglePlay = () => {
     }
   }
 };
+
+defineExpose({
+  pauseMedia
+});
 
 const toggleMute = () => {
   const player = props.type === 'video' ? videoPlayer.value : audioPlayer.value;

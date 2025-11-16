@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Multiple Disabilities</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -369,6 +369,17 @@
             <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
+            <div class="case-study-video">
+              <MediaPlayer
+                ref="multipleDisabilitiesPlayer"
+                type="video"
+                title="Traditional dance lesson"
+                subtitle="Learners responding to live music in the classroom"
+                src="/MVI_7696_blur.mp4"
+                :duration="120"
+              >
+              </MediaPlayer>
+            </div>
             <div class="case-study-text">
               <p>
                 This primary school provides a supportive and inclusive environment where learners with
@@ -497,7 +508,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import {
   IonButtons,
   IonContent,
@@ -554,6 +565,7 @@ import {
   refresh,
   ellipsisVertical
 } from 'ionicons/icons';
+import MediaPlayer from '../components/MediaPlayer.vue';
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';
 import { consumePendingAnchor } from '@/utils/anchorScroll';
@@ -561,6 +573,8 @@ import { consumePendingAnchor } from '@/utils/anchorScroll';
 const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
+
+const multipleDisabilitiesPlayer = ref<any>(null);
 
 const linkifyElectronicLine = (line: string): string => {
   const escapeHtml = (s: string) =>
@@ -906,6 +920,12 @@ onMounted(() => {
     console.log('[PageAnchor] MultipleDisabilities consume result', { didScroll });
   });
 });
+
+onBeforeRouteLeave(() => {
+  if (multipleDisabilitiesPlayer.value && typeof multipleDisabilitiesPlayer.value.pauseMedia === 'function') {
+    multipleDisabilitiesPlayer.value.pauseMedia();
+  }
+});
 </script>
 
 <style scoped>
@@ -919,6 +939,7 @@ ion-card { margin: 16px; }
 .case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }
 .case-study-prompts li { margin-bottom: 6px; }
+.case-study-video { margin-bottom: 16px; }
 </style>
 
 

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Visual Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.12</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -359,8 +359,37 @@
             <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
+            <div class="case-study-video">
+              <MediaPlayer
+                ref="visualCaseStudyPlayer"
+                type="video"
+                title="Weekend writing task using a Perkins Braille machine"
+                subtitle="Learner composing and reading his own work"
+                src="/SAGE_7638_7632.mp4"
+                :duration="120"
+              >
+              </MediaPlayer>
+            </div>
             <div class="case-study-text">
-              <ion-note color="medium">Case study content coming soon.</ion-note>
+              <p>
+                A Grade 3 learner, born blind and from an Apostolic Church family, is accessing education in
+                an inclusive school. The learner benefits from a range of accessible learning tools including
+                a Perkins Braille machine, audio books, voice recorders and Braille books.
+              </p>
+
+              <p>
+                The learner was asked to write a short composition about what he did at the weekend. In the
+                video you will see the learner writing about his weekend on a Perkins Braille machine. The
+                learner then reads his own work aloud. Minor punctuation errors were noted by the educator,
+                but the ideas were coherent and well structured.
+              </p>
+
+              <h4 class="case-study-subheading"><strong>Questions</strong></h4>
+              <ul>
+                <li>What can the learner do?</li>
+                <li>What other assistive technology might support the learner with reading and writing?</li>
+                <li>How could the learner be supported to further develop their fluency in reading and writing?</li>
+              </ul>
             </div>
             <div class="case-study-note">
               <ion-textarea
@@ -387,6 +416,17 @@
                   Clear
                 </ion-button>
               </div>
+              <ul class="case-study-prompts">
+                <li>
+                  Did you notice that the learner independently inserted Braille paper into the Perkins machine,
+                  identified correct keys, spaced accurately, and constructed sentences in response to the task?
+                </li>
+                <li>
+                  How might speech to text technology be used, so that the learner’s message is accessible beyond
+                  those who can read Braille?
+                </li>
+                <li>How can the teacher support the learner to proofread and edit his work?</li>
+              </ul>
             </div>
           </ion-card-content>
         </ion-card>
@@ -510,7 +550,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import {
   IonButtons,
   IonContent,
@@ -570,10 +610,13 @@ import {
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';
 import { consumePendingAnchor } from '@/utils/anchorScroll';
+import MediaPlayer from '../components/MediaPlayer.vue';
 
 const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
+
+const visualCaseStudyPlayer = ref<any>(null);
 
 const linkifyElectronicLine = (line: string): string => {
   const escapeHtml = (s: string) =>
@@ -878,6 +921,12 @@ onMounted(() => {
   });
 });
 
+onBeforeRouteLeave(() => {
+  if (visualCaseStudyPlayer.value && typeof visualCaseStudyPlayer.value.pauseMedia === 'function') {
+    visualCaseStudyPlayer.value.pauseMedia();
+  }
+});
+
 // Quiz types and state (retain minimal structure with placeholder question)
 interface MCOption { value: string; text: string }
 type VisualQuestion =
@@ -966,6 +1015,11 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .case-study-text { margin-bottom: 12px; }
+.case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
+.case-study-prompts { margin-top: 12px; margin-left: 20px; }
+.case-study-prompts li { margin-bottom: 6px; }
+.case-study-video { margin-bottom: 16px; }
 </style>
 
 
