@@ -360,12 +360,13 @@
           </ion-card-header>
           <ion-card-content>
             <div class="case-study-video">
+              <!-- Previously: src="/SAGE_7638_7632.mp4" -->
               <MediaPlayer
                 ref="visualCaseStudyPlayer"
                 type="video"
                 title="Weekend writing task using a Perkins Braille machine"
                 subtitle="Learner composing and reading his own work"
-                src="/SAGE_7638_7632.mp4"
+                src="https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE_7638_7632.mp4"
                 :duration="120"
               >
               </MediaPlayer>

@@ -370,12 +370,13 @@
           </ion-card-header>
           <ion-card-content>
             <div class="case-study-video">
+              <!-- Previously: src="/MVI_7696_blur.mp4" -->
               <MediaPlayer
                 ref="multipleDisabilitiesPlayer"
                 type="video"
                 title="Traditional dance lesson"
                 subtitle="Learners responding to live music in the classroom"
-                src="/MVI_7696_blur.mp4"
+                src="https://storage.googleapis.com/pwebtech.appspot.com/media/MVI_7696_blur.mp4"
                 :duration="120"
               >
               </MediaPlayer>
