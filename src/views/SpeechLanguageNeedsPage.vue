@@ -362,8 +362,75 @@
             <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
+            <div class="case-study-images">
+              <img
+                :src="getPublicUrl('speech_case_study.jpg')"
+                alt="Learner participating in a speech and language activity"
+                class="case-study-image"
+              />
+            </div>
             <div class="case-study-text">
-              <ion-note color="medium">Case study content coming soon.</ion-note>
+              <p>
+                Patience is a Grade 6 learner enrolled in a mainstream school with a resource unit that has
+                specialised classes for deaf learners. The class consists of 10 learners (three boys, seven
+                girls) who use Zimbabwe Sign Language (ZSL) for communication.
+              </p>
+
+              <p>
+                Patience is the only learner in the class who exhibits mild-to-moderate stammering during
+                oral reading and classroom discussions. To enhance oral communication for when she interacts
+                with other mainstream peers, the educators use different teaching techniques aimed at
+                improving oral expression, confidence and peer acceptance through supportive, inclusive
+                learning strategies.
+              </p>
+
+              <p>
+                The educator introduced the following literacy and communication activities to encourage
+                participation and confidence:
+              </p>
+              <ul>
+                <li>
+                  <strong>Mirror speech training:</strong> a speech therapy method using mirrors to promote
+                  articulation awareness.
+                </li>
+                <li>
+                  <strong>Visual feedback therapy:</strong> using visual cues (cards, mirrors, video,
+                  computer) to observe and adjust speech production.
+                </li>
+                <li>
+                  <strong>Confidence-building games:</strong> such as “Describe the picture”.
+                </li>
+                <li>
+                  <strong>Teacher modelling:</strong> demonstrating calm, slow speech and positive
+                  reinforcement.
+                </li>
+              </ul>
+
+              <p>The educator offers the following recommendations for supporting learners with speech needs:</p>
+              <ul>
+                <li>
+                  Create a non-judgmental environment that encourages learners with speech needs to
+                  participate.
+                </li>
+                <li>Plan activities which reduce stigma and promote cooperation.</li>
+                <li>Give children thinking time so that they can plan how they want to respond.</li>
+                <li>Include speech-friendly classroom rules, e.g., “Wait patiently for your friend to finish speaking”.</li>
+                <li>Positive teacher feedback is critical for confidence-building.</li>
+                <li>
+                  Incorporate speech therapy principles such as visual cues, rhythm and breathing into
+                  classroom routines.
+                </li>
+              </ul>
+
+              <h4 class="case-study-subheading">Questions</h4>
+              <ul>
+                <li>What other speech-friendly rules might help a learner in your class?</li>
+                <li>What other strategies could you use to provide positive educator feedback?</li>
+                <li>
+                  What other strategies could you use to foster confidence to contribute to all aspects of
+                  school life?
+                </li>
+              </ul>
             </div>
             <div class="case-study-note">
               <ion-textarea
@@ -390,6 +457,27 @@
                   Clear
                 </ion-button>
               </div>
+              <ul class="case-study-prompts">
+                <li>
+                  Can the group of learners agree a set of rules to create an environment where everyone
+                  feels comfortable to speak?
+                </li>
+                <li>
+                  Have you considered positive educator feedback in words, in pictures and in writing?
+                </li>
+                <li>
+                  In small group activities, could learners have specific roles within the group which allow
+                  them to contribute in different ways, for example, chairperson, timekeeper or scribe?
+                </li>
+                <li>
+                  How might sentence starters and word lists support learners in your class with speech needs
+                  to contribute more?
+                </li>
+                <li>
+                  Could learners rehearse their ideas and thoughts with another learner through talking
+                  partner activities before sharing with the whole group?
+                </li>
+              </ul>
             </div>
           </ion-card-content>
         </ion-card>
@@ -529,6 +617,12 @@ import { consumePendingAnchor } from '@/utils/anchorScroll';
 const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
+
+const getPublicUrl = (filename: string): string => {
+  const base = (import.meta as any).env?.BASE_URL || '/';
+  const normalizedBase = typeof base === 'string' ? base.replace(/\/$/, '') : '';
+  return `${normalizedBase}/${filename}`;
+};
 
 const linkifyElectronicLine = (line: string): string => {
   const escapeHtml = (s: string) =>
@@ -838,6 +932,15 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .case-study-text { margin-bottom: 12px; }
+.case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
+.case-study-prompts { margin-top: 12px; margin-left: 20px; }
+.case-study-prompts li { margin-bottom: 6px; }
+.case-study-images { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
+.case-study-image { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+@media (min-width: 768px) {
+  .case-study-images { grid-template-columns: repeat(1, 1fr); }
+}
 </style>
 
 

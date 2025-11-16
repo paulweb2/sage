@@ -370,7 +370,26 @@
           </ion-card-header>
           <ion-card-content>
             <div class="case-study-text">
-              <ion-note color="medium">Case study content coming soon.</ion-note>
+              <p>
+                This primary school provides a supportive and inclusive environment where learners with
+                different educational needs, including those with cognitive and multiple impairments, learn
+                together with mainstream peers. Instructions are given in learners’ native language (Shona)
+                for cultural relevance and easier understanding.
+              </p>
+
+              <p>
+                In the first part of the lesson learners were asked to choose a video which showed
+                traditional dance. The learners then watched the video to notice how the dancers moved to
+                the music. In the video you will see the children applying this learning in response to the
+                live music in their classroom.
+              </p>
+
+              <h4 class="case-study-subheading">Questions</h4>
+              <ul>
+                <li>What was the role of the educator?</li>
+                <li>How does the lesson use the learner’s culture to promote participation and enjoyment?</li>
+                <li>How could the learners’ enjoyment of music and dance be used in other curriculum areas?</li>
+              </ul>
             </div>
             <div class="case-study-note">
               <ion-textarea
@@ -397,6 +416,12 @@
                   Clear
                 </ion-button>
               </div>
+              <ul class="case-study-prompts">
+                <li>How did the educator encourage learner autonomy?</li>
+                <li>How do culturally familiar activities support participation and enjoyment?</li>
+                <li>How could music be used to support counting?</li>
+                <li>How could music and dance be used to support storytelling?</li>
+              </ul>
             </div>
           </ion-card-content>
         </ion-card>
@@ -890,6 +915,10 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .case-study-text { margin-bottom: 12px; }
+.case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
+.case-study-prompts { margin-top: 12px; margin-left: 20px; }
+.case-study-prompts li { margin-bottom: 6px; }
 </style>
 
 

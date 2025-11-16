@@ -388,7 +388,80 @@
           </ion-card-header>
           <ion-card-content>
             <div class="case-study-text">
-              <ion-note color="medium">Case study content coming soon.</ion-note>
+              <p>
+                Charles is a learner with cognitive needs aged 11. He was diagnosed at nine years by an
+                educational psychologist.
+              </p>
+
+              <p>Charles and his teacher agree that his strengths are:</p>
+              <ul>
+                <li><strong>Verbal communication:</strong> he is good at storytelling.</li>
+                <li><strong>Creativity:</strong> he is excellent at drawing and role-playing.</li>
+                <li>
+                  <strong>Social skills:</strong> he is supportive and kind to peers; he relates well with
+                  other peers in class.
+                </li>
+              </ul>
+
+              <p>Charles has difficulty with:</p>
+              <ul>
+                <li><strong>Reading fluency:</strong> he reads slowly and often reads wrong words.</li>
+                <li><strong>Spelling:</strong> he displays errors, even with simple or common words.</li>
+                <li>
+                  <strong>Writing:</strong> he has challenges with structuring sentences, even short and
+                  simple ones.
+                </li>
+                <li>
+                  <strong>Memory:</strong> he has short-term memory issues that affect his ability to follow
+                  multi-step instructions; he forgets easily what he has been taught.
+                </li>
+                <li><strong>Concentration:</strong> he has a short concentration span and can easily disengage.</li>
+                <li>
+                  <strong>Self-esteem:</strong> he feels frustrated, annoyed and ashamed when reading to the
+                  educator or peers.
+                </li>
+              </ul>
+
+              <p>The educator uses the following teaching approach:</p>
+              <ul>
+                <li>
+                  Use of sound games, rhymes and phoneme isolation, for example, “What sound can you hear
+                  from outside the class?”.
+                </li>
+                <li>Use of visual aids such as letter cards, phonetic alphabet, pictures.</li>
+                <li>Letter–sound association, teaching one sound symbol at a time.</li>
+                <li>Use of task analysis: breaking down words into sounds and sentences into words.</li>
+                <li>Repeating letters, words or sentences until it becomes automatic.</li>
+                <li>Praises all success as a way to positively reinforce achievement.</li>
+                <li>Keeps tasks short: about 10–15 minutes per task.</li>
+                <li>
+                  Multisensory instruction: incorporates visual, auditory and kinaesthetic learning (pictures,
+                  concrete objects).
+                </li>
+                <li>
+                  Classroom accommodations: extra time on assignments; use of alternative formats for reading
+                  (e.g., audiobooks); reduced copying from the board.
+                </li>
+                <li>
+                  Individualised Education Plan (IEP): goals focused on decoding skills and reading short
+                  comprehension.
+                </li>
+                <li>Emotional support: positive reinforcement and praise for effort.</li>
+              </ul>
+
+              <h4 class="case-study-subheading">Questions</h4>
+              <ul>
+                <li>
+                  Charles likes role play, storytelling and drawing and works well with his peers. How can
+                  these strengths be used to boost confidence and self-esteem?
+                </li>
+                <li>How could these strengths be used to develop Charles’ interest in reading?</li>
+                <li>How could these strengths be used to develop Charles’ comprehension skills?</li>
+                <li>
+                  How could these strengths be used to offer Charles alternative methods of demonstrating his
+                  learning that do not rely solely on reading and writing?
+                </li>
+              </ul>
             </div>
             <div class="case-study-note">
               <ion-textarea
@@ -415,6 +488,22 @@
                   Clear
                 </ion-button>
               </div>
+              <ul class="case-study-prompts">
+                <li>
+                  Have you thought about how role-play can support comprehension of a story or concept?
+                </li>
+                <li>
+                  Have you thought about choosing texts which Charles may already be familiar with the story?
+                </li>
+                <li>
+                  Have you thought about how drawings can be used to support the spoken word, for example,
+                  cartoons or animations?
+                </li>
+                <li>
+                  Have you thought about different roles learners can have in group or paired work so that
+                  Charles can actively participate without scribing or reading?
+                </li>
+              </ul>
             </div>
           </ion-card-content>
         </ion-card>
@@ -888,6 +977,10 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .case-study-text { margin-bottom: 12px; }
+.case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
+.case-study-prompts { margin-top: 12px; margin-left: 20px; }
+.case-study-prompts li { margin-bottom: 6px; }
 </style>
 
 

@@ -361,36 +361,139 @@
         <ion-card id="case-study">
           <ion-card-header>
             <ion-card-title>Case Study</ion-card-title>
-            <ion-card-subtitle>Real-World Example</ion-card-subtitle>
+            <ion-card-subtitle>Real-World Examples</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <div class="case-study-text">
-              <ion-note color="medium">Case study content coming soon.</ion-note>
+            <!-- Case One: Rudo -->
+            <div class="case-study-case">
+              <h3 class="case-study-heading">Case one: Rudo</h3>
+              <div class="case-study-layout">
+                <div class="case-study-media">
+                  <img
+                    :src="getPublicUrl('physical_case_study_image1.jpg')"
+                    alt="Rudo participating in a mathematics lesson"
+                    class="case-study-image"
+                  />
+                </div>
+                <div class="case-study-text">
+                  <p>
+                    Rudo, a girl with low vision and physical needs (uses spectacles and a wheelchair, but has
+                    no upper limb challenges), attends a mathematics lesson.
+                  </p>
+
+                  <p>
+                    During the lesson on percentages, the educator provided a workbook with enlarged font to
+                    make reading easier. The educator conducted the lesson in a well-lit classroom to support
+                    her visual needs.
+                  </p>
+
+                  <p>
+                    The educator used a hundred square and sets of objects to illustrate percentages, building
+                    on a previous lesson on fractions.
+                  </p>
+                </div>
+              </div>
+
+              <h4 class="case-study-subheading"><strong>Questions</strong></h4>
+              <ul>
+                <li>How has the educator adapted the physical environment for the learner?</li>
+                <li>How could Rudo’s peers be supportive of her learning?</li>
+              </ul>
+
+              <div class="case-study-note">
+                <ion-textarea
+                  v-model="caseStudyNoteCase1"
+                  placeholder="Write your case study notes here..."
+                  :rows="6"
+                  :auto-grow="true"
+                  :maxlength="2000"
+                  :counter="true"
+                  class="reflection-textarea"
+                  @ionInput="autoSaveCaseStudyNoteCase1"
+                ></ion-textarea>
+                <div class="reflection-actions">
+                  <ion-button expand="block" color="primary" @click="saveCaseStudyNoteCase1">
+                    <ion-icon :icon="save" slot="start"></ion-icon>
+                    Save
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNoteCase1">
+                    <ion-icon :icon="download" slot="start"></ion-icon>
+                    Export as TXT
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNoteCase1">
+                    <ion-icon :icon="trash" slot="start"></ion-icon>
+                    Clear
+                  </ion-button>
+                </div>
+                <ul class="case-study-prompts">
+                  <li>Have you considered the route from the classroom door to Rudo’s desk?</li>
+                  <li>Have you thought about the height of the desk?</li>
+                  <li>Have you thought about how Rudo could work with a peer to choose the resources for her task?</li>
+                  <li>How can learners support Rudo to collect resources for a task?</li>
+                  <li>How can learners offer support to Rudo?</li>
+                </ul>
+              </div>
             </div>
-            <div class="case-study-note">
-              <ion-textarea
-                v-model="caseStudyNote"
-                placeholder="Write your case study notes here..."
-                :rows="6"
-                :auto-grow="true"
-                :maxlength="2000"
-                :counter="true"
-                class="reflection-textarea"
-                @ionInput="autoSaveCaseStudyNote"
-              ></ion-textarea>
-              <div class="reflection-actions">
-                <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
-                  <ion-icon :icon="save" slot="start"></ion-icon>
-                  Save
-                </ion-button>
-                <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
-                  <ion-icon :icon="download" slot="start"></ion-icon>
-                  Export as TXT
-                </ion-button>
-                <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
-                  <ion-icon :icon="trash" slot="start"></ion-icon>
-                  Clear
-                </ion-button>
+
+            <!-- Case Two: Zanele -->
+            <div class="case-study-case">
+              <h3 class="case-study-heading">Case two: Zanele</h3>
+              <div class="case-study-layout">
+                <div class="case-study-media">
+                  <img
+                    :src="getPublicUrl('physical_case_study_image2.png')"
+                    alt="Zanele preparing for examinations"
+                    class="case-study-image"
+                  />
+                </div>
+                <div class="case-study-text">
+                  <p>
+                    Zanele, a Grade 7 learner with albinism, is preparing for her national examinations. She
+                    experiences low vision and sensitivity to light, which affects her reading and writing. One
+                    key challenge is practising on the Grade 7 examination scanner sheet for multiple-choice
+                    questions, which requires shading small boxes neatly and accurately.
+                  </p>
+
+                  <p>The school applied to the Zimbabwe Schools Examination Council for special examination consideration.</p>
+                </div>
+              </div>
+
+              <h4 class="case-study-subheading"><strong>Questions</strong></h4>
+              <ul>
+                <li>What special examination considerations might help Zanele to access the examination?</li>
+              </ul>
+
+              <div class="case-study-note">
+                <ion-textarea
+                  v-model="caseStudyNoteCase2"
+                  placeholder="Write your case study notes here..."
+                  :rows="6"
+                  :auto-grow="true"
+                  :maxlength="2000"
+                  :counter="true"
+                  class="reflection-textarea"
+                  @ionInput="autoSaveCaseStudyNoteCase2"
+                ></ion-textarea>
+                <div class="reflection-actions">
+                  <ion-button expand="block" color="primary" @click="saveCaseStudyNoteCase2">
+                    <ion-icon :icon="save" slot="start"></ion-icon>
+                    Save
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNoteCase2">
+                    <ion-icon :icon="download" slot="start"></ion-icon>
+                    Export as TXT
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNoteCase2">
+                    <ion-icon :icon="trash" slot="start"></ion-icon>
+                    Clear
+                  </ion-button>
+                </div>
+                <ul class="case-study-prompts">
+                  <li>Is a scribe allowed?</li>
+                  <li>Is a reader allowed?</li>
+                  <li>Is there an alternative answer sheet that the examination council can provide?</li>
+                  <li>Is extra time allowed?</li>
+                </ul>
               </div>
             </div>
           </ion-card-content>
@@ -532,6 +635,12 @@ const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
 
+const getPublicUrl = (filename: string): string => {
+  const base = (import.meta as any).env?.BASE_URL || '/';
+  const normalizedBase = typeof base === 'string' ? base.replace(/\/$/, '') : '';
+  return `${normalizedBase}/${filename}`;
+};
+
 const linkifyElectronicLine = (line: string): string => {
   const escapeHtml = (s: string) =>
     s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -655,43 +764,143 @@ const openAccessibilitySettings = () => {
   console.log('Accessibility settings coming soon!');
 };
 
-// Case Study note state
-const caseStudyNote = ref('');
-const autoSaveCaseStudyNote = () => {
+// Case Study note state (two cases)
+const caseStudyNoteCase1 = ref('');
+const caseStudyNoteCase2 = ref('');
+
+const autoSaveCaseStudyNoteCase1 = () => {
   try {
-    localStorage.setItem(`sage-cs-physical-sensory-needs-current`, JSON.stringify({ text: caseStudyNote.value }));
+    localStorage.setItem(
+      `sage-cs-physical-sensory-needs-case1`,
+      JSON.stringify({ text: caseStudyNoteCase1.value })
+    );
     ProgressService.saveCaseStudyCompletion('physical-sensory-needs');
   } catch {}
 };
-const saveCaseStudyNote = () => {
+
+const saveCaseStudyNoteCase1 = () => {
   try {
-    localStorage.setItem(`sage-cs-physical-sensory-needs-current`, JSON.stringify({ text: caseStudyNote.value }));
+    localStorage.setItem(
+      `sage-cs-physical-sensory-needs-case1`,
+      JSON.stringify({ text: caseStudyNoteCase1.value })
+    );
   } finally {
     ProgressService.saveCaseStudyCompletion('physical-sensory-needs');
-    toastController.create({ message: 'Case study note saved!', duration: 2000, position: 'bottom', color: 'success' }).then(t => t.present());
+    toastController
+      .create({
+        message: 'Case study note (Case one) saved!',
+        duration: 2000,
+        position: 'bottom',
+        color: 'success'
+      })
+      .then((t) => t.present());
   }
 };
 
-const exportCaseStudyNote = () => {
-  const content = `Case Study Note - Physical and Sensory Needs\n\n${caseStudyNote.value || 'No notes written yet.'}`;
+const exportCaseStudyNoteCase1 = () => {
+  const content = `Case Study Note - Physical and Sensory Needs (Case one: Rudo)\n\n${
+    caseStudyNoteCase1.value || 'No notes written yet.'
+  }`;
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = window.document.createElement('a');
   a.href = url;
-  a.download = 'case-study-physical-sensory-needs.txt';
+  a.download = 'case-study-physical-sensory-needs-case1-rudo.txt';
   window.document.body.appendChild(a);
   a.click();
   window.document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  toastController.create({ message: 'Case study note exported successfully!', duration: 2000, position: 'bottom', color: 'success' }).then(t => t.present());
+  toastController
+    .create({
+      message: 'Case study note (Case one) exported successfully!',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    })
+    .then((t) => t.present());
 };
 
-const clearCaseStudyNote = () => {
-  if (confirm('Are you sure you want to clear your case study note? This action cannot be undone.')) {
-    caseStudyNote.value = '';
-    localStorage.setItem(`sage-cs-physical-sensory-needs-current`, JSON.stringify({ text: '' }));
+const clearCaseStudyNoteCase1 = () => {
+  if (confirm('Are you sure you want to clear your case study note for Case one? This action cannot be undone.')) {
+    caseStudyNoteCase1.value = '';
+    localStorage.setItem(`sage-cs-physical-sensory-needs-case1`, JSON.stringify({ text: '' }));
     ProgressService.saveCaseStudyCompletion('physical-sensory-needs');
-    toastController.create({ message: 'Case study note cleared.', duration: 2000, position: 'bottom', color: 'warning' }).then(t => t.present());
+    toastController
+      .create({
+        message: 'Case study note (Case one) cleared.',
+        duration: 2000,
+        position: 'bottom',
+        color: 'warning'
+      })
+      .then((t) => t.present());
+  }
+};
+
+const autoSaveCaseStudyNoteCase2 = () => {
+  try {
+    localStorage.setItem(
+      `sage-cs-physical-sensory-needs-case2`,
+      JSON.stringify({ text: caseStudyNoteCase2.value })
+    );
+    ProgressService.saveCaseStudyCompletion('physical-sensory-needs');
+  } catch {}
+};
+
+const saveCaseStudyNoteCase2 = () => {
+  try {
+    localStorage.setItem(
+      `sage-cs-physical-sensory-needs-case2`,
+      JSON.stringify({ text: caseStudyNoteCase2.value })
+    );
+  } finally {
+    ProgressService.saveCaseStudyCompletion('physical-sensory-needs');
+    toastController
+      .create({
+        message: 'Case study note (Case two) saved!',
+        duration: 2000,
+        position: 'bottom',
+        color: 'success'
+      })
+      .then((t) => t.present());
+  }
+};
+
+const exportCaseStudyNoteCase2 = () => {
+  const content = `Case Study Note - Physical and Sensory Needs (Case two: Zanele)\n\n${
+    caseStudyNoteCase2.value || 'No notes written yet.'
+  }`;
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = window.document.createElement('a');
+  a.href = url;
+  a.download = 'case-study-physical-sensory-needs-case2-zanele.txt';
+  window.document.body.appendChild(a);
+  a.click();
+  window.document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toastController
+    .create({
+      message: 'Case study note (Case two) exported successfully!',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    })
+    .then((t) => t.present());
+};
+
+const clearCaseStudyNoteCase2 = () => {
+  if (confirm('Are you sure you want to clear your case study note for Case two? This action cannot be undone.')) {
+    caseStudyNoteCase2.value = '';
+    localStorage.setItem(`sage-cs-physical-sensory-needs-case2`, JSON.stringify({ text: '' }));
+    ProgressService.saveCaseStudyCompletion('physical-sensory-needs');
+    toastController
+      .create({
+        message: 'Case study note (Case two) cleared.',
+        duration: 2000,
+        position: 'bottom',
+        color: 'warning'
+      })
+      .then((t) => t.present());
   }
 };
 
@@ -834,10 +1043,26 @@ onMounted(() => {
   } catch {}
 
   try {
-    const csSaved = localStorage.getItem('sage-cs-physical-sensory-needs-current');
-    if (csSaved) {
-      const parsed = JSON.parse(csSaved);
-      caseStudyNote.value = typeof parsed?.text === 'string' ? parsed.text : '';
+    const cs1 = localStorage.getItem('sage-cs-physical-sensory-needs-case1');
+    const cs2 = localStorage.getItem('sage-cs-physical-sensory-needs-case2');
+
+    if (cs1) {
+      const parsed1 = JSON.parse(cs1);
+      caseStudyNoteCase1.value = typeof parsed1?.text === 'string' ? parsed1.text : '';
+    }
+
+    if (cs2) {
+      const parsed2 = JSON.parse(cs2);
+      caseStudyNoteCase2.value = typeof parsed2?.text === 'string' ? parsed2.text : '';
+    }
+
+    // Backwards compatibility: load legacy single note into Case one if present and no new notes yet
+    if (!cs1 && !cs2) {
+      const csLegacy = localStorage.getItem('sage-cs-physical-sensory-needs-current');
+      if (csLegacy) {
+        const parsedLegacy = JSON.parse(csLegacy);
+        caseStudyNoteCase1.value = typeof parsedLegacy?.text === 'string' ? parsedLegacy.text : '';
+      }
     }
   } catch {}
 
@@ -854,6 +1079,24 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .case-study-text { margin-bottom: 12px; }
+.case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
+.case-study-prompts { margin-top: 12px; margin-left: 20px; }
+.case-study-prompts li { margin-bottom: 6px; }
+.case-study-case { margin-bottom: 24px; }
+.case-study-heading { margin-bottom: 12px; font-weight: 700; }
+.case-study-layout { display: block; }
+.case-study-media { margin-bottom: 12px; }
+.case-study-image { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+@media (min-width: 768px) {
+  .case-study-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .case-study-media { margin-bottom: 0; }
+}
 </style>
 
 

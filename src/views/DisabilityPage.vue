@@ -754,7 +754,120 @@
               <ion-card-subtitle>Real-World Example</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <div class="case-study">
+              <!-- Custom content for Communication page -->
+              <div v-if="route.params.id === 'communication'">
+                <div class="case-study-text">
+                  <p>
+                    Chiedza is a learner with communication and social interaction needs. She has limited
+                    verbal communication skills and struggles to interact with her peers in the class. She
+                    can struggle to participate in group discussions. Chiedza also has challenges in
+                    requesting help and does not always fully engage in learning activities.
+                  </p>
+
+                  <p>
+                    The educator uses varied strategies to improve Chiedza’s communication. These strategies
+                    include:
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Structured communication:</strong> the educator uses games and naming objects
+                      familiar to her. Visual cue cards are also used (“I want to….”, “May I …..”, “May you
+                      help me …..”). This improves her ability to make sentences.
+                    </li>
+                    <li>
+                      <strong>Story telling:</strong> these are used to prepare Chiedza for new experiences
+                      (sporting activities, trips).
+                    </li>
+                    <li>
+                      <strong>Visual schedules:</strong> the educator sets aside 10 minutes daily for
+                      picture displays to reduce anxiety and improve transitions.
+                    </li>
+                    <li>
+                      <strong>Sensory breaks:</strong> scheduled quiet time in a sensory-friendly space help
+                      regulate emotions.
+                    </li>
+                    <li>
+                      <strong>Peer buddies:</strong> the educator identifies a classmate who is close to
+                      Chiedza and always supportive, and uses role play with the peer in areas such as
+                      greetings, requests and correct responses.
+                    </li>
+                    <li>
+                      <strong>Task analysis:</strong> breaking down tasks into small steps with visual cues
+                      and prompts.
+                    </li>
+                    <li>
+                      <strong>Positive reinforcement:</strong> reward system for completing tasks and
+                      engaging in group activities.
+                    </li>
+                    <li>
+                      <strong>Parental involvement:</strong> the educator collaborates with the parent in
+                      supporting Chiedza. The educator trains the parent how to use pictures and cards at
+                      home. This reinforces what the child learns at school.
+                    </li>
+                  </ul>
+
+                  <h4 class="case-study-subheading">Questions</h4>
+                  <ul>
+                    <li>
+                      Chiedza has challenges in requesting help. Which of the strategies listed could be
+                      developed to support her to ask for help?
+                    </li>
+                    <li>
+                      Which of the strategies above could be developed to support Chiedza to be more engaged
+                      in lessons?
+                    </li>
+                    <li>
+                      Which of the eight strategies above do you already use? Are there any new strategies
+                      you can use in your classroom? Are there any strategies you could give greater
+                      emphasis to?
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="case-study-note">
+                  <ion-textarea
+                    v-model="caseStudyNote"
+                    placeholder="Write your case study notes here..."
+                    :rows="6"
+                    :auto-grow="true"
+                    :maxlength="2000"
+                    :counter="true"
+                    class="reflection-textarea"
+                    @ionInput="autoSaveCaseStudyNote"
+                  ></ion-textarea>
+                  <div class="reflection-actions">
+                    <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
+                      <ion-icon :icon="save" slot="start"></ion-icon>
+                      Save
+                    </ion-button>
+                    <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
+                      <ion-icon :icon="download" slot="start"></ion-icon>
+                      Export as TXT
+                    </ion-button>
+                    <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
+                      <ion-icon :icon="trash" slot="start"></ion-icon>
+                      Clear
+                    </ion-button>
+                  </div>
+                  <ul class="case-study-prompts">
+                    <li>
+                      Have you thought about finding out what Chiedza is interested in and using that to
+                      develop learning activities?
+                    </li>
+                    <li>
+                      Have you thought about how peer buddies and positive reinforcement could be used to
+                      support Chiedza to ask for help?
+                    </li>
+                    <li>
+                      Could task analysis or parental involvement help Chiedza to be more engaged in
+                      lessons?
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Default case study layout for other pages -->
+              <div v-else class="case-study">
                 <h3>{{ disabilityContent.caseStudy.title }}</h3>
                 <p>{{ disabilityContent.caseStudy.scenario }}</p>
                 
@@ -1639,6 +1752,78 @@ const quizScore = ref(0);
 const matchingAnswers = ref<{ [key: string]: string }>({});
 const quizAnswers = ref<{ [key: number]: string | { [key: string]: string } }>({});
 const checkboxAnswers = ref<{ [key: string]: boolean }>({});
+
+// Case Study note state for Communication page
+const caseStudyNote = ref('');
+
+const autoSaveCaseStudyNote = () => {
+  const pageId = route.params.id as string;
+  if (pageId !== 'communication') return;
+  try {
+    localStorage.setItem(`sage-cs-${pageId}-current`, JSON.stringify({ text: caseStudyNote.value }));
+    ProgressService.saveCaseStudyCompletion(pageId);
+  } catch {}
+};
+
+const saveCaseStudyNote = () => {
+  const pageId = route.params.id as string;
+  if (pageId !== 'communication') return;
+  try {
+    localStorage.setItem(`sage-cs-${pageId}-current`, JSON.stringify({ text: caseStudyNote.value }));
+  } finally {
+    ProgressService.saveCaseStudyCompletion(pageId);
+    toastController
+      .create({
+        message: 'Case study note saved!',
+        duration: 2000,
+        position: 'bottom',
+        color: 'success'
+      })
+      .then((t) => t.present());
+  }
+};
+
+const exportCaseStudyNote = () => {
+  const pageId = route.params.id as string;
+  if (pageId !== 'communication') return;
+  const title = disabilityContent.value?.title || 'Case Study';
+  const content = `Case Study Note - ${title}\n\n${caseStudyNote.value || 'No notes written yet.'}`;
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = window.document.createElement('a');
+  a.href = url;
+  a.download = `case-study-${pageId}.txt`;
+  window.document.body.appendChild(a);
+  a.click();
+  window.document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toastController
+    .create({
+      message: 'Case study note exported successfully!',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    })
+    .then((t) => t.present());
+};
+
+const clearCaseStudyNote = () => {
+  const pageId = route.params.id as string;
+  if (pageId !== 'communication') return;
+  if (confirm('Are you sure you want to clear your case study note? This action cannot be undone.')) {
+    caseStudyNote.value = '';
+    localStorage.setItem(`sage-cs-${pageId}-current`, JSON.stringify({ text: '' }));
+    ProgressService.saveCaseStudyCompletion(pageId);
+    toastController
+      .create({
+        message: 'Case study note cleared.',
+        duration: 2000,
+        position: 'bottom',
+        color: 'warning'
+      })
+      .then((t) => t.present());
+  }
+};
 
 // Simple computed property to check if all questions are answered
 const allQuestionsAnswered = computed(() => {
@@ -4096,6 +4281,29 @@ ion-spinner {
 
 .reflection-actions ion-button {
   margin: 0;
+}
+
+.case-study-text {
+  margin-bottom: 12px;
+}
+
+.case-study-text ul {
+  margin: 8px 0 12px 20px;
+}
+
+.case-study-text .case-study-subheading {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.case-study-prompts {
+  margin-top: 12px;
+  margin-left: 20px;
+}
+
+.case-study-prompts li {
+  margin-bottom: 6px;
 }
 
 .reflection-progress {
