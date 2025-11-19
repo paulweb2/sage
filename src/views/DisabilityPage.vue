@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.15</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -893,39 +893,28 @@
           <!-- 8. Reflective Task -->
           <ion-card id="reflective-task">
             <ion-card-header>
-              <ion-card-title>Reflective Writing Journal</ion-card-title>
+              <ion-card-title>Reflective task</ion-card-title>
               <ion-card-subtitle>Deepen Your Learning Through Reflection</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <!-- Version Selector -->
-              <ion-item>
-                <ion-label position="stacked">Select Version</ion-label>
-                <ion-select 
-                  v-model="selectedReflectionVersion" 
-                  interface="popover" 
-                  placeholder="Choose version"
-                  @ionChange="loadReflectionVersion"
-                >
-                  <ion-select-option 
-                    v-for="version in reflectionVersions" 
-                    :key="version.id" 
-                    :value="version.id"
-                  >
-                    {{ version.name }} ({{ version.lastModified }})
-                  </ion-select-option>
-                </ion-select>
-                <ion-button fill="clear" slot="end" @click="createNewVersion">
-                  <ion-icon :icon="add"></ion-icon>
-                </ion-button>
-              </ion-item>
-
               <!-- Reflection Prompts -->
               <div class="reflection-section">
-                <h4>
-                  <ion-icon :icon="helpCircle" slot="start" color="primary"></ion-icon>
-                  Case Study Reflection
-                </h4>
-                <p class="reflection-prompt">
+                <p 
+                  class="reflection-prompt"
+                  v-if="route.params.id === 'communication'"
+                >
+                  1) How do your classroom routines support or limit different modes of communication?
+                </p>
+                <p 
+                  class="reflection-prompt"
+                  v-else-if="route.params.id === 'cognitive-intellectual-needs'"
+                >
+                  1) Choose three different tasks that you ask learners to do on everyday basis. Break each task into small steps.
+                </p>
+                <p 
+                  class="reflection-prompt"
+                  v-else
+                >
                   Based on the case study you've read, consider how you would apply similar strategies in your own context. 
                   What specific adaptations would you make? What challenges might you face and how would you address them?
                 </p>
@@ -940,7 +929,7 @@
                   @ionInput="autoSaveReflection"
                 ></ion-textarea>
                 
-                <!-- Prompt Accordion for Case Study Reflection -->
+                <!-- Prompt Accordion for Case Study / Question 1 Reflection -->
                 <ion-accordion-group>
                   <ion-accordion value="case-study-prompts">
                     <ion-item slot="header" color="light">
@@ -948,7 +937,44 @@
                       <ion-label>Think about...</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
-                      <ion-list>
+                      <!-- Communication page: Question 1 think box -->
+                      <ion-list v-if="route.params.id === 'communication'">
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Can students engage with your instructions in multiple ways to show their understanding?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Do all students feel safe to communicate via their preferred mode?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Do you model several ways to communicate?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How often do you adjust your routines based on students’ preferences?</ion-label>
+                        </ion-item>
+                      </ion-list>
+
+                      <!-- Cognitive & intellectual needs: Question 1 think box -->
+                      <ion-list v-else-if="route.params.id === 'cognitive-intellectual-needs'">
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Could you add a picture or an icon to illustrate each step?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How could the learner be sure that they have completed each step, for example, by ticking a box or crossing out a step?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How can you celebrate success with the learner?</ion-label>
+                        </ion-item>
+                      </ion-list>
+
+                      <!-- Hearing / visual pages: original think box -->
+                      <ion-list v-else>
                         <ion-item>
                           <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
                           <ion-label v-if="route.params.id === 'hearing-needs'">How could you adapt the hearing supports mentioned in the case study for your own students?</ion-label>
@@ -977,14 +1003,28 @@
               </div>
 
               <div class="reflection-section">
-                <h4>
-                  <ion-icon :icon="bulb" slot="start" color="secondary"></ion-icon>
-                  Practice Reflection
-                </h4>
-                <p class="reflection-prompt" v-if="route.params.id === 'hearing-needs'">
+                <p 
+                  class="reflection-prompt" 
+                  v-if="route.params.id === 'communication'"
+                >
+                  2) Identify one communication method other than speaking. How could you teach a group of children, including those who speak confidently, to communicate via this mode? How might this support all students’ learning?
+                </p>
+                <p 
+                  class="reflection-prompt" 
+                  v-else-if="route.params.id === 'cognitive-intellectual-needs'"
+                >
+                  2) Consider two different mathematical calculations. Select one concrete resource and one visual image that could be used to aid each calculation.
+                </p>
+                <p 
+                  class="reflection-prompt" 
+                  v-else-if="route.params.id === 'hearing-needs'"
+                >
                   Thinking about the lesson you taught recently, how might it be made more accessible to learners with hearing needs?
                 </p>
-                <p class="reflection-prompt" v-else>
+                <p 
+                  class="reflection-prompt" 
+                  v-else
+                >
                   Think about your current teaching practice. What aspects of your approach could be made more accessible 
                   for students with visual needs? What barriers might exist and how could you remove them?
                 </p>
@@ -999,7 +1039,7 @@
                   @ionInput="autoSaveReflection"
                 ></ion-textarea>
                 
-                <!-- Prompt Accordion for Practice Reflection -->
+                <!-- Prompt Accordion for Practice / Question 2 Reflection -->
                 <ion-accordion-group>
                   <ion-accordion value="practice-prompts">
                     <ion-item slot="header" color="light">
@@ -1007,7 +1047,36 @@
                       <ion-label>Think about...</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
-                      <ion-list v-if="route.params.id === 'hearing-needs'">
+                      <!-- Communication page: Question 2 think box -->
+                      <ion-list v-if="route.params.id === 'communication'">
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>What strategies would you use to teach students to communicate via alternative methods? Perhaps using visual cues?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>Have you considered how integrating this way of communicating into group work or discussions could give confident speakers new ways to listen, interpret and respond more thoughtfully?</ion-label>
+                        </ion-item>
+                      </ion-list>
+
+                      <!-- Cognitive & intellectual needs: Question 2 think box -->
+                      <ion-list v-else-if="route.params.id === 'cognitive-intellectual-needs'">
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>Could you add a picture or an icon to prompt the learner to use a resource or an image?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>How could the learner be sure that they have answered correctly, for example, by checking the answer using a different method or resource or image?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                          <ion-label>How can you celebrate success with the learner?</ion-label>
+                        </ion-item>
+                      </ion-list>
+
+                      <!-- Hearing / visual pages: original think box -->
+                      <ion-list v-else-if="route.params.id === 'hearing-needs'">
                         <ion-item>
                           <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
                           <ion-label>Have you considered the use of picture prompt?</ion-label>
@@ -1052,81 +1121,7 @@
                 </ion-accordion-group>
               </div>
 
-              <div class="reflection-section">
-                <h4>
-                  <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                  Next Steps Action Plan
-                </h4>
-                <p class="reflection-prompt" v-if="route.params.id === 'hearing-needs'">
-                  How could hearing learners support the learning of learners with hearing needs in your classroom?
-                </p>
-                <p class="reflection-prompt" v-else>
-                  Based on your reflections, what specific actions will you take to improve your practice? 
-                  Set concrete, achievable goals with timelines for implementation.
-                </p>
-                <ion-textarea
-                  v-model="currentReflection.nextSteps"
-                  placeholder="Outline your specific action plan with timelines and measurable goals..."
-                  :rows="6"
-                  :auto-grow="true"
-                  :maxlength="2000"
-                  :counter="true"
-                  class="reflection-textarea"
-                  @ionInput="autoSaveReflection"
-                ></ion-textarea>
-                
-                <!-- Prompt Accordion for Next Steps -->
-                <ion-accordion-group>
-                  <ion-accordion value="next-steps-prompts">
-                    <ion-item slot="header" color="light">
-                      <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
-                      <ion-label>Think about...</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                      <ion-list v-if="route.params.id === 'hearing-needs'">
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>What rules for communicating might help hearing learners support those with hearing needs?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>What basic Zimbabwean sign language signs would be useful to teach all learners?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>How might you intervene to ensure learners with hearing needs are included in social activities?</ion-label>
-                        </ion-item>
-                      </ion-list>
-                      <ion-list v-else>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>What specific resources do you need to acquire or develop?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>Who else needs to be involved in implementing these changes?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>What training or professional development might you need?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>How will you measure the impact of these changes on student learning?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>What timeline is realistic for implementing these improvements?</ion-label>
-                        </ion-item>
-                        <ion-item>
-                          <ion-icon :icon="arrowForward" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>How will you ensure these changes are sustainable and ongoing?</ion-label>
-                        </ion-item>
-                      </ion-list>
-                    </div>
-                  </ion-accordion>
-                </ion-accordion-group>
-              </div>
+              
 
               <!-- Action Buttons -->
               <div class="reflection-actions">
@@ -2559,7 +2554,7 @@ const pageSections = computed(() => {
       showEnabling: false,
       showResources: false,
       showCaseStudy: false,
-      showReflectiveTasks: false,
+      showReflectiveTasks: true,
       showQuiz: false
     },
     'speech-language-needs': {

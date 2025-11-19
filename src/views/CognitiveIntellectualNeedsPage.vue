@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive and Intellectual Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.15</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -23,6 +23,31 @@
       </ion-header>
 
       <div id="container">
+        <!-- Key Definitions Card -->
+        <ion-card id="key-definitions">
+          <ion-card-content>
+            <p>
+              <strong>Dyslexia</strong><br>
+              A learning difficulty that primarily affects reading and writing, with wider impacts on learning and daily life due to the central role of literacy across subjects.
+            </p>
+
+            <p>
+              <strong>Dyscalculia</strong><br>
+              A condition that affects how learners learn and remember arithmetic facts and calculations such as addition, subtraction, multiplication and division.
+            </p>
+
+            <p>
+              <strong>Dysgraphia</strong><br>
+              A neurological condition that affects memory processing and fine motor skills, making writing difficult. Individuals may struggle to form letters clearly and convert spoken sounds (phonemes) into written symbols (graphemes).
+            </p>
+
+            <p>
+              <strong>Dyspraxia</strong><br>
+              A condition where an individual finds learning and completing everyday tasks challenging due to poor coordination of their motor skills. A learner with dyspraxia may have difficulties with coordination, movement, and motor planning, which can affect tasks such as handwriting, organisation, and everyday physical activities.
+            </p>
+          </ion-card-content>
+        </ion-card>
+
         <!-- Language Section -->
         <ion-card id="language">
           <ion-card-header>
@@ -514,13 +539,14 @@
             <ion-card-title>Reflective task</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <!-- Question 1 -->
             <div class="reflection-section">
               <p class="reflection-prompt">
-                1) Thinking about a recent lesson, how might it be made more accessible to learners with cognitive and intellectual needs?
+                1) Choose three different tasks that you ask learners to do on everyday basis. Break each task into small steps.
               </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
-                placeholder="How could you adapt the supports mentioned in the case study for your own students?"
+                placeholder="Describe the three tasks and how you would break each one into small steps..."
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -528,12 +554,42 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+
+              <!-- Question 1 Think Box -->
+              <ion-accordion-group>
+                <ion-accordion value="cin-reflect-q1">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="primary"></ion-icon>
+                        <ion-label>Could you add a picture or an icon to illustrate each step?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="primary"></ion-icon>
+                        <ion-label>How could the learner be sure that they have completed each step, for example, by ticking a box or crossing out a step?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="primary"></ion-icon>
+                        <ion-label>How can you celebrate success with the learner?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
+
+            <!-- Question 2 -->
             <div class="reflection-section">
-              <h4>2) How could you help all children collaborate with those with a cognitive or intellectual need?</h4>
+              <p class="reflection-prompt">
+                2) Consider two different mathematical calculations. Select one concrete resource and one visual image that could be used to aid each calculation.
+              </p>
               <ion-textarea
                 v-model="reflection.practiceReflection"
-                placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
+                placeholder="Describe the calculations you chose and the concrete resources and visual images that would support each one..."
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -541,6 +597,32 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+
+              <!-- Question 2 Think Box -->
+              <ion-accordion-group>
+                <ion-accordion value="cin-reflect-q2">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Could you add a picture or an icon to prompt the learner to use a resource or an image?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="secondary"></ion-icon>
+                        <ion-label>How could the learner be sure that they have answered correctly, for example, by checking the answer using a different method or resource or image?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="checkmark" slot="start" color="secondary"></ion-icon>
+                        <ion-label>How can you celebrate success with the learner?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
             <div class="reflection-progress">
               <ion-progress-bar :value="reflectionProgress" color="success"></ion-progress-bar>

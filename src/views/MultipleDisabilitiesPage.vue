@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Multiple Disabilities</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.15</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -370,13 +370,13 @@
           </ion-card-header>
           <ion-card-content>
             <div class="case-study-video">
-              <!-- Previously: src="/MVI_7696_blur.mp4" -->
+              <!-- Previously: src="/MVI_7696_blur_even_lower_quality.mp4" -->
               <MediaPlayer
                 ref="multipleDisabilitiesPlayer"
                 type="video"
                 title="Traditional dance lesson"
                 subtitle="Learners responding to live music in the classroom"
-                src="https://storage.googleapis.com/pwebtech.appspot.com/media/MVI_7696_blur.mp4"
+                src="https://storage.googleapis.com/pwebtech.appspot.com/media/MVI_7696_blur_even_lower_quality.mp4"
                 :duration="120"
               >
               </MediaPlayer>
@@ -446,7 +446,7 @@
           <ion-card-content>
             <div class="reflection-section">
               <p class="reflection-prompt">
-                1) Thinking about a recent lesson, how might it be made more accessible to learners with multiple disabilities?
+                1) Consider how different sensory needs can be met/explored in one task, for example, in reading a story.
               </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
@@ -460,7 +460,11 @@
               ></ion-textarea>
             </div>
             <div class="reflection-section">
-              <h4>2) How could you help all children collaborate with those with multiple disabilities?</h4>
+              <h4>
+                2) Could you design objects, sounds, different textures to explore through the story?
+                <br /><br />
+                3) Set aside a small amount time every day for a week to observe a learner with multiple learning difficulties and note all of the subtle ways they communicate/interact with their environment.
+              </h4>
               <ion-textarea
                 v-model="reflection.practiceReflection"
                 placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
@@ -471,6 +475,26 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="md-reflection-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Have you observed light muscle twitches, tilting of their head, gazing at particular objects/colours/people?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Have you considered the time it takes for them to process a stimulus and respond to it in their communication mode?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
             <div class="reflection-progress">
               <ion-progress-bar :value="reflectionProgress" color="success"></ion-progress-bar>
@@ -564,7 +588,8 @@ import {
   download,
   trash,
   refresh,
-  ellipsisVertical
+  ellipsisVertical,
+  arrowForward
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';
 import { ProgressService } from '@/services/ProgressService';

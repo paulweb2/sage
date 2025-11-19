@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Visual Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.15</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -360,13 +360,13 @@
           </ion-card-header>
           <ion-card-content>
             <div class="case-study-video">
-              <!-- Previously: src="/SAGE_7638_7632.mp4" -->
+              <!-- Previously: src="/SAGE 7638_7632_even_lower_quality.mp4" -->
               <MediaPlayer
                 ref="visualCaseStudyPlayer"
                 type="video"
                 title="Weekend writing task using a Perkins Braille machine"
                 subtitle="Learner composing and reading his own work"
-                src="https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE_7638_7632.mp4"
+                src="https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE%207638_7632_even_lower_quality.mp4"
                 :duration="120"
               >
               </MediaPlayer>
@@ -440,7 +440,7 @@
           <ion-card-content>
             <div class="reflection-section">
               <p class="reflection-prompt">
-                1) Thinking about a recent lesson, how might it be made more accessible to learners with visual needs?
+                1) Thinking about a lesson you taught recently, what barriers were there to learners who are blind or visually impaired, and how could you adapt that lesson to make it more inclusive?
               </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
@@ -452,9 +452,33 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="visual-q1-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you considered the description of resources?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Could you think about the role of technology?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How could the learning environment be improved? Consider background noise, seating positions.</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
             <div class="reflection-section">
-              <h4>2) How could you help all children communicate and collaborate with those with a visual need?</h4>
+              <h4>2) Plan an introduction to a lesson. How can you adapt the start of the lesson to make it more inclusive for learners with visual needs?</h4>
               <ion-textarea
                 v-model="reflection.practiceReflection"
                 placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
@@ -465,6 +489,38 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="visual-q2-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Have you described everything that is written on a board?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Have you considered the use of real-world objects and models that learners can touch and feel?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Could a buddy system be useful?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Have you allowed enough time for learners to process information and answer questions?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>How could you include the learner in deciding which resources and modes of communication to use?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
             <div class="reflection-progress">
               <ion-progress-bar :value="reflectionProgress" color="success"></ion-progress-bar>
@@ -606,7 +662,8 @@ import {
   download,
   trash,
   refresh,
-  ellipsisVertical
+  ellipsisVertical,
+  arrowForward
 } from 'ionicons/icons';
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';

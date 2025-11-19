@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Physical and Sensory Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.13</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.15</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -507,7 +507,7 @@
           <ion-card-content>
             <div class="reflection-section">
               <p class="reflection-prompt">
-                1) Thinking about a recent lesson, how might it be made more accessible to learners with physical and sensory needs?
+                1) Conduct a self-observation and self-reflection throughout a week of teaching and note how often you seek points of view of your learners with physical disabilities (PD), and how often you make decisions for them.
               </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
@@ -521,7 +521,11 @@
               ></ion-textarea>
             </div>
             <div class="reflection-section">
-              <h4>2) How could you help all children collaborate with those with a physical or sensory need?</h4>
+              <h4>
+                2) Consider what changes to your practice you might make in the light of your reflections.
+                <br /><br />
+                3) Devise and carry out an activity for all your learners where they would think and articulate/draw/paint what they understand inclusion and belonging means to them in your learning community.
+              </h4>
               <ion-textarea
                 v-model="reflection.practiceReflection"
                 placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
@@ -532,6 +536,30 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="psn-reflection-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Possible questions include: What does it mean to be included?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>How does it feel to belong somewhere?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Can you implement some of the learners’ views into your teaching/set-up of your classroom?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
             <div class="reflection-progress">
               <ion-progress-bar :value="reflectionProgress" color="success"></ion-progress-bar>
@@ -625,7 +653,8 @@ import {
   download,
   trash,
   refresh,
-  ellipsisVertical
+  ellipsisVertical,
+  arrowForward
 } from 'ionicons/icons';
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';
