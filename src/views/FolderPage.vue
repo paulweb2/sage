@@ -193,12 +193,23 @@
               </ol>
             </ion-card-content>
           </ion-card>
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Washington Group Short Set of Questions (WGSSQ)</ion-card-title>
-              <ion-card-subtitle>Identify areas where support may be needed</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
+          <ion-card class="wgssq-card">
+            <ion-item
+              button
+              :detail="false"
+              lines="none"
+              class="wgssq-card-header"
+              :aria-expanded="wgssqExpanded"
+              aria-controls="wgssq-card-content"
+              @click="toggleWgssqCard"
+            >
+              <ion-label>
+                <h2>Washington Group Short Set of Questions (WGSSQ)</h2>
+                <p>Identify areas where support may be needed</p>
+              </ion-label>
+              <ion-icon :icon="chevronDown" slot="end" :class="{ rotated: wgssqExpanded }"></ion-icon>
+            </ion-item>
+            <ion-card-content v-show="wgssqExpanded" id="wgssq-card-content" class="wgssq-card-content">
               <p>Answer each question. There are no right or wrong answers. Selecting an option will reveal guidance.</p>
 
               <div class="question-block" v-for="q in screeningQuestions" :key="q.id">
@@ -218,6 +229,17 @@
 
                 <div class="divider"></div>
               </div>
+
+              <p class="adapted-note">
+                Adapted from
+                <a
+                  href="https://www.washingtongroup-disability.com/question-sets/wg-short-set-on-functioning-wg-ss/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  WG Short Set on Functioning (WG-SS) - The Washington Group on Disability Statistics
+                </a>
+              </p>
             </ion-card-content>
           </ion-card>
 
@@ -402,7 +424,8 @@ import {
   printOutline,
   trophy,
   arrowForward,
-  openOutline
+  openOutline,
+  chevronDown
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';
 import { ref as vueRef } from 'vue';
@@ -1033,124 +1056,353 @@ const orgs = ref([
   }
 ]);
 
-const screeningQuestions = vueRef([
+type GuidanceMap = Record<string, string>;
+
+type ScreeningQuestion = {
+  id: string;
+  title: string;
+  prompt: string;
+  options: { value: string; label: string }[];
+  guidance: GuidanceMap;
+};
+
+const contactDetailsNote =
+  '<p>Contact details for each of the organisations can be found in the <a href="/folder/Contacts">Contacts section</a>. The list is alphabetical to help you find each organisation.</p>';
+
+const screeningQuestions = vueRef<ScreeningQuestion[]>([
   {
     id: 'vision',
-    title: 'VISION',
-    prompt: 'Does your learner have difficulty seeing, even if wearing glasses? Would you say…',
+    title: 'Question 1',
+    prompt: 'Does the learner have difficulty seeing?',
     options: [
       { value: 'none', label: 'No difficulty' },
       { value: 'some', label: 'Some difficulty' },
       { value: 'lot', label: 'A lot of difficulty' },
       { value: 'cannot', label: 'Cannot do at all' }
-    ]
+    ],
+    guidance: {
+      none: '<p>No action required.</p>',
+      some: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Ask parents/carers to organise vision check to find out if glasses are needed.</li>
+          <li>The visual needs section of this toolkit provides advice and guidance on working with learners with visual needs.</li>
+        </ol>
+      `,
+      lot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Discuss referral to an optician or refractionist for diagnosis with parents.</li>
+          <li>The visual needs section of this toolkit provides advice and guidance on working with learners with visual needs.</li>
+          <li>Seek additional support with resources from organisations such as:
+            <ol type="a">
+              <li>Dorothy Duncan Centre</li>
+              <li>Council for the Blind</li>
+              <li>Richard Morris</li>
+              <li>Healthcare Promotions</li>
+              <li>Gross Care International</li>
+              <li>National Braille Printing Press</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `,
+      cannot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>If no diagnosis in place, discuss referral to an optician or refractionist for diagnosis with parents.</li>
+          <li>The visual needs section of this toolkit provides advice and guidance on working with learners with visual needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Dorothy Duncan Centre</li>
+              <li>Council for the Blind</li>
+              <li>Healthcare Promotions</li>
+              <li>Richard Morris</li>
+              <li>Gross Care International</li>
+              <li>National Braille Printing Press</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `
+    }
   },
   {
     id: 'hearing',
-    title: 'HEARING',
-    prompt: 'Does your learner have difficulty hearing, even if using a hearing aid(s)? Would you say…',
+    title: 'Question 2',
+    prompt: 'Does the learner have difficulty hearing?',
     options: [
       { value: 'none', label: 'No difficulty' },
       { value: 'some', label: 'Some difficulty' },
       { value: 'lot', label: 'A lot of difficulty' },
       { value: 'cannot', label: 'Cannot do at all' }
-    ]
+    ],
+    guidance: {
+      none: '<p>No action required.</p>',
+      some: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Ask parents/carers to organise hearing check to find out if a hearing aid, removal of ear wax or treatment of an ear infection is needed.</li>
+          <li>The hearing needs section of this toolkit provides advice and guidance on working with learners with hearing needs.</li>
+        </ol>
+      `,
+      lot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Discuss a referral to an audiologist or Ear, Nose and Throat specialist for diagnosis with parents.</li>
+          <li>The hearing needs section of this toolkit provides advice and guidance on working with learners with hearing needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Deaf Zimbabwe Trust</li>
+              <li>Emerald Hill School for the Deaf</li>
+              <li>WizEar Trust</li>
+              <li>Zimbabwe National Association of the Deaf (ZINADA)</li>
+              <li>Association of the Deaf (ASSOD)</li>
+              <li>National Audiological Laboratory</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `,
+      cannot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Discuss a referral to an audiologist or Ear, Nose and Throat specialist for diagnosis with parents.</li>
+          <li>The hearing needs section of this toolkit provides advice and guidance on working with learners with hearing needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Deaf Zimbabwe Trust</li>
+              <li>Emerald Hill School for the Deaf</li>
+              <li>WizEar Trust</li>
+              <li>Zimbabwe National Association of the Deaf (ZINADA)</li>
+              <li>Association of the Deaf (ASSOD)</li>
+              <li>National Audiological Laboratory</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `
+    }
   },
   {
     id: 'mobility',
-    title: 'MOBILITY',
-    prompt: 'Does your learner have difficulty walking or climbing steps? Would you say…',
+    title: 'Question 3',
+    prompt: 'Does the learner have difficulty walking or climbing steps?',
     options: [
       { value: 'none', label: 'No difficulty' },
       { value: 'some', label: 'Some difficulty' },
       { value: 'lot', label: 'A lot of difficulty' },
       { value: 'cannot', label: 'Cannot do at all' }
-    ]
+    ],
+    guidance: {
+      none: '<p>No action required.</p>',
+      some: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Organise lessons in an accessible classroom.</li>
+          <li>Ask parents/carers to organise health check.</li>
+          <li>The physical needs section of this toolkit provides advice and guidance on working with learners with mobility needs.</li>
+        </ol>
+      `,
+      lot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>In discussion with parents, refer to rehabilitation technicians or an orthopaedic specialist for diagnosis.</li>
+          <li>The physical needs section of this toolkit provides advice and guidance on working with learners with mobility needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Healthcare Promotions</li>
+              <li>Jairos Jiri Association</li>
+              <li>Leonard Cheshire Disability Zimbabwe Orthopaedic Centre</li>
+              <li>Rehabilitation Equipment Wholesalers</li>
+              <li>St Giles Rehabilitation Centre</li>
+              <li>Zimbabwe Parents of Children with Disabilities Association (ZPCDA)</li>
+              <li>Mpilo Hospital Children's Resource Unit</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `,
+      cannot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>If no diagnosis already in place, discuss referral to rehabilitation technicians or an orthopaedic specialist for diagnosis with parents.</li>
+          <li>The physical needs section of this toolkit provides advice and guidance on working with learners with mobility needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Healthcare Promotions</li>
+              <li>Jairos Jiri Association</li>
+              <li>Leonard Cheshire Disability Zimbabwe Orthopaedic Centre</li>
+              <li>Rehabilitation Equipment Wholesalers</li>
+              <li>St Giles Rehabilitation Centre</li>
+              <li>Zimbabwe Parents of Children with Disabilities Association (ZPCDA)</li>
+              <li>Mpilo Hospital Children's Resource Unit</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `
+    }
   },
   {
     id: 'cognition',
-    title: 'COGNITION (REMEMBERING)',
-    prompt: 'Does your learner have difficulty remembering or concentrating? Would you say…',
+    title: 'Question 4',
+    prompt: 'Does the learner have difficulty remembering or concentrating?',
     options: [
       { value: 'none', label: 'No difficulty' },
       { value: 'some', label: 'Some difficulty' },
       { value: 'lot', label: 'A lot of difficulty' },
       { value: 'cannot', label: 'Cannot do at all' }
-    ]
+    ],
+    guidance: {
+      none: '<p>No action required.</p>',
+      some: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Ask parents/carers to organise a health check.</li>
+          <li>The cognitive needs section of this toolkit provides advice and guidance on working with learners with cognitive needs.</li>
+        </ol>
+      `,
+      lot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>In discussion with parents, refer to a psychologist or multi-disciplinary assessment panel for diagnosis.</li>
+          <li>The cognitive needs section of this toolkit provides advice and guidance on working with learners with cognitive needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Zimbabwe Down Syndrome Association (ZDSA)</li>
+              <li>Dyscalculia Network</li>
+              <li>Dyspraxia UK</li>
+              <li>International Dyslexia Association</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `,
+      cannot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>If no diagnosis in place, discuss referral to a psychologist or multi-disciplinary assessment panel for diagnosis with parents.</li>
+          <li>The cognitive needs section of this toolkit provides advice and guidance on working with learners with cognitive needs.</li>
+          <li>Seek support with resources from organisations such as:
+            <ol type="a">
+              <li>Zimbabwe Down Syndrome Association (ZDSA)</li>
+              <li>Dyscalculia Network</li>
+              <li>Dyspraxia UK</li>
+              <li>International Dyslexia Association</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `
+    }
   },
   {
     id: 'selfcare',
-    title: 'SELF-CARE',
-    prompt: 'Does your learner have difficulty with self-care, such as washing all over or dressing? Would you say…',
+    title: 'Question 5',
+    prompt: 'Does the learner have difficulty with self-care, such as washing all over or dressing?',
     options: [
       { value: 'none', label: 'No difficulty' },
       { value: 'some', label: 'Some difficulty' },
       { value: 'lot', label: 'A lot of difficulty' },
       { value: 'cannot', label: 'Cannot do at all' }
-    ]
+    ],
+    guidance: {
+      none: '<p>No action required.</p>',
+      some: '<p>Ask parents/carers to organise a health check.</p>',
+      lot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>In discussion with parents, refer to an educational psychologist or multi-disciplinary assessment panel for diagnosis.</li>
+          <li>Seek support with resources from organisations such as:
+            <ul>
+              <li>Zimbabwe Down Syndrome Association (ZDSA)</li>
+              <li>Zimbabwe Association for the Care of the Mentally Handicapped (ZIMCARE) Trust</li>
+            </ul>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `,
+      cannot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>In discussion with parents, refer to an educational psychologist or multi-disciplinary assessment panel for diagnosis.</li>
+          <li>Seek support with resources from organisations such as:
+            <ul>
+              <li>Zimbabwe Down Syndrome Association (ZDSA)</li>
+              <li>Zimbabwe Association for the Care of the Mentally Handicapped (ZIMCARE) Trust</li>
+            </ul>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `
+    }
   },
   {
     id: 'communication',
-    title: 'COMMUNICATION',
-    prompt: 'Using their usual language, does your learner have difficulty communicating, for example understanding or being understood? Would you say…',
+    title: 'Question 6',
+    prompt: 'Using their usual language, does the learner have difficulty communicating, for example understanding or being understood?',
     options: [
       { value: 'none', label: 'No difficulty' },
       { value: 'some', label: 'Some difficulty' },
       { value: 'lot', label: 'A lot of difficulty' },
       { value: 'cannot', label: 'Cannot do at all' }
-    ]
+    ],
+    guidance: {
+      none: '<p>No action required.</p>',
+      some: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>Ask parents/carers to organise health check.</li>
+          <li>The speech and communication sections of this toolkit provide guidance and advice on working with learners with language or communication needs.</li>
+        </ol>
+      `,
+      lot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>In discussion with parents, refer to a speech therapist or a speech correctionist for diagnosis.</li>
+          <li>The speech and communication sections of this toolkit provide guidance and advice on working with learners with language or communication needs.</li>
+          <li>Seek additional support with resources from organisations such as:
+            <ol type="a">
+              <li>Playing, Talking, Learning</li>
+              <li>The Michael Palin Centre for Stammering</li>
+              <li>Zimbabwe Association of Audiology and Speech Pathology</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `,
+      cannot: `
+        <p>Take these steps:</p>
+        <ol>
+          <li>If no diagnosis in place, in discussion with parents, refer to a speech therapist or a speech correctionist for diagnosis.</li>
+          <li>The speech and communication sections of this toolkit provide guidance and advice on working with learners with language or communication needs.</li>
+          <li>Seek additional support with resources from organisations such as:
+            <ol type="a">
+              <li>Playing, Talking, Learning</li>
+              <li>The Michael Palin Centre for Stammering</li>
+              <li>Zimbabwe Association of Audiology and Speech Pathology</li>
+            </ol>
+          </li>
+        </ol>
+        ${contactDetailsNote}
+      `
+    }
   }
 ]);
 
 const responses = vueRef<Record<string, string>>({});
+const wgssqExpanded = vueRef(false);
 
-const directoryInfo = {
-  vision: {
-    support: [
-      {
-        name: 'Dorothy Duncan Centre',
-        address: '119 Fife Avenue 3rd/4th Street, Harare, Box 4489 Harare',
-        services: 'Provision of reading and educational materials for the blind and partially sighted',
-        phone: '+263 242 251117 / 496667'
-      }
-    ],
-    urgent: [
-      {
-        name: 'Council for the Blind',
-        address: 'Fife St / 15th Avenue, Bulawayo',
-        services: 'Eye Health services and spectacles.',
-        phone: '+263 712 209 822'
-      }
-    ]
-  }
+const toggleWgssqCard = () => {
+  wgssqExpanded.value = !wgssqExpanded.value;
 };
 
-const optContent = (q: any, value: string) => {
-  if (q.id === 'vision') {
-    if (value === 'none') {
-      return '<p>Answer: Your learner does not need additional support for their vision.</p>';
-    }
-    if (value === 'some') {
-      return `<p>Answer: Find out how you can support your learner in the Visual Needs section <a href=\"/disability/xxxxxxx\">here</a>.</p>`;
-    }
-    if (value === 'lot') {
-      const orgsHtml = directoryInfo.vision.support.map(o => `<div class=\"org-card\"><strong>${o.name}</strong><br/><small>${o.address}</small><br/>${o.services}<br/><em>${o.phone}</em></div>`).join('');
-      return `<p>Answer: Find out how you can support your learner in the Visual Needs section <a href=\"/disability/xxxxxxx\">here</a> and contact an organisation for more support and resources.</p>${orgsHtml}`;
-    }
-    if (value === 'cannot') {
-      const orgsHtml = directoryInfo.vision.urgent.map(o => `<div class=\"org-card\"><strong>${o.name}</strong><br/><small>${o.address}</small><br/>${o.services}<br/><em>${o.phone}</em></div>`).join('');
-      return `<p>Answer: Find out how you can support your learner in the Visual Needs section <a href=\"/disability/xxxxxxx\">here</a> and contact an organisation for an urgent referral and diagnosis.</p>${orgsHtml}`;
-    }
+const optContent = (q: ScreeningQuestion, value: string) => {
+  if (q.guidance?.[value]) {
+    return q.guidance[value];
   }
-  if (q.id === 'hearing') {
-    if (value === 'none') return '<p>Your learner does not need additional support for their hearing.</p>';
-    if (value === 'some' || value === 'lot' || value === 'cannot') {
-      return `<p>Find out how you can support your learner in the Hearing Needs section <a href=\"/needs/hearing\">here</a>.</p>`;
-    }
-  }
-  // For other categories, simple generic message
-  if (value === 'none') return '<p>No additional support indicated at this time.</p>';
-  return '<p>Consider support strategies in the relevant section of this toolkit and consult local services if needed.</p>';
+  return '<p>Refer to the relevant section of this toolkit for more guidance.</p>';
 };
 </script>
 
@@ -1665,6 +1917,43 @@ ion-card {
 .question-prompt { margin: 0 0 8px 0; color: var(--ion-color-medium); }
 .question-block ion-item { --background: transparent; border-radius: 8px; }
 .question-block ion-item:hover { --background: rgba(var(--ion-color-primary-rgb), 0.06); }
+.wgssq-card-header {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --min-height: 72px;
+  --background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary));
+  color: #fff;
+  border-radius: 8px 8px 0 0;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.2);
+}
+.wgssq-card-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.wgssq-card-header p {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+}
+.wgssq-card-header ion-icon {
+  color: #fff;
+  transition: transform 0.25s ease;
+}
+.wgssq-card-content {
+  border-top: 1px solid var(--ion-color-light);
+  background: var(--ion-color-light-shade, #f9fbff);
+}
+.adapted-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+.adapted-note a {
+  color: var(--ion-color-primary);
+  text-decoration: underline;
+}
 
 .guidance {
   margin: 10px 0 0 0;
@@ -1685,6 +1974,12 @@ ion-card {
   padding: 2px 8px;
   border-radius: 999px;
   margin-bottom: 8px;
+}
+.guidance li > ol,
+.guidance li > ul {
+  margin-left: 1.25rem;
+  padding-left: 0.5rem;
+  margin-top: 6px;
 }
 .divider { height: 1px; background: var(--ion-color-light); opacity: 0.6; margin-top: 12px; }
 .org-card {
