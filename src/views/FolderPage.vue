@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.15</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -294,35 +294,67 @@
               <ion-card-title>Organizations and key contacts</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ion-grid class="contacts-table">
-                <ion-row class="contacts-header" hidden="false">
-                  <ion-col size="12" size-md="4"><strong>Organization</strong></ion-col>
-                  <ion-col size="12" size-md="5"><strong>Details</strong></ion-col>
-                  <ion-col size="12" size-md="3"><strong>Website</strong></ion-col>
-                </ion-row>
+              <div class="contacts-table" role="table" aria-label="Organizations and key contacts">
+                <div class="contacts-header" role="row">
+                  <div class="contacts-cell contacts-name" role="columnheader">Organization</div>
+                  <div class="contacts-cell contacts-expertise" role="columnheader">Area of expertise</div>
+                  <div class="contacts-cell contacts-toggle" role="columnheader">Contact info</div>
+                </div>
 
-                <ion-row class="contacts-row" v-for="org in orgs" :key="org.name">
-                  <ion-col size="12" size-md="4">
-                    <ion-item lines="none">
-                      <ion-icon :icon="org.icon" slot="start" :color="org.color"></ion-icon>
-                      <ion-label>
-                        <h3>{{ org.name }}</h3>
-                        <ion-note color="medium">{{ org.type }}</ion-note>
-                      </ion-label>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col size="12" size-md="5">
-                    <p>{{ org.description }}</p>
-                    <ion-note color="medium">{{ org.contact }}</ion-note>
-                  </ion-col>
-                  <ion-col size="12" size-md="3">
-                    <ion-button fill="clear" :href="org.url" target="_blank" rel="noopener noreferrer">
-                      Visit Site
-                      <ion-icon :icon="openOutline" slot="end"></ion-icon>
-                    </ion-button>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
+                <ion-accordion-group class="contacts-accordion" :multiple="true">
+                  <ion-accordion v-for="contact in contacts" :key="contact.name" :value="contact.name">
+                    <div class="contacts-row" slot="header" role="row">
+                      <div class="contacts-cell contacts-name" role="cell">
+                        <strong>{{ contact.name }}</strong>
+                      </div>
+                      <div class="contacts-cell contacts-expertise" role="cell">
+                        <p>{{ contact.expertise }}</p>
+                      </div>
+                      <div class="contacts-cell contacts-toggle" role="cell">
+                        <span>View details</span>
+                        <ion-icon :icon="chevronDown" aria-hidden="true"></ion-icon>
+                      </div>
+                    </div>
+
+                    <div class="contact-details" slot="content">
+                      <div class="contact-detail" v-if="contact.address">
+                        <h4>Address</h4>
+                        <p class="pre-line">{{ contact.address }}</p>
+                      </div>
+
+                      <div class="contact-detail" v-if="contact.phones.length">
+                        <h4>Telephone</h4>
+                        <ul>
+                          <li v-for="phone in contact.phones" :key="phone">{{ phone }}</li>
+                        </ul>
+                      </div>
+
+                      <div class="contact-detail" v-if="contact.emails.length">
+                        <h4>Email</h4>
+                        <ul>
+                          <li v-for="email in contact.emails" :key="email">{{ email }}</li>
+                        </ul>
+                      </div>
+
+                      <div class="contact-detail" v-if="contact.website">
+                        <h4>Website / resource</h4>
+                        <p class="pre-line">{{ contact.website }}</p>
+                        <ion-button
+                          v-if="formatWebsite(contact.website)"
+                          size="small"
+                          fill="clear"
+                          :href="formatWebsite(contact.website)"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Visit link
+                          <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
+              </div>
             </ion-card-content>
           </ion-card>
         </div>
@@ -388,7 +420,6 @@ import { ProgressService } from '../services/ProgressService';
 import { 
   accessibilityOutline,
   informationCircleOutline,
-  schoolOutline,
   documentOutline,
   videocamOutline,
   micOutline,
@@ -400,8 +431,6 @@ import {
   ellipse,
   checkmark,
   shieldCheckmark,
-  people,
-  school,
   informationCircle,
   refresh,
   download,
@@ -416,11 +445,9 @@ import {
   mail,
   bulbOutline,
   helpCircleOutline,
-  medicalOutline,
   bodyOutline,
   chatbubbleOutline,
   eyeOutline,
-  earOutline,
   printOutline,
   trophy,
   arrowForward,
@@ -429,9 +456,21 @@ import {
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';
 import { ref as vueRef } from 'vue';
+import contactsData from '@/data/contacts.json';
 
 const route = useRoute();
 const router = useRouter();
+
+type ContactRecord = {
+  name: string;
+  address: string;
+  expertise: string;
+  phones: string[];
+  emails: string[];
+  website: string;
+};
+
+const contacts = contactsData as ContactRecord[];
 
 // Quiz/Screening state
 const screeningStarted = ref(false);
@@ -981,80 +1020,13 @@ const contactTeam = async () => {
   // await toast.present();
 };
 
-const orgs = ref([
-  {
-    name: 'Ministry of Primary and Secondary Education (MoPSE)',
-    type: 'Government Ministry',
-    description: 'Leads Zimbabwe\'s primary and secondary education policy, curriculum and services.',
-    contact: 'Government Portal',
-    url: 'https://www.zim.gov.zw/index.php/en/my-government/government-ministries/primary-and-secondary-education',
-    icon: school,
-    color: 'primary'
-  },
-  {
-    name: 'Ministry of Health and Child Care (MoHCC)',
-    type: 'Government Ministry',
-    description: 'Health services including rehabilitation, audiology, vision and assistive devices.',
-    contact: 'Official site',
-    url: 'http://www.mohcc.gov.zw/',
-    icon: medicalOutline,
-    color: 'danger'
-  },
-  {
-    name: 'UNICEF Zimbabwe',
-    type: 'UN Agency',
-    description: 'Supports inclusive education, child protection and Learning Passport with MoPSE.',
-    contact: 'unicef.org/zimbabwe',
-    url: 'https://www.unicef.org/zimbabwe/',
-    icon: people,
-    color: 'tertiary'
-  },
-  {
-    name: 'Plan International Zimbabwe (SAGE Lead)',
-    type: 'International NGO',
-    description: 'Leads SAGE consortium; programmes on girls\' education and protection.',
-    contact: 'plan-international.org/zimbabwe',
-    url: 'https://plan-international.org/zimbabwe/',
-    icon: people,
-    color: 'secondary'
-  },
-  {
-    name: 'Deaf Zimbabwe Trust (DZT)',
-    type: 'Disabled Persons Organisation (Deaf)',
-    description: 'Advocacy and support for deaf children and youth; promotes Zim Sign Language.',
-    contact: 'deafzimbabwetrust.org',
-    url: 'https://deafzimbabwetrust.org/',
-    icon: earOutline,
-    color: 'primary'
-  },
-  {
-    name: 'Jairos Jiri Association',
-    type: 'Rehabilitation & Support',
-    description: 'Rehabilitation, education and vocational training for persons with disabilities.',
-    contact: 'Official site',
-    url: '#',
-    icon: medicalOutline,
-    color: 'secondary'
-  },
-  {
-    name: 'Federation of Organizations of Disabled People in Zimbabwe (FODPZ)',
-    type: 'Federation of DPOs',
-    description: 'Umbrella body coordinating DPOs and national advocacy on disability rights.',
-    contact: 'Official site',
-    url: '#',
-    icon: people,
-    color: 'warning'
-  },
-  {
-    name: 'MoPSE Learning Passport',
-    type: 'e-Learning Platform',
-    description: 'Digital learning platform by MoPSE in partnership with UNICEF and Microsoft.',
-    contact: 'learningpassport.unicef.org',
-    url: 'https://mopsezw.learningpassport.unicef.org/',
-    icon: school,
-    color: 'success'
-  }
-]);
+const formatWebsite = (value: string) => {
+  if (!value) return '';
+  const match = value.match(/(https?:\/\/[^\s]+|www\.[^\s]+)/i);
+  if (!match) return '';
+  const cleaned = match[0].replace(/[),.;]+$/, '');
+  return cleaned.startsWith('http') ? cleaned : `https://${cleaned}`;
+};
 
 type GuidanceMap = Record<string, string>;
 
@@ -1885,31 +1857,136 @@ ion-card {
 
 .contacts-table {
   width: 100%;
-  border-collapse: collapse;
+  border: 1px solid var(--ion-color-light);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
 }
 
 .contacts-header {
-  background-color: #f8f9fa;
-  font-weight: bold;
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) minmax(220px, 3fr) minmax(140px, 1fr);
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--ion-color-light-shade, #f0f4f8);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ion-color-medium);
+}
+
+.contacts-accordion {
+  display: block;
+  width: 100%;
 }
 
 .contacts-row {
-  border-bottom: 1px solid #ddd;
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) minmax(220px, 3fr) minmax(140px, 1fr);
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--ion-color-light);
+  align-items: center;
 }
 
-.contacts-header,
-.contacts-row {
-  padding: 8px;
-  text-align: left;
+.contacts-accordion ion-accordion:last-of-type .contacts-row {
+  border-bottom: none;
 }
 
-.contacts-header {
-  display: none;
+.contacts-cell {
+  min-width: 0;
+}
+
+.contacts-name strong {
+  font-size: 1rem;
+  color: var(--ion-color-dark);
+}
+
+.contacts-expertise p {
+  margin: 0;
+  color: var(--ion-color-medium);
+  font-size: 0.95rem;
+}
+
+.contacts-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  color: var(--ion-color-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contacts-row ion-icon {
+  transition: transform 0.2s ease;
+}
+
+ion-accordion[aria-expanded='true'] .contacts-row ion-icon {
+  transform: rotate(180deg);
+}
+
+.contact-details {
+  padding: 20px;
+  background: var(--ion-color-light, #f7f9fb);
+  display: grid;
+  gap: 12px;
 }
 
 @media (min-width: 768px) {
+  .contact-details {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+.contact-detail {
+  background: #fff;
+  border: 1px solid var(--ion-color-light);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.contact-detail h4 {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+  color: var(--ion-color-primary);
+}
+
+.contact-detail p {
+  margin: 0;
+  color: var(--ion-color-dark);
+}
+
+.contact-detail ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ion-color-dark);
+}
+
+.pre-line {
+  white-space: pre-line;
+}
+
+@media (max-width: 767px) {
   .contacts-header {
-    display: table-row;
+    display: none;
+  }
+
+  .contacts-row {
+    grid-template-columns: 1fr;
+    padding: 12px 16px;
+  }
+
+  .contacts-toggle {
+    justify-content: flex-start;
+  }
+
+  .contact-details {
+    padding: 16px;
   }
 }
 .question-block { margin: 16px 0; }
