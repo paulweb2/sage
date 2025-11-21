@@ -5,9 +5,9 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Multiple Disabilities</ion-title>
+        <ion-title>Multiple disabilities</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.17</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -18,7 +18,7 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Multiple Disabilities</ion-title>
+          <ion-title size="large">Multiple disabilities</ion-title>
         </ion-toolbar>
       </ion-header>
 
@@ -525,6 +525,175 @@
           <ion-card-header>
             <ion-card-title>Quiz</ion-card-title>
           </ion-card-header>
+          <ion-card-content>
+            <div v-if="questions.length === 0">
+              <ion-note color="medium">Quiz coming soon.</ion-note>
+            </div>
+            <div v-else-if="!quizCompleted">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Question {{ currentQuizIndex + 1 }} of {{ questions.length }}</ion-card-title>
+                  <ion-progress-bar :value="(currentQuizIndex + 1) / questions.length" color="primary"></ion-progress-bar>
+                </ion-card-header>
+                <ion-card-content>
+                  <h4>{{ currentQuestion.question }}</h4>
+
+                  <!-- Multiple Choice and True/False -->
+                  <div v-if="!currentQuestion.type || currentQuestion.type === 'multiple-choice' || currentQuestion.type === 'true-false'">
+                    <ion-radio-group v-model="currentAnswer">
+                      <ion-item v-for="(option, idx) in currentQuestion.options || []" :key="idx">
+                        <ion-radio :value="option.value" slot="start"></ion-radio>
+                        <ion-label>{{ option.text }}</ion-label>
+                      </ion-item>
+                    </ion-radio-group>
+                  </div>
+
+                  <!-- Multi True/False -->
+                  <div v-else-if="currentQuestion.type === 'multi-true-false'">
+                    <div class="multi-true-false-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> Decide if each statement is True or False using the dropdown menus.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="(subQ, subIndex) in currentQuestion.subQuestions" :key="subQ.id" class="multi-true-false-item">
+                        <ion-label>
+                          <h4><strong>{{ String.fromCharCode(97 + subIndex) }})&nbsp;</strong>{{ subQ.text }}</h4>
+                        </ion-label>
+                        <ion-select
+                          v-model="matchingAnswers[subQ.id]"
+                          interface="popover"
+                          placeholder="True or False"
+                          :value="matchingAnswers[subQ.id]"
+                          class="multi-true-false-select"
+                        >
+                          <ion-select-option value="">Select answer</ion-select-option>
+                          <ion-select-option value="true">True</ion-select-option>
+                          <ion-select-option value="false">False</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <!-- Fill in the blank -->
+                  <div v-else-if="currentQuestion.type === 'fill-in-blank'">
+                    <div class="fill-in-blank-instructions">
+                      <ion-note color="primary">
+                        <strong>Word bank:</strong> Select the correct option from the dropdown to complete each sentence.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="(sentence, sentenceIndex) in currentQuestion.sentences" :key="sentence.id" class="fill-in-blank-item">
+                        <ion-label>
+                          <h4>
+                            <strong>{{ String.fromCharCode(97 + sentenceIndex) }})&nbsp;</strong>
+                            <span class="fill-in-blank-text">{{ sentence.textBefore }}</span>
+                            <ion-select
+                              v-model="matchingAnswers[sentence.id]"
+                              interface="popover"
+                              placeholder="Select answer"
+                              :value="matchingAnswers[sentence.id]"
+                              class="fill-in-blank-select"
+                            >
+                              <ion-select-option value="">Select answer</ion-select-option>
+                              <ion-select-option v-for="opt in sentence.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
+                            </ion-select>
+                            <span class="fill-in-blank-text">{{ sentence.textAfter }}</span>
+                          </h4>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <!-- Select all that apply -->
+                  <div v-else-if="currentQuestion.type === 'select-all'">
+                    <div class="select-all-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> Choose every option that directly matches the prompt. Selecting only “All of the above” is correct only when stated in the answers.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="option in currentQuestion.options" :key="option.value" class="select-all-item">
+                        <input type="checkbox" :value="option.value" v-model="checkboxAnswers[option.value]" />
+                        <ion-label>
+                          <h4><strong>{{ option.value }})&nbsp;</strong>{{ option.text }}</h4>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <div class="ion-padding-top">
+                    <ion-button expand="block" color="primary" @click="nextQuestion" :disabled="!canProceed">
+                      {{ currentQuizIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
+                    </ion-button>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </div>
+
+            <div v-else>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Results</ion-card-title>
+                  <ion-card-subtitle>Your Score: {{ quizScore }}%</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
+                  <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+
+                  <div class="quiz-results-details" v-if="questions.length > 0">
+                    <h4>Question Results:</h4>
+                    <div v-for="(question, index) in questions" :key="index" class="question-result-item">
+                      <div class="question-content">
+                        <ion-item class="question-item">
+                          <ion-label>
+                            <h5 class="question-heading">
+                              <ion-icon
+                                :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle"
+                                :color="isQuestionCorrect(index) ? 'success' : 'danger'"
+                                class="question-status-icon"
+                              ></ion-icon>
+                              Question {{ index + 1 }}
+                            </h5>
+                            <p>{{ question.question }}</p>
+                            <ion-note color="medium">
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
+                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                            </ion-note>
+
+                            <div class="learning-tip-container">
+                              <ion-accordion-group>
+                                <ion-accordion>
+                                  <ion-item slot="header" class="learning-tip-header">
+                                    <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
+                                    <ion-label>
+                                      <p>Explanation</p>
+                                    </ion-label>
+                                  </ion-item>
+                                  <div slot="content" class="ion-padding">
+                                    <p>{{ getQuestionTip(index) }}</p>
+                                    <div class="explanation-divider"></div>
+                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                    <p>{{ getLearningPoint(index) }}</p>
+                                  </div>
+                                </ion-accordion>
+                              </ion-accordion-group>
+                            </div>
+                          </ion-label>
+                        </ion-item>
+                      </div>
+                      <div class="question-divider"></div>
+                    </div>
+                  </div>
+
+                  <ion-button expand="block" color="primary" @click="retakeQuiz">
+                    <ion-icon :icon="refresh" slot="start"></ion-icon>
+                    Retake Quiz
+                  </ion-button>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-card-content>
         </ion-card>
       </div>
     </ion-content>
@@ -927,6 +1096,340 @@ const clearReflection = () => {
   }
 };
 
+// Quiz types and state
+interface MCOption { value: string; text: string }
+interface MultiTFSubQ { id: string; text: string; correctAnswer: 'true' | 'false'; explanation?: string }
+interface FillSentence { id: string; textBefore: string; textAfter?: string; correctAnswer: string; options: string[] }
+
+type MultipleDisabilitiesQuestion =
+  | { type?: 'multiple-choice'; question: string; options: MCOption[]; correctAnswer: string }
+  | { type: 'true-false'; question: string; options: MCOption[]; correctAnswer: string }
+  | { type: 'multi-true-false'; question: string; subQuestions: MultiTFSubQ[] }
+  | { type: 'fill-in-blank'; question: string; sentences: FillSentence[] }
+  | { type: 'select-all'; question: string; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] };
+
+const questions = ref<MultipleDisabilitiesQuestion[]>([
+  {
+    question: 'What physical barriers might learners with multiple disabilities experience in the classroom? Select all that apply.',
+    type: 'select-all',
+    options: [
+      { value: 'a', text: 'Crowded rooms without space to move the wheelchair.' },
+      { value: 'b', text: 'Light interrupting their line of vision.' },
+      { value: 'c', text: 'Lack of ability to reach resources or equipment.' },
+      { value: 'd', text: 'Not being able to communicate with peers.' }
+    ],
+    correctAnswers: ['a', 'b', 'c']
+  },
+  {
+    question: 'How can an educator enable socialisation of a learner with multiple disabilities into their classroom? Select all that apply.',
+    type: 'select-all',
+    options: [
+      { value: 'a', text: 'Ensure the learner has access to their preferred communication tools and all staff members know how to use them.' },
+      { value: 'b', text: 'Let the learner sit in the corner and engage with their communication tool on their own.' },
+      { value: 'c', text: 'Model the use of communication tools to other learners so they can interact with the learner with support.' },
+      { value: 'd', text: 'Include the learner’s favourite characters/colours/objects in the classroom environment to aid familiarity.' }
+    ],
+    correctAnswers: ['a', 'c', 'd']
+  },
+  {
+    question: 'Fill in the blanks by choosing from the word bank.',
+    type: 'fill-in-blank',
+    sentences: [
+      {
+        id: 'a',
+        textBefore: '______ of learners in different environments, at different times of the day, will enable an understanding of learner’s abilities and preferences.',
+        textAfter: '',
+        correctAnswer: 'observation',
+        options: ['touch', 'hear', 'observation', 'times']
+      },
+      {
+        id: 'b',
+        textBefore: 'Classroom adaptation may include consideration of changes in seating position to ensure the learner can see and _____ the educator.',
+        textAfter: '',
+        correctAnswer: 'hear',
+        options: ['touch', 'hear', 'observation', 'times']
+      },
+      {
+        id: 'c',
+        textBefore: 'Lighting at different _____ of the day may interrupt clear vision.',
+        textAfter: '',
+        correctAnswer: 'times',
+        options: ['touch', 'hear', 'observation', 'times']
+      },
+      {
+        id: 'd',
+        textBefore: 'Use light, sound or _____ to focus attention.',
+        textAfter: '',
+        correctAnswer: 'touch',
+        options: ['touch', 'hear', 'observation', 'times']
+      }
+    ]
+  },
+  {
+    question: 'Which statements describe the benefits of engaging in partnerships with parents/carers and the wider community of learners with multiple disabilities?',
+    type: 'select-all',
+    options: [
+      { value: 'a', text: 'Parents/carers have known their children the longest and can provide essential information about preferences, communication, and medical needs.' },
+      { value: 'b', text: 'Wider community members always act in the best interest of the learners.' },
+      { value: 'c', text: 'Parents/carers could become a sounding board for trying out different pedagogical approaches.' },
+      { value: 'd', text: 'Parents/carers experience their child in all possible circumstances; therefore, they know everything about their child.' }
+    ],
+    correctAnswers: ['a', 'c']
+  },
+  {
+    question: 'True or false? Evaluate each statement about supporting learners with multiple disabilities.',
+    type: 'multi-true-false',
+    subQuestions: [
+      {
+        id: 'a',
+        text: 'Printing out questions in bigger size fonts always enables learners to complete the task.',
+        correctAnswer: 'false',
+        explanation: 'False – larger fonts only help if print access is the barrier; comprehension and communication also matter.'
+      },
+      {
+        id: 'b',
+        text: 'Visual aids such as symbols or objects of reference can support writing activities.',
+        correctAnswer: 'true',
+        explanation: 'True – additional visual cues help learners connect meaning to tasks.'
+      },
+      {
+        id: 'c',
+        text: 'Sensory inputs can enhance the learners’ understanding of tasks and experiences.',
+        correctAnswer: 'true',
+        explanation: 'True – multi-sensory cues offer alternative pathways for engagement.'
+      },
+      {
+        id: 'd',
+        text: 'Asking a teaching assistant to complete the task for the learner counts as adequate support.',
+        correctAnswer: 'false',
+        explanation: 'False – it removes the learner from the experience and limits their participation.'
+      }
+    ]
+  }
+]);
+
+const currentQuizIndex = ref(0);
+const currentAnswer = ref('');
+const matchingAnswers = ref<{ [key: string]: string }>({});
+const checkboxAnswers = ref<{ [key: string]: boolean }>({});
+const quizCompleted = ref(false);
+const quizScore = ref(0);
+const quizAnswers = ref<{ [key: number]: any }>({});
+
+const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
+
+const canProceed = computed(() => {
+  const q = currentQuestion.value as any;
+  if (!q) return false;
+  if (!q.type || q.type === 'multiple-choice' || q.type === 'true-false') return !!currentAnswer.value;
+  if (q.type === 'multi-true-false') return q.subQuestions.every((sq: any) => matchingAnswers.value[sq.id] === 'true' || matchingAnswers.value[sq.id] === 'false');
+  if (q.type === 'fill-in-blank') return q.sentences.every((s: any) => !!matchingAnswers.value[s.id]);
+  if (q.type === 'select-all') return Object.values(checkboxAnswers.value).some(value => !!value);
+  return false;
+});
+
+function setsEqual(a: string[], b: string[]) {
+  if (a.length !== b.length) return false;
+  const setA = new Set(a);
+  return b.every(item => setA.has(item));
+}
+
+const nextQuestion = () => {
+  const q = currentQuestion.value as any;
+  if (!q) return;
+
+  const increment = Math.round(100 / questions.value.length);
+
+  if (!q.type || q.type === 'multiple-choice' || q.type === 'true-false') {
+    quizAnswers.value[currentQuizIndex.value] = currentAnswer.value;
+    if (q.correctAnswer && currentAnswer.value === q.correctAnswer) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'multi-true-false') {
+    const response = { ...matchingAnswers.value };
+    quizAnswers.value[currentQuizIndex.value] = response;
+    const allCorrect = q.subQuestions.every((sq: any) => response[sq.id] === sq.correctAnswer);
+    if (allCorrect) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'fill-in-blank') {
+    const response = { ...matchingAnswers.value };
+    quizAnswers.value[currentQuizIndex.value] = response;
+    const allCorrect = q.sentences.every((s: any) => response[s.id] === s.correctAnswer);
+    if (allCorrect) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'select-all') {
+    const selectedMap: { [key: string]: boolean } = {};
+    Object.entries(checkboxAnswers.value).forEach(([key, value]) => {
+      if (value) selectedMap[key] = true;
+    });
+    quizAnswers.value[currentQuizIndex.value] = selectedMap;
+    const selected = Object.keys(selectedMap).sort();
+    const correct = (q.correctAnswers || []).slice().sort();
+    const alt = (q.alternativeCorrectAnswers || []).slice().sort();
+    const isExact = selected.length > 0 && setsEqual(selected, correct);
+    const isAlt = alt.length > 0 && setsEqual(selected, alt);
+    if (isExact || isAlt) {
+      quizScore.value += increment;
+    }
+  }
+
+  if (currentQuizIndex.value < questions.value.length - 1) {
+    currentQuizIndex.value += 1;
+    currentAnswer.value = '';
+    matchingAnswers.value = {};
+    checkboxAnswers.value = {};
+  } else {
+    quizCompleted.value = true;
+    try {
+      localStorage.setItem(`sage-quiz-multiple-disabilities`, JSON.stringify({ completed: true, score: quizScore.value, answers: quizAnswers.value, lastCompleted: new Date().toISOString() }));
+    } finally {
+      ProgressService.saveQuizCompletion('multiple-disabilities', quizScore.value, quizAnswers.value);
+    }
+  }
+};
+
+const retakeQuiz = () => {
+  currentQuizIndex.value = 0;
+  currentAnswer.value = '';
+  matchingAnswers.value = {};
+  checkboxAnswers.value = {};
+  quizCompleted.value = false;
+  quizScore.value = 0;
+  quizAnswers.value = {};
+  ProgressService.resetQuizCompletion('multiple-disabilities');
+  localStorage.removeItem(`sage-quiz-multiple-disabilities`);
+};
+
+const getQuizScoreColor = (): 'success' | 'warning' | 'danger' => {
+  if (quizScore.value >= 80) return 'success';
+  if (quizScore.value >= 50) return 'warning';
+  return 'danger';
+};
+
+const getQuizScoreMessage = (): string => {
+  if (quizScore.value >= 80) return 'Great job! You understand how to reduce barriers for learners with multiple disabilities.';
+  if (quizScore.value >= 50) return 'Good effort. Review the explanations to deepen your understanding.';
+  return 'Keep going. The explanations below highlight strategies to support learners with multiple disabilities.';
+};
+
+const fallbackExplanationText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+const questionTips = [
+  'Think about tangible changes to the environment that make movement, vision, or access harder.',
+  'Socialisation grows when tools, peers, and environments actively invite participation.',
+  'Use the sentence context and the situations described to choose the most appropriate word from the bank.',
+  'Strong partnerships respect family knowledge while still observing how learners respond at school.',
+  'Evaluate each statement against inclusive practice—does it increase access and participation?'
+];
+const correctAnswerExplanations = [
+  'Crowded spaces, lighting, and unreachable equipment are physical barriers. Communication challenges are social, so option d does not fit this category.',
+  'Providing preferred communication tools, modelling their use, and designing familiar environments welcome the learner socially. Sitting alone reduces interaction opportunities.',
+  'Observation reveals patterns, hearing supports communication, times captures lighting needs, and touch-based cues help focus attention.',
+  'Parents/carers contribute vital insights and can co-design approaches. Community members may not always prioritise the learner, and no one knows every context in advance.',
+  'Bigger print is not a cure-all; visual aids and sensory inputs add context; completing work for a learner removes engagement.'
+];
+const learningPoints = [
+  'Addressing physical barriers is a foundational step toward full participation.',
+  'Intentional classroom design plus peer modelling builds authentic social belonging.',
+  'Observation and thoughtful environmental adjustments uncover how and when learners learn best.',
+  'Family partnerships enrich professional insight and keep support aligned across settings.',
+  'True inclusion focuses on meaningful participation, not just task completion.'
+];
+
+const isQuestionCorrect = (index: number): boolean => {
+  const question = questions.value[index] as any;
+  const userAnswer = quizAnswers.value[index];
+  if (question.type === 'multi-true-false') {
+    const ua = userAnswer as { [key: string]: string } | undefined;
+    if (!ua) return false;
+    return question.subQuestions.every((subQ: any) => ua[subQ.id] === subQ.correctAnswer);
+  }
+  if (question.type === 'fill-in-blank') {
+    const ua = userAnswer as { [key: string]: string } | undefined;
+    if (!ua) return false;
+    return question.sentences.every((s: any) => ua[s.id] === s.correctAnswer);
+  }
+  if (question.type === 'select-all') {
+    const ua = userAnswer as { [key: string]: boolean } | undefined;
+    if (!ua) return false;
+    const selected = Object.entries(ua).filter(([, checked]) => checked).map(([key]) => key).sort();
+    if (selected.length === 0) return false;
+    const correct = (question.correctAnswers || []).slice().sort();
+    if (setsEqual(selected, correct)) return true;
+    if (question.alternativeCorrectAnswers?.length) {
+      return setsEqual(selected, question.alternativeCorrectAnswers.slice().sort());
+    }
+    return false;
+  }
+  return userAnswer === question.correctAnswer;
+};
+
+const formatUserAnswer = (index: number): string => {
+  const question = questions.value[index] as any;
+  const userAnswer = quizAnswers.value[index];
+  if (!userAnswer) return 'Not answered';
+  if (question.type === 'multi-true-false') {
+    const ua = userAnswer as { [key: string]: string };
+    const entries = Object.entries(ua || {});
+    if (entries.length === 0) return 'Not answered';
+    return entries.map(([id, ans]) => `${id}: ${ans === 'true' ? 'True' : 'False'}`).join(', ');
+  }
+  if (question.type === 'fill-in-blank') {
+    const ua = userAnswer as { [key: string]: string };
+    const entries = Object.entries(ua || {});
+    if (entries.length === 0) return 'Not answered';
+    return entries.map(([id, ans]) => `${id}: ${ans}`).join(', ');
+  }
+  if (question.type === 'select-all') {
+    const ua = userAnswer as { [key: string]: boolean };
+    const selected = Object.entries(ua || {}).filter(([, checked]) => checked).map(([key]) => key);
+    if (selected.length === 0) return 'Not answered';
+    return selected.map(key => {
+      const option = (question.options || []).find((opt: any) => opt.value === key);
+      return option ? `${key}) ${option.text}` : key;
+    }).join(', ');
+  }
+  if (question.type === 'true-false') {
+    return userAnswer === 'true' ? 'True' : 'False';
+  }
+  const option = (question.options || []).find((opt: any) => opt.value === userAnswer);
+  return option ? option.text : 'Not answered';
+};
+
+const formatCorrectAnswer = (index: number): string => {
+  const question = questions.value[index] as any;
+  if (question.type === 'multi-true-false') {
+    return question.subQuestions.map((sq: any) => `${sq.id}: ${sq.correctAnswer === 'true' ? 'True' : 'False'}`).join(', ');
+  }
+  if (question.type === 'fill-in-blank') {
+    return question.sentences.map((s: any) => `${s.id}: ${s.correctAnswer}`).join(', ');
+  }
+  if (question.type === 'select-all') {
+    const correct = (question.correctAnswers || []).map((value: string) => {
+      const option = (question.options || []).find((opt: any) => opt.value === value);
+      return option ? `${value}) ${option.text}` : value;
+    });
+    if (question.alternativeCorrectAnswers?.length) {
+      const alt = question.alternativeCorrectAnswers.map((value: string) => {
+        const option = (question.options || []).find((opt: any) => opt.value === value);
+        return option ? `${value}) ${option.text}` : value;
+      });
+      return `${correct.join(', ')} (or ${alt.join(', ')})`;
+    }
+    return correct.join(', ');
+  }
+  if (question.type === 'true-false') {
+    return question.correctAnswer === 'true' ? 'True' : 'False';
+  }
+  const option = (question.options || []).find((opt: any) => opt.value === question.correctAnswer);
+  return option ? option.text : 'Unknown';
+};
+
+const getQuestionTip = (index: number): string => questionTips[index] || fallbackExplanationText;
+const getCorrectAnswerExplanation = (index: number): string => correctAnswerExplanations[index] || fallbackExplanationText;
+const getLearningPoint = (index: number): string => learningPoints[index] || fallbackExplanationText;
+
 onMounted(() => {
   console.log('[PageAnchor] MultipleDisabilities mounted', { path: route.path });
   try {
@@ -966,6 +1469,24 @@ ion-card { margin: 16px; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }
 .case-study-prompts li { margin-bottom: 6px; }
 .case-study-video { margin-bottom: 16px; }
+.quiz-results-details { margin-top: 12px; }
+.question-result-item { margin-top: 12px; }
+.question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
+.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
+.question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
+.question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.learning-tip-header { --background: var(--ion-color-light); }
+.learning-tip-container { margin-top: 4px; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
+.multi-true-false-instructions,
+.fill-in-blank-instructions,
+.select-all-instructions { margin-bottom: 12px; }
+.multi-true-false-item,
+.fill-in-blank-item,
+.select-all-item { align-items: flex-start; }
+.multi-true-false-select,
+.fill-in-blank-select { min-width: 140px; }
+.fill-in-blank-text { margin: 0 4px; display: inline-block; }
+.select-all-item input { margin-right: 10px; }
 </style>
 
 

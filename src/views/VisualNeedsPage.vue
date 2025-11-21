@@ -5,9 +5,9 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Visual Needs</ion-title>
+        <ion-title>Visual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.17</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -18,7 +18,7 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Visual Needs</ion-title>
+          <ion-title size="large">Visual needs</ion-title>
         </ion-toolbar>
       </ion-header>
 
@@ -564,6 +564,7 @@
                 <ion-card-content>
                   <h4>{{ currentQuestion.question }}</h4>
 
+                  <!-- Multiple Choice and True/False -->
                   <div v-if="!currentQuestion.type || currentQuestion.type === 'multiple-choice' || currentQuestion.type === 'true-false'">
                     <ion-radio-group v-model="currentAnswer">
                       <ion-item v-for="(option, idx) in currentQuestion.options || []" :key="idx">
@@ -571,6 +572,80 @@
                         <ion-label>{{ option.text }}</ion-label>
                       </ion-item>
                     </ion-radio-group>
+                  </div>
+
+                  <!-- Multi True/False -->
+                  <div v-else-if="currentQuestion.type === 'multi-true-false'">
+                    <div class="multi-true-false-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> Decide if each statement is True or False using the dropdown menus.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="(subQ, subIndex) in currentQuestion.subQuestions" :key="subQ.id" class="multi-true-false-item">
+                        <ion-label>
+                          <h4><strong>{{ String.fromCharCode(97 + subIndex) }})&nbsp;</strong>{{ subQ.text }}</h4>
+                        </ion-label>
+                        <ion-select
+                          v-model="matchingAnswers[subQ.id]"
+                          interface="popover"
+                          placeholder="True or False"
+                          :value="matchingAnswers[subQ.id]"
+                          class="multi-true-false-select"
+                        >
+                          <ion-select-option value="">Select answer</ion-select-option>
+                          <ion-select-option value="true">True</ion-select-option>
+                          <ion-select-option value="false">False</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <!-- Fill in the blank -->
+                  <div v-else-if="currentQuestion.type === 'fill-in-blank'">
+                    <div class="fill-in-blank-instructions">
+                      <ion-note color="primary">
+                        <strong>Word bank:</strong> Select the correct option from the dropdown to complete each sentence.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="(sentence, sentenceIndex) in currentQuestion.sentences" :key="sentence.id" class="fill-in-blank-item">
+                        <ion-label>
+                          <h4>
+                            <strong>{{ String.fromCharCode(97 + sentenceIndex) }})&nbsp;</strong>
+                            <span class="fill-in-blank-text">{{ sentence.textBefore }}</span>
+                            <ion-select
+                              v-model="matchingAnswers[sentence.id]"
+                              interface="popover"
+                              placeholder="Select answer"
+                              :value="matchingAnswers[sentence.id]"
+                              class="fill-in-blank-select"
+                            >
+                              <ion-select-option value="">Select answer</ion-select-option>
+                              <ion-select-option v-for="opt in sentence.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
+                            </ion-select>
+                            <span class="fill-in-blank-text">{{ sentence.textAfter }}</span>
+                          </h4>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <!-- Select all that apply -->
+                  <div v-else-if="currentQuestion.type === 'select-all'">
+                    <div class="select-all-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> Choose every option that directly supports learners with visual needs.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="option in currentQuestion.options" :key="option.value" class="select-all-item">
+                        <input type="checkbox" :value="option.value" v-model="checkboxAnswers[option.value]" />
+                        <ion-label>
+                          <h4><strong>{{ option.value }})&nbsp;</strong>{{ option.text }}</h4>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
                   </div>
 
                   <div class="ion-padding-top">
@@ -591,6 +666,52 @@
                 <ion-card-content>
                   <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
                   <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+
+                  <div class="quiz-results-details" v-if="questions.length > 0">
+                    <h4>Question Results:</h4>
+                    <div v-for="(question, index) in questions" :key="index" class="question-result-item">
+                      <div class="question-content">
+                        <ion-item class="question-item">
+                          <ion-label>
+                            <h5 class="question-heading">
+                              <ion-icon
+                                :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle"
+                                :color="isQuestionCorrect(index) ? 'success' : 'danger'"
+                                class="question-status-icon"
+                              ></ion-icon>
+                              Question {{ index + 1 }}
+                            </h5>
+                            <p>{{ question.question }}</p>
+                            <ion-note color="medium">
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
+                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                            </ion-note>
+
+                            <div class="learning-tip-container">
+                              <ion-accordion-group>
+                                <ion-accordion>
+                                  <ion-item slot="header" class="learning-tip-header">
+                                    <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
+                                    <ion-label>
+                                      <p>Explanation</p>
+                                    </ion-label>
+                                  </ion-item>
+                                  <div slot="content" class="ion-padding">
+                                    <p>{{ getQuestionTip(index) }}</p>
+                                    <div class="explanation-divider"></div>
+                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                    <p>{{ getLearningPoint(index) }}</p>
+                                  </div>
+                                </ion-accordion>
+                              </ion-accordion-group>
+                            </div>
+                          </ion-label>
+                        </ion-item>
+                      </div>
+                      <div class="question-divider"></div>
+                    </div>
+                  </div>
+
                   <ion-button expand="block" color="primary" @click="retakeQuiz">
                     <ion-icon :icon="refresh" slot="start"></ion-icon>
                     Retake Quiz
@@ -985,25 +1106,106 @@ onBeforeRouteLeave(() => {
   }
 });
 
-// Quiz types and state (retain minimal structure with placeholder question)
+// Quiz types and state
 interface MCOption { value: string; text: string }
+interface MultiTFSubQ { id: string; text: string; correctAnswer: 'true' | 'false'; explanation?: string }
+interface FillSentence { id: string; textBefore: string; textAfter?: string; correctAnswer: string; options: string[] }
+
 type VisualQuestion =
   | { type?: 'multiple-choice'; question: string; options: MCOption[]; correctAnswer: string }
-  | { type: 'true-false'; question: string; options: MCOption[]; correctAnswer: string };
+  | { type: 'true-false'; question: string; options: MCOption[]; correctAnswer: string }
+  | { type: 'multi-true-false'; question: string; subQuestions: MultiTFSubQ[] }
+  | { type: 'fill-in-blank'; question: string; sentences: FillSentence[] }
+  | { type: 'select-all'; question: string; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] };
 
 const questions = ref<VisualQuestion[]>([
   {
-    question: 'Placeholder question for Visual Needs (content coming soon).',
+    question: 'Which term below is an example of person-first language?',
     options: [
-      { value: 'a', text: 'Coming soon' },
-      { value: 'b', text: 'Coming soon' }
+      { value: 'a', text: 'Blind child' },
+      { value: 'b', text: 'Visually impaired student' },
+      { value: 'c', text: 'Learner who is blind' }
     ],
-    correctAnswer: 'a'
+    correctAnswer: 'c'
+  },
+  {
+    question: 'True or false? Decide whether each statement is accurate for learners with visual needs.',
+    type: 'multi-true-false',
+    subQuestions: [
+      {
+        id: 'a',
+        text: 'Cluttered classrooms can be hazardous for learners who are blind or visually impaired.',
+        correctAnswer: 'true',
+        explanation: 'True – objects that change position become tripping hazards, so consistent layouts keep movement predictable.'
+      },
+      {
+        id: 'b',
+        text: 'Students with visual needs are often less academically able.',
+        correctAnswer: 'false',
+        explanation: 'False – expectations should remain high because visual needs do not determine academic potential.'
+      },
+      {
+        id: 'c',
+        text: "Providing an oral commentary of teachers' written explanations helps support learning.",
+        correctAnswer: 'true',
+        explanation: 'True – describing what is written replaces visual cues that may otherwise be missed.'
+      }
+    ]
+  },
+  {
+    question: 'Choose the correct item from the word bank to complete each sentence.',
+    type: 'fill-in-blank',
+    sentences: [
+      {
+        id: 'a',
+        textBefore: "Large print materials should be in the learner's preferred font ",
+        textAfter: '.',
+        correctAnswer: 'size',
+        options: ['altered/changed', 'size', 'name']
+      },
+      {
+        id: 'b',
+        textBefore: "Peers should say the learner's ",
+        textAfter: ' before addressing them so they are cued into listening.',
+        correctAnswer: 'name',
+        options: ['altered/changed', 'size', 'name']
+      },
+      {
+        id: 'c',
+        textBefore: 'Frequently ',
+        textAfter: ' classroom layouts can be hazardous for learners with visual needs.',
+        correctAnswer: 'altered/changed',
+        options: ['altered/changed', 'size', 'name']
+      }
+    ]
+  },
+  {
+    question: 'Which tools can support the learning of learners who have visual needs? Select all that apply.',
+    type: 'select-all',
+    options: [
+      { value: 'a', text: 'Talking books' },
+      { value: 'b', text: 'Large print' },
+      { value: 'c', text: 'Audio description' },
+      { value: 'd', text: 'Sign language' },
+      { value: 'e', text: 'All of the above' }
+    ],
+    correctAnswers: ['a', 'b', 'c']
+  },
+  {
+    question: 'True or false: It is helpful if peers are taught to verbalise gestures.',
+    type: 'true-false',
+    options: [
+      { value: 'true', text: 'True' },
+      { value: 'false', text: 'False' }
+    ],
+    correctAnswer: 'true'
   }
 ]);
 
 const currentQuizIndex = ref(0);
 const currentAnswer = ref('');
+const matchingAnswers = ref<{ [key: string]: string }>({});
+const checkboxAnswers = ref<{ [key: string]: boolean }>({});
 const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<{ [key: number]: any }>({});
@@ -1014,8 +1216,17 @@ const canProceed = computed(() => {
   const q = currentQuestion.value as any;
   if (!q) return false;
   if (!q.type || q.type === 'multiple-choice' || q.type === 'true-false') return !!currentAnswer.value;
+  if (q.type === 'multi-true-false') return q.subQuestions.every((sq: any) => matchingAnswers.value[sq.id] === 'true' || matchingAnswers.value[sq.id] === 'false');
+  if (q.type === 'fill-in-blank') return q.sentences.every((s: any) => !!matchingAnswers.value[s.id]);
+  if (q.type === 'select-all') return Object.values(checkboxAnswers.value).some(value => !!value);
   return false;
 });
+
+function setsEqual(a: string[], b: string[]) {
+  if (a.length !== b.length) return false;
+  const setA = new Set(a);
+  return b.every(item => setA.has(item));
+}
 
 const nextQuestion = () => {
   const q = currentQuestion.value as any;
@@ -1028,11 +1239,41 @@ const nextQuestion = () => {
     if (q.correctAnswer && currentAnswer.value === q.correctAnswer) {
       quizScore.value += increment;
     }
+  } else if (q.type === 'multi-true-false') {
+    const response = { ...matchingAnswers.value };
+    quizAnswers.value[currentQuizIndex.value] = response;
+    const allCorrect = q.subQuestions.every((sq: any) => response[sq.id] === sq.correctAnswer);
+    if (allCorrect) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'fill-in-blank') {
+    const response = { ...matchingAnswers.value };
+    quizAnswers.value[currentQuizIndex.value] = response;
+    const allCorrect = q.sentences.every((s: any) => response[s.id] === s.correctAnswer);
+    if (allCorrect) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'select-all') {
+    const selectedMap: { [key: string]: boolean } = {};
+    Object.entries(checkboxAnswers.value).forEach(([key, value]) => {
+      if (value) selectedMap[key] = true;
+    });
+    quizAnswers.value[currentQuizIndex.value] = selectedMap;
+    const selected = Object.keys(selectedMap).sort();
+    const correct = (q.correctAnswers || []).slice().sort();
+    const alt = (q.alternativeCorrectAnswers || []).slice().sort();
+    const isExact = selected.length > 0 && setsEqual(selected, correct);
+    const isAlt = alt.length > 0 && setsEqual(selected, alt);
+    if (isExact || isAlt) {
+      quizScore.value += increment;
+    }
   }
 
   if (currentQuizIndex.value < questions.value.length - 1) {
     currentQuizIndex.value += 1;
     currentAnswer.value = '';
+    matchingAnswers.value = {};
+    checkboxAnswers.value = {};
   } else {
     quizCompleted.value = true;
     try {
@@ -1046,6 +1287,8 @@ const nextQuestion = () => {
 const retakeQuiz = () => {
   currentQuizIndex.value = 0;
   currentAnswer.value = '';
+  matchingAnswers.value = {};
+  checkboxAnswers.value = {};
   quizCompleted.value = false;
   quizScore.value = 0;
   quizAnswers.value = {};
@@ -1062,8 +1305,124 @@ const getQuizScoreColor = (): 'success' | 'warning' | 'danger' => {
 const getQuizScoreMessage = (): string => {
   if (quizScore.value >= 80) return 'Great job! You have a strong understanding of visual needs.';
   if (quizScore.value >= 50) return 'Good effort. Review the explanations to strengthen your understanding.';
-  return 'Keep going. More content will be available soon.';
+  return 'Keep going. The explanations below highlight practical strategies for visual access.';
 };
+
+const fallbackExplanationText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+const questionTips = [
+  'Look for language that centres the learner first before mentioning a disability.',
+  'Consider how learning environments, expectations, and instructional approaches affect learners with visual needs.',
+  'Use the sentence context and the word bank to decide which term keeps the learner safe and informed.',
+  'Focus on tools that deliver information through non-visual channels or enlarge visuals for easier access.',
+  'Think about how peers can describe what they do so no one misses the meaning behind gestures.'
+];
+const correctAnswerExplanations = [
+  'Person-first language names the individual before describing the disability, so "Learner who is blind" keeps the focus on the person.',
+  'a) True because clutter becomes a hazard; b) False because expectations should remain high; c) True because oral commentary replaces visual information that may otherwise be missed.',
+  "a) Size ensures the learner can read comfortably; b) Name cues the learner into conversations; c) Altered/changed layouts can be dangerous, so stability is best.",
+  'Talking books, large print, and audio description offer direct support for visual needs. Sign language focuses on communication for hearing differences, so "all of the above" is inaccurate here.',
+  'True – narrating gestures turns visual cues into auditory information so learners with visual needs stay involved during group work.'
+];
+const learningPoints = [
+  'Respectful, person-first language shapes expectations and inclusion.',
+  'Clear classrooms, high expectations, and described visuals build independence.',
+  'Consistent materials and predictable environments reduce confusion and support orientation.',
+  'Layered sensory inputs let learners engage with information in the format that suits them best.',
+  'Coaching peers to verbalise actions removes hidden barriers in collaborative tasks.'
+];
+
+const isQuestionCorrect = (index: number): boolean => {
+  const question = questions.value[index] as any;
+  const userAnswer = quizAnswers.value[index];
+  if (question.type === 'multi-true-false') {
+    const ua = userAnswer as { [key: string]: string } | undefined;
+    if (!ua) return false;
+    return question.subQuestions.every((subQ: any) => ua[subQ.id] === subQ.correctAnswer);
+  }
+  if (question.type === 'fill-in-blank') {
+    const ua = userAnswer as { [key: string]: string } | undefined;
+    if (!ua) return false;
+    return question.sentences.every((s: any) => ua[s.id] === s.correctAnswer);
+  }
+  if (question.type === 'select-all') {
+    const ua = userAnswer as { [key: string]: boolean } | undefined;
+    if (!ua) return false;
+    const selected = Object.entries(ua).filter(([, checked]) => checked).map(([key]) => key).sort();
+    if (selected.length === 0) return false;
+    const correct = (question.correctAnswers || []).slice().sort();
+    if (setsEqual(selected, correct)) return true;
+    if (question.alternativeCorrectAnswers?.length) {
+      return setsEqual(selected, question.alternativeCorrectAnswers.slice().sort());
+    }
+    return false;
+  }
+  return userAnswer === question.correctAnswer;
+};
+
+const formatUserAnswer = (index: number): string => {
+  const question = questions.value[index] as any;
+  const userAnswer = quizAnswers.value[index];
+  if (!userAnswer) return 'Not answered';
+  if (question.type === 'multi-true-false') {
+    const ua = userAnswer as { [key: string]: string };
+    const entries = Object.entries(ua || {});
+    if (entries.length === 0) return 'Not answered';
+    return entries.map(([id, ans]) => `${id}: ${ans === 'true' ? 'True' : 'False'}`).join(', ');
+  }
+  if (question.type === 'fill-in-blank') {
+    const ua = userAnswer as { [key: string]: string };
+    const entries = Object.entries(ua || {});
+    if (entries.length === 0) return 'Not answered';
+    return entries.map(([id, ans]) => `${id}: ${ans}`).join(', ');
+  }
+  if (question.type === 'select-all') {
+    const ua = userAnswer as { [key: string]: boolean };
+    const selected = Object.entries(ua || {}).filter(([, checked]) => checked).map(([key]) => key);
+    if (selected.length === 0) return 'Not answered';
+    return selected.map(key => {
+      const option = (question.options || []).find((opt: any) => opt.value === key);
+      return option ? `${key}) ${option.text}` : key;
+    }).join(', ');
+  }
+  if (question.type === 'true-false') {
+    return userAnswer === 'true' ? 'True' : 'False';
+  }
+  const option = (question.options || []).find((opt: any) => opt.value === userAnswer);
+  return option ? option.text : 'Not answered';
+};
+
+const formatCorrectAnswer = (index: number): string => {
+  const question = questions.value[index] as any;
+  if (question.type === 'multi-true-false') {
+    return question.subQuestions.map((sq: any) => `${sq.id}: ${sq.correctAnswer === 'true' ? 'True' : 'False'}`).join(', ');
+  }
+  if (question.type === 'fill-in-blank') {
+    return question.sentences.map((s: any) => `${s.id}: ${s.correctAnswer}`).join(', ');
+  }
+  if (question.type === 'select-all') {
+    const correct = (question.correctAnswers || []).map((value: string) => {
+      const option = (question.options || []).find((opt: any) => opt.value === value);
+      return option ? `${value}) ${option.text}` : value;
+    });
+    if (question.alternativeCorrectAnswers?.length) {
+      const alt = question.alternativeCorrectAnswers.map((value: string) => {
+        const option = (question.options || []).find((opt: any) => opt.value === value);
+        return option ? `${value}) ${option.text}` : value;
+      });
+      return `${correct.join(', ')} (or ${alt.join(', ')})`;
+    }
+    return correct.join(', ');
+  }
+  if (question.type === 'true-false') {
+    return question.correctAnswer === 'true' ? 'True' : 'False';
+  }
+  const option = (question.options || []).find((opt: any) => opt.value === question.correctAnswer);
+  return option ? option.text : 'Unknown';
+};
+
+const getQuestionTip = (index: number): string => questionTips[index] || fallbackExplanationText;
+const getCorrectAnswerExplanation = (index: number): string => correctAnswerExplanations[index] || fallbackExplanationText;
+const getLearningPoint = (index: number): string => learningPoints[index] || fallbackExplanationText;
 </script>
 
 <style scoped>
@@ -1078,6 +1437,24 @@ ion-card { margin: 16px; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }
 .case-study-prompts li { margin-bottom: 6px; }
 .case-study-video { margin-bottom: 16px; }
+.quiz-results-details { margin-top: 12px; }
+.question-result-item { margin-top: 12px; }
+.question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
+.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
+.question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
+.question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.learning-tip-header { --background: var(--ion-color-light); }
+.learning-tip-container { margin-top: 4px; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
+.multi-true-false-instructions,
+.fill-in-blank-instructions,
+.select-all-instructions { margin-bottom: 12px; }
+.multi-true-false-item,
+.fill-in-blank-item,
+.select-all-item { align-items: flex-start; }
+.multi-true-false-select,
+.fill-in-blank-select { min-width: 140px; }
+.fill-in-blank-text { margin: 0 4px; display: inline-block; }
+.select-all-item input { margin-right: 10px; }
 </style>
 
 

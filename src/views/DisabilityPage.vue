@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.17</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -2450,28 +2450,28 @@ const quizQuestions = computed((): QuizQuestion[] => {
 const getPageTitle = () => {
   const id = route.params.id as string;
   if (id === 'physical-disabilities') {
-    return 'Visual Needs';
+    return 'Visual needs';
   }
   if (id === 'hearing-needs') {
-    return 'Hearing Needs';
+    return 'Hearing needs';
   }
   if (id === 'physical-sensory-needs') {
-    return 'Physical and Sensory Needs';
+    return 'Physical and sensory needs';
   }
   if (id === 'cognitive-intellectual-needs') {
-    return 'Cognitive and Intellectual Needs';
+    return 'Cognitive and intellectual needs';
   }
   if (id === 'speech-language-needs') {
-    return 'Speech and Language Needs';
+    return 'Speech and language needs';
   }
   if (id === 'communication') {
     return 'Communication';
   }
   if (id === 'multiple-disabilities') {
-    return 'Multiple Disabilities';
+    return 'Multiple disabilities';
   }
   if (id === 'xxxxxxx') {
-    return 'Visual Needs';
+    return 'Visual needs';
   }
   return disabilityData[id as keyof typeof disabilityData]?.title || (id ? id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Unknown Page');
 };

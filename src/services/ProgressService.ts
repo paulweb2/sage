@@ -35,6 +35,7 @@ export class ProgressService {
     'hearing-needs-quiz',        // Hearing Needs Quiz
     'hearing-needs-reflection',  // Hearing Needs Reflection
     'hearing-needs-case-study',  // Hearing Needs Case Study note
+    'visual-needs-quiz',         // Visual Needs Quiz
     'communication-quiz',        // Communication Quiz
     'signposting-reflection'     // Signposting Reflection
   ];
@@ -417,15 +418,15 @@ export class ProgressService {
    */
   private static getPageTitle(pageId: string): string {
     const titles: { [key: string]: string } = {
-      'physical-disabilities': 'Visual Needs',
-      'visual-needs': 'Visual Needs',
-      'hearing-needs': 'Hearing Needs',
-      'physical-sensory-needs': 'Physical and Sensory Needs',
-      'cognitive-intellectual-needs': 'Cognitive and Intellectual Needs',
-      'speech-language-needs': 'Speech and Language Needs',
+      'physical-disabilities': 'Visual needs',
+      'visual-needs': 'Visual needs',
+      'hearing-needs': 'Hearing needs',
+      'physical-sensory-needs': 'Physical and sensory needs',
+      'cognitive-intellectual-needs': 'Cognitive and intellectual needs',
+      'speech-language-needs': 'Speech and language needs',
       'communication': 'Communication',
-      'multiple-disabilities': 'Multiple Disabilities',
-      'signposting': 'Signposting Tool'
+      'multiple-disabilities': 'Multiple disabilities',
+      'signposting': 'Signposting tool'
     };
     return titles[pageId] || pageId;
   }

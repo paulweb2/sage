@@ -5,9 +5,9 @@
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>My Progress</ion-title>
+        <ion-title>My progress</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.17</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -446,7 +446,8 @@ const certificateNumber = computed(() => {
 const ENABLED_IDS = new Set([
   'hearing-needs-quiz',
   'hearing-needs-reflection',
-  'communication-quiz'
+  'communication-quiz',
+  'visual-needs-quiz'
 ]);
 
 function isItemEnabled(id: string): boolean {

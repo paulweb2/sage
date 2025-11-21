@@ -21,7 +21,7 @@
             <ion-menu-toggle :auto-hide="false">
               <ion-item router-direction="root" router-link="/introduction" lines="none" :detail="false" class="hydrated" :class="{ selected: route.path === '/introduction' }">
                 <ion-icon aria-hidden="true" slot="start" :ios="informationCircleOutline" :md="informationCircleSharp"></ion-icon>
-                <ion-label>General Information</ion-label>
+                <ion-label>General information</ion-label>
               </ion-item>
             </ion-menu-toggle>
 
@@ -60,7 +60,7 @@
           </ion-list>
 
           <ion-list id="disability-categories">
-            <ion-list-header>Disability Categories</ion-list-header>
+            <ion-list-header>Disability categories</ion-list-header>
 
             <div v-for="(category, index) in disabilityCategories" :key="index">
               <!-- Main category item -->
@@ -162,19 +162,19 @@ const appPages = [
     mdIcon: homeSharp,
   },
   {
-    title: 'My Progress',
+    title: 'My progress',
     url: '/progress',
     iosIcon: trophyOutline,
     mdIcon: trophySharp,
   },
   {
-    title: 'General Information',
+    title: 'General information',
     url: '/introduction',
     iosIcon: informationCircleOutline,
     mdIcon: informationCircleSharp,
   },
   {
-    title: 'Signposting Tool',
+    title: 'Signposting tool',
     url: '/folder/Screening',
     iosIcon: navigateOutline,
     mdIcon: navigateSharp,
@@ -193,7 +193,7 @@ const appPages = [
   },
 ];
 
-const progressIndex = appPages.findIndex(page => page.title === 'My Progress');
+const progressIndex = appPages.findIndex(page => page.title === 'My progress');
 const progressUrl = progressIndex !== -1 ? appPages[progressIndex].url : '/progress';
 
 const introductionIndex = appPages.findIndex(page => page.url === '/introduction');
@@ -208,126 +208,74 @@ const topHome = computed(() => appPages
 
 const topRest = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My Progress' && page.url !== '/introduction' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My progress' && page.url !== '/introduction' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
 );
 
 const topPages = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My Progress' && page.url !== '/introduction' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My progress' && page.url !== '/introduction' && page.title !== 'Working with learners with disabilities')
 );
+
+const createDisabilitySubItems = () => ([
+  { title: 'Language', anchor: 'language' },
+  { title: 'Understanding the learner', anchor: 'understanding' },
+  { title: 'Challenges to learning', anchor: 'challenges' },
+  { title: 'Enabling learning', anchor: 'enabling' },
+  { title: 'Resources to support learning', anchor: 'resources' },
+  { title: 'Case study', anchor: 'case-study' },
+  { title: 'Reflective task', anchor: 'reflective-task' },
+  { title: 'Quiz', anchor: 'knowledge-check' }
+]);
 
 const disabilityCategories = ref([
   {
-    title: 'Visual Needs',
+    title: 'Visual needs',
     icon: eyeOutline,
     expanded: false,
     url: '/needs/visual',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
   {
-    title: 'Hearing Needs',
+    title: 'Hearing needs',
     icon: earOutline,
     expanded: false,
     url: '/needs/hearing',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
   {
-    title: 'Physical and Sensory Needs',
+    title: 'Physical and sensory needs',
     icon: bodyOutline,
     expanded: false,
     url: '/needs/physical-sensory',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
   {
-    title: 'Cognitive and Intellectual Needs',
+    title: 'Cognitive and intellectual needs',
     icon: bulbOutline,
     expanded: false,
     url: '/needs/cognitive-intellectual',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
   {
-    title: 'Speech and Language Needs',
+    title: 'Speech and language needs',
     icon: chatboxEllipsesOutline,
     expanded: false,
     url: '/needs/speech-language',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
   {
     title: 'Communication',
     icon: chatbubbleOutline,
     expanded: false,
     url: '/disability/communication',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
   {
-    title: 'Multiple Disabilities',
+    title: 'Multiple disabilities',
     icon: medicalOutline,
     expanded: false,
     url: '/needs/multiple-disabilities',
-    subItems: [
-      { title: 'Language', anchor: 'language' },
-      { title: 'Understanding the Learner', anchor: 'understanding' },
-      { title: 'Challenges to Learning', anchor: 'challenges' },
-      { title: 'Enabling Learning', anchor: 'enabling' },
-      { title: 'Resources to Support Learning', anchor: 'resources' },
-      { title: 'Case Study', anchor: 'case-study' },
-      { title: 'Reflective Task', anchor: 'reflective-task' },
-      { title: 'Quiz', anchor: 'knowledge-check' }
-    ]
+    subItems: createDisabilitySubItems()
   },
 ]);
 
@@ -392,7 +340,7 @@ const setActivePage = (section: 'top' | 'bottom', index: number) => {
   activeIndex.value = index;
 };
 
-// General Information has no expandable submenu; simple navigation via router-link
+// General information has no expandable submenu; simple navigation via router-link
 
 const handleWorkingClick = () => {
   if (workingExpanded.value) {

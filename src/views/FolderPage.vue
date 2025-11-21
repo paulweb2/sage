@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.17</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -791,7 +791,7 @@ const getPageTitle = () => {
     'Home': 'Home',
     'home': 'Home', // Add lowercase version
     'Introduction': 'Introduction',
-    'Screening': 'Signposting Tool',
+    'Screening': 'Signposting tool',
     'Contacts': 'Contacts'
   };
   
