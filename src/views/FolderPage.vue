@@ -291,10 +291,10 @@
           <!-- Contacts -->
           <ion-card>
             <ion-card-header>
-              <ion-card-title>Organizations and key contacts</ion-card-title>
+              <ion-card-title>Zimbabwe organizations and key contacts</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <div class="contacts-table" role="table" aria-label="Organizations and key contacts">
+              <div class="contacts-table" role="table" aria-label="Zimbabwe organizations and key contacts">
                 <div class="contacts-header" role="row">
                   <div class="contacts-cell contacts-name" role="columnheader">Organization</div>
                   <div class="contacts-cell contacts-expertise" role="columnheader">Area of expertise</div>
@@ -303,6 +303,75 @@
 
                 <ion-accordion-group class="contacts-accordion" :multiple="true">
                   <ion-accordion v-for="contact in contacts" :key="contact.name" :value="contact.name">
+                    <div class="contacts-row" slot="header" role="row">
+                      <div class="contacts-cell contacts-name" role="cell">
+                        <strong>{{ contact.name }}</strong>
+                      </div>
+                      <div class="contacts-cell contacts-expertise" role="cell">
+                        <p>{{ contact.expertise }}</p>
+                      </div>
+                      <div class="contacts-cell contacts-toggle" role="cell">
+                        <span>View details</span>
+                        <ion-icon :icon="chevronDown" aria-hidden="true"></ion-icon>
+                      </div>
+                    </div>
+
+                    <div class="contact-details" slot="content">
+                      <div class="contact-detail" v-if="contact.address">
+                        <h4>Address</h4>
+                        <p class="pre-line">{{ contact.address }}</p>
+                      </div>
+
+                      <div class="contact-detail" v-if="contact.phones.length">
+                        <h4>Telephone</h4>
+                        <ul>
+                          <li v-for="phone in contact.phones" :key="phone">{{ phone }}</li>
+                        </ul>
+                      </div>
+
+                      <div class="contact-detail" v-if="contact.emails.length">
+                        <h4>Email</h4>
+                        <ul>
+                          <li v-for="email in contact.emails" :key="email">{{ email }}</li>
+                        </ul>
+                      </div>
+
+                      <div class="contact-detail" v-if="contact.website">
+                        <h4>Website / resource</h4>
+                        <p class="pre-line">{{ contact.website }}</p>
+                        <ion-button
+                          v-if="formatWebsite(contact.website)"
+                          size="small"
+                          fill="clear"
+                          :href="formatWebsite(contact.website)"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Visit link
+                          <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Worldwide organizations and key contacts</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="contacts-table" role="table" aria-label="Worldwide organizations and key contacts">
+                <div class="contacts-header" role="row">
+                  <div class="contacts-cell contacts-name" role="columnheader">Organization</div>
+                  <div class="contacts-cell contacts-expertise" role="columnheader">Area of expertise</div>
+                  <div class="contacts-cell contacts-toggle" role="columnheader">Contact info</div>
+                </div>
+
+                <ion-accordion-group class="contacts-accordion" :multiple="true">
+                  <ion-accordion v-for="contact in worldwideContacts" :key="contact.name" :value="contact.name">
                     <div class="contacts-row" slot="header" role="row">
                       <div class="contacts-cell contacts-name" role="cell">
                         <strong>{{ contact.name }}</strong>
@@ -457,6 +526,7 @@ import {
 import MediaPlayer from '../components/MediaPlayer.vue';
 import { ref as vueRef } from 'vue';
 import contactsData from '@/data/contacts.json';
+import worldwideContactsData from '@/data/worldwideContacts.json';
 
 const route = useRoute();
 const router = useRouter();
@@ -471,6 +541,7 @@ type ContactRecord = {
 };
 
 const contacts = contactsData as ContactRecord[];
+const worldwideContacts = worldwideContactsData as ContactRecord[];
 
 // Quiz/Screening state
 const screeningStarted = ref(false);
