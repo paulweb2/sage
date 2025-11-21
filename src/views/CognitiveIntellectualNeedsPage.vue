@@ -653,6 +653,158 @@
           <ion-card-header>
             <ion-card-title>Quiz</ion-card-title>
           </ion-card-header>
+          <ion-card-content>
+            <div v-if="!quizCompleted">
+              <ion-card :key="currentQuizIndex">
+                <ion-card-header>
+                  <ion-card-title>Question {{ currentQuizIndex + 1 }} of {{ questions.length }}</ion-card-title>
+                  <ion-progress-bar :value="(currentQuizIndex + 1) / questions.length" color="primary"></ion-progress-bar>
+                </ion-card-header>
+                <ion-card-content>
+                  <h4>{{ currentQuestion.question }}</h4>
+
+                  <!-- Multiple Choice and True/False -->
+                  <div v-if="!currentQuestion.type || currentQuestion.type === 'multiple-choice' || currentQuestion.type === 'true-false'">
+                    <ion-radio-group v-model="currentAnswer">
+                      <ion-item v-for="(option, idx) in currentQuestion.options || []" :key="idx">
+                        <ion-radio :value="option.value" slot="start"></ion-radio>
+                        <ion-label>{{ option.text }}</ion-label>
+                      </ion-item>
+                    </ion-radio-group>
+                  </div>
+
+                  <!-- Multi True/False -->
+                  <div v-else-if="currentQuestion.type === 'multi-true-false'">
+                    <div class="multi-true-false-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> {{ currentQuestion.instructions || 'Answer each statement as True or False using the dropdown menus.' }}
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="(subQ, subIndex) in currentQuestion.subQuestions" :key="subQ.id" class="multi-true-false-item">
+                        <ion-label>
+                          <h4><strong>{{ String.fromCharCode(97 + subIndex) }})&nbsp;</strong>{{ subQ.text }}</h4>
+                        </ion-label>
+                        <ion-select v-model="matchingAnswers[subQ.id]" interface="popover" placeholder="True or False" :value="matchingAnswers[subQ.id]" class="multi-true-false-select">
+                          <ion-select-option value="">Select answer</ion-select-option>
+                          <ion-select-option value="true">True</ion-select-option>
+                          <ion-select-option value="false">False</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <!-- Fill in the blank -->
+                  <div v-else-if="currentQuestion.type === 'fill-in-blank'">
+                    <div class="fill-in-blank-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> {{ currentQuestion.instructions || 'Complete each sentence by selecting the most appropriate word or phrase from the dropdown menus.' }}
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="(sentence, sentenceIndex) in currentQuestion.sentences" :key="sentence.id" class="fill-in-blank-item">
+                        <ion-label>
+                          <h4>
+                            <strong>{{ String.fromCharCode(97 + sentenceIndex) }})&nbsp;</strong>
+                            <span class="fill-in-blank-text">
+                              <span>{{ sentence.textBefore }}</span>
+                              <ion-select v-model="matchingAnswers[sentence.id]" interface="popover" placeholder="Select answer" :value="matchingAnswers[sentence.id]" class="fill-in-blank-select">
+                                <ion-select-option value="">Select answer</ion-select-option>
+                                <ion-select-option v-for="opt in sentence.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
+                              </ion-select>
+                              <span>{{ sentence.textAfter }}</span>
+                            </span>
+                          </h4>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <!-- Select all that apply -->
+                  <div v-else-if="currentQuestion.type === 'select-all'">
+                    <div class="select-all-instructions">
+                      <ion-note color="primary">
+                        <strong>Instructions:</strong> Select all options that apply.
+                      </ion-note>
+                    </div>
+                    <ion-list>
+                      <ion-item v-for="option in currentQuestion.options" :key="option.value" class="select-all-item">
+                        <input type="checkbox" :value="option.value" v-model="checkboxAnswers[option.value]" style="margin-right: 10px;" />
+                        <ion-label>
+                          <h4><strong>{{ option.value }})&nbsp;</strong>{{ option.text }}</h4>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+
+                  <div class="ion-padding-top">
+                    <ion-button expand="block" color="primary" @click="nextQuestion" :disabled="!canProceed">
+                      {{ currentQuizIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
+                    </ion-button>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </div>
+
+            <div v-else>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Results</ion-card-title>
+                  <ion-card-subtitle>Your Score: {{ quizScore }}%</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
+                  <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+
+                  <div class="quiz-results-details" v-if="questions.length > 0">
+                    <h4>Question Results:</h4>
+                    <div v-for="(question, index) in questions" :key="index" class="question-result-item">
+                      <div class="question-content">
+                        <ion-item class="question-item">
+                          <ion-label>
+                            <h5 class="question-heading">
+                              <ion-icon :icon="isQuestionCorrect(index) ? checkmarkCircle : closeCircle" :color="isQuestionCorrect(index) ? 'success' : 'danger'" class="question-status-icon"></ion-icon>
+                              Question {{ index + 1 }}
+                            </h5>
+                            <p>{{ question.question }}</p>
+                            <ion-note color="medium">
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
+                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                            </ion-note>
+
+                            <div class="learning-tip-container">
+                              <ion-accordion-group>
+                                <ion-accordion>
+                                  <ion-item slot="header" class="learning-tip-header">
+                                    <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
+                                    <ion-label>
+                                      <p>Explanation</p>
+                                    </ion-label>
+                                  </ion-item>
+                                  <div slot="content" class="ion-padding">
+                                    <p>{{ getQuestionTip(index) }}</p>
+                                    <div class="explanation-divider"></div>
+                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                    <p>{{ getLearningPoint(index) }}</p>
+                                  </div>
+                                </ion-accordion>
+                              </ion-accordion-group>
+                            </div>
+                          </ion-label>
+                        </ion-item>
+                      </div>
+                      <div class="question-divider"></div>
+                    </div>
+                  </div>
+
+                  <ion-button expand="block" color="primary" @click="retakeQuiz">
+                    <ion-icon :icon="refresh" slot="start"></ion-icon>
+                    Retake Quiz
+                  </ion-button>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-card-content>
         </ion-card>
       </div>
     </ion-content>
@@ -974,6 +1126,387 @@ const organizationsLines: string[] = [
   'https://dyslexiaida.org/understanding-dysgraphia/ – International Dyslexia Association offering six months free membership to classroom teachers to access resources.'
 ];
 
+// Quiz configuration
+interface QuestionFeedback {
+  tip: string;
+  explanation: string;
+  learningPoint: string;
+}
+
+interface MCOption { value: string; text: string }
+interface MultiTFSubQ { id: string; text: string; correctAnswer: 'true' | 'false'; explanation?: string }
+interface FillSentence { id: string; textBefore: string; textAfter?: string; correctAnswer: string; options: string[] }
+
+interface BaseQuestion {
+  question: string;
+  instructions?: string;
+  feedback?: QuestionFeedback;
+}
+
+type CognitiveQuestion =
+  | (BaseQuestion & { type?: 'multiple-choice'; options: MCOption[]; correctAnswer: string })
+  | (BaseQuestion & { type: 'true-false'; options: MCOption[]; correctAnswer: string })
+  | (BaseQuestion & { type: 'multi-true-false'; subQuestions: MultiTFSubQ[]; instructions?: string })
+  | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[]; instructions?: string })
+  | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
+
+const defaultFeedback: QuestionFeedback = {
+  tip: 'Revisit the relevant guidance in this section to refresh your understanding.',
+  explanation: 'Review the learning content to see why this answer is correct.',
+  learningPoint: 'Inclusive strategies should build confidence, reduce anxiety and support active participation.'
+};
+
+const wordBankOptions = ['anxiety', 'self-esteem', 'break down', 'fatigue'];
+const matchNeeds = ['Dysgraphia', 'Dyscalculia', 'Dyspraxia', 'Dyslexia'];
+
+const questions = ref<CognitiveQuestion[]>([
+  {
+    question: 'What are the characteristics of learners with cognitive needs exhibited in the classroom? Select all that apply.',
+    type: 'select-all',
+    options: [
+      { value: 'a', text: 'Anxiety and low self-esteem' },
+      { value: 'b', text: 'Inability to blend sounds and letters into words' },
+      { value: 'c', text: 'Difficulty to use speech-to-text software to produce written work' },
+      { value: 'd', text: 'Difficulty in using imagination to plan a story' }
+    ],
+    correctAnswers: ['a', 'b'],
+    feedback: {
+      tip: 'Look for traits commonly linked with dyslexia and related cognitive needs.',
+      explanation: 'Anxiety, low self-esteem and phonological difficulties are common; with modelling, speech-to-text becomes easier and dyslexic learners often have strong imaginations.',
+      learningPoint: 'Recognise strengths while addressing areas like phonological processing and confidence.'
+    }
+  },
+  {
+    question: 'How can you make assessments accessible for learners with dyspraxia? Select all that apply.',
+    type: 'select-all',
+    options: [
+      { value: 'a', text: 'Provide them with questions for tests a day before' },
+      { value: 'b', text: 'Break down tasks into smaller chunks' },
+      { value: 'c', text: 'Allow more time for processing of information' },
+      { value: 'd', text: 'Provide concrete resources to aid calculations' }
+    ],
+    correctAnswers: ['b', 'c', 'd'],
+    feedback: {
+      tip: 'Focus on strategies that scaffold organisation, timing and access to tools.',
+      explanation: 'Chunked tasks, extra processing time and concrete supports aid dyspraxic learners; simply seeing questions in advance may not resolve writing/organisation barriers.',
+      learningPoint: 'Effective support emphasises structure, pacing and multisensory resources.'
+    }
+  },
+  {
+    question: 'Match each description with the cognitive need.',
+    type: 'fill-in-blank',
+    instructions: 'Options: Dysgraphia, Dyscalculia, Dyspraxia, Dyslexia.',
+    sentences: [
+      {
+        id: 'a',
+        textBefore: '“I struggle to re-read my own writing.” → ',
+        textAfter: '',
+        correctAnswer: 'Dysgraphia',
+        options: matchNeeds
+      },
+      {
+        id: 'b',
+        textBefore: '“I find remembering number facts difficult.” → ',
+        textAfter: '',
+        correctAnswer: 'Dyscalculia',
+        options: matchNeeds
+      },
+      {
+        id: 'c',
+        textBefore: '“I find it difficult to complete everyday tasks.” → ',
+        textAfter: '',
+        correctAnswer: 'Dyspraxia',
+        options: matchNeeds
+      },
+      {
+        id: 'd',
+        textBefore: '“I use a blue overlay on any printed text.” → ',
+        textAfter: '',
+        correctAnswer: 'Dyslexia',
+        options: matchNeeds
+      }
+    ],
+    feedback: {
+      tip: 'Link each statement to the primary area of difficulty: writing, maths, coordination or reading.',
+      explanation: 'The cues describe dysgraphia (writing), dyscalculia (number facts), dyspraxia (everyday tasks) and dyslexia (visual stress when reading).',
+      learningPoint: 'Understanding specific profiles guides targeted support.'
+    }
+  },
+  {
+    question: 'Fill in the blanks by selecting from the list.',
+    type: 'fill-in-blank',
+    instructions: 'Options: anxiety, self-esteem, break down, fatigue.',
+    sentences: [
+      {
+        id: 'a',
+        textBefore: 'Learners with cognitive disabilities are prone to a high level of ',
+        textAfter: ' associated with their learning difficulty.',
+        correctAnswer: 'anxiety',
+        options: wordBankOptions
+      },
+      {
+        id: 'b',
+        textBefore: 'One common emotional and well-being difficulty is low ',
+        textAfter: '.',
+        correctAnswer: 'self-esteem',
+        options: wordBankOptions
+      },
+      {
+        id: 'c',
+        textBefore: 'Teachers can ',
+        textAfter: ' complex tasks into more manageable chunks to support learners with dyspraxia.',
+        correctAnswer: 'break down',
+        options: wordBankOptions
+      },
+      {
+        id: 'd',
+        textBefore: 'As tasks require greater effort, learners with cognitive difficulties can experience ',
+        textAfter: ' or appear demotivated.',
+        correctAnswer: 'fatigue',
+        options: wordBankOptions
+      }
+    ],
+    feedback: {
+      tip: 'Match each blank to the emotional or instructional need described.',
+      explanation: 'Learners may feel anxiety, have low self-esteem, need tasks broken down and experience fatigue.',
+      learningPoint: 'Address emotional load alongside instructional scaffolds.'
+    }
+  },
+  {
+    question: 'True or false? Consider each statement carefully.',
+    type: 'multi-true-false',
+    instructions: 'Mark each statement as True or False.',
+    subQuestions: [
+      {
+        id: 'a',
+        text: 'Learners with dyscalculia can only calculate with small numbers.',
+        correctAnswer: 'false',
+        explanation: 'With appropriate support, learners with dyscalculia can work confidently with larger numbers.'
+      },
+      {
+        id: 'b',
+        text: 'Learners with dyslexia can find verbal instructions difficult to understand.',
+        correctAnswer: 'true',
+        explanation: 'Processing lengthy verbal instructions can be challenging without visual supports.'
+      },
+      {
+        id: 'c',
+        text: 'Learners with dyspraxia can benefit from acting out their expressions instead of writing them down.',
+        correctAnswer: 'true',
+        explanation: 'Demonstrating or acting out ideas can reduce the motor demands of writing.'
+      },
+      {
+        id: 'd',
+        text: 'It is best to have all the support resources available all the time for learners with cognitive disabilities.',
+        correctAnswer: 'false',
+        explanation: 'Too many resources at once can overwhelm learners; targeted supports are more effective.'
+      }
+    ],
+    feedback: {
+      tip: 'Think about how overload, alternative expression and targeted scaffolds impact learning.',
+      explanation: 'Statements b and c are true; a and d are false because learners can progress beyond basic calculations and need carefully selected supports.',
+      learningPoint: 'Use strategic supports and varied expression to reduce cognitive load.'
+    }
+  }
+]);
+
+const currentQuizIndex = ref(0);
+const currentAnswer = ref('');
+const matchingAnswers = ref<Record<string, string>>({});
+const checkboxAnswers = ref<Record<string, boolean>>({});
+const quizCompleted = ref(false);
+const quizScore = ref(0);
+const quizAnswers = ref<Record<number, any>>({});
+
+const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
+
+const canProceed = computed(() => {
+  const q = currentQuestion.value as any;
+  if (!q) return false;
+  if (!q.type || q.type === 'multiple-choice' || q.type === 'true-false') return !!currentAnswer.value;
+  if (q.type === 'multi-true-false') return q.subQuestions.every((sq: any) => matchingAnswers.value[sq.id] === 'true' || matchingAnswers.value[sq.id] === 'false');
+  if (q.type === 'fill-in-blank') return q.sentences.every((s: any) => !!matchingAnswers.value[s.id]);
+  if (q.type === 'select-all') return Object.values(checkboxAnswers.value).some((v) => v);
+  return false;
+});
+
+function setsEqual(a: string[], b: string[]) {
+  if (a.length !== b.length) return false;
+  const sa = new Set(a);
+  return b.every((v) => sa.has(v));
+}
+
+const nextQuestion = () => {
+  const q = currentQuestion.value as any;
+  if (!q) return;
+
+  const increment = Math.round(100 / questions.value.length);
+
+  if (!q.type || q.type === 'multiple-choice' || q.type === 'true-false') {
+    quizAnswers.value[currentQuizIndex.value] = currentAnswer.value;
+    if (q.correctAnswer && currentAnswer.value === q.correctAnswer) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'multi-true-false') {
+    quizAnswers.value[currentQuizIndex.value] = { ...matchingAnswers.value };
+    const allCorrect = q.subQuestions.every((sq: any) => matchingAnswers.value[sq.id] === sq.correctAnswer);
+    if (allCorrect) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'fill-in-blank') {
+    quizAnswers.value[currentQuizIndex.value] = { ...matchingAnswers.value };
+    const allCorrect = q.sentences.every((s: any) => matchingAnswers.value[s.id] === s.correctAnswer);
+    if (allCorrect) {
+      quizScore.value += increment;
+    }
+  } else if (q.type === 'select-all') {
+    const correct = q.correctAnswers as string[];
+    const alt = (q.alternativeCorrectAnswers || []) as string[];
+    const selectedMap: Record<string, boolean> = {};
+    Object.keys(checkboxAnswers.value).forEach((k) => {
+      if (checkboxAnswers.value[k]) selectedMap[k] = true;
+    });
+    quizAnswers.value[currentQuizIndex.value] = selectedMap;
+    const selected = Object.keys(selectedMap).sort();
+    const isExact = setsEqual(selected, correct.slice().sort());
+    const isAlt = alt.length > 0 && setsEqual(selected, alt.slice().sort());
+    if (isExact || isAlt) {
+      quizScore.value += increment;
+    }
+  }
+
+  if (currentQuizIndex.value < questions.value.length - 1) {
+    currentQuizIndex.value += 1;
+    currentAnswer.value = '';
+    matchingAnswers.value = {};
+    checkboxAnswers.value = {};
+  } else {
+    quizCompleted.value = true;
+    try {
+      localStorage.setItem(
+        `sage-quiz-cognitive-intellectual-needs`,
+        JSON.stringify({ completed: true, score: quizScore.value, answers: quizAnswers.value, lastCompleted: new Date().toISOString() })
+      );
+    } finally {
+      ProgressService.saveQuizCompletion('cognitive-intellectual-needs', quizScore.value, quizAnswers.value);
+    }
+  }
+};
+
+const retakeQuiz = () => {
+  currentQuizIndex.value = 0;
+  currentAnswer.value = '';
+  quizCompleted.value = false;
+  quizScore.value = 0;
+  matchingAnswers.value = {};
+  checkboxAnswers.value = {};
+  quizAnswers.value = {};
+  ProgressService.resetQuizCompletion('cognitive-intellectual-needs');
+  localStorage.removeItem(`sage-quiz-cognitive-intellectual-needs`);
+};
+
+const getQuizScoreColor = (): 'success' | 'warning' | 'danger' => {
+  if (quizScore.value >= 80) return 'success';
+  if (quizScore.value >= 50) return 'warning';
+  return 'danger';
+};
+
+const getQuizScoreMessage = (): string => {
+  if (quizScore.value >= 80) return 'Great job! You have a strong understanding of cognitive and intellectual needs.';
+  if (quizScore.value >= 50) return 'Good effort. Review the explanations to strengthen your understanding.';
+  return 'Keep going. The explanations below will help you learn more.';
+};
+
+const isQuestionCorrect = (index: number): boolean => {
+  const question = questions.value[index] as any;
+  const userAnswer = quizAnswers.value[index];
+  if (question.type === 'multi-true-false') {
+    const ua = userAnswer as Record<string, string> | undefined;
+    if (!ua || !question.subQuestions) return false;
+    return question.subQuestions.every((subQ: any) => ua[subQ.id] === subQ.correctAnswer);
+  } else if (question.type === 'fill-in-blank') {
+    const ua = userAnswer as Record<string, string> | undefined;
+    if (!ua || !question.sentences) return false;
+    return question.sentences.every((s: any) => ua[s.id] === s.correctAnswer);
+  } else if (question.type === 'select-all') {
+    const ua = userAnswer as Record<string, boolean> | undefined;
+    if (!ua) return false;
+    const selected = Object.entries(ua)
+      .filter(([, checked]) => checked)
+      .map(([k]) => k);
+    return selected.length === (question.correctAnswers?.length || 0) && setsEqual(selected.slice().sort(), (question.correctAnswers || []).slice().sort());
+  }
+  return userAnswer === question.correctAnswer;
+};
+
+const formatUserAnswer = (index: number): string => {
+  const question = questions.value[index] as any;
+  const userAnswer = quizAnswers.value[index];
+  if (question.type === 'multi-true-false') {
+    const ua = userAnswer as Record<string, string> | undefined;
+    if (!ua || Object.keys(ua).length === 0) return 'Not answered';
+    return Object.entries(ua)
+      .map(([id, ans]) => `${id}: ${ans === 'true' ? 'True' : 'False'}`)
+      .join(', ');
+  } else if (question.type === 'fill-in-blank') {
+    const ua = userAnswer as Record<string, string> | undefined;
+    if (!ua || Object.keys(ua).length === 0) return 'Not answered';
+    return Object.entries(ua)
+      .map(([id, ans]) => `${id}: ${ans}`)
+      .join(', ');
+  } else if (question.type === 'select-all') {
+    const ua = userAnswer as Record<string, boolean> | undefined;
+    if (!ua || Object.keys(ua).length === 0) return 'Not answered';
+    const selected = Object.entries(ua)
+      .filter(([, checked]) => checked)
+      .map(([k]) => k);
+    if (selected.length === 0) return 'Not answered';
+    return selected
+      .map((key) => {
+        const opt = (question.options || []).find((o: any) => o.value === key);
+        return `${key}) ${opt ? opt.text : ''}`;
+      })
+      .join(', ');
+  } else if (question.type === 'true-false') {
+    if (!userAnswer) return 'Not answered';
+    return userAnswer === 'true' ? 'True' : 'False';
+  } else {
+    const opt = (question.options || []).find((o: any) => o.value === userAnswer);
+    return opt ? opt.text : 'Not answered';
+  }
+};
+
+const formatCorrectAnswer = (index: number): string => {
+  const question = questions.value[index] as any;
+  if (question.type === 'multi-true-false') {
+    return question.subQuestions.map((sq: any) => `${sq.id}: ${sq.correctAnswer === 'true' ? 'True' : 'False'}`).join(', ');
+  } else if (question.type === 'fill-in-blank') {
+    return question.sentences.map((s: any) => `${s.id}: ${s.correctAnswer}`).join(', ');
+  } else if (question.type === 'select-all') {
+    return (question.options || [])
+      .filter((opt: any) => (question.correctAnswers || []).includes(opt.value))
+      .map((opt: any) => `${opt.value}) ${opt.text}`)
+      .join(', ');
+  } else if (question.type === 'true-false') {
+    return question.correctAnswer === 'true' ? 'True' : 'False';
+  } else {
+    const opt = (question.options || []).find((o: any) => o.value === question.correctAnswer);
+    return opt ? opt.text : 'Unknown';
+  }
+};
+
+const getFeedbackValue = (index: number, key: keyof QuestionFeedback): string => {
+  const question = questions.value[index];
+  if (question && question.feedback && question.feedback[key]) {
+    return question.feedback[key] as string;
+  }
+  return defaultFeedback[key];
+};
+
+const getQuestionTip = (index: number): string => getFeedbackValue(index, 'tip');
+const getCorrectAnswerExplanation = (index: number): string => getFeedbackValue(index, 'explanation');
+const getLearningPoint = (index: number): string => getFeedbackValue(index, 'learningPoint');
+
 const reflection = ref({
   caseStudyReflection: '',
   practiceReflection: ''
@@ -1063,6 +1596,15 @@ ion-card { margin: 16px; }
 .case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }
 .case-study-prompts li { margin-bottom: 6px; }
+.quiz-results-details { margin-top: 12px; }
+.question-result-item { margin-top: 12px; }
+.question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
+.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
+.question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
+.question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.learning-tip-header { --background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; }
+.learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
+.fill-in-blank-text { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 </style>
 
 
