@@ -27,7 +27,6 @@ export interface CertificateStatus {
 export class ProgressService {
   private static readonly PROGRESS_KEY = 'sage-overall-progress';
   private static readonly DISABILITY_PAGES = [
-    'physical-disabilities',
     'visual-needs',
     'hearing-needs', 
     'physical-sensory-needs',
@@ -486,7 +485,7 @@ export class ProgressService {
    */
   private static getPageTitle(pageId: string): string {
     const titles: { [key: string]: string } = {
-      'physical-disabilities': 'Visual needs',
+      'physical-disabilities': 'Physical disabilities',
       'visual-needs': 'Visual needs',
       'hearing-needs': 'Hearing needs',
       'physical-sensory-needs': 'Physical and sensory needs',
