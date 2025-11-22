@@ -1216,6 +1216,19 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<{ [key: number]: any }>({});
 
+const loadQuizState = () => {
+  const completed = ProgressService.isQuizCompleted('multiple-disabilities');
+  if (!completed) return;
+  quizCompleted.value = true;
+  quizScore.value = ProgressService.getQuizScore('multiple-disabilities') || 0;
+  const savedAnswers = ProgressService.getQuizAnswers('multiple-disabilities');
+  if (savedAnswers) {
+    quizAnswers.value = { ...(savedAnswers as { [key: number]: any }) };
+  }
+};
+
+onMounted(loadQuizState);
+
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
 
 const canProceed = computed(() => {

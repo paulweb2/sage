@@ -1411,6 +1411,19 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<Record<number, any>>({});
 
+const loadQuizState = () => {
+  const completed = ProgressService.isQuizCompleted('physical-sensory-needs');
+  if (!completed) return;
+  quizCompleted.value = true;
+  quizScore.value = ProgressService.getQuizScore('physical-sensory-needs') || 0;
+  const savedAnswers = ProgressService.getQuizAnswers('physical-sensory-needs');
+  if (savedAnswers) {
+    quizAnswers.value = { ...(savedAnswers as Record<number, any>) };
+  }
+};
+
+onMounted(loadQuizState);
+
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
 
 const getSentenceBlanks = (sentence: FillSentence) => {

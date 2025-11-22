@@ -1319,6 +1319,19 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<{ [key: number]: any }>({});
 
+const loadQuizState = () => {
+  const completed = ProgressService.isQuizCompleted('hearing-needs');
+  if (!completed) return;
+  quizCompleted.value = true;
+  quizScore.value = ProgressService.getQuizScore('hearing-needs') || 0;
+  const savedAnswers = ProgressService.getQuizAnswers('hearing-needs');
+  if (savedAnswers) {
+    quizAnswers.value = { ...(savedAnswers as { [key: number]: any }) };
+  }
+};
+
+onMounted(loadQuizState);
+
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
 
 const canProceed = computed(() => {

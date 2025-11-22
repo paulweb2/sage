@@ -1204,6 +1204,19 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<Record<number, any>>({});
 
+const loadQuizState = () => {
+  const completed = ProgressService.isQuizCompleted('speech-language-needs');
+  if (!completed) return;
+  quizCompleted.value = true;
+  quizScore.value = ProgressService.getQuizScore('speech-language-needs') || 0;
+  const savedAnswers = ProgressService.getQuizAnswers('speech-language-needs');
+  if (savedAnswers) {
+    quizAnswers.value = { ...(savedAnswers as Record<number, any>) };
+  }
+};
+
+onMounted(loadQuizState);
+
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
 
 const canProceed = computed(() => {

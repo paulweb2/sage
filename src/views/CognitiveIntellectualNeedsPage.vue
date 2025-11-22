@@ -1318,6 +1318,19 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<Record<number, any>>({});
 
+const loadQuizState = () => {
+  const completed = ProgressService.isQuizCompleted('cognitive-intellectual-needs');
+  if (!completed) return;
+  quizCompleted.value = true;
+  quizScore.value = ProgressService.getQuizScore('cognitive-intellectual-needs') || 0;
+  const savedAnswers = ProgressService.getQuizAnswers('cognitive-intellectual-needs');
+  if (savedAnswers) {
+    quizAnswers.value = { ...(savedAnswers as Record<number, any>) };
+  }
+};
+
+onMounted(loadQuizState);
+
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
 
 const canProceed = computed(() => {

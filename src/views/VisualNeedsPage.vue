@@ -1210,6 +1210,19 @@ const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<{ [key: number]: any }>({});
 
+const loadQuizState = () => {
+  const completed = ProgressService.isQuizCompleted('visual-needs');
+  if (!completed) return;
+  quizCompleted.value = true;
+  quizScore.value = ProgressService.getQuizScore('visual-needs') || 0;
+  const savedAnswers = ProgressService.getQuizAnswers('visual-needs');
+  if (savedAnswers) {
+    quizAnswers.value = { ...(savedAnswers as { [key: number]: any }) };
+  }
+};
+
+onMounted(loadQuizState);
+
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
 
 const canProceed = computed(() => {
