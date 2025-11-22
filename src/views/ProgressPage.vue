@@ -190,8 +190,8 @@
         </ion-card-content>
       </ion-card>
 
-      <!-- 100% Completion Celebration -->
-      <ion-card v-if="progress.percentage === 100" class="celebration-card">
+      <!-- Certificate Access -->
+      <ion-card v-if="certificateStatus.isUnlocked" class="celebration-card">
         <ion-card-header>
           <ion-card-title>
             <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
@@ -422,6 +422,8 @@ const groupedProgress = computed(() => {
 
   return Object.values(groups).sort((a, b) => b.completionRate - a.completionRate);
 });
+
+const certificateStatus = computed(() => ProgressService.getCertificateStatus(progress.value));
 
 // Certificate data
 const completionDate = computed(() => {

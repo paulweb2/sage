@@ -15,6 +15,15 @@ export interface ProgressData {
   lastUpdated: string;
 }
 
+export interface CertificateStatus {
+  isUnlocked: boolean;
+  completedQuizzes: number;
+  totalQuizzes: number;
+  completedReflections: number;
+  totalReflections: number;
+  passScore: number;
+}
+
 export class ProgressService {
   private static readonly PROGRESS_KEY = 'sage-overall-progress';
   private static readonly DISABILITY_PAGES = [
@@ -28,6 +37,26 @@ export class ProgressService {
     'multiple-disabilities',
     'signposting'
   ];
+  private static readonly CASE_STUDY_PAGES = new Set<string>([
+    'hearing-needs',
+    'visual-needs',
+    'physical-sensory-needs',
+    'cognitive-intellectual-needs',
+    'speech-language-needs',
+    'multiple-disabilities',
+    'communication'
+  ]);
+  private static readonly CERTIFICATE_PAGES = [
+    'visual-needs',
+    'hearing-needs',
+    'physical-sensory-needs',
+    'cognitive-intellectual-needs',
+    'speech-language-needs',
+    'communication',
+    'multiple-disabilities'
+  ];
+  private static readonly CERTIFICATE_PASS_SCORE = 60;
+  private static readonly REFLECTIONS_REQUIRING_NEXT_STEPS = new Set<string>();
 
   // TEMPORARY: Currently implemented tasks for celebration trigger
   // TODO: Remove this when all tasks are implemented and use full progress instead
@@ -71,7 +100,7 @@ export class ProgressService {
       });
 
       // Add Case Study note as a separate tracked item for pages that include it
-      if (pageId === 'hearing-needs' || pageId === 'visual-needs' || pageId === 'physical-sensory-needs' || pageId === 'cognitive-intellectual-needs' || pageId === 'speech-language-needs' || pageId === 'multiple-disabilities') {
+      if (this.CASE_STUDY_PAGES.has(pageId)) {
         const csCompleted = this.isCaseStudyCompleted(pageId);
         items.push({
           id: `${pageId}-case-study`,
@@ -175,18 +204,20 @@ export class ProgressService {
     try {
       const data = JSON.parse(reflectionData);
       // Check reflection fields
-      const hasCaseStudy = data.caseStudyReflection?.trim();
-      const hasPractice = data.practiceReflection?.trim();
-      const hasNextSteps = data.nextSteps?.trim();
+      const hasCaseStudy = !!data.caseStudyReflection?.trim();
+      const hasPractice = !!data.practiceReflection?.trim();
+      const hasNextSteps = !!data.nextSteps?.trim();
+      if (!(hasCaseStudy && hasPractice)) {
+        return false;
+      }
       // Hearing Needs page now has two reflection fields
       if (pageId === 'hearing-needs') {
-        return !!(hasCaseStudy && hasPractice);
+        return true;
       }
-      // Default: require three if nextSteps exists, otherwise consider two sufficient
-      if (typeof hasNextSteps === 'undefined') {
-        return !!(hasCaseStudy && hasPractice);
+      if (!this.REFLECTIONS_REQUIRING_NEXT_STEPS.has(pageId)) {
+        return true;
       }
-      return !!(hasCaseStudy && hasPractice && hasNextSteps);
+      return hasNextSteps;
     } catch {
       return false;
     }
@@ -212,15 +243,14 @@ export class ProgressService {
    * Case Study note: check completion (non-empty)
    */
   static isCaseStudyCompleted(pageId: string): boolean {
-    const data = localStorage.getItem(`sage-cs-${pageId}-current`);
-    if (!data) return false;
-    try {
-      const parsed = JSON.parse(data);
-      const text = typeof parsed?.text === 'string' ? parsed.text.trim() : '';
-      return text.length > 0;
-    } catch {
-      return false;
+    if (pageId === 'physical-sensory-needs') {
+      return (
+        this.hasSavedCaseStudyText('sage-cs-physical-sensory-needs-case1') ||
+        this.hasSavedCaseStudyText('sage-cs-physical-sensory-needs-case2')
+      );
     }
+
+    return this.hasSavedCaseStudyText(`sage-cs-${pageId}-current`);
   }
 
   /**
@@ -414,6 +444,44 @@ export class ProgressService {
   }
 
   /**
+   * Determine if certificate requirements have been met
+   */
+  static getCertificateStatus(progressData?: ProgressData): CertificateStatus {
+    const data = progressData ?? this.getOverallProgress();
+    const itemsById = data.items.reduce<Record<string, ProgressItem>>((acc, item) => {
+      acc[item.id] = item;
+      return acc;
+    }, {});
+
+    const quizIds = this.CERTIFICATE_PAGES.map(pageId => `${pageId}-quiz`);
+    const reflectionIds: string[] = [];
+
+    this.CERTIFICATE_PAGES.forEach(pageId => {
+      reflectionIds.push(`${pageId}-reflection`);
+      const caseStudyId = `${pageId}-case-study`;
+      if (itemsById[caseStudyId]) {
+        reflectionIds.push(caseStudyId);
+      }
+    });
+
+    const completedQuizzes = quizIds.filter(id => {
+      const item = itemsById[id];
+      return item?.completed && (item.score ?? 0) >= this.CERTIFICATE_PASS_SCORE;
+    }).length;
+
+    const completedReflections = reflectionIds.filter(id => itemsById[id]?.completed).length;
+
+    return {
+      isUnlocked: completedQuizzes === quizIds.length && completedReflections === reflectionIds.length,
+      completedQuizzes,
+      totalQuizzes: quizIds.length,
+      completedReflections,
+      totalReflections: reflectionIds.length,
+      passScore: this.CERTIFICATE_PASS_SCORE
+    };
+  }
+
+  /**
    * Get page title from page ID
    */
   private static getPageTitle(pageId: string): string {
@@ -515,5 +583,16 @@ export class ProgressService {
     }
 
     return streak;
+  }
+  private static hasSavedCaseStudyText(storageKey: string): boolean {
+    const data = localStorage.getItem(storageKey);
+    if (!data) return false;
+    try {
+      const parsed = JSON.parse(data);
+      const text = typeof parsed?.text === 'string' ? parsed.text.trim() : '';
+      return text.length > 0;
+    } catch {
+      return false;
+    }
   }
 } 
