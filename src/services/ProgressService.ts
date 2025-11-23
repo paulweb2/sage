@@ -76,17 +76,21 @@ export class ProgressService {
     
     // Check each disability page for quiz and reflection completion
     this.DISABILITY_PAGES.forEach(pageId => {
-      // Check quiz completion
-      const quizCompleted = this.isQuizCompleted(pageId);
-      const quizScore = this.getQuizScore(pageId);
-      items.push({
-        id: `${pageId}-quiz`,
-        title: `${this.getPageTitle(pageId)} - Quiz`,
-        type: 'quiz',
-        completed: quizCompleted,
-        score: quizScore,
-        lastCompleted: quizCompleted ? this.getQuizLastCompleted(pageId) : undefined
-      });
+      const hasQuiz = pageId !== 'signposting';
+      
+      if (hasQuiz) {
+        // Check quiz completion
+        const quizCompleted = this.isQuizCompleted(pageId);
+        const quizScore = this.getQuizScore(pageId);
+        items.push({
+          id: `${pageId}-quiz`,
+          title: `${this.getPageTitle(pageId)} - Quiz`,
+          type: 'quiz',
+          completed: quizCompleted,
+          score: quizScore,
+          lastCompleted: quizCompleted ? this.getQuizLastCompleted(pageId) : undefined
+        });
+      }
 
       // Check reflection completion
       const reflectionCompleted = this.isReflectionCompleted(pageId);
