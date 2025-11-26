@@ -48,10 +48,6 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: '/introduction',
-    component: () => import ('../views/IntroductionPage.vue')
-  },
-  {
     path: '/working-with-learners',
     component: () => import ('../views/WorkingWithLearnersPage.vue')
   }

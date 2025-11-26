@@ -17,16 +17,6 @@
 
             <div class="menu-divider"></div>
 
-            <!-- Introduction as a simple link (no subitems) -->
-            <ion-menu-toggle :auto-hide="false">
-              <ion-item router-direction="root" router-link="/introduction" lines="none" :detail="false" class="hydrated" :class="{ selected: route.path === '/introduction' }">
-                <ion-icon aria-hidden="true" slot="start" :ios="informationCircleOutline" :md="informationCircleSharp"></ion-icon>
-                <ion-label>General information</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-
-            <div class="menu-divider"></div>
-
             <ion-list id="working-categories">
               <ion-list-header>Working with learners with disabilities</ion-list-header>
               <ion-menu-toggle :auto-hide="false">
@@ -117,8 +107,6 @@ import { scrollAnchorIntoView, storePendingAnchor, clearPendingAnchor } from '@/
 import {
   homeOutline,
   homeSharp,
-  informationCircleOutline,
-  informationCircleSharp,
   accessibilityOutline,
   accessibilitySharp,
   schoolOutline,
@@ -168,12 +156,6 @@ const appPages = [
     mdIcon: trophySharp,
   },
   {
-    title: 'General information',
-    url: '/introduction',
-    iosIcon: informationCircleOutline,
-    mdIcon: informationCircleSharp,
-  },
-  {
     title: 'Signposting tool',
     url: '/folder/Screening',
     iosIcon: navigateOutline,
@@ -196,8 +178,6 @@ const appPages = [
 const progressIndex = appPages.findIndex(page => page.title === 'My progress');
 const progressUrl = progressIndex !== -1 ? appPages[progressIndex].url : '/progress';
 
-const introductionIndex = appPages.findIndex(page => page.url === '/introduction');
-
 const workingIndex = appPages.findIndex(page => page.title === 'Working with learners with disabilities');
 const workingExpanded = ref(false);
 
@@ -208,12 +188,12 @@ const topHome = computed(() => appPages
 
 const topRest = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My progress' && page.url !== '/introduction' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My progress' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
 );
 
 const topPages = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My progress' && page.url !== '/introduction' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My progress' && page.title !== 'Working with learners with disabilities')
 );
 
 const createDisabilitySubItems = () => ([
