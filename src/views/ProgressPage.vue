@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>My progress</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.17</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -263,10 +263,6 @@
           <SageCertificate
             ref="certificateRef"
             :completion-date="completionDate"
-            :total-completed="progress.completedItems"
-            :total-items="progress.totalItems"
-            :average-score="progressStats.averageQuizScore"
-            :certificate-number="certificateNumber"
             :recipient-name="recipientName"
           />
           <div class="certificate-name-input">

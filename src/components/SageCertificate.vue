@@ -1,90 +1,73 @@
 <template>
   <div class="certificate-container" ref="certificateRef">
-    <div class="certificate">
-      <!-- Certificate Border -->
-      <div class="certificate-border">
-        <div class="border-pattern"></div>
+    <div class="certificate-sheet">
+      <img src="/sage-logo.svg" alt="SAGE logo" class="certificate-logo" />
+
+      <div class="title-block">
+        <p class="title-prefix">
+          <span class="title-strong">Zimbabwe</span>
+          <span class="title-light">Disability Toolkit</span>
+        </p>
+        <h1>Certificate of Participation</h1>
       </div>
-      
-      <!-- Certificate Content -->
-      <div class="certificate-content">
-        <!-- Header -->
-        <div class="certificate-header">
-          <div class="logo-section">
-            <div class="sage-logo">SAGE</div>
-            <div class="logo-subtitle">Supporting Accessible and Inclusive Education</div>
-          </div>
-          <div class="certificate-title">
-            <h1>Certificate of Participation</h1>
-            <div class="title-underline"></div>
-          </div>
-        </div>
 
-        <!-- Main Content -->
-        <div class="certificate-body">
-          <div class="presentation-text">
-            This is to certify that
-          </div>
-          
-          <div class="recipient-name">
-            <span class="name-placeholder">{{ recipientName || '[Your Name]' }}</span>
-          </div>
-          
-          <div class="achievement-text">
-            has successfully completed all SAGE learning activities and demonstrated comprehensive knowledge of supporting students with diverse needs.
-          </div>
-          
-          <div class="master-status">
-            <div class="master-badge">
-              <span class="trophy-icon">🏆</span>
-              <span class="master-text">SAGE Master</span>
-            </div>
-          </div>
-          
-          <div class="completion-details">
-            <div class="detail-item">
-              <strong>Date of Completion:</strong> {{ completionDate }}
-            </div>
-            <div class="detail-item">
-              <strong>Total Activities Completed:</strong> {{ totalCompleted }}/{{ totalItems }}
-            </div>
-            <div class="detail-item">
-              <strong>Average Quiz Score:</strong> {{ averageScore }}%
-            </div>
-          </div>
-        </div>
+      <p class="intro-text">This is to certify that</p>
 
-        <!-- Footer -->
-        <div class="certificate-footer">
-          <div class="signature-section">
-            <div class="signature-line"></div>
-            <div class="signature-label">SAGE Program Director</div>
+      <div class="recipient-name">
+        <span>{{ displayedName }}</span>
+      </div>
+
+      <p class="body-text">
+        has engaged with the reflective tasks and quizzes for learners with
+      </p>
+
+      <ul class="needs-list">
+        <li>Visual needs</li>
+        <li>Hearing needs</li>
+        <li>Communication needs</li>
+        <li>Speech needs</li>
+        <li>Cognitive needs</li>
+        <li>Multiple needs</li>
+        <li>Physical needs</li>
+      </ul>
+
+      <div class="date-section">
+        <span>{{ props.completionDate }}</span>
+      </div>
+
+      <div class="signature-row">
+        <div class="signature-box">
+          <div class="signature-placeholder"></div>
+          <div class="signature-caption">Permanent Secretary</div>
+        </div>
+        <div class="signature-box">
+          <div class="signature-placeholder signature-with-image">
+            <img src="/cbm_signature.png" alt="CBM signature" />
           </div>
-          
-          <div class="certificate-number">
-            Certificate #: SAGE-{{ certificateNumber }}
-          </div>
+          <div class="signature-caption">CBM</div>
+        </div>
+        <div class="signature-box">
+          <div class="signature-placeholder"></div>
+          <div class="signature-caption">The Open University</div>
         </div>
       </div>
+
+      <img src="/sage_logo_strip.png" alt="SAGE partners" class="footer-banner" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
-  completionDate: string
-  totalCompleted: number
-  totalItems: number
-  averageScore: number
-  certificateNumber: string
-  recipientName?: string
+  completionDate: string;
+  recipientName?: string;
 }>();
 
+const displayedName = computed(() => props.recipientName?.trim() || '[Your Name]');
 const certificateRef = ref<HTMLElement | null>(null);
 
-// Print only the certificate area
 const printCertificate = () => {
   if (!certificateRef.value) return;
   const printContents = certificateRef.value.innerHTML;
@@ -92,159 +75,163 @@ const printCertificate = () => {
   document.body.innerHTML = printContents;
   window.print();
   document.body.innerHTML = originalContents;
-  window.location.reload(); // reload to restore app state
+  window.location.reload();
 };
+
 defineExpose({ printCertificate });
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+3:wght@400;600&display=swap');
+
 .certificate-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  background: #f8f9fa;
-  padding: 32px 0;
+  padding: 32px;
+  background: #f2f2f2;
 }
-.certificate {
+
+.certificate-sheet {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.08), 0 1.5px 6px rgba(0,0,0,0.04);
-  max-width: 700px;
+  padding: 48px 56px 40px;
+  border: 6px solid #d4d4d4;
+  max-width: 900px;
   width: 100%;
-  padding: 0;
+  min-height: 640px;
   position: relative;
-  overflow: hidden;
-}
-.certificate-border {
-  position: absolute;
-  inset: 0;
-  border: 6px solid #f7c948;
-  border-radius: 16px;
-  pointer-events: none;
-  z-index: 1;
-}
-.border-pattern {
-  position: absolute;
-  inset: 0;
-  border: 2px dashed #f7c948;
-  border-radius: 12px;
-  margin: 16px;
-  pointer-events: none;
-  z-index: 2;
-}
-.certificate-content {
-  position: relative;
-  z-index: 3;
-  padding: 48px 32px 32px 32px;
   text-align: center;
+  font-family: 'Source Sans 3', Arial, sans-serif;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
-.certificate-header {
-  margin-bottom: 32px;
+
+.certificate-logo {
+  width: 220px;
+  margin: 0 auto 16px;
+  display: block;
 }
-.logo-section {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  color: #f7c948;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
+
+.title-block {
+  margin-bottom: 24px;
 }
-.logo-subtitle {
-  font-size: 1rem;
-  color: #888;
-  font-weight: 400;
-  margin-bottom: 16px;
-}
-.certificate-title h1 {
-  font-size: 2.2rem;
-  font-weight: 700;
+
+.title-prefix {
+  font-family: 'Source Sans 3', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #444;
+  text-transform: uppercase;
   margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  line-height: 1.2;
+}
+
+.title-strong {
+  font-weight: 700;
+}
+
+.title-light {
+  font-weight: 400;
+}
+
+.title-block h1 {
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+  font-size: 2rem;
+  margin: 4px 0 0;
   color: #222;
 }
-.title-underline {
-  width: 80px;
-  height: 4px;
-  background: #f7c948;
-  margin: 12px auto 0 auto;
-  border-radius: 2px;
-}
-.certificate-body {
-  margin: 32px 0;
-}
-.presentation-text {
+
+.intro-text {
   font-size: 1.1rem;
   color: #444;
   margin-bottom: 12px;
 }
+
 .recipient-name {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2d6a4f;
-  margin-bottom: 12px;
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+  font-size: 2.2rem;
+  color: #1f2933;
+  margin-bottom: 16px;
 }
-.name-placeholder {
-  border-bottom: 1px dashed #bbb;
-  padding: 0 32px;
+
+.recipient-name span {
+  padding: 4px 48px;
+  display: inline-block;
 }
-.achievement-text {
-  font-size: 1.1rem;
+
+.body-text {
+  font-size: 1.05rem;
   color: #444;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
-.master-status {
-  margin-bottom: 24px;
-}
-.master-badge {
-  display: inline-flex;
-  align-items: center;
-  background: #f7c948;
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.2rem;
-  border-radius: 24px;
-  padding: 8px 24px;
-  box-shadow: 0 2px 8px rgba(247,201,72,0.15);
-}
-.trophy-icon {
-  font-size: 2rem;
-  margin-right: 12px;
-}
-.completion-details {
-  margin-top: 16px;
+
+.needs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
   font-size: 1rem;
-  color: #555;
+  color: #444;
 }
-.detail-item {
-  margin-bottom: 4px;
+
+.needs-list li {
+  margin: 4px 0;
 }
-.certificate-footer {
-  margin-top: 40px;
+
+.date-section {
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+  font-size: 1.3rem;
+  color: #1f2933;
+  margin: 24px 0 36px;
+}
+
+.signature-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.signature-box {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+}
+
+.signature-placeholder {
+  border: 2px solid #c1c1c1;
+  height: 80px;
+  margin-bottom: 12px;
+}
+
+.signature-with-image {
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-with-image img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: grayscale(1);
+}
+.signature-caption {
   font-size: 0.95rem;
-  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
 }
-.signature-section {
-  text-align: left;
+
+.footer-banner {
+  width: 100%;
+  margin-top: 16px;
 }
-.signature-line {
-  width: 160px;
-  border-bottom: 2px solid #bbb;
-  margin-bottom: 4px;
-  margin-left: 8px;
-}
-.signature-label {
-  font-size: 0.95rem;
-  color: #888;
-  margin-left: 8px;
-}
-.certificate-number {
-  text-align: right;
-  font-size: 0.95rem;
-  color: #bbb;
-}
+
 @media print {
   body {
     background: #fff !important;
@@ -252,12 +239,10 @@ defineExpose({ printCertificate });
   .certificate-container {
     background: #fff !important;
     padding: 0 !important;
-    min-height: 0 !important;
   }
-  .certificate {
+  .certificate-sheet {
     box-shadow: none !important;
-    border: none !important;
-    margin: 0 auto !important;
+    border-color: #c3c3c3;
   }
 }
-</style> 
+</style>
