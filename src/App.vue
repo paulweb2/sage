@@ -18,39 +18,39 @@
             <div class="menu-divider"></div>
 
             <ion-list id="working-categories">
-              <ion-list-header>Working with learners with disabilities</ion-list-header>
-              <ion-menu-toggle :auto-hide="false">
-                <ion-item router-direction="root" :router-link="'/working/working-partnership'" lines="none" :detail="false" class="hydrated category-item">
-                  <ion-icon aria-hidden="true" slot="start" :ios="handLeftOutline" :md="handLeftSharp"></ion-icon>
-                  <ion-label>Working in partnership</ion-label>
-                </ion-item>
-              </ion-menu-toggle>
-              <ion-menu-toggle :auto-hide="false">
-                <ion-item router-direction="root" :router-link="'/working/working-language'" lines="none" :detail="false" class="hydrated category-item">
-                  <ion-icon aria-hidden="true" slot="start" :ios="bookOutline" :md="bookSharp"></ion-icon>
-                  <ion-label>Language</ion-label>
-                </ion-item>
-              </ion-menu-toggle>
-              <ion-menu-toggle :auto-hide="false">
-                <ion-item router-direction="root" :router-link="'/working/working-tensions'" lines="none" :detail="false" class="hydrated category-item">
-                  <ion-icon aria-hidden="true" slot="start" :ios="constructOutline" :md="constructSharp"></ion-icon>
-                  <ion-label>Challenges and enablers</ion-label>
+              <ion-list-header>Overview of supporting learners with disabilities</ion-list-header>
+              <ion-menu-toggle :auto-hide="false" v-for="(workingItem, index) in workingMenuItems" :key="workingItem.url">
+                <ion-item
+                  @click="setActivePage('working', index)"
+                  router-direction="root"
+                  :router-link="workingItem.url"
+                  lines="none"
+                  :detail="false"
+                  class="hydrated category-item"
+                  :class="{ selected: activeSection === 'working' && activeIndex === index }"
+                >
+                  <ion-icon aria-hidden="true" slot="start" :ios="workingItem.iosIcon" :md="workingItem.mdIcon"></ion-icon>
+                  <ion-label>{{ workingItem.title }}</ion-label>
                 </ion-item>
               </ion-menu-toggle>
             </ion-list>
 
             <div class="menu-divider"></div>
 
-            <ion-menu-toggle :auto-hide="false" v-for="tp in topRest" :key="tp.index">
-              <ion-item @click="setActivePage('top', tp.index)" router-direction="root" :router-link="tp.page.url" lines="none" :detail="false" class="hydrated" :class="{ selected: activeSection === 'top' && activeIndex === tp.index }">
-                <ion-icon aria-hidden="true" slot="start" :ios="tp.page.iosIcon" :md="tp.page.mdIcon"></ion-icon>
-                <ion-label>{{ tp.page.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
+            <ion-list id="signposting-section" v-if="topRest.length">
+              <ion-list-header>Screening and referring learners with disabilities</ion-list-header>
+
+              <ion-menu-toggle :auto-hide="false" v-for="tp in topRest" :key="tp.index">
+                <ion-item @click="setActivePage('top', tp.index)" router-direction="root" :router-link="tp.page.url" lines="none" :detail="false" class="hydrated" :class="{ selected: activeSection === 'top' && activeIndex === tp.index }">
+                  <ion-icon aria-hidden="true" slot="start" :ios="tp.page.iosIcon" :md="tp.page.mdIcon"></ion-icon>
+                  <ion-label>{{ tp.page.title }}</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            </ion-list>
           </ion-list>
 
           <ion-list id="disability-categories">
-            <ion-list-header>Disability categories</ion-list-header>
+            <ion-list-header>Supporting individual learning needs</ion-list-header>
 
             <div v-for="(category, index) in disabilityCategories" :key="index">
               <!-- Main category item -->
@@ -140,17 +140,37 @@ import {
 
 const route = useRoute();
 const router = useRouter();
-const activeSection = ref<'top' | 'bottom'>('top');
+const activeSection = ref<'top' | 'bottom' | 'working'>('top');
 const activeIndex = ref(0);
+const workingMenuItems = [
+  {
+    title: 'Working in partnership',
+    url: '/working/working-partnership',
+    iosIcon: handLeftOutline,
+    mdIcon: handLeftSharp,
+  },
+  {
+    title: 'Language',
+    url: '/working/working-language',
+    iosIcon: bookOutline,
+    mdIcon: bookSharp,
+  },
+  {
+    title: 'Challenges and enablers',
+    url: '/working/working-tensions',
+    iosIcon: constructOutline,
+    mdIcon: constructSharp,
+  },
+];
 const appPages = [
   {
-    title: 'Home',
+    title: 'Home and introduction',
     url: '/folder/Home',
     iosIcon: homeOutline,
     mdIcon: homeSharp,
   },
   {
-    title: 'My progress',
+    title: 'My certificate of participation',
     url: '/progress',
     iosIcon: trophyOutline,
     mdIcon: trophySharp,
@@ -168,32 +188,32 @@ const appPages = [
     mdIcon: mailSharp,
   },
   {
-    title: 'Working with learners with disabilities',
+    title: 'Overview of supporting learners with disabilities',
     url: '/working-with-learners',
     iosIcon: peopleOutline,
     mdIcon: peopleSharp,
   },
 ];
 
-const progressIndex = appPages.findIndex(page => page.title === 'My progress');
+const progressIndex = appPages.findIndex(page => page.title === 'My certificate of participation');
 const progressUrl = progressIndex !== -1 ? appPages[progressIndex].url : '/progress';
 
-const workingIndex = appPages.findIndex(page => page.title === 'Working with learners with disabilities');
+const workingIndex = appPages.findIndex(page => page.title === 'Overview of supporting learners with disabilities');
 const workingExpanded = ref(false);
 
 const topHome = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .find(({ page }) => page.title === 'Home') || null
+  .find(({ page }) => page.url === '/folder/Home') || null
 );
 
 const topRest = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My progress' && page.title !== 'Home' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My certificate of participation' && page.url !== '/folder/Home' && page.title !== 'Overview of supporting learners with disabilities')
 );
 
 const topPages = computed(() => appPages
   .map((page, index) => ({ page, index }))
-  .filter(({ page }) => page.title !== 'My progress' && page.title !== 'Working with learners with disabilities')
+  .filter(({ page }) => page.title !== 'My certificate of participation' && page.title !== 'Overview of supporting learners with disabilities')
 );
 
 const createDisabilitySubItems = () => ([
@@ -203,7 +223,7 @@ const createDisabilitySubItems = () => ([
   { title: 'Enabling learning', anchor: 'enabling' },
   { title: 'Resources to support learning', anchor: 'resources' },
   { title: 'Case study', anchor: 'case-study' },
-  { title: 'Reflective task', anchor: 'reflective-task' },
+  { title: 'Reflective tasks', anchor: 'reflective-task' },
   { title: 'Quiz', anchor: 'knowledge-check' }
 ]);
 
@@ -315,7 +335,7 @@ const scrollToSection = async (anchor: string, categoryIndex: number) => {
   }
 };
 
-const setActivePage = (section: 'top' | 'bottom', index: number) => {
+const setActivePage = (section: 'top' | 'bottom' | 'working', index: number) => {
   activeSection.value = section;
   activeIndex.value = index;
 };
@@ -389,6 +409,13 @@ const updateActiveState = () => {
     return;
   }
   
+  // Check if we're on one of the working menu pages
+  const workingMenuIndex = workingMenuItems.findIndex(item => item.url === path);
+  if (workingMenuIndex !== -1) {
+    setActivePage('working', workingMenuIndex);
+    return;
+  }
+  
   // Check if we're on a disability page
   const bottomIndex = disabilityCategories.value.findIndex((category) => 
     category.url === path
@@ -446,6 +473,14 @@ ion-menu.md ion-list#disability-categories ion-list-header {
 }
 
 ion-menu.md ion-list#working-categories ion-list-header {
+  font-size: 16px;
+  margin-bottom: 18px;
+  color: #757575;
+  min-height: 26px;
+  font-weight: normal;
+}
+
+ion-menu.md ion-list#signposting-section ion-list-header {
   font-size: 16px;
   margin-bottom: 18px;
   color: #757575;
@@ -542,6 +577,11 @@ ion-menu.ios ion-list#disability-categories ion-list-header {
 }
 
 ion-menu.ios ion-list#working-categories ion-list-header {
+  margin-bottom: 8px;
+  font-weight: normal;
+}
+
+ion-menu.ios ion-list#signposting-section ion-list-header {
   margin-bottom: 8px;
   font-weight: normal;
 }

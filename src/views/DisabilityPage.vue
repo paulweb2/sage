@@ -827,7 +827,7 @@
                 <div class="case-study-note">
                   <ion-textarea
                     v-model="caseStudyNote"
-                    placeholder="Write your case study notes here..."
+                    placeholder="Write your case study notes here…"
                     :rows="6"
                     :auto-grow="true"
                     :maxlength="2000"
@@ -890,10 +890,10 @@
             </ion-card-content>
           </ion-card>
 
-          <!-- 8. Reflective Task -->
+          <!-- 8. Reflective Tasks -->
           <ion-card id="reflective-task">
             <ion-card-header>
-              <ion-card-title>Reflective task</ion-card-title>
+              <ion-card-title>Reflective tasks</ion-card-title>
               <ion-card-subtitle>Deepen Your Learning Through Reflection</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -920,7 +920,7 @@
                 </p>
                 <ion-textarea
                   v-model="currentReflection.caseStudyReflection"
-                  placeholder="Reflect on how you would adapt the case study strategies to your own teaching context..."
+                  placeholder="Write your reflections here…"
                   :rows="6"
                   :auto-grow="true"
                   :maxlength="2000"
@@ -1030,7 +1030,7 @@
                 </p>
                 <ion-textarea
                   v-model="currentReflection.practiceReflection"
-                  placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
+                  placeholder="Write your reflections here…"
                   :rows="6"
                   :auto-grow="true"
                   :maxlength="2000"
@@ -1150,13 +1150,13 @@
                 <ion-note>{{ Math.round(reflectionProgress * 100) }}% Complete</ion-note>
               </div>
               
-              <!-- General Reflection Prompts Accordion -->
-              <ion-accordion-group>
-                <ion-accordion value="general-prompts">
-                  <ion-item slot="header" color="light">
-                    <ion-icon :icon="helpCircle" slot="start" color="primary"></ion-icon>
-                    <ion-label>General Reflection Prompts</ion-label>
-                  </ion-item>
+              <!-- Reflection prompts accordion -->
+            <ion-accordion-group>
+              <ion-accordion value="general-prompts">
+                <ion-item slot="header" color="light">
+                  <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                  <ion-label>Think about...</ion-label>
+                </ion-item>
                   <div class="ion-padding" slot="content">
                     <ion-list>
                       <ion-item>

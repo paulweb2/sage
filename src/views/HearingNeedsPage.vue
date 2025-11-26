@@ -400,7 +400,7 @@
             <div class="case-study-note">
               <ion-textarea
                 v-model="caseStudyNote"
-                placeholder="Write your case study notes here..."
+                placeholder="Write your case study notes here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -436,7 +436,7 @@
         <!-- Reflection Tool -->
         <ion-card id="reflective-task">
           <ion-card-header>
-            <ion-card-title>Reflective task</ion-card-title>
+            <ion-card-title>Reflective tasks</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div class="reflection-section">
@@ -445,7 +445,7 @@
               </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
-                placeholder="How could you adapt the hearing supports mentioned in the case study for your own students?"
+                placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -482,7 +482,7 @@
               <h4>2) How could you help hearing children communicate with those with a hearing need?</h4>
               <ion-textarea
                 v-model="reflection.practiceReflection"
-                placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
+                placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -544,8 +544,8 @@
             <ion-accordion-group>
               <ion-accordion value="general-prompts">
                 <ion-item slot="header" color="light">
-                  <ion-icon :icon="helpCircle" slot="start" color="primary"></ion-icon>
-                  <ion-label>General Reflection Prompts</ion-label>
+                  <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                  <ion-label>Think about...</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -1157,7 +1157,7 @@ const saveReflection = () => {
 };
 
 const exportReflection = () => {
-  const content = `Reflective task - Hearing Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
+  const content = `Reflective tasks - Hearing Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = window.document.createElement('a');

@@ -233,7 +233,7 @@
               </template>
               <ion-textarea
                 v-model="reflectionText"
-                placeholder="Write your reflection..."
+                placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -268,8 +268,8 @@
             <ion-accordion-group>
               <ion-accordion value="general-prompts">
                 <ion-item slot="header" color="light">
-                  <ion-icon :icon="helpCircle" slot="start" color="primary"></ion-icon>
-                  <ion-label>General Reflection Prompts</ion-label>
+                  <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                  <ion-label>Think about...</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -346,7 +346,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonTextarea, IonButton, IonIcon, IonProgressBar, IonNote, IonAccordionGroup, IonAccordion, IonItem, IonLabel, IonList, IonGrid, IonRow, IonCol, actionSheetController } from '@ionic/vue';
 import { toastController } from '@ionic/vue';
-import { save, download, trash, helpCircle, star, people, settings, school, heart, checkmark, ellipsisVertical, business, close } from 'ionicons/icons';
+import { save, download, trash, bulb, star, people, settings, school, heart, checkmark, ellipsisVertical, business, close } from 'ionicons/icons';
 
 const route = useRoute();
 const pageId = computed(() => (route.params.id as string) || 'working-partnership');

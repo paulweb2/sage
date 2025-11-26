@@ -491,7 +491,7 @@
             <div class="case-study-note">
               <ion-textarea
                 v-model="caseStudyNote"
-                placeholder="Write your case study notes here..."
+                placeholder="Write your case study notes here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -536,7 +536,7 @@
         <!-- Reflection Tool -->
         <ion-card id="reflective-task">
           <ion-card-header>
-            <ion-card-title>Reflective task</ion-card-title>
+            <ion-card-title>Reflective tasks</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <!-- Question 1 -->
@@ -546,7 +546,7 @@
               </p>
               <ion-textarea
                 v-model="reflection.caseStudyReflection"
-                placeholder="Describe the three tasks and how you would break each one into small steps..."
+                placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -589,7 +589,7 @@
               </p>
               <ion-textarea
                 v-model="reflection.practiceReflection"
-                placeholder="Describe the calculations you chose and the concrete resources and visual images that would support each one..."
+                placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -1555,7 +1555,7 @@ const saveReflection = () => {
 };
 
 const exportReflection = () => {
-  const content = `Reflective task - Cognitive and Intellectual Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
+  const content = `Reflective tasks - Cognitive and Intellectual Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = window.document.createElement('a');

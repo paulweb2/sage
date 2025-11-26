@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>My progress</ion-title>
+        <ion-title>My certificate of participation</ion-title>
         <ion-buttons slot="end">
           <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
           <ion-button @click="presentActionSheet">
@@ -24,7 +24,6 @@
             <ion-icon :icon="trophy" slot="start" :color="achievement.color"></ion-icon>
             Overall Progress
           </ion-card-title>
-          <ion-card-subtitle>Your SAGE Learning Journey</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <!-- Progress Circle -->

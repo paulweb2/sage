@@ -403,7 +403,7 @@
               <div class="case-study-note">
                 <ion-textarea
                   v-model="caseStudyNoteCase1"
-                  placeholder="Write your case study notes here..."
+                  placeholder="Write your case study notes here…"
                   :rows="6"
                   :auto-grow="true"
                   :maxlength="2000"
@@ -466,7 +466,7 @@
               <div class="case-study-note">
                 <ion-textarea
                   v-model="caseStudyNoteCase2"
-                  placeholder="Write your case study notes here..."
+                  placeholder="Write your case study notes here…"
                   :rows="6"
                   :auto-grow="true"
                   :maxlength="2000"
@@ -502,16 +502,16 @@
         <!-- Reflection Tool -->
         <ion-card id="reflective-task">
           <ion-card-header>
-            <ion-card-title>Reflective task</ion-card-title>
+            <ion-card-title>Reflective tasks</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div class="reflection-section">
               <p class="reflection-prompt">
                 1) Conduct a self-observation and self-reflection throughout a week of teaching and note how often you seek points of view of your learners with physical disabilities (PD), and how often you make decisions for them.
               </p>
-              <ion-textarea
-                v-model="reflection.caseStudyReflection"
-                placeholder="How could you adapt the supports mentioned in the case study for your own students?"
+            <ion-textarea
+              v-model="reflection.caseStudyReflection"
+              placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -526,9 +526,9 @@
                 <br /><br />
                 3) Devise and carry out an activity for all your learners where they would think and articulate/draw/paint what they understand inclusion and belonging means to them in your learning community.
               </h4>
-              <ion-textarea
-                v-model="reflection.practiceReflection"
-                placeholder="Reflect on your current practice and identify areas for improvement in accessibility..."
+            <ion-textarea
+              v-model="reflection.practiceReflection"
+              placeholder="Write your reflections here…"
                 :rows="6"
                 :auto-grow="true"
                 :maxlength="2000"
@@ -1661,7 +1661,7 @@ const saveReflection = () => {
 };
 
 const exportReflection = () => {
-  const content = `Reflective task - Physical and Sensory Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
+  const content = `Reflective tasks - Physical and Sensory Needs\n\n1) CASE STUDY REFLECTION:\n${reflection.value.caseStudyReflection || 'No reflection written yet.'}\n\n2) PRACTICE REFLECTION:\n${reflection.value.practiceReflection || 'No reflection written yet.'}`;
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = window.document.createElement('a');

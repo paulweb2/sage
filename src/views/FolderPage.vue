@@ -25,10 +25,23 @@
       <div id="container">
         <!-- Home Page -->
         <div v-if="route.params.id === 'Home'">
+          <div class="home-mobile-logo">
+            <img src="/sage-logo.svg" alt="SAGE logo" class="home-mobile-logo-img" />
+            <div class="home-mobile-logo-text">
+              Zimbabwe Disability<br />Toolkit
+            </div>
+          </div>
+
           <!-- SAGE Cover Illustration -->
           <div class="sage-cover-illustration-wrapper">
             <img src="/Letwin_Gwambura_Danda.jpg" alt="Classroom scene of learners studying together, including a learner using a wheelchair" class="sage-cover-illustration" />
           </div>
+
+          <ion-card>
+            <ion-card-content>
+              <p>Welcome to the Zimbabwe Disability Tookit App. In this section you will find an overview of the app, including the background, objectives, using the toolkit as an information source or a professional learning resource, and how to achieve your Certificate of Participation.</p>
+            </ion-card-content>
+          </ion-card>
 
           <ion-card>
             <ion-card-content>
@@ -228,7 +241,7 @@
         <div v-else-if="route.params.id === 'Screening'">
           <ion-card>
             <ion-card-content>
-              <p>Screening, supporting and referring learners with disabilities.</p>
+              <p>Screening and referring learners with disabilities.</p>
             </ion-card-content>
           </ion-card>
           <ion-card>
@@ -312,10 +325,10 @@
             </ion-card-header>
             <ion-card-content>
               <div class="reflection-section">
-                <p>What key points are important for you to take from this section challenges about screening and referring learners?</p>
+                <p>What key points are important for you to take from this section about screening and referring learners?</p>
                 <ion-textarea
                   v-model="signpostingReflectionText"
-                  placeholder="Write your reflection..."
+                  placeholder="Write your reflections here…"
                   :rows="6"
                   :auto-grow="true"
                   :maxlength="2000"
@@ -851,8 +864,8 @@ const getPageTitle = () => {
   
   // Handle case sensitivity - check both exact match and case-insensitive
   const titles: { [key: string]: string } = {
-    'Home': 'Home',
-    'home': 'Home', // Add lowercase version
+    'Home': 'Home and introduction',
+    'home': 'Home and introduction', // Add lowercase version
     'Screening': 'Signposting tool',
     'Contacts': 'Contacts'
   };
@@ -870,7 +883,7 @@ const getPageTitle = () => {
     }
   }
   
-  const finalTitle = title || id || 'Home';
+  const finalTitle = title || id || 'Home and introduction';
   console.log('Page title:', finalTitle); // Debug logging
   return finalTitle;
 };
@@ -1554,6 +1567,38 @@ ion-radio-group ion-item {
 
 ion-badge {
   margin-top: 8px;
+}
+
+.home-mobile-logo {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .home-mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--ion-color-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .home-mobile-logo-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+  }
+
+  .home-mobile-logo-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ion-text-color, #1e1e1e);
+  }
 }
 
 .sage-cover-illustration-wrapper {
