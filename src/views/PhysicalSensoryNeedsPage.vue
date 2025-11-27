@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Physical and sensory needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -425,13 +425,38 @@
                     Clear
                   </ion-button>
                 </div>
-                <ul class="case-study-prompts">
-                  <li>Have you considered the route from the classroom door to Rudo’s desk?</li>
-                  <li>Have you thought about the height of the desk?</li>
-                  <li>Have you thought about how Rudo could work with a peer to choose the resources for her task?</li>
-                  <li>How can learners support Rudo to collect resources for a task?</li>
-                  <li>How can learners offer support to Rudo?</li>
-                </ul>
+                <ion-accordion-group>
+                  <ion-accordion value="psn-case-study-1-think">
+                    <ion-item slot="header" color="light">
+                      <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                      <ion-label>Think about...</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Have you considered the route from the classroom door to Rudo’s desk?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Have you thought about the height of the desk?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Have you thought about how Rudo could work with a peer to choose the resources for her task?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How can learners support Rudo to collect resources for a task?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>How can learners offer support to Rudo?</ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
               </div>
             </div>
 
@@ -488,12 +513,34 @@
                     Clear
                   </ion-button>
                 </div>
-                <ul class="case-study-prompts">
-                  <li>Is a scribe allowed?</li>
-                  <li>Is a reader allowed?</li>
-                  <li>Is there an alternative answer sheet that the examination council can provide?</li>
-                  <li>Is extra time allowed?</li>
-                </ul>
+                <ion-accordion-group>
+                  <ion-accordion value="psn-case-study-2-think">
+                    <ion-item slot="header" color="light">
+                      <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                      <ion-label>Think about...</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                      <ion-list>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Is a scribe allowed?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Is a reader allowed?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Is there an alternative answer sheet that the examination council can provide?</ion-label>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                          <ion-label>Is extra time allowed?</ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
               </div>
             </div>
           </ion-card-content>

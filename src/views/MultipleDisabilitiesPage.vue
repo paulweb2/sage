@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Multiple disabilities</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -428,12 +428,34 @@
                   Clear
                 </ion-button>
               </div>
-              <ul class="case-study-prompts">
-                <li>How did the educator encourage learner autonomy?</li>
-                <li>How do culturally familiar activities support participation and enjoyment?</li>
-                <li>How could music be used to support counting?</li>
-                <li>How could music and dance be used to support storytelling?</li>
-              </ul>
+              <ion-accordion-group>
+                <ion-accordion value="md-case-study-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How did the educator encourage learner autonomy?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How do culturally familiar activities support participation and enjoyment?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How could music be used to support counting?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How could music and dance be used to support storytelling?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
           </ion-card-content>
         </ion-card>

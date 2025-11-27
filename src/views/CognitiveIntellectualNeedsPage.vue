@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive and intellectual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -513,22 +513,34 @@
                   Clear
                 </ion-button>
               </div>
-              <ul class="case-study-prompts">
-                <li>
-                  Have you thought about how role-play can support comprehension of a story or concept?
-                </li>
-                <li>
-                  Have you thought about choosing texts which Charles may already be familiar with the story?
-                </li>
-                <li>
-                  Have you thought about how drawings can be used to support the spoken word, for example,
-                  cartoons or animations?
-                </li>
-                <li>
-                  Have you thought about different roles learners can have in group or paired work so that
-                  Charles can actively participate without scribing or reading?
-                </li>
-              </ul>
+              <ion-accordion-group>
+                <ion-accordion value="cognitive-case-study-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you thought about how role-play can support comprehension of a story or concept?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you thought about choosing texts which Charles may already be familiar with the story?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you thought about how drawings can be used to support the spoken word, for example, cartoons or animations?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you thought about different roles learners can have in group or paired work so that Charles can actively participate without scribing or reading?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
           </ion-card-content>
         </ion-card>
@@ -565,15 +577,15 @@
                   <div class="ion-padding" slot="content">
                     <ion-list>
                       <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="primary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
                         <ion-label>Could you add a picture or an icon to illustrate each step?</ion-label>
                       </ion-item>
                       <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="primary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
                         <ion-label>How could the learner be sure that they have completed each step, for example, by ticking a box or crossing out a step?</ion-label>
                       </ion-item>
                       <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="primary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
                         <ion-label>How can you celebrate success with the learner?</ion-label>
                       </ion-item>
                     </ion-list>
@@ -608,15 +620,15 @@
                   <div class="ion-padding" slot="content">
                     <ion-list>
                       <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="secondary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
                         <ion-label>Could you add a picture or an icon to prompt the learner to use a resource or an image?</ion-label>
                       </ion-item>
                       <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="secondary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
                         <ion-label>How could the learner be sure that they have answered correctly, for example, by checking the answer using a different method or resource or image?</ion-label>
                       </ion-item>
                       <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="secondary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
                         <ion-label>How can you celebrate success with the learner?</ion-label>
                       </ion-item>
                     </ion-list>
@@ -869,7 +881,8 @@ import {
   download,
   trash,
   refresh,
-  ellipsisVertical
+  ellipsisVertical,
+  arrowForward
 } from 'ionicons/icons';
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';

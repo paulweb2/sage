@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Speech and Language Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.16</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -457,27 +457,38 @@
                   Clear
                 </ion-button>
               </div>
-              <ul class="case-study-prompts">
-                <li>
-                  Can the group of learners agree a set of rules to create an environment where everyone
-                  feels comfortable to speak?
-                </li>
-                <li>
-                  Have you considered positive educator feedback in words, in pictures and in writing?
-                </li>
-                <li>
-                  In small group activities, could learners have specific roles within the group which allow
-                  them to contribute in different ways, for example, chairperson, timekeeper or scribe?
-                </li>
-                <li>
-                  How might sentence starters and word lists support learners in your class with speech needs
-                  to contribute more?
-                </li>
-                <li>
-                  Could learners rehearse their ideas and thoughts with another learner through talking
-                  partner activities before sharing with the whole group?
-                </li>
-              </ul>
+              <ion-accordion-group>
+                <ion-accordion value="speech-case-study-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Can the group of learners agree a set of rules to create an environment where everyone feels comfortable to speak?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you considered positive educator feedback in words, in pictures and in writing?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>In small group activities, could learners have specific roles within the group which allow them to contribute in different ways, for example, chairperson, timekeeper or scribe?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How might sentence starters and word lists support learners in your class with speech needs to contribute more?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Could learners rehearse their ideas and thoughts with another learner through talking partner activities before sharing with the whole group?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
           </ion-card-content>
         </ion-card>

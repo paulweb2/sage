@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Hearing needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -550,28 +550,24 @@
                 <div class="ion-padding" slot="content">
                   <ion-list>
                     <ion-item>
-                      <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
-                      <ion-label>What are your student's strengths and how can you build on them?</ion-label>
+                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                      <ion-label>Have you thought about the table arrangements?</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
-                      <ion-label>How can you involve the student's family and support network?</ion-label>
+                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                      <ion-label>Have you thought about the position of the teacher or any other adults?</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
-                      <ion-label>What environmental changes would make the biggest difference?</ion-label>
+                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                      <ion-label>Have you considered grouping learners who communicate in the same ways or pairing learners with different ways of communicating?</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-icon :icon="school" slot="start" color="primary"></ion-icon>
-                      <ion-label>How can you collaborate with other professionals and specialists?</ion-label>
+                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                      <ion-label>How does the use of games support participation?</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-icon :icon="heart" slot="start" color="danger"></ion-icon>
-                      <ion-label>What would help your student feel more confident and included?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>How will you know if your interventions are working?</ion-label>
+                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                      <ion-label>How does the use of dice or dominoes support an understanding of number?</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>

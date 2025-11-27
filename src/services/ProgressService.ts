@@ -24,6 +24,11 @@ export interface CertificateStatus {
   passScore: number;
 }
 
+export interface ProgressOptions {
+  excludedPageIds?: string[];
+  excludedItemIds?: string[];
+}
+
 export class ProgressService {
   private static readonly PROGRESS_KEY = 'sage-overall-progress';
   private static readonly DISABILITY_PAGES = [
@@ -71,18 +76,25 @@ export class ProgressService {
   /**
    * Get overall progress across all disability pages
    */
-  static getOverallProgress(): ProgressData {
-    const items: ProgressItem[] = [];
+  static getOverallProgress(options: ProgressOptions = {}): ProgressData {
+    const { excludedPageIds = [], excludedItemIds = [] } = options;
+    const excludedPages = new Set(excludedPageIds);
+    const excludedItems = new Set(excludedItemIds);
+    const collectedItems: ProgressItem[] = [];
     
     // Check each disability page for quiz and reflection completion
     this.DISABILITY_PAGES.forEach(pageId => {
+      if (excludedPages.has(pageId)) {
+        return;
+      }
+
       const hasQuiz = pageId !== 'signposting';
       
       if (hasQuiz) {
         // Check quiz completion
         const quizCompleted = this.isQuizCompleted(pageId);
         const quizScore = this.getQuizScore(pageId);
-        items.push({
+        collectedItems.push({
           id: `${pageId}-quiz`,
           title: `${this.getPageTitle(pageId)} - Quiz`,
           type: 'quiz',
@@ -94,7 +106,7 @@ export class ProgressService {
 
       // Check reflection completion
       const reflectionCompleted = this.isReflectionCompleted(pageId);
-      items.push({
+      collectedItems.push({
         id: `${pageId}-reflection`,
         title: `${this.getPageTitle(pageId)} - Reflection`,
         type: 'reflection',
@@ -105,7 +117,7 @@ export class ProgressService {
       // Add Case Study note as a separate tracked item for pages that include it
       if (this.CASE_STUDY_PAGES.has(pageId)) {
         const csCompleted = this.isCaseStudyCompleted(pageId);
-        items.push({
+        collectedItems.push({
           id: `${pageId}-case-study`,
           title: `${this.getPageTitle(pageId)} - Case Study`,
           type: 'reflection',
@@ -115,15 +127,17 @@ export class ProgressService {
       }
     });
 
+    const items = collectedItems.filter(item => !excludedItems.has(item.id));
     const completedItems = items.filter(item => item.completed).length;
     const totalItems = items.length;
     
     // TEMPORARY: Calculate percentage based on implemented tasks only for celebration
     // TODO: Change this back to totalItems when all tasks are implemented
+    const implementedTaskIds = this.IMPLEMENTED_TASKS.filter(id => !excludedItems.has(id));
     const implementedCompletedItems = items.filter(item => 
-      this.IMPLEMENTED_TASKS.includes(item.id) && item.completed
+      implementedTaskIds.includes(item.id) && item.completed
     ).length;
-    const implementedTotalItems = this.IMPLEMENTED_TASKS.length;
+    const implementedTotalItems = implementedTaskIds.length;
     const celebrationPercentage = implementedTotalItems > 0 
       ? Math.round((implementedCompletedItems / implementedTotalItems) * 100) 
       : 0;
@@ -402,7 +416,7 @@ export class ProgressService {
   /**
    * Get progress statistics
    */
-  static getProgressStats(): {
+  static getProgressStats(options: ProgressOptions = {}): {
     totalQuizzes: number;
     completedQuizzes: number;
     totalReflections: number;
@@ -411,7 +425,7 @@ export class ProgressService {
     daysActive: number;
     lastActivityDate?: string;
   } {
-    const progress = this.getOverallProgress();
+    const progress = this.getOverallProgress(options);
     const quizItems = progress.items.filter(item => item.type === 'quiz');
     const reflectionItems = progress.items.filter(item => item.type === 'reflection');
     
@@ -547,8 +561,8 @@ export class ProgressService {
   /**
    * Get recent activity (last 5 completed items)
    */
-  static getRecentActivity(): ProgressItem[] {
-    const progress = this.getOverallProgress();
+  static getRecentActivity(options: ProgressOptions = {}): ProgressItem[] {
+    const progress = this.getOverallProgress(options);
     return progress.items
       .filter(item => item.completed && item.lastCompleted)
       .sort((a, b) => new Date(b.lastCompleted!).getTime() - new Date(a.lastCompleted!).getTime())
@@ -558,8 +572,8 @@ export class ProgressService {
   /**
    * Get completion streak (consecutive days with activity)
    */
-  static getCompletionStreak(): number {
-    const progress = this.getOverallProgress();
+  static getCompletionStreak(options: ProgressOptions = {}): number {
+    const progress = this.getOverallProgress(options);
     const completedItems = progress.items.filter(item => item.completed && item.lastCompleted);
     
     if (completedItems.length === 0) return 0;

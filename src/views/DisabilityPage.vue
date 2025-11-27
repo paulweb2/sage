@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -849,20 +849,30 @@
                       Clear
                     </ion-button>
                   </div>
-                  <ul class="case-study-prompts">
-                    <li>
-                      Have you thought about finding out what Chiedza is interested in and using that to
-                      develop learning activities?
-                    </li>
-                    <li>
-                      Have you thought about how peer buddies and positive reinforcement could be used to
-                      support Chiedza to ask for help?
-                    </li>
-                    <li>
-                      Could task analysis or parental involvement help Chiedza to be more engaged in
-                      lessons?
-                    </li>
-                  </ul>
+                  <ion-accordion-group>
+                    <ion-accordion value="communication-case-study-think">
+                      <ion-item slot="header" color="light">
+                        <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                        <ion-label>Think about...</ion-label>
+                      </ion-item>
+                      <div class="ion-padding" slot="content">
+                        <ion-list>
+                          <ion-item>
+                            <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                            <ion-label>Have you thought about finding out what Chiedza is interested in and using that to develop learning activities?</ion-label>
+                          </ion-item>
+                          <ion-item>
+                            <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                            <ion-label>Have you thought about how peer buddies and positive reinforcement could be used to support Chiedza to ask for help?</ion-label>
+                          </ion-item>
+                          <ion-item>
+                            <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                            <ion-label>Could task analysis or parental involvement help Chiedza to be more engaged in lessons?</ion-label>
+                          </ion-item>
+                        </ion-list>
+                      </div>
+                    </ion-accordion>
+                  </ion-accordion-group>
                 </div>
               </div>
 

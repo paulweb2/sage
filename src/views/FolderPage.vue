@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -359,11 +359,11 @@
                   <div class="ion-padding" slot="content">
                     <ion-list>
                       <ion-item>
-                        <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
                         <ion-label>How can the signposting tool support your work as an educator?</ion-label>
                       </ion-item>
                       <ion-item>
-                        <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
                         <ion-label>What are the key points to consider when using the signposting tool?</ion-label>
                       </ion-item>
                     </ion-list>
@@ -619,7 +619,6 @@ import {
   trophy,
   arrowForward,
   openOutline,
-  people,
   chevronDown
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';

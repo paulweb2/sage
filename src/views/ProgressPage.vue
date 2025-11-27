@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>My certificate of participation</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.18</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -344,11 +344,16 @@ import {
   accessibilityOutline
 } from 'ionicons/icons';
 
-import { ProgressService, type ProgressData, type ProgressItem } from '../services/ProgressService';
+import { ProgressService, type ProgressData, type ProgressItem, type ProgressOptions } from '../services/ProgressService';
 import SageCertificate from '../components/SageCertificate.vue';
 import { actionSheetController, toastController } from '@ionic/vue';
 
 const route = useRoute();
+const CERTIFICATE_EXCLUDED_ITEMS: string[] = ['signposting-reflection'];
+const certificateProgressOptions: ProgressOptions = {
+  excludedItemIds: CERTIFICATE_EXCLUDED_ITEMS
+};
+
 const progress = ref<ProgressData>({
   totalItems: 0,
   completedItems: 0,
@@ -470,10 +475,10 @@ const loadProgress = async () => {
     // Add a small delay to show loading state
     await new Promise(resolve => setTimeout(resolve, 100));
     
-    const newProgress = ProgressService.getOverallProgress();
-    const newRecentActivity = ProgressService.getRecentActivity();
-    const newCompletionStreak = ProgressService.getCompletionStreak();
-    const newProgressStats = ProgressService.getProgressStats();
+    const newProgress = ProgressService.getOverallProgress(certificateProgressOptions);
+    const newRecentActivity = ProgressService.getRecentActivity(certificateProgressOptions);
+    const newCompletionStreak = ProgressService.getCompletionStreak(certificateProgressOptions);
+    const newProgressStats = ProgressService.getProgressStats(certificateProgressOptions);
     
     // Check if there are any new completions
     const newCompletedItems = newProgress.items.filter(item => item.completed).length;
