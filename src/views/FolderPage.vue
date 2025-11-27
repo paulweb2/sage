@@ -349,6 +349,27 @@
                   Clear All
                 </ion-button>
               </div>
+
+              <ion-accordion-group>
+                <ion-accordion value="signposting-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                        <ion-label>How can the signposting tool support your work as an educator?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
+                        <ion-label>What are the key points to consider when using the signposting tool?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </ion-card-content>
           </ion-card>
 
@@ -588,6 +609,7 @@ import {
   add,
   calendar,
   mail,
+  bulb,
   bulbOutline,
   helpCircleOutline,
   bodyOutline,
@@ -597,6 +619,7 @@ import {
   trophy,
   arrowForward,
   openOutline,
+  people,
   chevronDown
 } from 'ionicons/icons';
 import MediaPlayer from '../components/MediaPlayer.vue';

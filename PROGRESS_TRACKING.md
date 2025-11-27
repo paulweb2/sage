@@ -29,7 +29,7 @@ The SAGE app now includes a comprehensive progress tracking system that monitors
 ### 4. 100% Completion Celebration
 - **Special Recognition**: Golden celebration card for complete mastery
 - **Share Achievement**: Option to share completion on social media
-- **Master Badge**: Special "SAGE Master" recognition
+- **Master Badge**: Special "Disability Toolkit Master" recognition
 
 ## Technical Implementation
 
@@ -82,7 +82,7 @@ Progress data is stored in localStorage using consistent naming conventions:
 1. **Complete Quizzes**: Take quizzes in any disability category to track progress
 2. **Write Reflections**: Complete all three reflection sections (Case Study, Practice, Next Steps)
 3. **Monitor Progress**: Check the "My Progress" page in the navigation menu
-4. **Achieve Mastery**: Complete all 14 activities (7 quizzes + 7 reflections) to become a SAGE Master
+4. **Achieve Mastery**: Complete all 14 activities (7 quizzes + 7 reflections) to become a Disability Toolkit Master
 
 ### For Developers
 
@@ -98,7 +98,7 @@ Progress data is stored in localStorage using consistent naming conventions:
 | Beginner | 40-59% | Secondary | Bulb | You're making good progress |
 | Intermediate | 60-79% | Primary | School | Good work! Keep going |
 | Advanced | 80-99% | Success | Checkmark | Excellent progress! |
-| Master | 100% | Warning | Star | Congratulations! You're a SAGE Master! |
+| Master | 100% | Warning | Star | Congratulations! You're a Disability Toolkit Master! |
 
 ## Testing
 

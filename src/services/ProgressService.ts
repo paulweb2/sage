@@ -511,14 +511,14 @@ export class ProgressService {
         level: 'Master',
         color: 'warning',
         icon: 'star',
-        message: 'Congratulations! You\'ve completed all quizzes and reflections. You\'re a SAGE Master!'
+        message: 'Congratulations! You\'ve completed all quizzes and reflections. You\'re a Disability Toolkit Master!'
       };
     } else if (percentage >= 80) {
       return {
         level: 'Advanced',
         color: 'success',
         icon: 'checkmark-circle',
-        message: 'Excellent progress! You\'re well on your way to becoming a SAGE expert.'
+        message: 'Excellent progress! You\'re well on your way to becoming a Disability Toolkit expert.'
       };
     } else if (percentage >= 60) {
       return {
@@ -539,7 +539,7 @@ export class ProgressService {
         level: 'Getting Started',
         color: 'medium',
         icon: 'play',
-        message: 'Welcome to SAGE! Start your learning journey by exploring the disability categories.'
+        message: 'Welcome to the Disability Toolkit! Start your learning journey by exploring the disability categories.'
       };
     }
   }

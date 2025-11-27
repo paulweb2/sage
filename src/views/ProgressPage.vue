@@ -200,8 +200,8 @@
         <ion-card-content>
           <div class="celebration-content">
             <div class="celebration-icon">🏆</div>
-            <h3>You've completed all SAGE learning activities!</h3>
-            <p>You're now a SAGE Master with comprehensive knowledge of supporting students with diverse needs.</p>
+            <h3>You've completed all Disability Toolkit learning activities!</h3>
+            <p>You're now a Disability Toolkit Master with comprehensive knowledge of supporting students with diverse needs.</p>
             <ion-button expand="block" color="warning" @click="showCertificateModal = true">
               <ion-icon :icon="document" slot="start"></ion-icon>
               Print Certificate
@@ -251,7 +251,7 @@
     <ion-modal :is-open="showCertificateModal" @didDismiss="showCertificateModal = false">
       <ion-header>
         <ion-toolbar>
-          <ion-title>SAGE Master Certificate</ion-title>
+          <ion-title>Disability Toolkit Master Certificate</ion-title>
           <ion-buttons slot="end">
             <ion-button @click="showCertificateModal = false">Close</ion-button>
           </ion-buttons>
@@ -634,7 +634,7 @@ const printPage = () => {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>SAGE - ${globalThis.document.title}</title>
+          <title>Disability Toolkit - ${globalThis.document.title}</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; }
             .print-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
@@ -647,14 +647,14 @@ const printPage = () => {
         </head>
         <body>
           <div class="print-header">
-            <h1>SAGE - Supporting Accessible and Inclusive Education</h1>
+            <h1>Disability Toolkit - Supporting Accessible and Inclusive Education</h1>
             <p>Printed on: ${new Date().toLocaleDateString()}</p>
           </div>
           <div class="print-content">
             ${container.innerHTML}
           </div>
           <div class="print-footer">
-            SAGE - Supporting Accessible and Inclusive Education
+            Disability Toolkit - Supporting Accessible and Inclusive Education
           </div>
         </body>
       </html>

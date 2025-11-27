@@ -272,7 +272,49 @@
                   <ion-label>Think about...</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <ion-list>
+                  <ion-list v-if="pageId === 'working-partnership'">
+                    <ion-item>
+                      <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
+                      <ion-label>What can you do to find out more about your learners' strengths and interests?</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                      <ion-label>How can you further involve parents and communities to enhance learning and participation for learners?</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
+                      <ion-label>What support might OPDs and NGOs be able to offer educators or learners?</ion-label>
+                    </ion-item>
+                  </ion-list>
+                  <ion-list v-else-if="pageId === 'working-language'">
+                    <ion-item>
+                      <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
+                      <ion-label>How can careful choice of language support a learner to feel engaged and included?</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                      <ion-label>How can you support other members of the school community to use respectful language?</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
+                      <ion-label>How can you support the wider community to use respectful language?</ion-label>
+                    </ion-item>
+                  </ion-list>
+                  <ion-list v-else-if="pageId === 'working-tensions'">
+                    <ion-item>
+                      <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
+                      <ion-label>What is the key challenge for you in supporting learners with disabilities?</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
+                      <ion-label>What action can you take to enable an inclusive environment for all learners?</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
+                      <ion-label>What resources or training do you need to enable an inclusive environment for all learners?</ion-label>
+                    </ion-item>
+                  </ion-list>
+                  <ion-list v-else>
                     <ion-item>
                       <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
                       <ion-label>What are your student's strengths and how can you build on them?</ion-label>
