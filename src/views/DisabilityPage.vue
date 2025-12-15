@@ -267,12 +267,17 @@
                                         </ion-label>
                                       </ion-item>
                                       <div slot="content" class="ion-padding">
-                                        <p>{{ getQuestionTip(index) }}</p>
-                                        
-                                        <div class="explanation-divider"></div>
-                                        
-                                        <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                        <p>{{ getLearningPoint(index) }}</p>
+                                    <template v-if="isCommunicationPage">
+                                      <p class="question-explanation">{{ getCommunicationExplanation(index) }}</p>
+                                    </template>
+                                    <template v-else>
+                                      <p>{{ getQuestionTip(index) }}</p>
+                                      
+                                      <div class="explanation-divider"></div>
+                                      
+                                      <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                      <p>{{ getLearningPoint(index) }}</p>
+                                    </template>
                                       </div>
                                     </ion-accordion>
                                   </ion-accordion-group>
@@ -1413,12 +1418,17 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    
-                                    <div class="explanation-divider"></div>
-                                    
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <template v-if="isCommunicationPage">
+                                      <p class="question-explanation">{{ getCommunicationExplanation(index) }}</p>
+                                    </template>
+                                    <template v-else>
+                                      <p>{{ getQuestionTip(index) }}</p>
+                                      
+                                      <div class="explanation-divider"></div>
+                                      
+                                      <p>{{ getCorrectAnswerExplanation(index) }}</p>
+                                      <p>{{ getLearningPoint(index) }}</p>
+                                    </template>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1551,6 +1561,10 @@ import {
 } from 'ionicons/icons';
 
 const route = useRoute();
+const isCommunicationPage = computed(() => {
+  const id = (route.params.id as string || '').toLowerCase();
+  return id.includes('communication');
+});
 
 // Quiz question interfaces
 interface BaseQuestion {
@@ -3717,6 +3731,26 @@ const wrongAnswerQuestions = computed(() => {
     .filter(({ index }) => !isQuestionCorrect(index));
 });
 
+const communicationExplanationFallback = 'Explanation coming soon.';
+const communicationExplanations: string[] = [
+  `"Non-speaking" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive communication practices.
+
+Use person-first language and respect individual preferences when discussing communication needs. Focus on abilities and support rather than limitations.`,
+  `Communication needs are highly individual and vary between home and school environments. What works in one context may not work in another.
+
+Communication needs are individual and contextual - avoid making assumptions about what works for all students in all situations.`,
+  `Visual timetables help with structure, clear seating plans support concentration, and noise-cancelling headphones reduce sensory input.
+
+Understanding the purpose of different communication support strategies helps in providing appropriate accommodations for students with communication needs.`,
+  'All children can acquire knowledge, understanding and skills, even if they cannot speak. They can understand and communicate in other ways.',
+  `"Supporting and valuing multiple communication methods (e.g., symbols, AAC, gestures, speech)" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive communication practices.
+
+Use person-first language and respect individual preferences when discussing communication needs. Focus on abilities and support rather than limitations.`
+];
+
+const getCommunicationExplanation = (index: number): string =>
+  communicationExplanations[index] || communicationExplanationFallback;
+
 // Get tip for a specific question
 const getQuestionTip = (index: number) => {
   const question = quizQuestions.value[index];
@@ -4094,6 +4128,11 @@ ion-range {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.question-explanation {
+  white-space: pre-wrap;
+  margin: 0;
 }
 
 /* Learning Tip Styles */

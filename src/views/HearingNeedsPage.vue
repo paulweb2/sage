@@ -708,10 +708,7 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    <div class="explanation-divider"></div>
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <p class="question-explanation">{{ getQuestionExplanation(index) }}</p>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1494,84 +1491,36 @@ const formatCorrectAnswer = (index: number): string => {
   }
 };
 
-const getQuestionTip = (index: number): string => {
-  const question = questions.value[index] as any;
-  const userAnswer = quizAnswers.value[index];
-  if (question.type === 'multi-true-false') {
-    return 'For multi-part true/false questions, consider each statement individually. Think about the specific needs and challenges that learners with hearing needs face in educational settings.';
-  } else if (question.type === 'fill-in-blank') {
-    return 'For fill-in-the-blank questions, think about what makes content accessible and supportive for learners with hearing needs. Consider both environmental factors and learning strategies.';
-  } else if (question.type === 'true-false') {
-    if (userAnswer === 'true' && question.correctAnswer === 'false') {
-      return 'This statement is false. Consider the complexity and individual nature of hearing needs - they vary greatly between individuals and contexts.';
-    }
-    return 'This statement is true. Hearing abilities and needs are diverse and individual-specific.';
-  } else {
-    const userOption = (question.options || []).find((o: any) => o.value === userAnswer);
-    const correctOption = (question.options || []).find((o: any) => o.value === question.correctAnswer);
-    if (userOption && correctOption) {
-      if (index === 0) {
-        if (userAnswer === 'b') {
-          return "The term 'Deaf and dumb' is offensive and outdated. It incorrectly suggests that people with hearing loss cannot communicate or think clearly.";
-        } else if (userAnswer === 'c') {
-          return "The term 'Handicapped' is considered outdated and offensive. It focuses on limitations rather than abilities and individual identity.";
-        }
-      }
-      return `You selected "${userOption.text}" but the correct answer is "${correctOption.text}". Consider the most inclusive and respectful language when discussing hearing needs.`;
-    }
-    return 'Review the question carefully and consider which answer best reflects inclusive, person-first language and respectful communication practices for hearing needs.';
-  }
-};
+const fallbackExplanationText = 'Explanation coming soon.';
+const questionExplanations: string[] = [
+  `The term 'Deaf and dumb' is offensive and outdated. It incorrectly suggests that people with hearing loss cannot communicate or think clearly.
 
-const getCorrectAnswerExplanation = (index: number): string => {
-  const question = questions.value[index] as any;
-  if (question.type === 'multi-true-false') {
-    if (index === 1) {
-      return 'I. True - Low lighting affects visual communication which is crucial for learners with hearing needs. II. True - Processing information requires additional cognitive effort. III. False - Dictation relies on hearing which can be challenging for learners with hearing needs.';
-    }
-    return 'For multi-part true/false questions, each statement must be evaluated based on the specific needs and challenges that learners with hearing needs face.';
-  } else if (question.type === 'fill-in-blank') {
-    if (index === 2) {
-      return 'A. Subtitles provide visual access to audio content. B. Facing the teacher supports access to visual cues and speechreading. C. Regular breaks help reduce cognitive fatigue from processing information.';
-    }
-    return 'Fill-in-the-blank questions test understanding of accessibility features and support strategies for learners with hearing needs.';
-  } else if (question.type === 'true-false') {
-    if (index === 4) {
-      return 'True because prioritising conceptual understanding allows learners to demonstrate knowledge without relying on specific language forms.';
-    }
-    if (question.correctAnswer === 'false') {
-      return 'Hearing needs are highly individual and vary between home and school environments. What works in one context may not work in another.';
-    }
-    return 'This statement accurately reflects the reality of hearing abilities and the importance of recognizing individual differences.';
-  } else {
-    const correctOption = (question.options || []).find((o: any) => o.value === question.correctAnswer);
-    if (correctOption) {
-      if (index === 0) {
-        return `"${correctOption.text}" is the correct answer because it uses respectful, inclusive language that focuses on the person first and avoids offensive or outdated terms. Terms like 'Deaf and dumb' and 'Handicapped' are considered offensive and perpetuate harmful stereotypes.`;
-      }
-      return `"${correctOption.text}" is the correct answer because it uses person-first language, respects individual preferences, and promotes inclusive practices for hearing needs.`;
-    }
-    return 'The correct answer reflects best practices in inclusive education and respectful language use for hearing needs.';
-  }
-};
+"D/deaf or has hearing loss" is the correct answer because it uses respectful, inclusive language that focuses on the person first and avoids offensive or outdated terms. Terms like 'Deaf and dumb' and 'Handicapped' are considered offensive and perpetuate harmful stereotypes.
 
-const getLearningPoint = (index: number): string => {
-  const question = questions.value[index] as any;
-  if (question.type === 'multi-true-false') {
-    if (index === 1) {
-      return 'Understanding the specific environmental and cognitive needs of learners with hearing needs helps create more inclusive and supportive learning environments.';
-    }
-    return 'Multi-part questions help assess understanding of different aspects of supporting learners with hearing needs.';
-  } else if (question.type === 'fill-in-blank') {
-    if (index === 2) {
-      return 'Accessibility features like captions and structured breaks are essential tools for supporting learners with hearing needs.';
-    }
-    return 'Selecting appropriate accessibility supports demonstrates understanding of learners’ needs.';
-  } else if (question.type === 'true-false') {
-    return 'Recognizing the diversity of hearing needs is crucial for inclusive teaching.';
-  }
-  return 'Using respectful, person-first language supports inclusive practice for hearing needs.';
-};
+Using respectful, person-first language supports inclusive practice for hearing needs.`,
+  `I. True - Low lighting affects visual communication which is crucial for learners with hearing needs. 
+
+II. True - Processing information requires additional cognitive effort.
+
+III. False - Dictation relies on hearing which can be challenging for learners with hearing needs.
+
+Understanding the specific environmental and cognitive needs of learners with hearing needs helps create more inclusive and supportive learning environments`,
+  `Subtitles provide visual access to audio content.
+
+Facing the teacher supports access to visual cues and speechreading.
+
+Regular breaks help reduce cognitive fatigue from processing information.
+
+Accessibility features like captions and structured breaks are essential tools for supporting learners with hearing needs.`,
+  `The correct answer is all of the above. 
+
+Using respectful, person-first language supports inclusive practice for hearing needs.`,
+  `True: Prioritising conceptual understanding allows learners to demonstrate knowledge without relying on specific language forms.
+
+Recognizing the diversity of hearing needs is crucial for inclusive teaching.`
+];
+
+const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 </script>
 
 <style scoped>
@@ -1584,9 +1533,9 @@ ion-card { margin: 16px; }
 .quiz-results-details { margin-top: 12px; }
 .question-result-item { margin-top: 12px; }
 .question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
-.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
 .question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
 .question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; }
 .learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 .tip-content { background: var(--ion-color-light); border-radius: 8px; padding: 12px; margin: 4px 0; }

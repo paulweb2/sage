@@ -794,10 +794,7 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    <div class="explanation-divider"></div>
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <p class="question-explanation">{{ getQuestionExplanation(index) }}</p>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1163,12 +1160,6 @@ type CognitiveQuestion =
   | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[]; instructions?: string })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
-const defaultFeedback: QuestionFeedback = {
-  tip: 'Revisit the relevant guidance in this section to refresh your understanding.',
-  explanation: 'Review the learning content to see why this answer is correct.',
-  learningPoint: 'Inclusive strategies should build confidence, reduce anxiety and support active participation.'
-};
-
 const wordBankOptions = ['anxiety', 'self-esteem', 'break down', 'fatigue'];
 const matchNeeds = ['Dysgraphia', 'Dyscalculia', 'Dyspraxia', 'Dyslexia'];
 
@@ -1521,17 +1512,31 @@ const formatCorrectAnswer = (index: number): string => {
   }
 };
 
-const getFeedbackValue = (index: number, key: keyof QuestionFeedback): string => {
-  const question = questions.value[index];
-  if (question && question.feedback && question.feedback[key]) {
-    return question.feedback[key] as string;
-  }
-  return defaultFeedback[key];
-};
+const fallbackExplanationText = 'Explanation coming soon.';
+const questionExplanations: string[] = [
+  `a.        True: Anxiety and low self-esteem are characteristic of learners with cognitive needs. 
 
-const getQuestionTip = (index: number): string => getFeedbackValue(index, 'tip');
-const getCorrectAnswerExplanation = (index: number): string => getFeedbackValue(index, 'explanation');
-const getLearningPoint = (index: number): string => getFeedbackValue(index, 'learningPoint');
+b.        True: Learners with cognitive needs may find it difficult to blend sounds and letters into words.
+c.        False: Once modelled, learners will find using this software significantly easier than writing a story
+d.        False: Learners with dyslexia often have vivid imagination and can verbalise detailed and descriptive narratives.`,
+  `Chunked tasks, extra processing time and concrete supports aid dyspraxic learners; simply seeing questions in advance may not resolve writing/organisation barriers.
+
+Effective support emphasises structure, pacing and multisensory resources.`,
+  'The learning needs are dysgraphia (writing), dyscalculia (number facts), dyspraxia (everyday tasks) and dyslexia (reading)',
+  `Learners with cognitive needs may feel anxiety, have low self-esteem, require complex tasks to be broken down into more manageable parts and experience fatigue.
+
+Educators need to support emotional needs alongside learning needs.`,
+  `Statements b and c are true.
+
+Learners with dyslexia can find verbal instructions difficult to understand. Learners with dyspraxia can benefit from acting out their expressions instead of writing them down.
+
+Statements a and d are false
+With the right support, learners with dyscalculia can become efficient in all calculations).
+
+It is crucial not to overwhelm learners, therefore, a variety of supportive resources may sometimes be counterproductive. `
+];
+
+const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 
 const reflection = ref({
   caseStudyReflection: '',
@@ -1625,9 +1630,9 @@ ion-card { margin: 16px; }
 .quiz-results-details { margin-top: 12px; }
 .question-result-item { margin-top: 12px; }
 .question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
-.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
 .question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
 .question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; }
 .learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 .fill-in-blank-text { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; }

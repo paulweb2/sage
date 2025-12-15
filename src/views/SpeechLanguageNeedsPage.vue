@@ -364,7 +364,7 @@
           <ion-card-content>
             <div class="case-study-images">
               <img
-                :src="getPublicUrl('speech_case_study.png')"
+                :src="getPublicUrl('speech_case_study.jpg')"
                 alt="Learner participating in a speech and language activity"
                 class="case-study-image"
               />
@@ -733,10 +733,7 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    <div class="explanation-divider"></div>
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <p class="question-explanation">{{ getQuestionExplanation(index) }}</p>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1060,12 +1057,6 @@ resources.paper = [
 ];
 
 // Quiz configuration
-interface QuestionFeedback {
-  tip: string;
-  explanation: string;
-  learningPoint: string;
-}
-
 interface MCOption { value: string; text: string }
 interface MultiTFSubQ { id: string; text: string; correctAnswer: 'true' | 'false'; explanation?: string }
 interface FillSentence { id: string; textBefore: string; textAfter?: string; correctAnswer: string; options: string[] }
@@ -1073,7 +1064,6 @@ interface FillSentence { id: string; textBefore: string; textAfter?: string; cor
 interface BaseQuestion {
   question: string;
   instructions?: string;
-  feedback?: QuestionFeedback;
 }
 
 type SpeechQuestion =
@@ -1082,12 +1072,6 @@ type SpeechQuestion =
   | (BaseQuestion & { type: 'multi-true-false'; subQuestions: MultiTFSubQ[] })
   | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[] })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
-
-const defaultFeedback: QuestionFeedback = {
-  tip: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  learningPoint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-};
 
 const fillWordBank = ['receptive', 'expressive', 'distractions'];
 const matchingExplanations = [
@@ -1104,12 +1088,7 @@ const questions = ref<SpeechQuestion[]>([
       { value: 'true', text: 'True' },
       { value: 'false', text: 'False' }
     ],
-    correctAnswer: 'false',
-    feedback: {
-      tip: 'Think about how receptive and expressive language often overlap.',
-      explanation: 'Learners with speech needs may also find it difficult to understand others, so the statement is false.',
-      learningPoint: 'Speech and language needs can affect both understanding and expression.'
-    }
+    correctAnswer: 'false'
   },
   {
     question: 'Which of these is a supportive strategy?',
@@ -1118,12 +1097,7 @@ const questions = ref<SpeechQuestion[]>([
       { value: 'b', text: 'Giving extra processing time.' },
       { value: 'c', text: 'Telling the learner that they articulated a sound incorrectly.' }
     ],
-    correctAnswer: 'b',
-    feedback: {
-      tip: 'Supportive strategies reduce pressure and allow learners to communicate in their own time.',
-      explanation: 'Giving extra processing time helps learners plan what to say. Finishing sentences or pointing out errors can reduce confidence.',
-      learningPoint: 'Patience and modelling are more supportive than correcting or interrupting.'
-    }
+    correctAnswer: 'b'
   },
   {
     question: 'Choose a word from the list to complete each sentence.',
@@ -1407,17 +1381,29 @@ const formatCorrectAnswer = (index: number): string => {
   }
 };
 
-const getFeedbackValue = (index: number, key: keyof QuestionFeedback): string => {
-  const question = questions.value[index];
-  if (question && question.feedback && question.feedback[key]) {
-    return question.feedback[key] as string;
-  }
-  return defaultFeedback[key];
-};
+const fallbackExplanationText = 'Explanation coming soon.';
+const questionExplanations: string[] = [
+  `Learners with speech needs may also find it difficult to understand others, so the statement is false.
 
-const getQuestionTip = (index: number): string => getFeedbackValue(index, 'tip');
-const getCorrectAnswerExplanation = (index: number): string => getFeedbackValue(index, 'explanation');
-const getLearningPoint = (index: number): string => getFeedbackValue(index, 'learningPoint');
+Speech and language needs can affect both understanding and expression.`,
+  `Giving extra processing time helps learners plan what to say. Finishing sentences or pointing out errors can reduce confidence.
+
+Patience and modelling are more supportive than correcting or interrupting.`,
+  `Receptive relates to understanding others, expressive to sharing ideas, and fewer distractions reduce barriers to communication.
+
+Targeted strategies should balance receptive and expressive supports while managing the environment.`,
+  `Speech sound delays are linked with articulation.
+
+Motor language disorders relate to planning movement.
+GLP learners speak in chunks.
+
+Different speech and language profiles call for tailored instructional approaches.`,
+  `Some learners may feel less pressure if they sit away from the speaker, so facing the speaker is not always required.
+
+Personalised positioning can reduce anxiety and support engagement.`
+];
+
+const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 
 const reflection = ref({
   caseStudyReflection: '',
@@ -1517,9 +1503,9 @@ ion-card { margin: 16px; }
 .quiz-results-details { margin-top: 12px; }
 .question-result-item { margin-top: 12px; }
 .question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
-.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
 .question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
 .question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; }
 .learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 </style>

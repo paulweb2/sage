@@ -693,10 +693,7 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    <div class="explanation-divider"></div>
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <p class="question-explanation">{{ getQuestionExplanation(index) }}</p>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1349,27 +1346,28 @@ const getQuizScoreMessage = (): string => {
   return 'Keep going. The explanations below highlight strategies to support learners with multiple disabilities.';
 };
 
-const fallbackExplanationText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-const questionTips = [
-  'Think about tangible changes to the environment that make movement, vision, or access harder.',
-  'Socialisation grows when tools, peers, and environments actively invite participation.',
-  'Use the sentence context and the situations described to choose the most appropriate word from the bank.',
-  'Strong partnerships respect family knowledge while still observing how learners respond at school.',
-  'Evaluate each statement against inclusive practice—does it increase access and participation?'
-];
-const correctAnswerExplanations = [
-  'Crowded spaces, lighting, and unreachable equipment are physical barriers. Communication challenges are social, so option d does not fit this category.',
-  'Providing preferred communication tools, modelling their use, and designing familiar environments welcome the learner socially. Sitting alone reduces interaction opportunities.',
-  'Observation reveals patterns, hearing supports communication, times captures lighting needs, and touch-based cues help focus attention.',
-  'Parents/carers contribute vital insights and can co-design approaches. Community members may not always prioritise the learner, and no one knows every context in advance.',
-  'Bigger print is not a cure-all; visual aids and sensory inputs add context; completing work for a learner removes engagement.'
-];
-const learningPoints = [
-  'Addressing physical barriers is a foundational step toward full participation.',
-  'Intentional classroom design plus peer modelling builds authentic social belonging.',
-  'Observation and thoughtful environmental adjustments uncover how and when learners learn best.',
-  'Family partnerships enrich professional insight and keep support aligned across settings.',
-  'True inclusion focuses on meaningful participation, not just task completion.'
+const fallbackExplanationText = 'Explanation coming soon.';
+const questionExplanations: string[] = [
+  `Crowded spaces, poor lighting, and unreachable equipment are physical barriers. 
+
+Not being able to communicate with peers is a social rather than a physical barrier.
+
+Addressing physical barriers is a foundational step toward full participation.`,
+  `Providing preferred communication tools, modelling their use, and designing familiar environments welcome the learner socially. Sitting alone reduces interaction opportunities.
+
+Intentional classroom design plus peer modelling builds authentic social belonging.`,
+  `Observation of learners in different environments, at different times of the day, enables an understanding of learner’s abilities and preferences.
+
+Classroom adaptation may include changes in seating position to ensure the learner can see and hear the educator. 
+
+Lighting at different times of the day may interrupt clear vision
+Use light, sound or touch focus attention.`,
+  `Community members may not always priorities an individual learner as they may have different agendas. 
+
+Parents and carer do not see their children in all situations and learners can adapt different personas/behaviours in different environments and try new things they would not do with their parents in the past. However, parents/carers have known their children the longest and can provide essential information about their likes/dislikes, preferred means of communication, and crucial medical information.  Parents/carers can therefore be a useful sounding board for trying out different pedagogical approaches.`,
+  `Bigger print is not a cure-all ; visual aids and sensory inputs increase accessibility; completing work for a learner reduces their engagement with the class.
+
+Inclusion focuses on meaningful participation, not just task completion.`
 ];
 
 const isQuestionCorrect = (index: number): boolean => {
@@ -1461,9 +1459,7 @@ const formatCorrectAnswer = (index: number): string => {
   return option ? option.text : 'Unknown';
 };
 
-const getQuestionTip = (index: number): string => questionTips[index] || fallbackExplanationText;
-const getCorrectAnswerExplanation = (index: number): string => correctAnswerExplanations[index] || fallbackExplanationText;
-const getLearningPoint = (index: number): string => learningPoints[index] || fallbackExplanationText;
+const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 
 onMounted(() => {
   console.log('[PageAnchor] MultipleDisabilities mounted', { path: route.path });
@@ -1507,9 +1503,9 @@ ion-card { margin: 16px; }
 .quiz-results-details { margin-top: 12px; }
 .question-result-item { margin-top: 12px; }
 .question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
-.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
 .question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
 .question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: var(--ion-color-light); }
 .learning-tip-container { margin-top: 4px; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 .multi-true-false-instructions,

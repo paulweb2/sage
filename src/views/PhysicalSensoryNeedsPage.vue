@@ -796,10 +796,7 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    <div class="explanation-divider"></div>
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <p class="question-explanation">{{ getQuestionExplanation(index) }}</p>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1268,12 +1265,6 @@ type PhysicalQuestion =
   | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[] })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
-const defaultFeedback: QuestionFeedback = {
-  tip: 'Review the related section on inclusive strategies for learners with PD.',
-  explanation: 'Revisit the guidance in this module for a deeper explanation.',
-  learningPoint: 'Inclusive adjustments should support participation, agency and belonging.'
-};
-
 const fillWordOptions = ['time', 'room/space', 'hear/understand', 'feeling/belonging'];
 const aspectOptions = ['Social', 'Physical', 'Environmental', 'Emotional and well-being'];
 
@@ -1661,17 +1652,26 @@ const formatCorrectAnswer = (index: number): string => {
   }
 };
 
-const getFeedbackValue = (index: number, key: keyof QuestionFeedback): string => {
-  const question = questions.value[index];
-  if (question && question.feedback && question.feedback[key]) {
-    return question.feedback[key] as string;
-  }
-  return defaultFeedback[key];
-};
+const fallbackExplanationText = 'Explanation coming soon.';
+const questionExplanations: string[] = [
+  `Peer understanding of technology and insights from families open up inclusive interactions without lowering expectations.
 
-const getQuestionTip = (index: number): string => getFeedbackValue(index, 'tip');
-const getCorrectAnswerExplanation = (index: number): string => getFeedbackValue(index, 'explanation');
-const getLearningPoint = (index: number): string => getFeedbackValue(index, 'learningPoint');
+Sustained peer collaboration and high aspirations help learners with PD flourish socially.`,
+  `Only statement a is false; the rest show how learning tools, a sense of belonging and social inclusion matter.
+
+Avoid assumptions about cognition and focus on removing barriers and learner agency.`,
+  `Only statements b and c are true; seating and grouping decisions influence independence and belonging.
+
+Plan environments that maximise both access and classroom community.`,
+  `Additional time, a different room or space, better audibility and feeling/belonging all support inclusive assessment for learners with physical needs.
+
+Assessment adjustments should consider time, environment, communication and emotional safety.`,
+  `The statements highlight the need for social interaction, physical access, environmental adjustments and emotional well-being.
+
+Planning for PD should account for social, physical, environmental and emotional dimensions together.`
+];
+
+const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 
 const reflection = ref({
   caseStudyReflection: '',
@@ -1795,9 +1795,9 @@ ion-card { margin: 16px; }
 .quiz-results-details { margin-top: 12px; }
 .question-result-item { margin-top: 12px; }
 .question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
-.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
 .question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
 .question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; }
 .learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 .fill-in-blank-text { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }

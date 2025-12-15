@@ -722,10 +722,7 @@
                                     </ion-label>
                                   </ion-item>
                                   <div slot="content" class="ion-padding">
-                                    <p>{{ getQuestionTip(index) }}</p>
-                                    <div class="explanation-divider"></div>
-                                    <p>{{ getCorrectAnswerExplanation(index) }}</p>
-                                    <p>{{ getLearningPoint(index) }}</p>
+                                    <p class="question-explanation">{{ getQuestionExplanation(index) }}</p>
                                   </div>
                                 </ion-accordion>
                               </ion-accordion-group>
@@ -1347,26 +1344,24 @@ const getQuizScoreMessage = (): string => {
 };
 
 const fallbackExplanationText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-const questionTips = [
-  'Look for language that centres the learner first before mentioning a disability.',
-  'Consider how learning environments, expectations, and instructional approaches affect learners with visual needs.',
-  'Use the sentence context and the word bank to decide which term keeps the learner safe and informed.',
-  'Focus on tools that deliver information through non-visual channels or enlarge visuals for easier access.',
-  'Think about how peers can describe what they do so no one misses the meaning behind gestures.'
-];
-const correctAnswerExplanations = [
-  'Person-first language names the individual before describing the disability, so "Learner who is blind" keeps the focus on the person.',
-  'a) True because clutter becomes a hazard; b) False because expectations should remain high; c) True because oral commentary replaces visual information that may otherwise be missed.',
-  "a) Size ensures the learner can read comfortably; b) Name cues the learner into conversations; c) Altered/changed layouts can be dangerous, so stability is best.",
-  'Talking books, large print, and audio description offer direct support for visual needs. Sign language focuses on communication for hearing differences, so "all of the above" is inaccurate here.',
-  'True – narrating gestures turns visual cues into auditory information so learners with visual needs stay involved during group work.'
-];
-const learningPoints = [
-  'Respectful, person-first language shapes expectations and inclusion.',
-  'Clear classrooms, high expectations, and described visuals build independence.',
-  'Consistent materials and predictable environments reduce confusion and support orientation.',
-  'Layered sensory inputs let learners engage with information in the format that suits them best.',
-  'Coaching peers to verbalise actions removes hidden barriers in collaborative tasks.'
+const questionExplanations: string[] = [
+  'Person-first language names the individual before describing the disability. The phrase "Learner who is blind" keeps the focus on the person.',
+  `a) True - Clutter is a hazard for learners with visual needs;
+b) False - Expectations should be high for learners with visual needs; 
+c) True - Oral commentary replaces visual information that may otherwise be missed by learners with visual needs.
+
+Uncluttered classrooms, high expectations, and described visuals build independence for learners with visual needs.`,
+  `a) Using the learners preferred font size ensures the learner can read comfortably;
+b) Using names cues learners with visual needs into conversations;
+c) Changed layouts can be dangerous for learners with visual needs so keeping a stable classroom layout is best.
+
+Consistent materials and predictable environments reduce confusion and support orientation for learner with visual needs`,
+  `a) Talking books, large print, and audio description offer direct support for visual needs.
+b) Sign language focuses on communication for hearing differences, so is not appropriate for learners with visual needs"
+c) Layered sensory inputs let learners engage with information in format that may be more accessible.
+d) Focus on tools that deliver information through non-visual channels or enlarge visuals for easier access.
+e) Textured number lines and rulers.`,
+  'True – narrating gestures turns visual cues into auditory information so learners with visual needs stay involved during group work. Coaching peers to verbalise actions removes hidden barriers in collaborative tasks.'
 ];
 
 const isQuestionCorrect = (index: number): boolean => {
@@ -1458,9 +1453,7 @@ const formatCorrectAnswer = (index: number): string => {
   return option ? option.text : 'Unknown';
 };
 
-const getQuestionTip = (index: number): string => questionTips[index] || fallbackExplanationText;
-const getCorrectAnswerExplanation = (index: number): string => correctAnswerExplanations[index] || fallbackExplanationText;
-const getLearningPoint = (index: number): string => learningPoints[index] || fallbackExplanationText;
+const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 </script>
 
 <style scoped>
@@ -1478,9 +1471,9 @@ ion-card { margin: 16px; }
 .quiz-results-details { margin-top: 12px; }
 .question-result-item { margin-top: 12px; }
 .question-divider { height: 1px; background: var(--ion-color-medium); opacity: 0.2; margin: 12px 0; }
-.explanation-divider { height: 1px; background-color: var(--ion-color-light-shade); margin: 16px 0; opacity: 0.6; }
 .question-status-icon { margin-right: 8px; vertical-align: middle; font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center; }
 .question-heading { font-size: 1.5rem; font-weight: 800; color: var(--ion-color-dark); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; line-height: 1.2; }
+.question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: var(--ion-color-light); }
 .learning-tip-container { margin-top: 4px; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 .multi-true-false-instructions,
