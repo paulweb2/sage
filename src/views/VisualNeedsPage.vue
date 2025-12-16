@@ -712,6 +712,22 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
+                            <div class="hint-container">
+                              <ion-accordion-group>
+                                <ion-accordion>
+                                  <ion-item slot="header" class="learning-tip-header">
+                                    <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
+                                    <ion-label>
+                                      <p>Hint</p>
+                                    </ion-label>
+                                  </ion-item>
+                                  <div slot="content" class="ion-padding">
+                                    <p class="question-hint">{{ getQuestionHint(index) }}</p>
+                                  </div>
+                                </ion-accordion>
+                              </ion-accordion-group>
+                            </div>
+
                             <div class="learning-tip-container">
                               <ion-accordion-group>
                                 <ion-accordion>
@@ -1343,7 +1359,9 @@ const getQuizScoreMessage = (): string => {
   return 'Keep going. The explanations below highlight practical strategies for visual access.';
 };
 
+const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
 const questionExplanations: string[] = [
   'Person-first language names the individual before describing the disability. The phrase "Learner who is blind" keeps the focus on the person.',
   `a) True - Clutter is a hazard for learners with visual needs;
@@ -1364,6 +1382,7 @@ e) Textured number lines and rulers.`,
   'True – narrating gestures turns visual cues into auditory information so learners with visual needs stay involved during group work. Coaching peers to verbalise actions removes hidden barriers in collaborative tasks.'
 ];
 
+const getQuestionHint = (index: number): string => questionHints[index] || hintPlaceholderText;
 const isQuestionCorrect = (index: number): boolean => {
   const question = questions.value[index] as any;
   const userAnswer = quizAnswers.value[index];
@@ -1476,6 +1495,8 @@ ion-card { margin: 16px; }
 .question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: var(--ion-color-light); }
 .learning-tip-container { margin-top: 4px; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
+.hint-container { margin-top: 4px; width: 100%; background-color: #fff8e1; border-radius: 8px; padding: 4px; border: 1px solid #ffb74d; }
+.question-hint { white-space: pre-wrap; margin: 0; }
 .multi-true-false-instructions,
 .fill-in-blank-instructions,
 .select-all-instructions { margin-bottom: 12px; }

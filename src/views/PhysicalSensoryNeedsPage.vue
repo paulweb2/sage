@@ -786,6 +786,22 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
+                            <div class="hint-container">
+                              <ion-accordion-group>
+                                <ion-accordion>
+                                  <ion-item slot="header" class="learning-tip-header">
+                                    <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
+                                    <ion-label>
+                                      <p>Hint</p>
+                                    </ion-label>
+                                  </ion-item>
+                                  <div slot="content" class="ion-padding">
+                                    <p class="question-hint">{{ getQuestionHint(index) }}</p>
+                                  </div>
+                                </ion-accordion>
+                              </ion-accordion-group>
+                            </div>
+
                             <div class="learning-tip-container">
                               <ion-accordion-group>
                                 <ion-accordion>
@@ -1652,7 +1668,9 @@ const formatCorrectAnswer = (index: number): string => {
   }
 };
 
+const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Explanation coming soon.';
+const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
 const questionExplanations: string[] = [
   `Peer understanding of technology and insights from families open up inclusive interactions without lowering expectations.
 
@@ -1671,6 +1689,7 @@ Assessment adjustments should consider time, environment, communication and emot
 Planning for PD should account for social, physical, environmental and emotional dimensions together.`
 ];
 
+const getQuestionHint = (index: number): string => questionHints[index] || hintPlaceholderText;
 const getQuestionExplanation = (index: number): string => questionExplanations[index] || fallbackExplanationText;
 
 const reflection = ref({
@@ -1800,6 +1819,8 @@ ion-card { margin: 16px; }
 .question-explanation { white-space: pre-wrap; margin: 0; }
 .learning-tip-header { --background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; }
 .learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
+.hint-container { margin-top: 4px; width: 100%; background-color: #fff8e1; border-radius: 8px; padding: 4px; border: 1px solid #ffb74d; }
+.question-hint { white-space: pre-wrap; margin: 0; }
 .fill-in-blank-text { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
 </style>
 
