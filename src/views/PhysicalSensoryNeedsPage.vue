@@ -786,7 +786,7 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
-                            <div class="hint-container">
+                            <div class="hint-container" v-if="!isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -802,7 +802,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1670,7 +1670,13 @@ const formatCorrectAnswer = (index: number): string => {
 
 const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Explanation coming soon.';
-const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
+const questionHints: string[] = [
+  'Look for actions that empower peers and keep expectations high.',
+  'Think about whole-child development—physical, social and emotional.',
+  'Balance access adjustments with social participation.',
+  'Match each blank to the adjustment being described.',
+  'Consider whether the statement is about people (social), movement around the physical space, the environment or feelings.'
+];
 const questionExplanations: string[] = [
   `Peer understanding of technology and insights from families open up inclusive interactions without lowering expectations.
 

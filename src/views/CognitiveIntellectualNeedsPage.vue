@@ -784,7 +784,7 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
-                            <div class="hint-container">
+                            <div class="hint-container" v-if="!isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -800,7 +800,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1530,7 +1530,13 @@ const formatCorrectAnswer = (index: number): string => {
 
 const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Explanation coming soon.';
-const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
+const questionHints: string[] = [
+  'Look for characteristics of learners with cognitive needs with dyslexia and related cognitive needs.',
+  'Focus on strategies that scaffold organisation, timing and access to tools.',
+  'Use the definitions provided at the start of the cognitive needs section to link the area of difficulty with the learning need.',
+  'Look out for the learning needs and support for learners with different cognitive needs.',
+  'Think about how overload, alternative expression and targeted scaffolds impact learning.'
+];
 const questionExplanations: string[] = [
   `a.        True: Anxiety and low self-esteem are characteristic of learners with cognitive needs. 
 

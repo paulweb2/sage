@@ -712,7 +712,7 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
-                            <div class="hint-container">
+                            <div class="hint-container" v-if="!isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -728,7 +728,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1361,7 +1361,13 @@ const getQuizScoreMessage = (): string => {
 
 const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
+const questionHints: string[] = [
+  'Look for language that centres the learner first before mentioning a disability.',
+  'Think about what might make learning less assessable for learners with visual needs.',
+  'Think about how the learner can be included in all aspects of the lesson.',
+  'Think about the different ways that learners with visual needs can be supported.',
+  'Think about how peers can describe what they do, so everyone understands what is happening.'
+];
 const questionExplanations: string[] = [
   'Person-first language names the individual before describing the disability. The phrase "Learner who is blind" keeps the focus on the person.',
   `a) True - Clutter is a hazard for learners with visual needs;

@@ -256,7 +256,7 @@
                                   <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                                 </ion-note>
                                 
-                                <div class="hint-container">
+                                <div class="hint-container" v-if="!isQuestionCorrect(index)">
                                   <ion-accordion-group>
                                     <ion-accordion>
                                       <ion-item slot="header" class="learning-tip-header">
@@ -273,7 +273,7 @@
                                 </div>
 
                                 <!-- Learning Tip for All Answers - appears inside the ion-label -->
-                                <div class="learning-tip-container">
+                                <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                                   <ion-accordion-group>
                                     <ion-accordion>
                                       <ion-item slot="header" class="learning-tip-header">
@@ -1423,7 +1423,7 @@
                                 <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                               </ion-note>
                               
-                              <div class="hint-container">
+                              <div class="hint-container" v-if="!isQuestionCorrect(index)">
                                 <ion-accordion-group>
                                   <ion-accordion>
                                     <ion-item slot="header" class="learning-tip-header">
@@ -1440,7 +1440,7 @@
                               </div>
                               
                                                             <!-- Learning Tip for All Answers - appears inside the ion-label -->
-                              <div class="learning-tip-container">
+                              <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                                 <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -2394,6 +2394,7 @@ const quizQuestions = computed((): QuizQuestion[] => {
     return [
       {
         question: "Which of the following is the most inclusive way to describe a learner who does not use speech?",
+        hint: 'Consider the most inclusive and respectful language when discussing communication needs.',
         options: [
           { value: 'a', text: 'Mute' },
           { value: 'b', text: 'Non-verbal' },
@@ -2404,6 +2405,7 @@ const quizQuestions = computed((): QuizQuestion[] => {
       },
       {
         question: "Students with communication needs always experience the same challenges at home and school.",
+        hint: 'Think about learners as individuals.',
         type: 'true-false',
         options: [
           { value: 'true', text: 'True' },
@@ -2413,6 +2415,7 @@ const quizQuestions = computed((): QuizQuestion[] => {
       },
       {
         question: "Match the communication support strategy to its purpose:",
+        hint: 'Each communication support strategy has a specific purpose.',
         type: 'matching',
         strategies: [
           { id: 'a', text: 'Visual timetable' },
@@ -2428,6 +2431,7 @@ const quizQuestions = computed((): QuizQuestion[] => {
       },
       {
         question: "Children who cannot speak cannot learn.",
+        hint: 'Think about different ways that learners can acquire knowledge and skills.',
         type: 'true-false',
         options: [
           { value: 'true', text: 'True' },
@@ -2437,6 +2441,7 @@ const quizQuestions = computed((): QuizQuestion[] => {
       },
       {
         question: "Which of the following best describes a 'total communication approach'?",
+        hint: 'Think about multiple communication methods.',
         options: [
           { value: 'a', text: 'Only using speech and writing in the classroom' },
           { value: 'b', text: 'Encouraging all students to use sign language' },

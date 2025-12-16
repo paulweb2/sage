@@ -698,7 +698,7 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
-                            <div class="hint-container">
+                            <div class="hint-container" v-if="!isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -714,7 +714,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1509,7 +1509,13 @@ const formatCorrectAnswer = (index: number): string => {
 
 const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Explanation coming soon.';
-const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
+const questionHints: string[] = [
+  'Think about using respectful, person-first language.',
+  'Consider each statement individually. Think about the specific needs and challenges that learners with hearing needs face in educational settings.',
+  'For these questions, think about what makes learning accessible for learners with hearing needs. Consider both environmental factors and learning strategies.',
+  'Review the question carefully and consider which answer best reflects inclusive, person-first language and respectful communication practices for hearing needs.',
+  'Consider the diverse needs that learners with hearing needs might have.'
+];
 const questionExplanations: string[] = [
   `The term 'Deaf and dumb' is offensive and outdated. It incorrectly suggests that people with hearing loss cannot communicate or think clearly.
 

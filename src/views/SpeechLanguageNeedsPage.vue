@@ -723,7 +723,7 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
-                            <div class="hint-container">
+                            <div class="hint-container" v-if="!isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -739,7 +739,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1399,7 +1399,13 @@ const formatCorrectAnswer = (index: number): string => {
 
 const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Explanation coming soon.';
-const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
+const questionHints: string[] = [
+  'Think about how receptive and expressive language often overlap.',
+  'Think about supportive strategies to reduce pressure and allow learners to communicate in their own time.',
+  'Use the clues in each sentence to decide which part of language is described.',
+  'Focus on the key characteristic of each learning need before choosing an explanation.',
+  'Consider what helps individual learners feel comfortable when communicating.'
+];
 const questionExplanations: string[] = [
   `Learners with speech needs may also find it difficult to understand others, so the statement is false.
 

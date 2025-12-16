@@ -683,7 +683,7 @@
                               <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
                             </ion-note>
 
-                            <div class="hint-container">
+                            <div class="hint-container" v-if="!isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -699,7 +699,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1364,7 +1364,13 @@ const getQuizScoreMessage = (): string => {
 
 const hintPlaceholderText = 'hint will go here';
 const fallbackExplanationText = 'Explanation coming soon.';
-const questionHints: string[] = questions.value.map(() => hintPlaceholderText);
+const questionHints: string[] = [
+  'Think about changes to the environment that make movement, vision, or access harder.',
+  'Think about how tools, peers, and environments can actively invite participation.',
+  'Use the context and situations described to choose the most appropriate word from the bank.',
+  'Consider the environments in which families have observed learners and the environments they are not aware of and who prioritises the learning of individuals.',
+  'Consider each statement- does the approach increase access and participation?'
+];
 const questionExplanations: string[] = [
   `Crowded spaces, poor lighting, and unreachable equipment are physical barriers. 
 
