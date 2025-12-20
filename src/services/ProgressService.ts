@@ -197,6 +197,20 @@ export class ProgressService {
   }
 
   /**
+   * Get how many times a quiz has been completed
+   */
+  static getQuizCompletionCount(pageId: string): number {
+    const quizData = localStorage.getItem(`sage-quiz-${pageId}`);
+    if (!quizData) return 0;
+    try {
+      const data = JSON.parse(quizData);
+      return typeof data.completionCount === 'number' ? data.completionCount : 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  /**
    * Get quiz last completed date
    */
   static getQuizLastCompleted(pageId: string): string | undefined {
@@ -352,10 +366,24 @@ export class ProgressService {
    * Save quiz completion data
    */
   static saveQuizCompletion(pageId: string, score: number, answers?: { [key: number]: string | { [key: string]: string } }): void {
+    let completionCount = 0;
+    try {
+      const existing = localStorage.getItem(`sage-quiz-${pageId}`);
+      if (existing) {
+        const parsed = JSON.parse(existing);
+        if (typeof parsed?.completionCount === 'number') {
+          completionCount = parsed.completionCount;
+        }
+      }
+    } catch {
+      completionCount = 0;
+    }
+
     const data = {
       completed: true,
       score,
       answers,
+      completionCount: completionCount + 1,
       lastCompleted: new Date().toISOString()
     };
     localStorage.setItem(`sage-quiz-${pageId}`, JSON.stringify(data));

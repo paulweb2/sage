@@ -273,7 +273,7 @@
                                 </div>
 
                                 <!-- Learning Tip for All Answers - appears inside the ion-label -->
-                                <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
+                                <div class="learning-tip-container" v-if="isQuestionCorrect(index) || quizCompletionCount > 1">
                                   <ion-accordion-group>
                                     <ion-accordion>
                                       <ion-item slot="header" class="learning-tip-header">
@@ -1401,6 +1401,7 @@
                   <ion-card-content>
                     <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
                     <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+                    <ion-note color="medium">Completed {{ quizCompletionCount }} {{ quizCompletionCount === 1 ? 'time' : 'times' }}</ion-note>
                     
                     <!-- Detailed Results -->
                     <div class="quiz-results-details" v-if="quizCompleted && quizQuestions.length > 0">
@@ -1440,7 +1441,7 @@
                               </div>
                               
                                                             <!-- Learning Tip for All Answers - appears inside the ion-label -->
-                              <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index) || quizCompletionCount > 1">
                                 <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1781,6 +1782,7 @@ const loadQuizState = () => {
   if (isCompleted) {
     quizCompleted.value = true;
     quizScore.value = ProgressService.getQuizScore(pageId) || 0;
+    quizCompletionCount.value = ProgressService.getQuizCompletionCount(pageId);
     const savedAnswers = ProgressService.getQuizAnswers(pageId);
     if (savedAnswers) {
       quizAnswers.value = savedAnswers;
@@ -1800,9 +1802,33 @@ const currentQuizQuestion = ref(0);
 const currentQuizAnswer = ref('');
 const quizCompleted = ref(false);
 const quizScore = ref(0);
+const quizCompletionCount = ref(0);
 const matchingAnswers = ref<{ [key: string]: string }>({});
 const quizAnswers = ref<{ [key: number]: string | { [key: string]: string } }>({});
 const checkboxAnswers = ref<{ [key: string]: boolean }>({});
+
+const applySavedQuizAnswer = (index: number) => {
+  const question = quizQuestions.value[index];
+  const savedAnswer = quizAnswers.value[index];
+
+  currentQuizAnswer.value = '';
+  matchingAnswers.value = {};
+  checkboxAnswers.value = {};
+
+  if (!question || savedAnswer === undefined) return;
+
+  if (question.type === 'select-all') {
+    checkboxAnswers.value = { ...(savedAnswer as Record<string, boolean>) };
+    return;
+  }
+
+  if (question.type === 'matching' || question.type === 'multi-true-false' || question.type === 'fill-in-blank') {
+    matchingAnswers.value = { ...(savedAnswer as Record<string, string>) };
+    return;
+  }
+
+  currentQuizAnswer.value = savedAnswer as string;
+};
 
 // Case Study note state for Communication page
 const caseStudyNote = ref('');
@@ -1935,10 +1961,7 @@ watch(matchingAnswers, (newVal) => {
 // Watch for question changes and clear answers
 watch(currentQuizQuestion, (newVal) => {
   console.log('Question changed to:', newVal);
-  // Clear checkbox answers when moving to a new question
-  checkboxAnswers.value = {};
-  // Clear matching answers when moving to a new question
-  matchingAnswers.value = {};
+  applySavedQuizAnswer(newVal);
 }, { immediate: false });
 
 // Computed property to check if user can proceed to next question
@@ -3550,11 +3573,7 @@ const nextQuizQuestion = () => {
   if (currentQuizQuestion.value < quizQuestions.value.length - 1) {
     // Move to next question first
     currentQuizQuestion.value++;
-    currentQuizAnswer.value = '';
-    // Reset matching answers for next question
-    matchingAnswers.value = {};
-    // Reset checkbox answers for next question
-    checkboxAnswers.value = {};
+    applySavedQuizAnswer(currentQuizQuestion.value);
   } else {
     // Calculate score based on correct answers
     let correctAnswers = 0;
@@ -3606,26 +3625,15 @@ const nextQuizQuestion = () => {
     // Save quiz completion to progress tracking
     const pageId = route.params.id as string;
     ProgressService.saveQuizCompletion(pageId, quizScore.value, quizAnswers.value);
+    quizCompletionCount.value = ProgressService.getQuizCompletionCount(pageId);
   }
 };
 
 const retakeQuiz = () => {
   currentQuizQuestion.value = 0;
-  currentQuizAnswer.value = '';
   quizCompleted.value = false;
   quizScore.value = 0;
-  matchingAnswers.value = {};
-  quizAnswers.value = {};
-  
-  // Reset quiz completion in progress tracking
-  const pageId = route.params.id as string;
-  ProgressService.resetQuizCompletion(pageId);
-  
-  // For hearing-needs page, also clear localStorage to ensure fresh start
-  if (pageId === 'hearing-needs') {
-    localStorage.removeItem(`sage-quiz-${pageId}`);
-    console.log('Cleared hearing-needs quiz data from localStorage');
-  }
+  applySavedQuizAnswer(currentQuizQuestion.value);
 };
 
 // Helper functions for quiz results

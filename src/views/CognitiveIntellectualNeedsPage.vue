@@ -767,6 +767,7 @@
                 <ion-card-content>
                   <ion-progress-bar :value="quizScore / 100" :color="getQuizScoreColor()"></ion-progress-bar>
                   <ion-note>{{ getQuizScoreMessage() }}</ion-note>
+              <ion-note color="medium">Completed {{ quizCompletionCount }} {{ quizCompletionCount === 1 ? 'time' : 'times' }}</ion-note>
 
                   <div class="quiz-results-details" v-if="questions.length > 0">
                     <h4>Question Results:</h4>
@@ -800,7 +801,7 @@
                               </ion-accordion-group>
                             </div>
 
-                            <div class="learning-tip-container" v-if="isQuestionCorrect(index)">
+                            <div class="learning-tip-container" v-if="isQuestionCorrect(index) || quizCompletionCount > 1">
                               <ion-accordion-group>
                                 <ion-accordion>
                                   <ion-item slot="header" class="learning-tip-header">
@@ -1337,12 +1338,14 @@ const checkboxAnswers = ref<Record<string, boolean>>({});
 const quizCompleted = ref(false);
 const quizScore = ref(0);
 const quizAnswers = ref<Record<number, any>>({});
+const quizCompletionCount = ref(0);
 
 const loadQuizState = () => {
   const completed = ProgressService.isQuizCompleted('cognitive-intellectual-needs');
   if (!completed) return;
   quizCompleted.value = true;
   quizScore.value = ProgressService.getQuizScore('cognitive-intellectual-needs') || 0;
+  quizCompletionCount.value = ProgressService.getQuizCompletionCount('cognitive-intellectual-needs');
   const savedAnswers = ProgressService.getQuizAnswers('cognitive-intellectual-needs');
   if (savedAnswers) {
     quizAnswers.value = { ...(savedAnswers as Record<number, any>) };
@@ -1352,6 +1355,31 @@ const loadQuizState = () => {
 onMounted(loadQuizState);
 
 const currentQuestion = computed(() => questions.value[currentQuizIndex.value]);
+
+const applySavedAnswerState = (index: number) => {
+  const question = questions.value[index] as any;
+  const savedAnswer = quizAnswers.value[index];
+
+  currentAnswer.value = '';
+  matchingAnswers.value = {};
+  checkboxAnswers.value = {};
+
+  if (!question || savedAnswer === undefined) return;
+
+  if (!question.type || question.type === 'multiple-choice' || question.type === 'true-false') {
+    currentAnswer.value = savedAnswer as string;
+    return;
+  }
+
+  if (question.type === 'multi-true-false' || question.type === 'fill-in-blank') {
+    matchingAnswers.value = { ...(savedAnswer as Record<string, string>) };
+    return;
+  }
+
+  if (question.type === 'select-all') {
+    checkboxAnswers.value = { ...(savedAnswer as Record<string, boolean>) };
+  }
+};
 
 const canProceed = computed(() => {
   const q = currentQuestion.value as any;
@@ -1410,32 +1438,19 @@ const nextQuestion = () => {
 
   if (currentQuizIndex.value < questions.value.length - 1) {
     currentQuizIndex.value += 1;
-    currentAnswer.value = '';
-    matchingAnswers.value = {};
-    checkboxAnswers.value = {};
+    applySavedAnswerState(currentQuizIndex.value);
   } else {
     quizCompleted.value = true;
-    try {
-      localStorage.setItem(
-        `sage-quiz-cognitive-intellectual-needs`,
-        JSON.stringify({ completed: true, score: quizScore.value, answers: quizAnswers.value, lastCompleted: new Date().toISOString() })
-      );
-    } finally {
-      ProgressService.saveQuizCompletion('cognitive-intellectual-needs', quizScore.value, quizAnswers.value);
-    }
+    ProgressService.saveQuizCompletion('cognitive-intellectual-needs', quizScore.value, quizAnswers.value);
+    quizCompletionCount.value = ProgressService.getQuizCompletionCount('cognitive-intellectual-needs');
   }
 };
 
 const retakeQuiz = () => {
   currentQuizIndex.value = 0;
-  currentAnswer.value = '';
   quizCompleted.value = false;
   quizScore.value = 0;
-  matchingAnswers.value = {};
-  checkboxAnswers.value = {};
-  quizAnswers.value = {};
-  ProgressService.resetQuizCompletion('cognitive-intellectual-needs');
-  localStorage.removeItem(`sage-quiz-cognitive-intellectual-needs`);
+  applySavedAnswerState(currentQuizIndex.value);
 };
 
 const getQuizScoreColor = (): 'success' | 'warning' | 'danger' => {
