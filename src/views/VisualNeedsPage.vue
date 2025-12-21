@@ -603,7 +603,7 @@
                   <div v-else-if="currentQuestion.type === 'multi-true-false'">
                     <div class="multi-true-false-instructions">
                       <ion-note color="primary">
-                        <strong>Instructions:</strong> Decide if each statement is True or False using the dropdown menus.
+                        <strong>Instructions:</strong> Click on the arrow to select your answer.
                       </ion-note>
                     </div>
                     <ion-list>
@@ -630,7 +630,7 @@
                   <div v-else-if="currentQuestion.type === 'fill-in-blank'">
                     <div class="fill-in-blank-instructions">
                       <ion-note color="primary">
-                        <strong>Word bank:</strong> Select the correct option from the dropdown to complete each sentence.
+                        <strong>Instructions:</strong> Click on the arrow to select your answer.
                       </ion-note>
                     </div>
                     <ion-list>
@@ -658,11 +658,6 @@
 
                   <!-- Select all that apply -->
                   <div v-else-if="currentQuestion.type === 'select-all'">
-                    <div class="select-all-instructions">
-                      <ion-note color="primary">
-                        <strong>Instructions:</strong> Choose every option that directly supports learners with visual needs.
-                      </ion-note>
-                    </div>
                     <ion-list>
                       <ion-item v-for="option in currentQuestion.options" :key="option.value" class="select-all-item">
                         <input type="checkbox" :value="option.value" v-model="checkboxAnswers[option.value]" />
@@ -1192,7 +1187,7 @@ const questions = ref<VisualQuestion[]>([
     ]
   },
   {
-    question: 'Choose the correct item from the word bank to complete each sentence.',
+    question: 'Select the correct word to complete each sentence. You have three words to chose from name, change and font.',
     type: 'fill-in-blank',
     sentences: [
       {
@@ -1219,14 +1214,14 @@ const questions = ref<VisualQuestion[]>([
     ]
   },
   {
-    question: 'Which tools can support the learning of learners who have visual needs? Select all that apply.',
+    question: 'Choose every option that supports learners with visual needs.',
     type: 'select-all',
     options: [
       { value: 'a', text: 'Talking books' },
       { value: 'b', text: 'Large print' },
       { value: 'c', text: 'Audio description' },
       { value: 'd', text: 'Sign language' },
-      { value: 'e', text: 'All of the above' }
+      { value: 'e', text: 'Textured number lines and rulers.' }
     ],
     correctAnswers: ['a', 'b', 'c']
   },

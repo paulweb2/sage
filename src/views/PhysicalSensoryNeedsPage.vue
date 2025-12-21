@@ -686,7 +686,7 @@
 
                   <!-- Fill in the blank (dropdown for each blank) -->
                   <div v-else-if="currentQuestion.type === 'fill-in-blank'">
-                    <div class="fill-in-blank-instructions">
+                    <div class="fill-in-blank-instructions" v-if="currentQuestion.instructions !== '__none__'">
                       <ion-note color="primary">
                         <strong>Instructions:</strong> {{ currentQuestion.instructions || 'Complete each sentence by selecting the most appropriate word or phrase from the dropdown menus.' }}
                       </ion-note>
@@ -1287,7 +1287,7 @@ const aspectOptions = ['Social', 'Physical', 'Environmental', 'Emotional and wel
 
 const questions = ref<PhysicalQuestion[]>([
   {
-    question: 'How could you enhance the social skills of learners with PD within the classroom? Select all the answers that are correct.',
+    question: 'How could you enhance the social skills of learners with PD within the classroom?',
     type: 'select-all',
     options: [
       { value: 'a', text: 'Ensure the learner always has a teaching assistant by their side in the playground.' },
@@ -1305,7 +1305,7 @@ const questions = ref<PhysicalQuestion[]>([
   {
     question: 'True or false? Consider each statement carefully.',
     type: 'multi-true-false',
-    instructions: 'Mark each statement as True or False.',
+    instructions: 'Click on the arrow to select your answer.',
     subQuestions: [
       {
         id: 'a',
@@ -1375,23 +1375,23 @@ const questions = ref<PhysicalQuestion[]>([
     }
   },
   {
-    question: 'Fill in the blanks using the word bank.',
+    question: 'Click on the arrow to select the correct word to complete each sentence.',
     type: 'fill-in-blank',
-    instructions: 'Options: time, room/space, hear/understand, feeling/belonging.',
+    instructions: '__none__',
     sentences: [
       {
         id: 'a-time',
         textBefore: 'Adjustment to assessment can include more ',
         textAfter: ' to process information,',
-        correctAnswer: 'time',
-        options: fillWordOptions,
+        correctAnswer: 'Time',
+        options: ['Belonging', 'Understand', 'Space', 'Time'],
         extraBlanks: [
           {
             id: 'a-room',
             textBefore: ' using a different ',
             textAfter: ' to minimise distractions.',
-            correctAnswer: 'room/space',
-            options: fillWordOptions
+            correctAnswer: 'Space',
+            options: ['Belonging', 'Understand', 'Space', 'Time']
           }
         ]
       },
@@ -1399,15 +1399,15 @@ const questions = ref<PhysicalQuestion[]>([
         id: 'b-hear',
         textBefore: 'Strategic seating arrangements can enable the learners to see and ',
         textAfter: ' the educator’s instructions effectively.',
-        correctAnswer: 'hear/understand',
-        options: fillWordOptions
+        correctAnswer: 'Understand',
+        options: ['Belonging', 'Understand', 'Space', 'Time']
       },
       {
         id: 'c-belong',
         textBefore: 'Active participation in all classroom activities can enhance the learner’s sense of ',
         textAfter: '.',
-        correctAnswer: 'feeling/belonging',
-        options: fillWordOptions
+        correctAnswer: 'Belonging',
+        options: ['Belonging', 'Understand', 'Space', 'Time']
       }
     ],
     feedback: {
@@ -1417,9 +1417,9 @@ const questions = ref<PhysicalQuestion[]>([
     }
   },
   {
-    question: 'Match each statement to the aspect of learning it represents.',
+    question: 'Match each statement to the aspect of learning it represents; social, physical, environmental or, emotional and well-being.',
     type: 'fill-in-blank',
-    instructions: 'Options: Social, Physical, Environmental, Emotional and well-being.',
+    instructions: 'Click on the arrow to select your answer.',
     sentences: [
       {
         id: 'a',
