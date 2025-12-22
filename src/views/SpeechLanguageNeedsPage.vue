@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Speech and Language Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -720,8 +720,10 @@
                             </h5>
                             <p>{{ question.question }}</p>
                             <ion-note color="medium">
-                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
-                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }}
+                              <span class="correct-answer" style="display: none;">
+                                | <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              </span>
                             </ion-note>
 
                             <div class="hint-container" v-if="!isQuestionCorrect(index)">
@@ -1090,7 +1092,7 @@ type SpeechQuestion =
   | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[] })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
-const fillWordBank = ['receptive', 'expressive', 'distractions'];
+const fillWordBank = ['expressive', 'distractions', 'receptive'];
 const matchingExplanations = [
   'Articulation difficulties.',
   'Difficulties in planning, sequencing and conducting the movements needed to verbalise.',
@@ -1108,7 +1110,7 @@ const questions = ref<SpeechQuestion[]>([
     correctAnswer: 'false'
   },
   {
-    question: 'Which of these is a supportive strategy?',
+    question: 'Which of these is a supportive strategy for learners with speech needs?',
     options: [
       { value: 'a', text: "Finishing someone's sentence if they are stammering." },
       { value: 'b', text: 'Giving extra processing time.' },
@@ -1117,9 +1119,9 @@ const questions = ref<SpeechQuestion[]>([
     correctAnswer: 'b'
   },
   {
-    question: 'Choose a word from the list to complete each sentence.',
+    question: 'Choose a word from the list to complete each sentence. You can choose from receptive, expressive or distractions.',
     type: 'fill-in-blank',
-    instructions: 'Choose from: receptive, expressive, distractions.',
+    instructions: 'Click on the arrow to make your choice.',
     sentences: [
       {
         id: 'a',
@@ -1150,30 +1152,30 @@ const questions = ref<SpeechQuestion[]>([
     }
   },
   {
-    question: 'Match each learning need with the explanation.',
+    question: 'Choose a word from the list to complete each sentence. You can choose from: - Articulation difficulties, - Difficulties with planning and sequencing and conducting the movements needed to articulate sounds - Speaking in phrases not sounds',
     type: 'fill-in-blank',
-    instructions: 'Use the dropdowns to pair each learning need with the correct explanation.',
+    instructions: 'Click on the arrows to select your answer.',
     sentences: [
       {
         id: 'a',
         textBefore: 'Speech Sound Delay → ',
         textAfter: '',
         correctAnswer: matchingExplanations[0],
-        options: matchingExplanations
+        options: [matchingExplanations[1], matchingExplanations[0], matchingExplanations[2]]
       },
       {
         id: 'b',
         textBefore: 'Motor language disorder → ',
         textAfter: '',
         correctAnswer: matchingExplanations[1],
-        options: matchingExplanations
+        options: [matchingExplanations[2], matchingExplanations[1], matchingExplanations[0]]
       },
       {
         id: 'c',
         textBefore: 'Gestalt Language Processing → ',
         textAfter: '',
         correctAnswer: matchingExplanations[2],
-        options: matchingExplanations
+        options: [matchingExplanations[0], matchingExplanations[2], matchingExplanations[1]]
       }
     ],
     feedback: {

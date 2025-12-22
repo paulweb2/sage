@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Visual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -704,8 +704,10 @@
                             </h5>
                             <p>{{ question.question }}</p>
                             <ion-note color="medium">
-                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
-                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }}
+                              <span class="correct-answer" style="display: none;">
+                                | <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              </span>
                             </ion-note>
 
                             <div class="hint-container" v-if="!isQuestionCorrect(index)">

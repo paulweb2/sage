@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive and intellectual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -781,8 +781,10 @@
                             </h5>
                             <p>{{ question.question }}</p>
                             <ion-note color="medium">
-                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
-                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }}
+                              <span class="correct-answer" style="display: none;">
+                                | <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              </span>
                             </ion-note>
 
                             <div class="hint-container" v-if="!isQuestionCorrect(index)">
@@ -1177,12 +1179,12 @@ type CognitiveQuestion =
   | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[]; instructions?: string })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
-const wordBankOptions = ['anxiety', 'self-esteem', 'break down', 'fatigue'];
+const wordBankOptions = ['fatigue', 'break down', 'self-esteem', 'anxiety'];
 const matchNeeds = ['Dysgraphia', 'Dyscalculia', 'Dyspraxia', 'Dyslexia'];
 
 const questions = ref<CognitiveQuestion[]>([
   {
-    question: 'What are the characteristics of learners with cognitive needs exhibited in the classroom? Select all that apply.',
+    question: 'What are the characteristics of learners with cognitive needs exhibited in the classroom?',
     type: 'select-all',
     options: [
       { value: 'a', text: 'Anxiety and low self-esteem' },
@@ -1198,7 +1200,7 @@ const questions = ref<CognitiveQuestion[]>([
     }
   },
   {
-    question: 'How can you make assessments accessible for learners with dyspraxia? Select all that apply.',
+    question: 'How can you make assessments accessible for learners with dyspraxia?',
     type: 'select-all',
     options: [
       { value: 'a', text: 'Provide them with questions for tests a day before' },
@@ -1214,9 +1216,9 @@ const questions = ref<CognitiveQuestion[]>([
     }
   },
   {
-    question: 'Match each description with the cognitive need.',
+    question: 'Match each description with the cognitive need Dysgraphia, Dyscalculia, Dyspraxia, Dyslexia.',
     type: 'fill-in-blank',
-    instructions: 'Options: Dysgraphia, Dyscalculia, Dyspraxia, Dyslexia.',
+    instructions: 'Click on the arrow to make your selection.',
     sentences: [
       {
         id: 'a',
@@ -1254,9 +1256,9 @@ const questions = ref<CognitiveQuestion[]>([
     }
   },
   {
-    question: 'Fill in the blanks by selecting from the list.',
+    question: 'Select the correct word to complete each sentence.  You have four options to choose from anxiety, self-esteem, break down, fatigue.',
     type: 'fill-in-blank',
-    instructions: 'Options: anxiety, self-esteem, break down, fatigue.',
+    instructions: 'Click on the arrow to make your choice.',
     sentences: [
       {
         id: 'a',
@@ -1294,9 +1296,9 @@ const questions = ref<CognitiveQuestion[]>([
     }
   },
   {
-    question: 'True or false? Consider each statement carefully.',
+    question: 'True or false?',
     type: 'multi-true-false',
-    instructions: 'Mark each statement as True or False.',
+    instructions: 'Click on the arrow to select your answer.',
     subQuestions: [
       {
         id: 'a',

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Multiple disabilities</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -574,7 +574,7 @@
                   <div v-else-if="currentQuestion.type === 'multi-true-false'">
                     <div class="multi-true-false-instructions">
                       <ion-note color="primary">
-                        <strong>Instructions:</strong> Decide if each statement is True or False using the dropdown menus.
+                        <strong>Instructions:</strong> {{ currentQuestion.instructions || 'Decide if each statement is True or False using the dropdown menus.' }}
                       </ion-note>
                     </div>
                     <ion-list>
@@ -599,9 +599,9 @@
 
                   <!-- Fill in the blank -->
                   <div v-else-if="currentQuestion.type === 'fill-in-blank'">
-                    <div class="fill-in-blank-instructions">
+                    <div class="fill-in-blank-instructions" v-if="currentQuestion.instructions !== '__none__'">
                       <ion-note color="primary">
-                        <strong>Word bank:</strong> Select the correct option from the dropdown to complete each sentence.
+                        <strong>Instructions:</strong> {{ currentQuestion.instructions || 'Select the correct option from the dropdown to complete each sentence.' }}
                       </ion-note>
                     </div>
                     <ion-list>
@@ -631,7 +631,7 @@
                   <div v-else-if="currentQuestion.type === 'select-all'">
                     <div class="select-all-instructions">
                       <ion-note color="primary">
-                        <strong>Instructions:</strong> Choose every option that directly matches the prompt. Selecting only “All of the above” is correct only when stated in the answers.
+                        <strong>Instructions:</strong> {{ currentQuestion.instructions || 'Choose every option that directly matches the prompt. Selecting only “All of the above” is correct only when stated in the answers.' }}
                       </ion-note>
                     </div>
                     <ion-list>
@@ -680,8 +680,10 @@
                             </h5>
                             <p>{{ question.question }}</p>
                             <ion-note color="medium">
-                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }} |
-                              <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              <strong>Your answer:</strong> {{ formatUserAnswer(index) }}
+                              <span class="correct-answer" style="display: none;">
+                                | <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                              </span>
                             </ion-note>
 
                             <div class="hint-container" v-if="!isQuestionCorrect(index)">
@@ -1146,8 +1148,9 @@ type MultipleDisabilitiesQuestion =
 
 const questions = ref<MultipleDisabilitiesQuestion[]>([
   {
-    question: 'What physical barriers might learners with multiple disabilities experience in the classroom? Select all that apply.',
+    question: 'What physical barriers might learners with multiple disabilities experience in the classroom?',
     type: 'select-all',
+    instructions: 'Select all that apply.',
     options: [
       { value: 'a', text: 'Crowded rooms without space to move the wheelchair.' },
       { value: 'b', text: 'Light interrupting their line of vision.' },
@@ -1157,8 +1160,9 @@ const questions = ref<MultipleDisabilitiesQuestion[]>([
     correctAnswers: ['a', 'b', 'c']
   },
   {
-    question: 'How can an educator enable socialisation of a learner with multiple disabilities into their classroom? Select all that apply.',
+    question: 'How can an educator enable socialisation of a learner with multiple disabilities into their classroom?',
     type: 'select-all',
+    instructions: 'Select all that apply.',
     options: [
       { value: 'a', text: 'Ensure the learner has access to their preferred communication tools and all staff members know how to use them.' },
       { value: 'b', text: 'Let the learner sit in the corner and engage with their communication tool on their own.' },
@@ -1168,42 +1172,44 @@ const questions = ref<MultipleDisabilitiesQuestion[]>([
     correctAnswers: ['a', 'c', 'd']
   },
   {
-    question: 'Fill in the blanks by choosing from the word bank.',
+    question: 'Select the correct word to complete each sentence. You have three words to choose from; touch hear, observe, times.',
     type: 'fill-in-blank',
+    instructions: 'Click on the arrow to select your answer.',
     sentences: [
       {
         id: 'a',
         textBefore: '______ of learners in different environments, at different times of the day, will enable an understanding of learner’s abilities and preferences.',
         textAfter: '',
-        correctAnswer: 'observation',
-        options: ['touch', 'hear', 'observation', 'times']
+        correctAnswer: 'observe',
+        options: ['times', 'observe', 'touch', 'hear']
       },
       {
         id: 'b',
         textBefore: 'Classroom adaptation may include consideration of changes in seating position to ensure the learner can see and _____ the educator.',
         textAfter: '',
         correctAnswer: 'hear',
-        options: ['touch', 'hear', 'observation', 'times']
+        options: ['observe', 'hear', 'times', 'touch']
       },
       {
         id: 'c',
         textBefore: 'Lighting at different _____ of the day may interrupt clear vision.',
         textAfter: '',
         correctAnswer: 'times',
-        options: ['touch', 'hear', 'observation', 'times']
+        options: ['touch', 'times', 'hear', 'observe']
       },
       {
         id: 'd',
         textBefore: 'Use light, sound or _____ to focus attention.',
         textAfter: '',
         correctAnswer: 'touch',
-        options: ['touch', 'hear', 'observation', 'times']
+        options: ['hear', 'touch', 'observe', 'times']
       }
     ]
   },
   {
     question: 'Which statements describe the benefits of engaging in partnerships with parents/carers and the wider community of learners with multiple disabilities?',
     type: 'select-all',
+    instructions: 'Select all of the answers that apply.',
     options: [
       { value: 'a', text: 'Parents/carers have known their children the longest and can provide essential information about preferences, communication, and medical needs.' },
       { value: 'b', text: 'Wider community members always act in the best interest of the learners.' },
@@ -1213,8 +1219,9 @@ const questions = ref<MultipleDisabilitiesQuestion[]>([
     correctAnswers: ['a', 'c']
   },
   {
-    question: 'True or false? Evaluate each statement about supporting learners with multiple disabilities.',
+    question: 'True or false? ',
     type: 'multi-true-false',
+    instructions: 'Click on the arrows to select your answer.',
     subQuestions: [
       {
         id: 'a',

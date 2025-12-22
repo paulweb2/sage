@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.19</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -179,7 +179,7 @@
                       <div v-else-if="quizQuestions[currentQuizQuestion] && quizQuestions[currentQuizQuestion].type === 'matching'">
                         <div class="matching-instructions">
                           <ion-note color="primary">
-                            <strong>Instructions:</strong> Match each communication support strategy (a, b, c) with its correct purpose (a, b, c) using the dropdown menus.
+                            <strong>Instructions:</strong> {{ quizQuestions[currentQuizQuestion].instructions || 'Click on the arrow to select your answer.' }}
                           </ion-note>
                         </div>
                         <ion-list>
@@ -252,8 +252,10 @@
                                 </h5>
                                 <p>{{ question.question }}</p>
                                 <ion-note color="medium">
-                                  <strong>Your answer:</strong> {{ formatUserAnswer(index) }} | 
-                                  <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                                  <strong>Your answer:</strong> {{ formatUserAnswer(index) }}
+                                  <span class="correct-answer" style="display: none;">
+                                    | <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                                  </span>
                                 </ion-note>
                                 
                                 <div class="hint-container" v-if="!isQuestionCorrect(index)">
@@ -1224,8 +1226,7 @@
           <!-- 9. Quiz -->
           <ion-card id="knowledge-check" v-if="pageSections.showQuiz">
             <ion-card-header>
-              <ion-card-title>Knowledge Check</ion-card-title>
-              <ion-card-subtitle>Test Your Understanding</ion-card-subtitle>
+              <ion-card-title>Quiz</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <div v-if="!quizCompleted">
@@ -1324,10 +1325,7 @@
                   <div v-else-if="quizQuestions[currentQuizQuestion].type === 'matching'">
                     <div class="matching-instructions">
                       <ion-note color="primary">
-                        <strong>Instructions:</strong> Match each 
-                        <span v-if="route.params.id === 'hearing-needs'">hearing support strategy</span>
-                        <span v-else>communication support strategy</span>
-                        (a, b, c) with its correct purpose (a, b, c) using the dropdown menus.
+                        <strong>Instructions:</strong> Click on the arrow to select your answer.
                       </ion-note>
                     </div>
                       <ion-list>
@@ -1420,8 +1418,10 @@
                               </h5>
                               <p>{{ question.question }}</p>
                               <ion-note color="medium">
-                                <strong>Your answer:</strong> {{ formatUserAnswer(index) }} | 
-                                <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                                <strong>Your answer:</strong> {{ formatUserAnswer(index) }}
+                                <span class="correct-answer" style="display: none;">
+                                  | <strong>Correct answer:</strong> {{ formatCorrectAnswer(index) }}
+                                </span>
                               </ion-note>
                               
                               <div class="hint-container" v-if="!isQuestionCorrect(index)">
@@ -2437,8 +2437,9 @@ const quizQuestions = computed((): QuizQuestion[] => {
         correctAnswer: 'false'
       },
       {
-        question: "Match the communication support strategy to its purpose:",
+        question: 'Match the communication support strategy to its purpose: you can chose from \n- Support concentration and communication access\n- Help understand daily routines and transitions\n- Reduce sensory input to support regulation',
         hint: 'Each communication support strategy has a specific purpose.',
+        instructions: 'Click on the arrow to select your answer.',
         type: 'matching',
         strategies: [
           { id: 'a', text: 'Visual timetable' },
