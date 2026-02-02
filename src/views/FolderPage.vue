@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -34,7 +34,7 @@
 
           <!-- SAGE Cover Illustration -->
           <div class="sage-cover-illustration-wrapper">
-            <img src="/Letwin_Gwambura_Danda.jpg" alt="Classroom scene of learners studying together, including a learner using a wheelchair" class="sage-cover-illustration" />
+            <img src="/Letwin_Gwambura_Danda.jpg" alt="Illustration of learners studying together in a classroom, including a learner using a wheelchair." class="sage-cover-illustration" />
           </div>
 
           <ion-card>
@@ -116,7 +116,7 @@
           <ion-card>
             <ion-card-content>
               <div class="partners-strip single" role="img" aria-label="Programme sponsors and partners">
-                <img src="/sage_logo_strip.png" alt="Programme partners" class="partners-strip-img" />
+                <img src="/sage_logo_strip.png" alt="Logos of SAGE and partner organisations." class="partners-strip-img" />
               </div>
               <p>
                 SAGE (Supporting Adolescent Girls' Education) is a UK Aid-funded programme through the UK's Foreign,

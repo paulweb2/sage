@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Physical and sensory needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -371,7 +371,7 @@
                 <div class="case-study-media">
                   <img
                     :src="getPublicUrl('physical_case_study_image1.jpg')"
-                    alt="Rudo participating in a mathematics lesson"
+                    alt="Learner using a wheelchair writes in a notebook at a classroom desk during a lesson."
                     class="case-study-image"
                   />
                 </div>
@@ -467,7 +467,7 @@
                 <div class="case-study-media">
                   <img
                     :src="getPublicUrl('physical_case_study_image2.png')"
-                    alt="Zanele preparing for examinations"
+                    alt="Two learners complete a multiple-choice answer sheet at a desk, shading small boxes."
                     class="case-study-image"
                   />
                 </div>

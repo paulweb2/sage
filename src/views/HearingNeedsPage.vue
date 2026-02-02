@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Hearing needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -348,11 +348,7 @@
             <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <div class="case-study-images">
-              <img :src="getPublicUrl('hearing_casestudy_image1.png')" alt="Case study image 1" class="case-study-image" />
-              <img :src="getPublicUrl('hearing_casestudy_image2.png')" alt="Case study image 2" class="case-study-image" />
-              <img :src="getPublicUrl('hearing_casestudy_image3.png')" alt="Case study image 3" class="case-study-image" />
-            </div>
+            <CaseStudyCarousel :images="caseStudyImages" />
 
             <div class="case-study-text">
               <p>
@@ -818,6 +814,7 @@ import {
   ellipsisVertical
 } from 'ionicons/icons';
 import { ProgressService } from '@/services/ProgressService';
+import CaseStudyCarousel from '@/components/CaseStudyCarousel.vue';
 import { toastController } from '@ionic/vue';
 import { consumePendingAnchor } from '@/utils/anchorScroll';
 
@@ -889,6 +886,21 @@ const linkifyText = (text: string): string => {
   });
   return result;
 };
+
+const caseStudyImages = [
+  {
+    src: getPublicUrl('hearing_casestudy_image1.png'),
+    alt: 'Learners gathered around classroom tables with number blocks and counters laid out for a maths activity.'
+  },
+  {
+    src: getPublicUrl('hearing_casestudy_image2.png'),
+    alt: 'Learner sorting number cards and counters on a desk during a small-group maths task.'
+  },
+  {
+    src: getPublicUrl('hearing_casestudy_image3.png'),
+    alt: 'Teacher gesturing while teaching at a whiteboard with shapes and numbers drawn.'
+  }
+];
 
 const wordsToUse = [
   { term: 'D/deaf', explanation: 'Refers to the condition of profound or complete hearing loss; lower or upper case D/d can be used. Check with the learner for their preference.' },
@@ -1590,11 +1602,6 @@ ion-card { margin: 16px; }
 .correct-answer-explanation { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ion-color-light-shade); }
 .correct-answer-explanation h6 { color: var(--ion-color-success); margin-bottom: 6px; font-weight: 600; }
 .learning-tip-header { --background: var(--ion-color-light); }
-.case-study-images { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
-.case-study-image { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-@media (min-width: 768px) {
-  .case-study-images { grid-template-columns: repeat(3, 1fr); }
-}
 .case-study-text ul { margin: 8px 0 12px 20px; }
 .case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }

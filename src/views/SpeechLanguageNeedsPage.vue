@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Speech and Language Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.21</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -365,7 +365,7 @@
             <div class="case-study-images">
               <img
                 :src="getPublicUrl('speech_case_study.png')"
-                alt="Learner participating in a speech and language activity"
+                alt="Learner reading a braille book at a classroom desk."
                 class="case-study-image"
               />
             </div>

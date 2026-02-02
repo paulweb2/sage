@@ -42,7 +42,7 @@
         </div>
         <div class="signature-box">
           <div class="signature-placeholder signature-with-image">
-            <img src="/cbm_signature.png" alt="CBM signature" />
+            <img src="/cbm_signature.png" alt="Signature of a CBM representative." />
           </div>
           <div class="signature-caption">CBM</div>
         </div>
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <img src="/sage_logo_strip.png" alt="SAGE partners" class="footer-banner" />
+      <img src="/sage_logo_strip.png" alt="Logos of SAGE and partner organisations." class="footer-banner" />
     </div>
   </div>
 </template>
