@@ -364,7 +364,7 @@
           <ion-card-content>
             <div class="case-study-images">
               <img
-                :src="getPublicUrl('speech_case_study.jpg')"
+                :src="getPublicUrl('speech_case_study.png')"
                 alt="Learner participating in a speech and language activity"
                 class="case-study-image"
               />
@@ -1083,6 +1083,11 @@ interface FillSentence { id: string; textBefore: string; textAfter?: string; cor
 interface BaseQuestion {
   question: string;
   instructions?: string;
+  feedback?: {
+    tip?: string;
+    explanation?: string;
+    learningPoint?: string;
+  };
 }
 
 type SpeechQuestion =

@@ -1139,12 +1139,22 @@ interface MCOption { value: string; text: string }
 interface MultiTFSubQ { id: string; text: string; correctAnswer: 'true' | 'false'; explanation?: string }
 interface FillSentence { id: string; textBefore: string; textAfter?: string; correctAnswer: string; options: string[] }
 
+interface BaseQuestion {
+  question: string;
+  instructions?: string;
+  feedback?: {
+    tip?: string;
+    explanation?: string;
+    learningPoint?: string;
+  };
+}
+
 type MultipleDisabilitiesQuestion =
-  | { type?: 'multiple-choice'; question: string; options: MCOption[]; correctAnswer: string }
-  | { type: 'true-false'; question: string; options: MCOption[]; correctAnswer: string }
-  | { type: 'multi-true-false'; question: string; subQuestions: MultiTFSubQ[] }
-  | { type: 'fill-in-blank'; question: string; sentences: FillSentence[] }
-  | { type: 'select-all'; question: string; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] };
+  | (BaseQuestion & { type?: 'multiple-choice'; options: MCOption[]; correctAnswer: string })
+  | (BaseQuestion & { type: 'true-false'; options: MCOption[]; correctAnswer: string })
+  | (BaseQuestion & { type: 'multi-true-false'; subQuestions: MultiTFSubQ[] })
+  | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[] })
+  | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
 const questions = ref<MultipleDisabilitiesQuestion[]>([
   {
