@@ -508,7 +508,7 @@
                   <ion-list>
                     <ion-item v-for="(question, index) in disabilityContent.understanding.strengths" :key="index">
                       <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
-                      <ion-label>{{ question }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(question) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -519,7 +519,7 @@
                   <ion-list>
                     <ion-item v-for="(question, index) in disabilityContent.understanding.challenges" :key="index">
                       <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
-                      <ion-label>{{ question }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(question) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -530,7 +530,7 @@
                   <ion-list>
                     <ion-item v-for="(question, index) in disabilityContent.understanding.strategies" :key="index">
                       <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
-                      <ion-label>{{ question }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(question) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -541,7 +541,7 @@
                   <ion-list>
                     <ion-item v-for="(statement, index) in disabilityContent.understanding.advocacy" :key="index">
                       <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
-                      <ion-label>{{ statement }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(statement) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -567,7 +567,7 @@
                         <ion-list>
                           <ion-item v-for="(challenge, index) in disabilityContent.challenges.physical" :key="index">
                             <ion-icon :icon="warning" slot="start" color="warning"></ion-icon>
-                            <ion-label>{{ challenge }}</ion-label>
+                            <ion-label>{{ ensureSentenceEnding(challenge) }}</ion-label>
                           </ion-item>
                         </ion-list>
                       </ion-card-content>
@@ -582,7 +582,7 @@
                         <ion-list>
                           <ion-item v-for="(challenge, index) in disabilityContent.challenges.social" :key="index">
                             <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
-                            <ion-label>{{ challenge }}</ion-label>
+                            <ion-label>{{ ensureSentenceEnding(challenge) }}</ion-label>
                           </ion-item>
                         </ion-list>
                       </ion-card-content>
@@ -599,7 +599,7 @@
                         <ion-list>
                           <ion-item v-for="(challenge, index) in disabilityContent.challenges.tasks" :key="index">
                             <ion-icon :icon="document" slot="start" color="primary"></ion-icon>
-                            <ion-label>{{ challenge }}</ion-label>
+                            <ion-label>{{ ensureSentenceEnding(challenge) }}</ion-label>
                           </ion-item>
                         </ion-list>
                       </ion-card-content>
@@ -614,7 +614,7 @@
                         <ion-list>
                           <ion-item v-for="(challenge, index) in disabilityContent.challenges.assessment" :key="index">
                             <ion-icon :icon="school" slot="start" color="tertiary"></ion-icon>
-                            <ion-label>{{ challenge }}</ion-label>
+                            <ion-label>{{ ensureSentenceEnding(challenge) }}</ion-label>
                           </ion-item>
                         </ion-list>
                       </ion-card-content>
@@ -642,7 +642,7 @@
                     <ion-list>
                       <ion-item v-for="(strategy, index) in disabilityContent.enabling.physical" :key="index">
                         <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>{{ strategy }}</ion-label>
+                        <ion-label>{{ ensureSentenceEnding(strategy) }}</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>
@@ -657,7 +657,7 @@
                     <ion-list>
                       <ion-item v-for="(strategy, index) in disabilityContent.enabling.social" :key="index">
                         <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>{{ strategy }}</ion-label>
+                        <ion-label>{{ ensureSentenceEnding(strategy) }}</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>
@@ -672,7 +672,7 @@
                     <ion-list>
                       <ion-item v-for="(strategy, index) in disabilityContent.enabling.tasks" :key="index">
                         <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>{{ strategy }}</ion-label>
+                        <ion-label>{{ ensureSentenceEnding(strategy) }}</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>
@@ -687,7 +687,7 @@
                     <ion-list>
                       <ion-item v-for="(strategy, index) in disabilityContent.enabling.assessment" :key="index">
                         <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>{{ strategy }}</ion-label>
+                        <ion-label>{{ ensureSentenceEnding(strategy) }}</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>
@@ -724,7 +724,7 @@
                     <ion-item v-for="(resource, index) in disabilityContent.resources.electronic" :key="index" button @click="openResource(resource)">
                       <ion-icon :icon="laptop" slot="start" color="primary"></ion-icon>
                       <ion-label>
-                        <h4>{{ resource.title }}</h4>
+                        <h4>{{ ensureSentenceEnding(resource.title) }}</h4>
                         <p>{{ resource.description }}</p>
                         <ion-note>{{ resource.url }}</ion-note>
                       </ion-label>
@@ -740,7 +740,7 @@
                     <ion-item v-for="(resource, index) in disabilityContent.resources.paper" :key="index" button @click="openResource(resource)">
                       <ion-icon :icon="document" slot="start" color="secondary"></ion-icon>
                       <ion-label>
-                        <h4>{{ resource.title }}</h4>
+                        <h4>{{ ensureSentenceEnding(resource.title) }}</h4>
                         <p>{{ resource.description }}</p>
                         <ion-note>{{ resource.availability }}</ion-note>
                       </ion-label>
@@ -907,7 +907,7 @@
                 <ion-list>
                   <ion-item v-for="(detail, index) in disabilityContent.caseStudy.details" :key="index">
                     <ion-icon :icon="informationCircle" slot="start" color="primary"></ion-icon>
-                    <ion-label>{{ detail }}</ion-label>
+                    <ion-label>{{ ensureSentenceEnding(detail) }}</ion-label>
                   </ion-item>
                 </ion-list>
 
@@ -916,7 +916,7 @@
                   <h4>Key Learning Points</h4>
                   <ion-chip v-for="(point, index) in disabilityContent.caseStudy.learningPoints" :key="index" color="success">
                     <ion-icon :icon="checkmark"></ion-icon>
-                    <ion-label>{{ point }}</ion-label>
+                    <ion-label>{{ ensureSentenceEnding(point) }}</ion-label>
                   </ion-chip>
                 </div>
               </div>
@@ -1552,6 +1552,7 @@ import {
 import { actionSheetController, toastController } from '@ionic/vue';
 import { ProgressService } from '../services/ProgressService';
 import { consumePendingAnchor } from '@/utils/anchorScroll';
+import { ensureSentenceEnding } from '@/utils/text';
 import { 
   documentOutline,
   videocamOutline,
@@ -2997,16 +2998,16 @@ const disabilityContent = computed(() => {
       description: '',
       language: {
         wordsToUse: [
-          { term: 'Learner who is non-speaking', explanation: '' },
-          { term: 'Learner who uses adaptive communication', explanation: '' },
+          { term: 'Learner who is non-speaking.', explanation: '' },
+          { term: 'Learner who uses adaptive communication.', explanation: '' },
           { term: '‘Show me’ or ‘share with me’ instead of ‘tell me or talk to your partner’.', explanation: '' }
         ],
         wordsToAvoid: [
-          { term: 'Dumb', reason: '' },
-          { term: 'Mute', reason: '' },
-          { term: 'Non-verbal', reason: '' },
-          { term: 'Can’t communicate', reason: '' },
-          { term: 'Suffers from', reason: '' },
+          { term: 'Dumb.', reason: '' },
+          { term: 'Mute.', reason: '' },
+          { term: 'Non-verbal.', reason: '' },
+          { term: 'Can’t communicate.', reason: '' },
+          { term: 'Suffers from …', reason: '' },
           { term: 'Refuses to talk', reason: '' },
           { term: 'Normal communication.', reason: '' }
         ]

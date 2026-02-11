@@ -149,11 +149,11 @@
                     <ion-list>
                       <ion-item>
                         <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>Learners with impairments / learners with disabilities</ion-label>
+                        <ion-label>Learners with impairments / learners with disabilities.</ion-label>
                       </ion-item>
                       <ion-item>
                         <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>Learners without disability</ion-label>
+                        <ion-label>Learners without disability.</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>
@@ -167,11 +167,11 @@
                     <ion-list>
                       <ion-item>
                         <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
-                        <ion-label>The disabled / handicapped / people living with disabilities</ion-label>
+                        <ion-label>The disabled / handicapped / people living with disabilities.</ion-label>
                       </ion-item>
                       <ion-item>
                         <ion-icon :icon="close" slot="start" color="danger"></ion-icon>
-                        <ion-label>Normal people / able-bodied people / non-disabled people</ion-label>
+                        <ion-label>Normal people / able-bodied people / non-disabled people.</ion-label>
                       </ion-item>
                     </ion-list>
                   </div>

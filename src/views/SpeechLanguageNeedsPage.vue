@@ -100,7 +100,7 @@
                 <ion-list v-if="understanding.strengths.length">
                   <ion-item v-for="(q, i) in understanding.strengths" :key="`str-` + i + '-' + q">
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>{{ ensureSentenceEnding(q) }}</ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
@@ -110,7 +110,7 @@
                 <ion-list v-if="understanding.challenges.length">
                   <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>{{ ensureSentenceEnding(q) }}</ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
@@ -121,7 +121,7 @@
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ item.question }}</h4>
+                      <h4>{{ ensureSentenceEnding(item.question) }}</h4>
                       <div v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">
                         <template v-if="item.question !== 'Prompts:'"><strong>Prompts:</strong></template>
                         <ul style="margin: 6px 0 0 6px; padding-left: 12px;">
@@ -138,7 +138,7 @@
                 <ion-list v-if="understanding.advocacy.length">
                   <ion-item v-for="(q, i) in understanding.advocacy" :key="`adv-` + i + '-' + q">
                     <ion-icon :icon="megaphone" slot="start" color="tertiary"></ion-icon>
-                    <ion-label>{{ q }}</ion-label>
+                    <ion-label>{{ ensureSentenceEnding(q) }}</ion-label>
                   </ion-item>
                 </ion-list>
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
@@ -164,7 +164,7 @@
                       <ion-list>
                         <ion-item v-for="(c, i) in challenges.physical" :key="`phys-` + i + '-' + c">
                           <ion-icon :icon="warning" slot="start" color="warning"></ion-icon>
-                          <ion-label>{{ c }}</ion-label>
+                          <ion-label>{{ ensureSentenceEnding(c) }}</ion-label>
                         </ion-item>
                       </ion-list>
                     </ion-card-content>
@@ -179,7 +179,7 @@
                       <ion-list>
                         <ion-item v-for="(c, i) in challenges.social" :key="`soc-` + i + '-' + c">
                           <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
-                          <ion-label>{{ c }}</ion-label>
+                          <ion-label>{{ ensureSentenceEnding(c) }}</ion-label>
                         </ion-item>
                       </ion-list>
                     </ion-card-content>
@@ -196,7 +196,7 @@
                       <ion-list>
                         <ion-item v-for="(c, i) in challenges.tasks" :key="`task-` + i + '-' + c">
                           <ion-icon :icon="documentIcon" slot="start" color="primary"></ion-icon>
-                          <ion-label>{{ c }}</ion-label>
+                          <ion-label>{{ ensureSentenceEnding(c) }}</ion-label>
                         </ion-item>
                       </ion-list>
                     </ion-card-content>
@@ -211,7 +211,7 @@
                       <ion-list>
                         <ion-item v-for="(c, i) in challenges.assessment" :key="`assess-` + i + '-' + c">
                           <ion-icon :icon="school" slot="start" color="tertiary"></ion-icon>
-                          <ion-label>{{ c }}</ion-label>
+                          <ion-label>{{ ensureSentenceEnding(c) }}</ion-label>
                         </ion-item>
                       </ion-list>
                     </ion-card-content>
@@ -239,7 +239,7 @@
                   <ion-list>
                     <ion-item v-for="(s, i) in enabling.physical" :key="`en-phys-` + i + '-' + s">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>{{ s }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -254,7 +254,7 @@
                   <ion-list>
                     <ion-item v-for="(s, i) in enabling.social" :key="`en-soc-` + i + '-' + s">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>{{ s }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -269,7 +269,7 @@
                   <ion-list>
                     <ion-item v-for="(s, i) in enabling.tasks" :key="`en-task-` + i + '-' + s">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>{{ s }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -284,7 +284,7 @@
                   <ion-list>
                     <ion-item v-for="(s, i) in enabling.assessment" :key="`en-assess-` + i + '-' + s">
                       <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>{{ s }}</ion-label>
+                      <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -841,6 +841,7 @@ import {
 import { ProgressService } from '@/services/ProgressService';
 import { toastController } from '@ionic/vue';
 import { consumePendingAnchor } from '@/utils/anchorScroll';
+import { ensureSentenceEnding } from '@/utils/text';
 
 const route = useRoute();
 const selectedUnderstanding = ref('strengths');
@@ -877,15 +878,15 @@ const linkifyText = (text: string): string => {
 };
 
 const wordsToUse: { term: string; explanation: string }[] = [
-  { term: 'A learner with a stammer', explanation: '' },
+  { term: 'A learner with a stammer.', explanation: '' },
   { term: 'A learner who experiences speech difficulties, difference, variation, struggles to produce specific sounds.', explanation: '' }
 ];
 const wordsToAvoid: { term: string; reason: string }[] = [
-  { term: 'Abnormal speech', reason: '' },
-  { term: 'Speech impediment or impairment (unless medically diagnosed)', reason: '' },
+  { term: 'Abnormal speech.', reason: '' },
+  { term: 'Speech impediment or impairment (unless medically diagnosed).', reason: '' },
   { term: 'Suffers from …', reason: '' },
-  { term: 'Has a lisp', reason: '' },
-  { term: 'Stammering girl/boy', reason: '' },
+  { term: 'Has a lisp.', reason: '' },
+  { term: 'Stammering girl/boy.', reason: '' },
   { term: 'Stammerer.', reason: '' }
 ];
 
