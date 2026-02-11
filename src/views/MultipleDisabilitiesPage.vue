@@ -479,12 +479,26 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveReflection"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="md-reflection-think-1">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="secondary"></ion-icon>
+                        <ion-label>Could you design objects, sounds, different textures to explore through the story?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </div>
             <div class="reflection-section">
               <h4>
-                2) Could you design objects, sounds, different textures to explore through the story?
-                <br /><br />
-                3) Set aside a small amount time every day for a week to observe a learner with multiple learning difficulties and note all of the subtle ways they communicate/interact with their environment.
+                2) Set aside a small amount time every day for a week to observe a learner with multiple learning difficulties and note all of the subtle ways they communicate/interact with their environment.
               </h4>
               <ion-textarea
                 v-model="reflection.practiceReflection"

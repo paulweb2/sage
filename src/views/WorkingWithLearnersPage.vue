@@ -188,7 +188,7 @@
             </ion-card-header>
             <ion-card-content>
               <h4><strong>Challenge</strong></h4>
-              <p>Each learner with a disability is unique; some may have multiple needs, while others may face challenges that are not always visible. For example, a learner could be both deaf and have a cognitive learning difficulty, or they may also come from a disadvantaged background.</p>
+              <p>Each learner with a disability is unique; some may have multiple needs, while others may face challenges that are not always visible. For example, a learner could be both deaf and have a cognitive learning difficulty, and they may also come from a disadvantaged background.</p>
               <h4><strong>Enabler</strong></h4>
               <p>This means educators cannot rely on ‘one-size-fits-all’ approaches. Instead, they need to adopt flexible methods that respond to individual differences.</p>
             </ion-card-content>

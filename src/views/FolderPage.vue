@@ -378,7 +378,7 @@
               <ion-card-title>Summary</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <p>Screening using the WGSSQ is the first step in identifying learners who may need extra support. By handling the process with care, respect and confidentiality, educators can ensure that learners with disabilities are supported and where appropriate referred for further help they need to succeed in school.</p>
+              <p>Screening using the WGSSQ is the first step in identifying learners who may need extra support. By handling the process with care, respect and confidentiality, educators can ensure that learners with disabilities are supported and where appropriate referred for the further help they need to succeed in school.</p>
             </ion-card-content>
           </ion-card>
         </div>

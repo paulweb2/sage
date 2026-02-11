@@ -112,7 +112,7 @@
                 </ion-list>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
-                <p>Using the learner’s preferred communication method, questions and prompts help to understand strategies that can support the learner:</p>
+                <p>Using the learner’s preferred communication method, questions and prompts help to understand <strong>strategies</strong> that can support the learner:</p>
                 <ion-list>
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
@@ -1074,7 +1074,7 @@ const enabling = {
     'Provide visual instructions and/or pictures and lesson objectives in written formats that are accessible to the learner.'
   ],
   social: [
-    'Teach ways to communicate learners with hearing needs to staff and learners. For example, speaking one at a time, gaining the attention of a person with hearing needs before speaking, and facing the person you are talking to. Peers could be taught basic signs.',
+    'Teach ways to communicate with learners with hearing needs to all staff.',
     'Foster a ‘deaf-aware’ classroom through peer education and empathy-building activities.',
     'Encourage peer buddies or promote social inclusion activities.',
     'Use home language where appropriate.'

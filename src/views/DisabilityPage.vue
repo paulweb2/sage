@@ -3068,7 +3068,7 @@ const disabilityContent = computed(() => {
           'Ensure individuals can access resources that help them, such as noise-cancelling headphones (or ear defenders), which support concentration and communication access.'
         ],
         social: [
-          'Teach strategies for listening but respect variances, for example, eye contact is not compulsory).',
+          'Teach strategies for listening but respect variances, for example, eye contact is not compulsory.',
           'Support the learner’s interactions with their peers by modelling phrases and demonstrating different ways to listen and respond.',
           'Teach other children how to ‘listen’ to alternative communication methods such as symbols or sign language.',
           'Always gain the learner’s attention before attempting to interact.',

@@ -106,7 +106,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'challenges'">
-                <p>Questions and promptsto help find out about <strong>challenges</strong> a learner may encounter:</p>
+                <p>Questions and prompts to help find out about <strong>challenges</strong> a learner may encounter:</p>
                 <ion-list v-if="understanding.challenges.length">
                   <ion-item v-for="(q, i) in understanding.challenges" :key="`chal-` + i + '-' + q">
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
@@ -116,7 +116,7 @@
                 <ion-note v-else color="medium">Content coming soon.</ion-note>
               </div>
               <div v-else-if="selectedUnderstanding === 'strategies'">
-                <p>Questions and prompts to understand strategies that can <strong>support</strong> the learner:</p>
+                <p>Questions and prompts to understand <strong>strategies</strong> that can support the learner:</p>
                 <ion-list v-if="understanding.strategies.length">
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
@@ -423,7 +423,7 @@
                 </li>
                 <li>
                   How might speech to text technology be used, so that the learner’s message is accessible beyond
-                  those who can read Braille?
+                  only those who can read Braille?
                 </li>
                 <li>How can the teacher support the learner to proofread and edit his work?</li>
               </ul>
@@ -557,7 +557,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>How might speech to text technology be used, so that the learner’s message is accessible beyond those who can read Braille?</ion-label>
+                      <ion-label>How might speech to text technology be used, so that the learner’s message is accessible beyond only those who can read Braille?</ion-label>
                     </ion-item>
                     <ion-item>
                       <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
@@ -868,7 +868,7 @@ const languageAvoidLines: string[] = [
   '‘Suffers from blindness’ implies suffering.',
   '‘Afflicted with visual impairment’ suggests helplessness',
   '‘Victim of visual impairment’ or ‘victim of vision loss’ suggests pity',
-  '‘Bind as a bat’ is considered disrespectful and dehumanising',
+  '‘Blind as a bat’ is considered disrespectful and dehumanising',
   '‘Visually challenged’ is euphemistic and considered condescending.',
 ];
 
@@ -884,7 +884,7 @@ const understanding = {
   ] as string[],
   challenges: [
     'What are some barriers you have experienced when doing classroom activities?',
-    'What challenges do you face with physical spaces at school – like hallways, cafeterias, or classrooms – and what challenges do you face?',
+    'What challenges do you face with physical spaces at school – like hallways, cafeterias, or classrooms?',
     'What stops you from understanding the learning?',
     'What stops you working on tasks with your friends?'
   ] as string[],
@@ -895,7 +895,7 @@ const understanding = {
     },
     { question: 'In what ways can verbal description help you?', prompts: [] },
     { question: 'What assistive technologies help you with your learning?', prompts: [] },
-    { question: 'In what ways to models and concrete images help you with your learning?', prompts: [] },
+    { question: 'In what ways do models and concrete images help you with your learning?', prompts: [] },
     { question: 'How can collaborative group work be made more accessible and inclusive for you?', prompts: [] }
   ] as { question: string; prompts: string[] }[],
   advocacy: [
@@ -1040,7 +1040,7 @@ const resources = {
     { title: 'Storybooks that include characters with hearing needs. Examples can be found here: https://www.perkins.org/books-about-deafness-or-with-deaf-characters/' },
     { title: 'Tactile graphics – such as raised-line drawings for maps, graphs, diagrams, geometric figures – can be created using ‘swell paper’ in an ordinary printer.' },
     { title: 'Books, worksheets, and handouts printed in a larger font size (typically 18-point or higher).' },
-    { title: '3D shapes, counting blocks, abacuses, based in blocks and 3D models E.G skeletons, solar systems' },
+    { title: '3D shapes, counting blocks, abacuses, based in blocks and 3D models for example skeletons, solar systems.' },
     { title: 'Textured number lines, clocks, thermometers and rulers with Braille or raised markers.' }
   ] as Array<{ title: string; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>

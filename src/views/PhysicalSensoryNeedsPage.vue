@@ -335,7 +335,10 @@
                     <ion-icon :icon="documentIcon" slot="start" color="secondary"></ion-icon>
                     <ion-label>
                       <h4 v-html="linkifyText(r.title)"></h4>
-                      <p>{{ r.description }}</p>
+                      <ul v-if="r.bullets && r.bullets.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                        <li v-for="(b, bi) in r.bullets" :key="`res-paper-bullet-` + i + '-' + bi">{{ b }}</li>
+                      </ul>
+                      <p v-else-if="r.description" style="white-space: pre-wrap;">{{ r.description }}</p>
                       <p v-if="r.availability">{{ r.availability }}</p>
                     </ion-label>
                   </ion-item>
@@ -1182,7 +1185,7 @@ const challenges = {
   physical: [
     'Moving from one activity/space to another',
     'Reaching and using equipment and resources if fine motor or gross motor skills are\nneeded',
-    'Teacher and teaching resources not being aligned with the line of learner’s line of\nvision or hearing',
+    'Teacher and teaching resources not being aligned with learners\' line of vision or hearing',
     'Time and access to personal care',
     'Barriers to transition within the school environment.'
   ] as string[],
@@ -1205,7 +1208,7 @@ const challenges = {
 const enabling = {
   physical: [
     'Ensure passages between spaces/rooms/inside and outside are sufficient to\naccommodate wider frames of wheelchairs or walking frames to enable the learner’s\nsmooth movement between areas of learning.',
-    'Ensure pathways are clear as even without equipment, if a person is not too steady\nobstacles can be difficult to navigate.',
+    'Ensure pathways are clear, as even without equipment, if a person is not too steady\nobstacles can be difficult to navigate.',
     'Position educator and the resources so that they use are visible and audible to the\nlearner.',
     'Ensure the learner is enabled to reach for materials they need for a task.'
   ] as string[],
@@ -1223,7 +1226,7 @@ const enabling = {
     'Strive to gain learners’ views on their experiences and sensations during class activities\nto involve them in the decision-making process and inform your planning for future\nactivities.'
   ] as string[],
   assessment: [
-    'Adjustments for assessment may include using a different room for a test to minimis distractions.',
+    'Adjustments for assessment may include using a different room for a test to minimise distractions.',
     'Adaptations of resources used in assessments should meet individual needs, such\nas using assistive technology or alternative modes of communication.',
     'Ensure assistance is provided for practical tests.',
     'Allowing extra time for processing of information.'
@@ -1233,12 +1236,16 @@ const enabling = {
 const resources = {
   electronic: [] as any[],
   paper: [
-    { title: 'Depending on the level and variety of disability.' },
-    { title: 'Pencil grips.' },
-    { title: 'Paintbrush grips.' },
-    { title: 'Larger print.' },
-    { title: 'Clipboards to retain the paper in place may be needed.' }
-  ] as Array<{ title: string; description?: string; availability?: string }>,
+    {
+      title: 'Depending on the level and variety of disability:',
+      bullets: [
+        'Pencil grips',
+        'Paintbrush grips',
+        'Larger print',
+        'Clipboards to retain the paper in place may be needed'
+      ]
+    }
+  ] as Array<{ title: string; bullets?: string[]; description?: string; availability?: string }>,
   organizations: [] as Array<{ name: string; description?: string; contact?: string }>
 };
 const electronicLines: string[] = [

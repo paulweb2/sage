@@ -948,7 +948,7 @@ const linkifyText = (text: string): string => {
 };
 
 const wordsToUse: { term: string; explanation: string }[] = [
-  { term: 'Person Person-centred language', explanation: 'a learner who is dyslexic or has dyslexia.' },
+  { term: 'Person-centred language', explanation: 'a learner who is dyslexic or has dyslexia.' },
   { term: 'A leaner who experiences characteristics of dyslexia', explanation: 'who might need more time to process information/organise tasks.' }
 ];
 const wordsToAvoid: { term: string; reason: string }[] = [
@@ -1120,7 +1120,7 @@ const challenges = {
       title: 'Dysgraphia',
       items: [
         'Fine motor skills required to control a pen/pencil, which may lead to: irregular letter size and shape; incomplete letters; odd writing grip; frequent spelling mistakes; occasional pain when writing; decreased or increased speed of writing and copying; talking to self while writing; general illegibility and reluctance or refusal to complete writing tasks',
-        'Difficulty with mMemorisationing of words and processing the letters in those words',
+        'Difficulty with memorising words and processing the letters in those words',
         'Fine motor skills required to control a pen/pencil.'
       ]
     }

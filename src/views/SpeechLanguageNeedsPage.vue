@@ -1044,7 +1044,7 @@ const enabling = {
     'Allow extra time.',
     'Explicitly teach strategies for interpreting written and spoken information.',
     'Explicitly teach phrases to use when answering assessment questions.',
-    'A stammer is not an indication of a leaner’s level of intelligence.'
+    'A stammer is not an indication of a learner’s level of intelligence.'
   ] as string[]
 };
 
