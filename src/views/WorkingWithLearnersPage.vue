@@ -55,7 +55,12 @@
                     <ion-card class="partner-card partner-parents">
                       <ion-card-header class="partner-card-header">
                         <div class="partner-badge">
-                          <ion-icon :icon="heart" color="danger"></ion-icon>
+                          <img
+                            src="/family_1996677.png"
+                            alt=""
+                            aria-hidden="true"
+                            class="partner-badge-image"
+                          />
                         </div>
                         <ion-card-title>Parents</ion-card-title>
                       </ion-card-header>
@@ -551,6 +556,11 @@ ion-card { margin: 16px; }
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 .partner-badge ion-icon { font-size: 20px; }
+.partner-badge-image {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
 
 /* Themed backgrounds per partner */
 .partner-learners {

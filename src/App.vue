@@ -55,7 +55,15 @@
             <div v-for="(category, index) in disabilityCategories" :key="index">
               <!-- Main category item -->
               <ion-item lines="none" @click="handleCategoryClick(index)" class="category-item" router-direction="root" :class="{ selected: activeSection === 'bottom' && activeIndex === index }">
-                <ion-icon aria-hidden="true" slot="start" :ios="category.icon" :md="category.icon"></ion-icon>
+                <img
+                  v-if="category.imageSrc"
+                  :src="category.imageSrc"
+                  alt=""
+                  aria-hidden="true"
+                  slot="start"
+                  class="menu-custom-icon"
+                />
+                <ion-icon v-else aria-hidden="true" slot="start" :ios="category.icon" :md="category.icon"></ion-icon>
                 <ion-label>{{ category.title }}</ion-label>
                 <ion-icon v-if="category.subItems.length > 0" :icon="chevronDown" slot="end" :class="{ 'rotated': category.expanded }"></ion-icon>
               </ion-item>
@@ -252,6 +260,7 @@ const disabilityCategories = ref([
   {
     title: 'Cognitive needs',
     icon: bulbOutline,
+    imageSrc: '/brain_1491214.png',
     expanded: false,
     url: '/needs/cognitive-intellectual',
     subItems: createDisabilitySubItems()
@@ -537,6 +546,27 @@ ion-menu.md ion-item ion-label {
 
 .submenu-item:hover {
   --background: rgba(var(--ion-color-primary-rgb), 0.1);
+}
+
+.menu-custom-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Match Ionic's default slotted icon spacing in ion-item */
+ion-menu.md ion-item .menu-custom-icon[slot="start"] {
+  margin-inline-end: 32px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+ion-menu.ios ion-item .menu-custom-icon[slot="start"] {
+  margin-inline-start: 0;
+  margin-inline-end: 16px;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 
 .rotated {
