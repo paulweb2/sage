@@ -76,7 +76,7 @@
             </ion-card-header>
             <ion-card-content>
               <p>The toolkit aims to help educators and others to:</p>
-              <ol type="i">
+              <ol>
                 <li>use respectful language when talking to or about learners with disabilities</li>
                 <li>recognise, screen, and refer learners with disabilities for further assessment and support</li>
                 <li>teach in inclusive ways that meet the needs of all learners.</li>
@@ -260,7 +260,7 @@
               <ion-card-title>Recommended steps for posing questions in the Signposting Tool</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ol type="i">
+              <ol>
                 <li><strong>Introduce yourself clearly</strong> - Begin by greeting the learner and telling them your name. This helps to build trust and respect.</li>
                 <li><strong>Explain the purpose</strong> - Tell the learner why you are asking the questions. For example, ‘These questions help us understand if you need extra support in learning.’ This reassures the learner that the process is meant to help them, not to judge them.</li>
                 <li><strong>Ask the six questions</strong> - Use the WGSSQ on the Signposting Tool tab to check whether the learner has any difficulty in the key areas (seeing, hearing, walking, remembering, communicating and self-care). Ask in simple and clear language.</li>
