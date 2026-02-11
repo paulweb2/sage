@@ -345,9 +345,9 @@
         <ion-card id="case-study">
           <ion-card-header>
             <ion-card-title>Case Study</ion-card-title>
-            <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
+            <h3 class="case-study-heading">Working with numbers to 20</h3>
             <CaseStudyCarousel :images="caseStudyImages" />
 
             <div class="case-study-text">
@@ -1604,6 +1604,7 @@ ion-card { margin: 16px; }
 .correct-answer-explanation h6 { color: var(--ion-color-success); margin-bottom: 6px; font-weight: 600; }
 .learning-tip-header { --background: var(--ion-color-light); }
 .case-study-text ul { margin: 8px 0 12px 20px; }
+.case-study-heading { margin-bottom: 12px; font-weight: 700; }
 .case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }
 .case-study-prompts li { margin-bottom: 6px; }

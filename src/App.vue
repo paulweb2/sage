@@ -243,7 +243,7 @@ const disabilityCategories = ref([
     subItems: createDisabilitySubItems()
   },
   {
-    title: 'Physical and sensory needs',
+    title: 'Physical Needs',
     icon: bodyOutline,
     expanded: false,
     url: '/needs/physical-sensory',

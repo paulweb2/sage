@@ -25,7 +25,7 @@
       <div id="container">
         <ion-card id="intro" v-if="pageId !== 'working-language'">
           <ion-card-content>
-            <p>{{ pageIntro }}</p>
+            <p v-html="pageIntro"></p>
           </ion-card-content>
         </ion-card>
 
@@ -187,7 +187,9 @@
               <ion-card-title>Learners do not fall neatly into single categories</ion-card-title>
             </ion-card-header>
             <ion-card-content>
+              <h4><strong>Challenge</strong></h4>
               <p>Each learner with a disability is unique; some may have multiple needs, while others may face challenges that are not always visible. For example, a learner could be both deaf and have a cognitive learning difficulty, or they may also come from a disadvantaged background.</p>
+              <h4><strong>Enabler</strong></h4>
               <p>This means educators cannot rely on ‘one-size-fits-all’ approaches. Instead, they need to adopt flexible methods that respond to individual differences.</p>
             </ion-card-content>
           </ion-card>
@@ -197,7 +199,9 @@
               <ion-card-title>Educators cannot do everything</ion-card-title>
             </ion-card-header>
             <ion-card-content>
+              <h4><strong>Challenge</strong></h4>
               <p>Schools and educators may not be able to meet every need for everyone, all the time. This is why the idea of ‘reasonable adjustments’ is important.</p>
+              <h4><strong>Enabler</strong></h4>
               <p>Reasonable adjustments are changes that remove barriers to learning and participation while remaining practical within the school’s circumstances. Examples include giving extra time in examinations, seating a learner at the front of the class, or using larger print materials. The focus of reasonable adjustments is on doing what is possible and practical within the available resources.</p>
             </ion-card-content>
           </ion-card>
@@ -207,8 +211,10 @@
               <ion-card-title>Resources: funds, staffing, expertise</ion-card-title>
             </ion-card-header>
             <ion-card-content>
+              <h4><strong>Challenge</strong></h4>
               <p>One of the biggest challenges to a genuinely inclusive education system is a lack of resources. Schools may struggle with limited budgets, not enough staff, or a shortage of teachers trained in inclusive education. Assistive devices and accessible learning materials may be expensive or unavailable. These gaps can make it harder to provide the right support.</p>
-              <p>However, partnerships with parents, communities, government and organisations can help to close some of these gaps and share responsibility.</p>
+              <h4><strong>Enabler</strong></h4>
+              <p>Partnerships with parents, communities, government and organisations can help to close some of these gaps and share responsibility.</p>
             </ion-card-content>
           </ion-card>
         </div>
@@ -404,7 +410,7 @@ const pageSubtitle = computed(() => '');
 const pageIntro = computed(() => {
   if (pageId.value === 'working-partnership') return 'Inclusive education works best when everyone plays a role; no one person or group can achieve it alone. Partnerships between learners, parents, communities and other stakeholders help remove barriers and create supportive environments.';
   if (pageId.value === 'working-language') return 'Use respectful, person-centred language and identity-first terms where preferred.';
-  if (pageId.value === 'working-tensions') return 'Creating an inclusive learning environment is important, but it also comes with challenges. Teachers, parents, and schools often face tensions when trying to balance the needs of learners with disabilities with the resources available.';
+  if (pageId.value === 'working-tensions') return 'Creating an inclusive learning environment is important, but it also comes with <strong>challenges</strong>. For example teachers, parents, and schools often face <strong>challenges</strong> when trying to balance the needs of learners with disabilities with the resources available. However, educators can take action to be an <strong>enabler</strong> for a more inclusive environment for all learners.';
   return '';
 });
 

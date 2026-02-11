@@ -356,15 +356,14 @@
         <ion-card id="case-study">
           <ion-card-header>
             <ion-card-title>Case Study</ion-card-title>
-            <ion-card-subtitle>Real-World Example</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
+            <h3 class="case-study-heading">Weekend writing task using a Perkins Braille machine</h3>
             <div class="case-study-video">
               <!-- Previously: src="/SAGE 7638_7632_even_lower_quality.mp4" -->
               <MediaPlayer
                 ref="visualCaseStudyPlayer"
                 type="video"
-                title="Weekend writing task using a Perkins Braille machine"
                 subtitle="Learner composing and reading his own work"
                 src="https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE%207638_7632_even_lower_quality.mp4"
                 :duration="120"
@@ -1504,6 +1503,7 @@ ion-card { margin: 16px; }
 .reflection-progress { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
 .reflection-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .case-study-text { margin-bottom: 12px; }
+.case-study-heading { margin-bottom: 12px; font-weight: 700; }
 .case-study-text ul { margin: 8px 0 12px 20px; }
 .case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }

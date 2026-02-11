@@ -774,12 +774,12 @@
           <ion-card id="case-study">
             <ion-card-header>
               <ion-card-title>Case Study</ion-card-title>
-              <ion-card-subtitle>Real-World Example</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
               <!-- Custom content for Communication page -->
               <div v-if="route.params.id === 'communication'">
                 <div class="case-study-text">
+                  <h3 class="case-study-heading">Chiedza</h3>
                   <p>
                     Chiedza is a learner with communication and social interaction needs. She has limited
                     verbal communication skills and struggles to interact with her peers in the class. She
@@ -4391,6 +4391,11 @@ ion-spinner {
 
 .case-study-text {
   margin-bottom: 12px;
+}
+
+.case-study-heading {
+  margin-bottom: 12px;
+  font-weight: 700;
 }
 
 .case-study-text ul {

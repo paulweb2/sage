@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Physical and sensory needs</ion-title>
+        <ion-title>Physical Needs</ion-title>
         <ion-buttons slot="end">
           <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
           <ion-button @click="presentActionSheet">
@@ -18,7 +18,7 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Physical and sensory needs</ion-title>
+          <ion-title size="large">Physical Needs</ion-title>
         </ion-toolbar>
       </ion-header>
 
@@ -361,7 +361,6 @@
         <ion-card id="case-study">
           <ion-card-header>
             <ion-card-title>Case Study</ion-card-title>
-            <ion-card-subtitle>Real-World Examples</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <!-- Case One: Rudo -->
