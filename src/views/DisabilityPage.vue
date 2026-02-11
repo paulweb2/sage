@@ -721,48 +721,51 @@
               <div class="ion-padding">
                 <div v-if="selectedResourceType === 'electronic'">
                   <ion-list>
-                    <ion-item v-for="(resource, index) in disabilityContent.resources.electronic" :key="index" button @click="openResource(resource)">
+                    <ion-item v-for="(resource, index) in disabilityContent.resources.electronic" :key="index">
                       <ion-icon :icon="laptop" slot="start" color="primary"></ion-icon>
                       <ion-label>
-                        <h4>{{ ensureSentenceEnding(resource.title) }}</h4>
+                        <h4 v-html="linkifyText(resource.title)"></h4>
                         <p>{{ resource.description }}</p>
-                        <ion-note>{{ resource.url }}</ion-note>
+                        <p
+                          v-if="resource.url"
+                          style="white-space: pre-wrap; margin: 0;"
+                          v-html="linkifyText(resource.url)"
+                        ></p>
                       </ion-label>
-                      <ion-button fill="clear" slot="end" @click="downloadResource(resource)">
-                        <ion-icon :icon="download"></ion-icon>
-                      </ion-button>
                     </ion-item>
                   </ion-list>
                 </div>
 
                 <div v-else-if="selectedResourceType === 'paper'">
                   <ion-list>
-                    <ion-item v-for="(resource, index) in disabilityContent.resources.paper" :key="index" button @click="openResource(resource)">
+                    <ion-item v-for="(resource, index) in disabilityContent.resources.paper" :key="index">
                       <ion-icon :icon="document" slot="start" color="secondary"></ion-icon>
                       <ion-label>
-                        <h4>{{ ensureSentenceEnding(resource.title) }}</h4>
+                        <h4 v-html="linkifyText(resource.title)"></h4>
                         <p>{{ resource.description }}</p>
-                        <ion-note>{{ resource.availability }}</ion-note>
+                        <p
+                          v-if="resource.availability"
+                          style="white-space: pre-wrap; margin: 0;"
+                          v-html="linkifyText(resource.availability)"
+                        ></p>
                       </ion-label>
-                      <ion-button fill="clear" slot="end" @click="downloadResource(resource)">
-                        <ion-icon :icon="download"></ion-icon>
-                      </ion-button>
                     </ion-item>
                   </ion-list>
                 </div>
 
                 <div v-else-if="selectedResourceType === 'organizations'">
                   <ion-list>
-                    <ion-item v-for="(org, index) in disabilityContent.resources.organizations" :key="index" button @click="contactOrganization(org)">
+                    <ion-item v-for="(org, index) in disabilityContent.resources.organizations" :key="index">
                       <ion-icon :icon="business" slot="start" color="tertiary"></ion-icon>
                       <ion-label>
-                        <h4>{{ org.name }}</h4>
+                        <h4 v-html="linkifyText(org.name)"></h4>
                         <p>{{ org.description }}</p>
-                        <ion-note>{{ org.contact }}</ion-note>
+                        <p
+                          v-if="org.contact"
+                          style="white-space: pre-wrap; margin: 0;"
+                          v-html="linkifyText(org.contact)"
+                        ></p>
                       </ion-label>
-                      <ion-button fill="clear" slot="end" @click="contactOrganization(org)">
-                        <ion-icon :icon="mail"></ion-icon>
-                      </ion-button>
                     </ion-item>
                   </ion-list>
                 </div>
@@ -1583,7 +1586,6 @@ import {
   home,
   laptop,
   business,
-  mail,
   eyeOutline,
   earOutline,
   chatbubbleOutline,
@@ -2545,16 +2547,16 @@ const getPageTitle = () => {
     return 'Physical and sensory needs';
   }
   if (id === 'cognitive-intellectual-needs') {
-    return 'Cognitive and intellectual needs';
+    return 'Cognitive needs';
   }
   if (id === 'speech-language-needs') {
     return 'Speech and language needs';
   }
   if (id === 'communication') {
-    return 'Communication';
+    return 'Communication needs';
   }
   if (id === 'multiple-disabilities') {
-    return 'Multiple disabilities';
+    return 'Multiple learning needs';
   }
   if (id === 'xxxxxxx') {
     return 'Visual needs';
@@ -2951,9 +2953,9 @@ const disabilityContent = computed(() => {
   }
   if (id === 'multiple-disabilities') {
     return {
-      title: 'Multiple Disabilities',
-      category: 'Multiple Disabilities',
-      description: 'Content for Multiple Disabilities is coming soon...',
+      title: 'Multiple learning needs',
+      category: 'Multiple learning needs',
+      description: 'Content for Multiple learning needs is coming soon...',
       language: {
         wordsToAvoid: [],
         wordsToUse: []
@@ -2993,7 +2995,7 @@ const disabilityContent = computed(() => {
   if (id === 'communication') {
     // Return content structure for the communication page
     return {
-      title: 'Communication',
+      title: 'Communication needs',
       category: 'Communication & Interaction',
       description: '',
       language: {
@@ -3379,23 +3381,23 @@ const getTaskColor = (index: number) => {
   return colors[index] || 'primary';
 };
 
+const linkifyText = (text: string): string => {
+  const escapeHtml = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  let result = escapeHtml(text);
+  const urlRegex = /(https?:\/\/[^\s)]+)/g;
+  result = result.replace(urlRegex, (m) => {
+    const href = m;
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${m}</a>`;
+  });
+  return result;
+};
+
 // Event handlers
 const completeTask = (index: number) => {
   if (disabilityContent.value?.reflectiveTasks) {
     disabilityContent.value.reflectiveTasks[index].completed = !disabilityContent.value.reflectiveTasks[index].completed;
   }
-};
-
-const openResource = (resource: any) => {
-  console.log(`Opening resource: ${resource.title}`);
-  if (resource.url) {
-    // Open URL in new window/tab - works in both web browsers and mobile apps
-    window.open(resource.url, '_blank', 'noopener,noreferrer');
-  }
-};
-
-const downloadResource = (resource: any) => {
-  console.log(`Downloading resource: ${resource.title}`);
 };
 
 // Reflective Writing Functions
@@ -3539,17 +3541,6 @@ const clearReflection = () => {
         color: 'warning'
       }).then(toast => toast.present());
     }
-  }
-};
-
-const contactOrganization = (org: any) => {
-  console.log(`Contacting organization: ${org.name}`);
-  if (org.contact && org.contact.startsWith('http')) {
-    // If contact is a URL, open it in new window/tab
-    window.open(org.contact, '_blank', 'noopener,noreferrer');
-  } else if (org.contact) {
-    // If contact is a phone number or other contact info, could show it in a toast or modal
-    console.log(`Contact information: ${org.contact}`);
   }
 };
 
@@ -4358,7 +4349,6 @@ ion-spinner {
 .reflection-prompt {
   margin: 0 0 16px 0;
   color: var(--ion-color-medium);
-  font-style: italic;
   line-height: 1.5;
 }
 

@@ -243,14 +243,14 @@ const disabilityCategories = ref([
     subItems: createDisabilitySubItems()
   },
   {
-    title: 'Physical Needs',
+    title: 'Physical needs',
     icon: bodyOutline,
     expanded: false,
     url: '/needs/physical-sensory',
     subItems: createDisabilitySubItems()
   },
   {
-    title: 'Cognitive and intellectual needs',
+    title: 'Cognitive needs',
     icon: bulbOutline,
     expanded: false,
     url: '/needs/cognitive-intellectual',
@@ -264,14 +264,14 @@ const disabilityCategories = ref([
     subItems: createDisabilitySubItems()
   },
   {
-    title: 'Communication',
+    title: 'Communication needs',
     icon: chatbubbleOutline,
     expanded: false,
     url: '/disability/communication',
     subItems: createDisabilitySubItems()
   },
   {
-    title: 'Multiple disabilities',
+    title: 'Multiple learning needs',
     icon: medicalOutline,
     expanded: false,
     url: '/needs/multiple-disabilities',

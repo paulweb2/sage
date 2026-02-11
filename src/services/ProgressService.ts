@@ -535,10 +535,10 @@ export class ProgressService {
       'visual-needs': 'Visual needs',
       'hearing-needs': 'Hearing needs',
       'physical-sensory-needs': 'Physical and sensory needs',
-      'cognitive-intellectual-needs': 'Cognitive and intellectual needs',
+      'cognitive-intellectual-needs': 'Cognitive needs',
       'speech-language-needs': 'Speech and language needs',
-      'communication': 'Communication',
-      'multiple-disabilities': 'Multiple disabilities',
+      'communication': 'Communication needs',
+      'multiple-disabilities': 'Multiple learning needs',
       'signposting': 'Signposting tool'
     };
     return titles[pageId] || pageId;

@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Multiple disabilities</ion-title>
+        <ion-title>Multiple learning needs</ion-title>
         <ion-buttons slot="end">
           <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
           <ion-button @click="presentActionSheet">
@@ -18,7 +18,7 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Multiple disabilities</ion-title>
+          <ion-title size="large">Multiple learning needs</ion-title>
         </ion-toolbar>
       </ion-header>
 

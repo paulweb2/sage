@@ -1037,7 +1037,7 @@ const resources = {
   electronic: [] as any[],
   paper: [
     { title: 'Braille books and materials.' },
-    { title: 'Audio books – National Braille Printing Press.' },
+    { title: 'Storybooks that include characters with hearing needs. Examples can be found here: https://www.perkins.org/books-about-deafness-or-with-deaf-characters/' },
     { title: 'Tactile graphics – such as raised-line drawings for maps, graphs, diagrams, geometric figures – can be created using ‘swell paper’ in an ordinary printer.' },
     { title: 'Books, worksheets, and handouts printed in a larger font size (typically 18-point or higher).' },
     { title: '3D shapes, counting blocks, abacuses, based in blocks and 3D models E.G skeletons, solar systems' },
