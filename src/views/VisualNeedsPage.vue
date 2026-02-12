@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Visual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.23</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -645,7 +645,7 @@
                     <ion-list>
                       <ion-item v-for="(sentence, sentenceIndex) in currentQuestion.sentences" :key="sentence.id" class="fill-in-blank-item">
                         <ion-label>
-                          <h4>
+                          <h4 :class="{ 'fill-in-blank-inline-flow-text': currentQuestion.inlineFlow }">
                             <strong>{{ String.fromCharCode(97 + sentenceIndex) }})&nbsp;</strong>
                             <span class="fill-in-blank-text">{{ sentence.textBefore }}</span>
                             <ion-select
@@ -654,6 +654,7 @@
                               placeholder="Select answer"
                               :value="matchingAnswers[sentence.id]"
                               class="fill-in-blank-select"
+                              :class="{ 'fill-in-blank-inline-flow-select': currentQuestion.inlineFlow }"
                             >
                               <ion-select-option value="">Select answer</ion-select-option>
                               <ion-select-option v-for="opt in sentence.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
@@ -1171,7 +1172,7 @@ type VisualQuestion =
   | { type?: 'multiple-choice'; question: string; options: MCOption[]; correctAnswer: string }
   | { type: 'true-false'; question: string; options: MCOption[]; correctAnswer: string }
   | { type: 'multi-true-false'; question: string; subQuestions: MultiTFSubQ[] }
-  | { type: 'fill-in-blank'; question: string; sentences: FillSentence[] }
+  | { type: 'fill-in-blank'; question: string; sentences: FillSentence[]; inlineFlow?: boolean }
   | { type: 'select-all'; question: string; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] };
 
 const questions = ref<VisualQuestion[]>([
@@ -1211,6 +1212,7 @@ const questions = ref<VisualQuestion[]>([
   {
     question: 'Select the correct word to complete each sentence. You have three words to chose from name, change and font.',
     type: 'fill-in-blank',
+    inlineFlow: true,
     sentences: [
       {
         id: 'a',
@@ -1587,6 +1589,23 @@ ion-card { margin: 16px; }
 .multi-true-false-select,
 .fill-in-blank-select { min-width: 140px; }
 .fill-in-blank-text { margin: 0 4px; display: inline-block; }
+.fill-in-blank-inline-flow-text .fill-in-blank-text {
+  margin: 0;
+  display: inline;
+}
+.fill-in-blank-inline-flow-select {
+  display: inline-block !important;
+  vertical-align: baseline;
+  width: auto !important;
+  max-width: 100%;
+  min-width: clamp(90px, 15vw, 150px);
+  margin: 0 3px;
+  --padding-start: 6px;
+  --padding-end: 6px;
+}
+.fill-in-blank-inline-flow-select::part(text) {
+  white-space: nowrap;
+}
 .select-all-item input { margin-right: 10px; }
 .strategy-question-text {
   display: block;

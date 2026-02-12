@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Physical needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.23</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -709,7 +709,7 @@
                           <h4>
                             <strong>{{ String.fromCharCode(97 + sentenceIndex) }})&nbsp;</strong>
                           </h4>
-                          <p class="fill-in-blank-text">
+                          <p class="fill-in-blank-text" :class="{ 'fill-in-blank-inline-flow-text': currentQuestion.inlineFlow }">
                             <span>{{ sentence.textBefore }}</span>
                             <ion-select
                               v-model="matchingAnswers[sentence.id]"
@@ -717,6 +717,7 @@
                               placeholder="Select answer"
                               :value="matchingAnswers[sentence.id]"
                               class="fill-in-blank-select"
+                              :class="{ 'fill-in-blank-inline-flow-select': currentQuestion.inlineFlow }"
                             >
                               <ion-select-option value="">Select answer</ion-select-option>
                               <ion-select-option v-for="opt in sentence.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
@@ -730,6 +731,7 @@
                                 placeholder="Select answer"
                                 :value="matchingAnswers[extra.id]"
                                 class="fill-in-blank-select"
+                                :class="{ 'fill-in-blank-inline-flow-select': currentQuestion.inlineFlow }"
                               >
                                 <ion-select-option value="">Select answer</ion-select-option>
                                 <ion-select-option v-for="opt in extra.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
@@ -1307,7 +1309,7 @@ type PhysicalQuestion =
   | (BaseQuestion & { type?: 'multiple-choice'; options: MCOption[]; correctAnswer: string })
   | (BaseQuestion & { type: 'true-false'; options: MCOption[]; correctAnswer: string })
   | (BaseQuestion & { type: 'multi-true-false'; subQuestions: MultiTFSubQ[] })
-  | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[] })
+  | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[]; inlineFlow?: boolean })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
 const fillWordOptions = ['time', 'room/space', 'hear/understand', 'feeling/belonging'];
@@ -1406,6 +1408,7 @@ const questions = ref<PhysicalQuestion[]>([
     question: 'Click on the arrow to select the correct word to complete each sentence.',
     type: 'fill-in-blank',
     instructions: '__none__',
+    inlineFlow: true,
     sentences: [
       {
         id: 'a-time',
@@ -1911,6 +1914,27 @@ ion-card { margin: 16px; }
 .hint-container { margin-top: 4px; width: 100%; background-color: #fff8e1; border-radius: 8px; padding: 4px; border: 1px solid #ffb74d; }
 .question-hint { white-space: pre-wrap; margin: 0; }
 .fill-in-blank-text { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
+.fill-in-blank-inline-flow-text {
+  display: block;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.fill-in-blank-inline-flow-text span {
+  display: inline;
+}
+.fill-in-blank-inline-flow-select {
+  display: inline-block !important;
+  vertical-align: baseline;
+  width: auto !important;
+  max-width: 100%;
+  min-width: clamp(90px, 15vw, 150px);
+  margin: 0 3px;
+  --padding-start: 6px;
+  --padding-end: 6px;
+}
+.fill-in-blank-inline-flow-select::part(text) {
+  white-space: nowrap;
+}
 .resource-paper-bullets {
   margin: 6px 0 0 6px;
   padding-left: 12px;

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Speech and Language Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.22</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.23</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -664,10 +664,17 @@
                     <ion-list>
                       <ion-item v-for="(sentence, sentenceIndex) in currentQuestion.sentences" :key="sentence.id" class="fill-in-blank-item">
                         <ion-label>
-                          <h4>
+                          <h4 :class="{ 'fill-in-blank-inline-flow-text': currentQuestion.inlineFlow }">
                             <strong>{{ String.fromCharCode(97 + sentenceIndex) }})&nbsp;</strong>
                             <span class="fill-in-blank-text">{{ sentence.textBefore }}</span>
-                            <ion-select v-model="matchingAnswers[sentence.id]" interface="popover" placeholder="Select answer" :value="matchingAnswers[sentence.id]" class="fill-in-blank-select">
+                            <ion-select
+                              v-model="matchingAnswers[sentence.id]"
+                              interface="popover"
+                              placeholder="Select answer"
+                              :value="matchingAnswers[sentence.id]"
+                              class="fill-in-blank-select"
+                              :class="{ 'fill-in-blank-inline-flow-select': currentQuestion.inlineFlow }"
+                            >
                               <ion-select-option value="">Select answer</ion-select-option>
                               <ion-select-option v-for="opt in sentence.options" :key="opt" :value="opt">{{ opt }}</ion-select-option>
                             </ion-select>
@@ -1111,7 +1118,7 @@ type SpeechQuestion =
   | (BaseQuestion & { type?: 'multiple-choice'; options: MCOption[]; correctAnswer: string })
   | (BaseQuestion & { type: 'true-false'; options: MCOption[]; correctAnswer: string })
   | (BaseQuestion & { type: 'multi-true-false'; subQuestions: MultiTFSubQ[] })
-  | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[] })
+  | (BaseQuestion & { type: 'fill-in-blank'; sentences: FillSentence[]; inlineFlow?: boolean })
   | (BaseQuestion & { type: 'select-all'; options: MCOption[]; correctAnswers: string[]; alternativeCorrectAnswers?: string[] });
 
 const fillWordBank = ['expressive', 'distractions', 'receptive'];
@@ -1144,6 +1151,7 @@ const questions = ref<SpeechQuestion[]>([
     question: 'Choose a word from the list to complete each sentence. You can choose from receptive, expressive or distractions.',
     type: 'fill-in-blank',
     instructions: 'Click on the arrow to make your choice.',
+    inlineFlow: true,
     sentences: [
       {
         id: 'a',
@@ -1625,6 +1633,23 @@ ion-card { margin: 16px; }
   font: inherit;
   color: inherit;
   line-height: inherit;
+}
+.fill-in-blank-inline-flow-text .fill-in-blank-text {
+  margin: 0;
+  display: inline;
+}
+.fill-in-blank-inline-flow-select {
+  display: inline-block !important;
+  vertical-align: baseline;
+  width: auto !important;
+  max-width: 100%;
+  min-width: clamp(90px, 15vw, 150px);
+  margin: 0 3px;
+  --padding-start: 6px;
+  --padding-end: 6px;
+}
+.fill-in-blank-inline-flow-select::part(text) {
+  white-space: nowrap;
 }
 #understanding ion-item ion-label,
 #understanding ion-item ion-label h4,
