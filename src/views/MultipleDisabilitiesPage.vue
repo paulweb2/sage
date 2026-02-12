@@ -102,7 +102,8 @@
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
                     <ion-label>
                       <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 0 0 0 6px; padding-left: 12px;">
                         <li v-for="(p, pi) in item.prompts" :key="`strp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
@@ -117,7 +118,8 @@
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
                     <ion-label>
                       <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 0 0 0 6px; padding-left: 12px;">
                         <li v-for="(p, pi) in item.prompts" :key="`chalp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
@@ -131,9 +133,10 @@
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
-                        <li>Prompts: {{ item.prompts.join(', ') }}</li>
+                      <span class="strategy-question-text">{{ ensureSentenceEnding(item.question) }}</span>
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" class="strategy-prompts-list" style="margin: 0 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
                   </ion-item>
@@ -875,18 +878,16 @@ const languageAvoidLines: string[] = [
 
 const understanding = {
   strengths: [
-    { question: 'What are you interested in?', prompts: [] },
     {
-      question: 'Prompts:',
+      question: 'What are you interested in?',
       prompts: ['outside of school', 'in school']
     },
     { question: 'How do you prefer to communicate?', prompts: [] },
     { question: 'Work with parents and carers to find out about the learner’s likes and dislikes, preferred means of communication, and crucial medical information.', prompts: [] }
   ] as { question: string; prompts: string[] }[],
   challenges: [
-    { question: 'What makes learning challenging for you?', prompts: [] },
     {
-      question: 'Prompts:',
+      question: 'What makes learning challenging for you?',
       prompts: [
         'Is it the set-up of the environment – position in the classroom, location of resources, sound, light, smells?',
         'Is it an overstimulating environment – noise, smells, sounds, tastes, colours>',
@@ -1595,6 +1596,46 @@ ion-card { margin: 16px; }
 .fill-in-blank-select { min-width: 140px; }
 .fill-in-blank-text { margin: 0 4px; display: inline-block; }
 .select-all-item input { margin-right: 10px; }
+.strategy-question-text {
+  display: block;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+.strategy-prompts-list li {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+#understanding ion-item ion-label,
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p,
+#understanding ion-item ion-label li,
+#understanding ion-item ion-label span,
+#understanding ion-item ion-label div {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p {
+  margin: 0 !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p,
+#resources ion-item ion-label li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p {
+  margin: 0 !important;
+}
 </style>
 
 

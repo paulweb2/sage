@@ -127,7 +127,8 @@
                     <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
                     <ion-label>
                       <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 0 0 0 6px; padding-left: 12px;">
                         <li v-for="(p, pi) in item.prompts" :key="`strp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
@@ -142,7 +143,8 @@
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
                     <ion-label>
                       <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 0 0 0 6px; padding-left: 12px;">
                         <li v-for="(p, pi) in item.prompts" :key="`chalp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
@@ -156,13 +158,11 @@
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <div v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">
-                        <template v-if="item.question !== 'Prompts:'"><strong>Prompts:</strong></template>
-                        <ul style="margin: 6px 0 0 6px; padding-left: 12px;">
-                          <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
-                        </ul>
-                      </div>
+                      <span class="strategy-question-text">{{ ensureSentenceEnding(item.question) }}</span>
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" class="strategy-prompts-list" style="margin: 0 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
+                      </ul>
                     </ion-label>
                   </ion-item>
                 </ion-list>
@@ -963,8 +963,7 @@ const understanding = {
     { question: 'What kinds of activities do you enjoy in school?', prompts: [] },
     { question: 'Which subjects do you enjoy in school?', prompts: [] },
     { question: 'Which ways of communicating are best for you?', prompts: [] },
-    { question: 'How do you use mathematics/reading/writing in your hobbies or everyday life?', prompts: [] },
-    { question: 'Prompts:', prompts: ['playing games', 'counting money', 'reading or writing information for your work.'] },
+    { question: 'How do you use mathematics/reading/writing in your hobbies or everyday life?', prompts: ['playing games', 'counting money', 'reading or writing information for your work.'] },
     { question: 'What resources support your learning in reading/writing/mathematics?', prompts: [] },
     { question: 'What kind of lessons do you find easiest to participate in?', prompts: [] }
   ] as { question: string; prompts: string[] }[],
@@ -972,8 +971,7 @@ const understanding = {
     { question: 'Can you give me an example of a challenge for you in your learning activities?', prompts: [] },
     { question: 'Can you give me an example of a challenge for you when working with your peers?', prompts: [] },
     { question: 'Can you give me an example of a challenge with your educators?', prompts: [] },
-    { question: 'Can you give me an example of a challenge for you in the learning environment?', prompts: [] },
-    { question: 'Prompts:', prompts: ['noise', 'distractions', 'the way that learning materials and resources are presented.'] }
+    { question: 'Can you give me an example of a challenge for you in the learning environment?', prompts: ['noise', 'distractions', 'the way that learning materials and resources are presented.'] }
   ] as { question: string; prompts: string[] }[],
   strategies: [
     { question: 'Can I break these instructions into smaller steps for you?', prompts: [] },
@@ -982,11 +980,7 @@ const understanding = {
     { question: 'Would you like to try another way to complete this task?', prompts: [] },
     { question: 'Are there any other tools you used in the past that could help you here?', prompts: [] },
     { question: 'Could you dictate your ideas, and I will write them/type them for you?', prompts: [] },
-    { question: 'Would a different way of communicating be helpful here?', prompts: [] },
-    {
-      question: 'Prompts:',
-      prompts: ['noise', 'spoken words', 'concrete resources', 'typing keyboard', 'flash cards with clearly numbered instructions.']
-    }
+    { question: 'Would a different way of communicating be helpful here?', prompts: ['noise', 'spoken words', 'concrete resources', 'typing keyboard', 'flash cards with clearly numbered instructions.'] }
   ] as { question: string; prompts: string[] }[],
   advocacy: [
     'It helps me when …',
@@ -1682,6 +1676,46 @@ ion-card { margin: 16px; }
 .hint-container { margin-top: 4px; width: 100%; background-color: #fff8e1; border-radius: 8px; padding: 4px; border: 1px solid #ffb74d; }
 .question-hint { white-space: pre-wrap; margin: 0; }
 .fill-in-blank-text { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.strategy-question-text {
+  display: block;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+.strategy-prompts-list li {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+#understanding ion-item ion-label,
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p,
+#understanding ion-item ion-label li,
+#understanding ion-item ion-label span,
+#understanding ion-item ion-label div {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p {
+  margin: 0 !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p,
+#resources ion-item ion-label li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p {
+  margin: 0 !important;
+}
 </style>
 
 

@@ -4425,6 +4425,39 @@ ion-spinner {
   font-weight: 500;
 }
 
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p,
+#resources ion-item ion-label li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p {
+  margin: 0 !important;
+}
+
+#understanding ion-item ion-label,
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p,
+#understanding ion-item ion-label li,
+#understanding ion-item ion-label span,
+#understanding ion-item ion-label div {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p {
+  margin: 0 !important;
+}
+
 @media (max-width: 768px) {
   .reflection-section {
     padding: 12px;

@@ -117,9 +117,10 @@
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
-                        <li>Prompts: {{ item.prompts.join(', ') }}</li>
+                      <span class="strategy-question-text">{{ ensureSentenceEnding(item.question) }}</span>
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" class="strategy-prompts-list" style="margin: 0 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
                   </ion-item>
@@ -1608,4 +1609,44 @@ ion-card { margin: 16px; }
 .case-study-text .case-study-subheading { margin-top: 12px; margin-bottom: 8px; font-weight: 700; }
 .case-study-prompts { margin-top: 12px; margin-left: 20px; }
 .case-study-prompts li { margin-bottom: 6px; }
+.strategy-question-text {
+  display: block;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+.strategy-prompts-list li {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+#understanding ion-item ion-label,
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p,
+#understanding ion-item ion-label li,
+#understanding ion-item ion-label span,
+#understanding ion-item ion-label div {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p {
+  margin: 0 !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p,
+#resources ion-item ion-label li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p {
+  margin: 0 !important;
+}
 </style> 

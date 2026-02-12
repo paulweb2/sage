@@ -121,13 +121,11 @@
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <div v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">
-                        <template v-if="item.question !== 'Prompts:'"><strong>Prompts:</strong></template>
-                        <ul style="margin: 6px 0 0 6px; padding-left: 12px;">
-                          <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
-                        </ul>
-                      </div>
+                      <span class="strategy-question-text">{{ ensureSentenceEnding(item.question) }}</span>
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" class="strategy-prompts-list" style="margin: 0 0 0 6px; padding-left: 12px;">
+                        <li v-for="(p, pi) in item.prompts" :key="`stratp-` + i + '-' + pi">{{ p }}</li>
+                      </ul>
                     </ion-label>
                   </ion-item>
                 </ion-list>
@@ -902,8 +900,7 @@ const understanding = {
   ] as string[],
   strategies: [
     { question: 'What helps you when you’re trying to say something? Do you use anything to help you ?', prompts: [] },
-    { question: 'What is the easiest way for you to share your ideas?', prompts: [] },
-    { question: 'Prompts:', prompts: ['drawing', 'mind maps', 'demonstrating', 'singing', 'writing.'] }
+    { question: 'What is the easiest way for you to share your ideas?', prompts: ['drawing', 'mind maps', 'demonstrating', 'singing', 'writing.'] }
   ] as { question: string; prompts: string[] }[],
   advocacy: [
     'I need more time to speak.',
@@ -1559,6 +1556,46 @@ ion-card { margin: 16px; }
 .learning-tip-container { margin-top: 4px; margin-left: 0; margin-bottom: 0; width: 100%; background-color: #e3f2fd; border-radius: 8px; padding: 4px; border: 1px solid #2196f3; }
 .hint-container { margin-top: 4px; width: 100%; background-color: #fff8e1; border-radius: 8px; padding: 4px; border: 1px solid #ffb74d; }
 .question-hint { white-space: pre-wrap; margin: 0; }
+.strategy-question-text {
+  display: block;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+.strategy-prompts-list li {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+#understanding ion-item ion-label,
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p,
+#understanding ion-item ion-label li,
+#understanding ion-item ion-label span,
+#understanding ion-item ion-label div {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p {
+  margin: 0 !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p,
+#resources ion-item ion-label li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p {
+  margin: 0 !important;
+}
 </style>
 
 

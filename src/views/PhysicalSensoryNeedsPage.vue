@@ -112,7 +112,8 @@
                     <ion-icon :icon="helpCircle" slot="start" color="secondary"></ion-icon>
                     <ion-label>
                       <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <p v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px;">Prompts:</p>
+                      <ul v-if="item.prompts && item.prompts.length" style="margin: 0 0 0 6px; padding-left: 12px;">
                         <li v-for="(p, pi) in item.prompts" :key="`chalp-` + i + '-' + pi">{{ p }}</li>
                       </ul>
                     </ion-label>
@@ -126,8 +127,8 @@
                   <ion-item v-for="(item, i) in understanding.strategies" :key="`strat-` + i">
                     <ion-icon :icon="bulb" slot="start" color="primary"></ion-icon>
                     <ion-label>
-                      <h4>{{ ensureSentenceEnding(item.question) }}</h4>
-                      <ul v-if="item.prompts && item.prompts.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <span class="strategy-question-text">{{ ensureSentenceEnding(item.question) }}</span>
+                      <ul v-if="item.prompts && item.prompts.length" class="strategy-prompts-list" style="margin: 6px 0 0 6px; padding-left: 12px;">
                         <li>Prompts: {{ item.prompts.join(', ') }}</li>
                       </ul>
                     </ion-label>
@@ -335,7 +336,7 @@
                     <ion-icon :icon="documentIcon" slot="start" color="secondary"></ion-icon>
                     <ion-label>
                       <h4 v-html="linkifyText(r.title)"></h4>
-                      <ul v-if="r.bullets && r.bullets.length" style="margin: 6px 0 0 6px; padding-left: 12px;">
+                      <ul v-if="r.bullets && r.bullets.length" class="resource-paper-bullets">
                         <li v-for="(b, bi) in r.bullets" :key="`res-paper-bullet-` + i + '-' + bi">{{ b }}</li>
                       </ul>
                       <p v-else-if="r.description" style="white-space: pre-wrap;">{{ r.description }}</p>
@@ -975,9 +976,8 @@ const understanding = {
     { question: 'Can you always see/hear/access your learning?', prompts: [] },
     { question: 'Do you feel part of class activities and decision-making?', prompts: [] },
     { question: 'Are you comfortable in your wheelchair/the seat you use in the classroom?', prompts: [] },
-    { question: 'What are the physical barriers in the classroom?', prompts: [] },
     {
-      question: 'Prompts:',
+      question: 'What are the physical barriers in the classroom?',
       prompts: [
         'height of the desk',
         'access to sink or toilet',
@@ -1852,6 +1852,57 @@ ion-card { margin: 16px; }
 .hint-container { margin-top: 4px; width: 100%; background-color: #fff8e1; border-radius: 8px; padding: 4px; border: 1px solid #ffb74d; }
 .question-hint { white-space: pre-wrap; margin: 0; }
 .fill-in-blank-text { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
+.resource-paper-bullets {
+  margin: 6px 0 0 6px;
+  padding-left: 12px;
+}
+.resource-paper-bullets li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+.strategy-question-text {
+  display: block;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+.strategy-prompts-list li {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+#understanding ion-item ion-label,
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p,
+#understanding ion-item ion-label li,
+#understanding ion-item ion-label span,
+#understanding ion-item ion-label div {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#understanding ion-item ion-label h4,
+#understanding ion-item ion-label p {
+  margin: 0 !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p,
+#resources ion-item ion-label li {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--ion-text-color, inherit) !important;
+}
+#resources ion-item ion-label h4,
+#resources ion-item ion-label p {
+  margin: 0 !important;
+}
 </style>
 
 
