@@ -1071,7 +1071,7 @@ resources.paper = [
     description: ''
   },
   {
-    title: 'Storybooks – these include characters with a stammer. For examples, see https://stamma.org/get-help/parents/books-parents-children?gad_source=1&gad_campaignid=17747066382&gbraid=0AAAAADjl8m0K1kwZhfEOjGVJa_5xg_vmx&gclid=Cj0KCQjwtMHEBhC-ARIsABua5iQZfI4p_rVUFfwne91KSv22wDEtWLgJLrGbw_vECu5iw0ZmbgBhY6kaApobEALw_wcB',
+    title: 'Storybooks – these include characters with a stammer. For examples, see https://stamma.org/get-help/parents/books-parents-children',
     description: ''
   }
 ];
