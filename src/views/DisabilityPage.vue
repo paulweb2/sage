@@ -49,7 +49,14 @@
                         <ion-radio-group v-model="currentQuizAnswer">
                           <ion-item v-for="(option, index) in (quizQuestions[currentQuizQuestion].options || [])" :key="index">
                             <ion-radio :value="option.value" slot="start"></ion-radio>
-                            <ion-label>{{ option.text }}</ion-label>
+                            <ion-label
+                              role="button"
+                              tabindex="0"
+                              style="cursor: pointer;"
+                              @click="selectQuizRadioOption(option.value)"
+                              @keydown.enter.prevent="selectQuizRadioOption(option.value)"
+                              @keydown.space.prevent="selectQuizRadioOption(option.value)"
+                            >{{ option.text }}</ion-label>
                           </ion-item>
                         </ion-radio-group>
                       </div>
@@ -59,7 +66,14 @@
                         <ion-radio-group v-model="currentQuizAnswer">
                           <ion-item v-for="(option, index) in (quizQuestions[currentQuizQuestion].options || [])" :key="index">
                             <ion-radio :value="option.value" slot="start"></ion-radio>
-                            <ion-label>{{ option.text }}</ion-label>
+                            <ion-label
+                              role="button"
+                              tabindex="0"
+                              style="cursor: pointer;"
+                              @click="selectQuizRadioOption(option.value)"
+                              @keydown.enter.prevent="selectQuizRadioOption(option.value)"
+                              @keydown.space.prevent="selectQuizRadioOption(option.value)"
+                            >{{ option.text }}</ion-label>
                           </ion-item>
                         </ion-radio-group>
                       </div>
@@ -168,7 +182,14 @@
                                 v-model="checkboxAnswers[option.value]"
                                 style="margin-right: 10px;"
                               />
-                              <ion-label>
+                              <ion-label
+                                role="button"
+                                tabindex="0"
+                                style="cursor: pointer;"
+                                @click="toggleQuizCheckboxOption(option.value)"
+                                @keydown.enter.prevent="toggleQuizCheckboxOption(option.value)"
+                                @keydown.space.prevent="toggleQuizCheckboxOption(option.value)"
+                              >
                                 <h4><strong>{{ option.value }})</strong> {{ option.text }}</h4>
                               </ion-label>
                             </ion-item>
@@ -208,6 +229,15 @@
                       </div>
                       
                       <div class="ion-padding-top">
+                        <ion-button 
+                          expand="block"
+                          color="medium"
+                          fill="outline"
+                          @click="previousQuizQuestion"
+                          :disabled="currentQuizQuestion === 0"
+                        >
+                          Previous Question
+                        </ion-button>
                         <ion-button 
                           expand="block" 
                           color="primary"
@@ -1246,7 +1276,14 @@
                       <ion-radio-group v-model="currentQuizAnswer">
                         <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
                           <ion-radio :value="option.value" slot="start"></ion-radio>
-                          <ion-label>{{ option.text }}</ion-label>
+                          <ion-label
+                            role="button"
+                            tabindex="0"
+                            style="cursor: pointer;"
+                            @click="selectQuizRadioOption(option.value)"
+                            @keydown.enter.prevent="selectQuizRadioOption(option.value)"
+                            @keydown.space.prevent="selectQuizRadioOption(option.value)"
+                          >{{ option.text }}</ion-label>
                         </ion-item>
                       </ion-radio-group>
                     </div>
@@ -1256,7 +1293,14 @@
                       <ion-radio-group v-model="currentQuizAnswer">
                         <ion-item v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index">
                           <ion-radio :value="option.value" slot="start"></ion-radio>
-                          <ion-label>{{ option.text }}</ion-label>
+                          <ion-label
+                            role="button"
+                            tabindex="0"
+                            style="cursor: pointer;"
+                            @click="selectQuizRadioOption(option.value)"
+                            @keydown.enter.prevent="selectQuizRadioOption(option.value)"
+                            @keydown.space.prevent="selectQuizRadioOption(option.value)"
+                          >{{ option.text }}</ion-label>
                         </ion-item>
                       </ion-radio-group>
                     </div>
@@ -1372,7 +1416,14 @@
                             v-model="checkboxAnswers[option.value]"
                             style="margin-right: 10px;"
                           />
-                          <ion-label>
+                          <ion-label
+                            role="button"
+                            tabindex="0"
+                            style="cursor: pointer;"
+                            @click="toggleQuizCheckboxOption(option.value)"
+                            @keydown.enter.prevent="toggleQuizCheckboxOption(option.value)"
+                            @keydown.space.prevent="toggleQuizCheckboxOption(option.value)"
+                          >
                             <h4><strong>{{ option.value }})</strong> {{ option.text }}</h4>
                           </ion-label>
                         </ion-item>
@@ -1380,6 +1431,15 @@
                     </div>
                     
                     <div class="ion-padding-top">
+                      <ion-button
+                        expand="block"
+                        color="medium"
+                        fill="outline"
+                        @click="previousQuizQuestion"
+                        :disabled="currentQuizQuestion === 0"
+                      >
+                        Previous Question
+                      </ion-button>
                       <ion-button 
                         expand="block" 
                         color="primary"
@@ -2025,6 +2085,14 @@ const canProceedToNextQuestion = computed(() => {
   console.log('Regular question validation result:', result);
   return result;
 });
+
+const selectQuizRadioOption = (value: string) => {
+  currentQuizAnswer.value = value;
+};
+
+const toggleQuizCheckboxOption = (value: string) => {
+  checkboxAnswers.value[value] = !checkboxAnswers.value[value];
+};
 
 
 
@@ -3544,27 +3612,34 @@ const clearReflection = () => {
   }
 };
 
-const nextQuizQuestion = () => {
-  // Save current answer before moving to next question
+const saveCurrentQuizAnswer = () => {
   const currentQuestion = quizQuestions.value[currentQuizQuestion.value];
-  
+
   if (!currentQuestion) {
     return;
   }
-  
+
   if (currentQuestion.type === 'matching' || currentQuestion.type === 'multi-true-false' || currentQuestion.type === 'fill-in-blank') {
-    // Save matching answers, multi-true-false answers, or fill-in-blank answers
     quizAnswers.value[currentQuizQuestion.value] = { ...matchingAnswers.value };
   } else if (currentQuestion.type === 'select-all') {
-    // Save checkbox answers for select-all questions
     quizAnswers.value[currentQuizQuestion.value] = { ...checkboxAnswers.value };
   } else {
-    // Save regular answer
     quizAnswers.value[currentQuizQuestion.value] = currentQuizAnswer.value;
   }
-  
+};
+
+const previousQuizQuestion = () => {
+  saveCurrentQuizAnswer();
+  if (currentQuizQuestion.value > 0) {
+    currentQuizQuestion.value--;
+    applySavedQuizAnswer(currentQuizQuestion.value);
+  }
+};
+
+const nextQuizQuestion = () => {
+  saveCurrentQuizAnswer();
+
   if (currentQuizQuestion.value < quizQuestions.value.length - 1) {
-    // Move to next question first
     currentQuizQuestion.value++;
     applySavedQuizAnswer(currentQuizQuestion.value);
   } else {

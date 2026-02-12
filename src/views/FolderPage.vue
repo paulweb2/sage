@@ -294,7 +294,16 @@
                 <ion-radio-group v-model="responses[q.id]">
                   <ion-item v-for="opt in q.options" :key="opt.value" lines="none">
                     <ion-radio :value="opt.value" slot="start"></ion-radio>
-                    <ion-label>{{ opt.label }}</ion-label>
+                    <ion-label
+                      role="button"
+                      tabindex="0"
+                      style="cursor: pointer;"
+                      @click="selectScreeningOption(q.id, opt.value)"
+                      @keydown.enter.prevent="selectScreeningOption(q.id, opt.value)"
+                      @keydown.space.prevent="selectScreeningOption(q.id, opt.value)"
+                    >
+                      {{ opt.label }}
+                    </ion-label>
                   </ion-item>
                 </ion-radio-group>
 
@@ -1536,6 +1545,10 @@ const wgssqExpanded = vueRef(false);
 
 const toggleWgssqCard = () => {
   wgssqExpanded.value = !wgssqExpanded.value;
+};
+
+const selectScreeningOption = (questionId: string, value: string) => {
+  responses.value[questionId] = value;
 };
 
 const optContent = (q: ScreeningQuestion, value: string) => {

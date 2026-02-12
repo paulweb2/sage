@@ -655,7 +655,16 @@
                     <ion-radio-group v-model="currentAnswer">
                       <ion-item v-for="(option, idx) in currentQuestion.options || []" :key="idx">
                         <ion-radio :value="option.value" slot="start"></ion-radio>
-                        <ion-label>{{ option.text }}</ion-label>
+                        <ion-label
+                          role="button"
+                          tabindex="0"
+                          style="cursor: pointer;"
+                          @click="selectRadioOption(option.value)"
+                          @keydown.enter.prevent="selectRadioOption(option.value)"
+                          @keydown.space.prevent="selectRadioOption(option.value)"
+                        >
+                          {{ option.text }}
+                        </ion-label>
                       </ion-item>
                     </ion-radio-group>
                   </div>
@@ -743,7 +752,14 @@
                     <ion-list>
                       <ion-item v-for="option in currentQuestion.options" :key="option.value" class="select-all-item">
                         <input type="checkbox" :value="option.value" v-model="checkboxAnswers[option.value]" style="margin-right: 10px;" />
-                        <ion-label>
+                        <ion-label
+                          role="button"
+                          tabindex="0"
+                          style="cursor: pointer;"
+                          @click="toggleCheckboxOption(option.value)"
+                          @keydown.enter.prevent="toggleCheckboxOption(option.value)"
+                          @keydown.space.prevent="toggleCheckboxOption(option.value)"
+                        >
                           <h4><strong>{{ option.value }})&nbsp;</strong>{{ option.text }}</h4>
                         </ion-label>
                       </ion-item>
@@ -751,6 +767,9 @@
                   </div>
 
                   <div class="ion-padding-top">
+                    <ion-button expand="block" color="medium" fill="outline" @click="previousQuestion" :disabled="currentQuizIndex === 0">
+                      Previous Question
+                    </ion-button>
                     <ion-button expand="block" color="primary" @click="nextQuestion" :disabled="!canProceed">
                       {{ currentQuizIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question' }}
                     </ion-button>
@@ -1540,51 +1559,91 @@ function setsEqual(a: string[], b: string[]) {
   return b.every((v) => sa.has(v));
 }
 
-const nextQuestion = () => {
+const selectRadioOption = (value: string) => {
+  currentAnswer.value = value;
+};
+
+const toggleCheckboxOption = (value: string) => {
+  checkboxAnswers.value[value] = !checkboxAnswers.value[value];
+};
+
+const saveCurrentAnswer = () => {
   const q = currentQuestion.value as any;
   if (!q) return;
 
-  const increment = Math.round(100 / questions.value.length);
-
   if (!q.type || q.type === 'multiple-choice' || q.type === 'true-false') {
     quizAnswers.value[currentQuizIndex.value] = currentAnswer.value;
-    if (q.correctAnswer && currentAnswer.value === q.correctAnswer) {
-      quizScore.value += increment;
-    }
-  } else if (q.type === 'multi-true-false') {
+  } else if (q.type === 'multi-true-false' || q.type === 'fill-in-blank') {
     quizAnswers.value[currentQuizIndex.value] = { ...matchingAnswers.value };
-    const allCorrect = q.subQuestions.every((sq: any) => matchingAnswers.value[sq.id] === sq.correctAnswer);
-    if (allCorrect) {
-      quizScore.value += increment;
-    }
-  } else if (q.type === 'fill-in-blank') {
-    quizAnswers.value[currentQuizIndex.value] = { ...matchingAnswers.value };
-    const allCorrect = q.sentences.every((s: FillSentence) =>
-      getSentenceBlanks(s).every((blank) => matchingAnswers.value[blank.id] === blank.correctAnswer)
-    );
-    if (allCorrect) {
-      quizScore.value += increment;
-    }
   } else if (q.type === 'select-all') {
-    const correct = q.correctAnswers as string[];
-    const alt = (q.alternativeCorrectAnswers || []) as string[];
     const selectedMap: Record<string, boolean> = {};
     Object.keys(checkboxAnswers.value).forEach((k) => {
       if (checkboxAnswers.value[k]) selectedMap[k] = true;
     });
     quizAnswers.value[currentQuizIndex.value] = selectedMap;
-    const selected = Object.keys(selectedMap).sort();
-    const isExact = setsEqual(selected, correct.slice().sort());
-    const isAlt = alt.length > 0 && setsEqual(selected, alt.slice().sort());
-    if (isExact || isAlt) {
-      quizScore.value += increment;
-    }
   }
+};
+
+const calculateQuizScore = (): number => {
+  if (questions.value.length === 0) return 0;
+
+  let correctAnswers = 0;
+  questions.value.forEach((question: any, index: number) => {
+    const userAnswer = quizAnswers.value[index];
+
+    if (question.type === 'multi-true-false') {
+      const ua = userAnswer as Record<string, string> | undefined;
+      if (ua && question.subQuestions?.every((subQ: any) => ua[subQ.id] === subQ.correctAnswer)) {
+        correctAnswers += 1;
+      }
+    } else if (question.type === 'fill-in-blank') {
+      const ua = userAnswer as Record<string, string> | undefined;
+      if (ua && question.sentences?.every((sentence: FillSentence) =>
+        getSentenceBlanks(sentence).every((blank) => ua[blank.id] === blank.correctAnswer)
+      )) {
+        correctAnswers += 1;
+      }
+    } else if (question.type === 'select-all') {
+      const ua = userAnswer as Record<string, boolean> | undefined;
+      if (!ua) return;
+
+      const selected = Object.entries(ua)
+        .filter(([, checked]) => checked)
+        .map(([key]) => key)
+        .sort();
+      const correct = (question.correctAnswers || []).slice().sort();
+      const alt = (question.alternativeCorrectAnswers || []).slice().sort();
+      const isExact = selected.length > 0 && setsEqual(selected, correct);
+      const isAlt = alt.length > 0 && setsEqual(selected, alt);
+      if (isExact || isAlt) {
+        correctAnswers += 1;
+      }
+    } else if (userAnswer === question.correctAnswer) {
+      correctAnswers += 1;
+    }
+  });
+
+  return Math.round((correctAnswers / questions.value.length) * 100);
+};
+
+const previousQuestion = () => {
+  saveCurrentAnswer();
+  if (currentQuizIndex.value > 0) {
+    currentQuizIndex.value -= 1;
+    applySavedAnswerState(currentQuizIndex.value);
+  }
+};
+
+const nextQuestion = () => {
+  const q = currentQuestion.value as any;
+  if (!q) return;
+  saveCurrentAnswer();
 
   if (currentQuizIndex.value < questions.value.length - 1) {
     currentQuizIndex.value += 1;
     applySavedAnswerState(currentQuizIndex.value);
   } else {
+    quizScore.value = calculateQuizScore();
     quizCompleted.value = true;
     ProgressService.saveQuizCompletion('physical-sensory-needs', quizScore.value, quizAnswers.value);
     quizCompletionCount.value = ProgressService.getQuizCompletionCount('physical-sensory-needs');
