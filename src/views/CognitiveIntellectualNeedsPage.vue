@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.23</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.24</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -997,7 +997,7 @@ const understanding = {
     { question: 'Can you give me an example of a challenge for you in your learning activities?', prompts: [] },
     { question: 'Can you give me an example of a challenge for you when working with your peers?', prompts: [] },
     { question: 'Can you give me an example of a challenge with your educators?', prompts: [] },
-    { question: 'Can you give me an example of a challenge for you in the learning environment?', prompts: ['noise', 'distractions', 'the way that learning materials and resources are presented.'] }
+    { question: 'Can you give me an example of a challenge for you in the learning environment?', prompts: ['distractions', 'the way that learning materials and resources are presented.'] }
   ] as { question: string; prompts: string[] }[],
   strategies: [
     { question: 'Can I break these instructions into smaller steps for you?', prompts: [] },

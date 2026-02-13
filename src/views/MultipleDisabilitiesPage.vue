@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Multiple learning needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.23</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.24</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -1217,7 +1217,7 @@ const questions = ref<MultipleDisabilitiesQuestion[]>([
     correctAnswers: ['a', 'c', 'd']
   },
   {
-    question: 'Select the correct word to complete each sentence. You have three words to choose from; touch hear, observe, times.',
+    question: 'Select the correct word to complete each sentence. You have three words to choose from; touch hear, observation, times.',
     type: 'fill-in-blank',
     instructions: 'Click on the arrow to select your answer.',
     sentences: [
@@ -1225,29 +1225,29 @@ const questions = ref<MultipleDisabilitiesQuestion[]>([
         id: 'a',
         textBefore: '______ of learners in different environments, at different times of the day, will enable an understanding of learner’s abilities and preferences.',
         textAfter: '',
-        correctAnswer: 'observe',
-        options: ['times', 'observe', 'touch', 'hear']
+        correctAnswer: 'observation',
+        options: ['times', 'observation', 'touch', 'hear']
       },
       {
         id: 'b',
         textBefore: 'Classroom adaptation may include consideration of changes in seating position to ensure the learner can see and _____ the educator.',
         textAfter: '',
         correctAnswer: 'hear',
-        options: ['observe', 'hear', 'times', 'touch']
+        options: ['observation', 'hear', 'times', 'touch']
       },
       {
         id: 'c',
         textBefore: 'Lighting at different _____ of the day may interrupt clear vision.',
         textAfter: '',
         correctAnswer: 'times',
-        options: ['touch', 'times', 'hear', 'observe']
+        options: ['touch', 'times', 'hear', 'observation']
       },
       {
         id: 'd',
         textBefore: 'Use light, sound or _____ to focus attention.',
         textAfter: '',
         correctAnswer: 'touch',
-        options: ['hear', 'touch', 'observe', 'times']
+        options: ['hear', 'touch', 'observation', 'times']
       }
     ]
   },
