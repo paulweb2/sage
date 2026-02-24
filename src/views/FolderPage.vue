@@ -431,14 +431,36 @@
                       <div class="contact-detail" v-if="contact.phones.length">
                         <h4>Telephone</h4>
                         <ul>
-                          <li v-for="phone in contact.phones" :key="phone">{{ phone }}</li>
+                          <li v-for="phone in contact.phones" :key="phone">
+                            <span>{{ phone }}</span>
+                            <ion-button
+                              v-if="formatPhoneLink(phone)"
+                              size="small"
+                              fill="clear"
+                              :href="formatPhoneLink(phone)"
+                            >
+                              Call number
+                              <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                            </ion-button>
+                          </li>
                         </ul>
                       </div>
 
                       <div class="contact-detail" v-if="contact.emails.length">
                         <h4>Email</h4>
                         <ul>
-                          <li v-for="email in contact.emails" :key="email">{{ email }}</li>
+                          <li v-for="email in contact.emails" :key="email">
+                            <span>{{ email }}</span>
+                            <ion-button
+                              v-if="formatEmailLink(email)"
+                              size="small"
+                              fill="clear"
+                              :href="formatEmailLink(email)"
+                            >
+                              Open email
+                              <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                            </ion-button>
+                          </li>
                         </ul>
                       </div>
 
@@ -500,14 +522,36 @@
                       <div class="contact-detail" v-if="contact.phones.length">
                         <h4>Telephone</h4>
                         <ul>
-                          <li v-for="phone in contact.phones" :key="phone">{{ phone }}</li>
+                          <li v-for="phone in contact.phones" :key="phone">
+                            <span>{{ phone }}</span>
+                            <ion-button
+                              v-if="formatPhoneLink(phone)"
+                              size="small"
+                              fill="clear"
+                              :href="formatPhoneLink(phone)"
+                            >
+                              Call number
+                              <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                            </ion-button>
+                          </li>
                         </ul>
                       </div>
 
                       <div class="contact-detail" v-if="contact.emails.length">
                         <h4>Email</h4>
                         <ul>
-                          <li v-for="email in contact.emails" :key="email">{{ email }}</li>
+                          <li v-for="email in contact.emails" :key="email">
+                            <span>{{ email }}</span>
+                            <ion-button
+                              v-if="formatEmailLink(email)"
+                              size="small"
+                              fill="clear"
+                              :href="formatEmailLink(email)"
+                            >
+                              Open email
+                              <ion-icon :icon="openOutline" slot="end"></ion-icon>
+                            </ion-button>
+                          </li>
                         </ul>
                       </div>
 
@@ -1203,6 +1247,18 @@ const formatWebsite = (value: string) => {
   if (!match) return '';
   const cleaned = match[0].replace(/[),.;]+$/, '');
   return cleaned.startsWith('http') ? cleaned : `https://${cleaned}`;
+};
+
+const formatPhoneLink = (value: string) => {
+  if (!value) return '';
+  const cleaned = value.trim().replace(/(ext\.?|x)\s*\d+$/i, '').replace(/[^\d+]/g, '');
+  return /\d/.test(cleaned) ? `tel:${cleaned}` : '';
+};
+
+const formatEmailLink = (value: string) => {
+  if (!value) return '';
+  const match = value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  return match ? `mailto:${match[0]}` : '';
 };
 
 type GuidanceMap = Record<string, string>;
