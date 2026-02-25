@@ -1,7 +1,17 @@
 <template>
   <ion-app>
+    <a href="#main-content" class="skip-link" @click.prevent="focusMainContent">
+      Skip to main content
+    </a>
     <ion-split-pane content-id="main-content">
-      <ion-menu content-id="main-content" type="overlay">
+      <ion-menu
+        ref="sideNavigationRef"
+        id="app-side-navigation"
+        content-id="main-content"
+        type="overlay"
+        tabindex="-1"
+        aria-label="Primary navigation"
+      >
         <ion-content>
           <ion-list id="inbox-list">
             <div class="sage-logo-wrapper">
@@ -54,7 +64,23 @@
 
             <div v-for="(category, index) in disabilityCategories" :key="index">
               <!-- Main category item -->
-              <ion-item lines="none" @click="handleCategoryClick(index)" class="category-item" router-direction="root" :class="{ selected: activeSection === 'bottom' && activeIndex === index }">
+              <ion-item
+                lines="none"
+                button
+                tabindex="0"
+                :data-category-index="index"
+                @click="handleCategoryClick(index)"
+                @keydown.enter.prevent="handleCategoryClick(index)"
+                @keydown.space.prevent="handleCategoryClick(index)"
+                @keydown.right.prevent="openSubmenuAndFocusFirstItem(index)"
+                @keydown.left.prevent="closeSubmenu(index)"
+                @keydown.down.prevent="focusNextCategory(index)"
+                @keydown.up.prevent="focusPreviousCategory(index)"
+                class="category-item"
+                router-direction="root"
+                :class="{ selected: activeSection === 'bottom' && activeIndex === index }"
+                :aria-expanded="category.subItems.length > 0 ? String(category.expanded) : undefined"
+              >
                 <img
                   v-if="category.imageSrc"
                   :src="category.imageSrc"
@@ -70,7 +96,18 @@
 
               <!-- Submenu items -->
               <div v-show="category.expanded && category.subItems.length > 0" class="submenu-container">
-                <ion-item v-for="subItem in category.subItems" :key="subItem.title" lines="none" class="submenu-item" @click="scrollToSection(subItem.anchor, index)">
+                <ion-item
+                  v-for="subItem in category.subItems"
+                  :key="subItem.title"
+                  lines="none"
+                  button
+                  tabindex="0"
+                  :data-parent-index="index"
+                  class="submenu-item"
+                  @click="scrollToSection(subItem.anchor, index)"
+                  @keydown.enter.prevent="scrollToSection(subItem.anchor, index)"
+                  @keydown.space.prevent="scrollToSection(subItem.anchor, index)"
+                >
                   <ion-label>{{ subItem.title }}</ion-label>
                 </ion-item>
               </div>
@@ -89,7 +126,15 @@
           </div>
         </ion-content>
       </ion-menu>
-      <ion-router-outlet id="main-content"></ion-router-outlet>
+      <a href="#app-side-navigation" class="skip-link skip-link-back" @click.prevent="focusSideNavigation">
+        Skip to navigation
+      </a>
+      <ion-router-outlet
+        ref="mainContentRef"
+        id="main-content"
+        tabindex="-1"
+        aria-label="Main content"
+      ></ion-router-outlet>
     </ion-split-pane>
   </ion-app>
 </template>
@@ -109,7 +154,7 @@ import {
   IonRouterOutlet,
   IonSplitPane,
 } from '@ionic/vue';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch, computed, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { scrollAnchorIntoView, storePendingAnchor, clearPendingAnchor } from '@/utils/anchorScroll';
 import {
@@ -148,6 +193,8 @@ import {
 
 const route = useRoute();
 const router = useRouter();
+const sideNavigationRef = ref<HTMLElement | null>(null);
+const mainContentRef = ref<HTMLElement | null>(null);
 const activeSection = ref<'top' | 'bottom' | 'working'>('top');
 const activeIndex = ref(0);
 const workingMenuItems = [
@@ -308,6 +355,48 @@ const handleCategoryClick = (index: number) => {
   }
 };
 
+const focusCategoryByIndex = (index: number) => {
+  const navigationEl = resolveElement(sideNavigationRef.value);
+  if (!navigationEl) return;
+  const target = navigationEl.querySelector(`ion-item[data-category-index="${index}"]`) as HTMLElement | null;
+  target?.focus({ preventScroll: true });
+};
+
+const focusNextCategory = (index: number) => {
+  if (index + 1 < disabilityCategories.value.length) {
+    focusCategoryByIndex(index + 1);
+  }
+};
+
+const focusPreviousCategory = (index: number) => {
+  if (index - 1 >= 0) {
+    focusCategoryByIndex(index - 1);
+  }
+};
+
+const focusFirstSubmenuItem = async (categoryIndex: number) => {
+  await nextTick();
+  requestAnimationFrame(() => {
+    const navigationEl = resolveElement(sideNavigationRef.value);
+    if (!navigationEl) return;
+    const firstSubItem = navigationEl.querySelector(`ion-item.submenu-item[data-parent-index="${categoryIndex}"]`) as HTMLElement | null;
+    firstSubItem?.focus({ preventScroll: true });
+  });
+};
+
+const openSubmenuAndFocusFirstItem = async (categoryIndex: number) => {
+  if (!disabilityCategories.value[categoryIndex]) return;
+  disabilityCategories.value.forEach((category, i) => {
+    category.expanded = i === categoryIndex;
+  });
+  await focusFirstSubmenuItem(categoryIndex);
+};
+
+const closeSubmenu = (categoryIndex: number) => {
+  if (!disabilityCategories.value[categoryIndex]) return;
+  disabilityCategories.value[categoryIndex].expanded = false;
+};
+
 const scrollToSection = async (anchor: string, categoryIndex: number) => {
   // Close the menu first
   const menuEl = document.querySelector('ion-menu') as any;
@@ -342,6 +431,7 @@ const scrollToSection = async (anchor: string, categoryIndex: number) => {
       void scrollAnchorIntoView(anchor);
     }, 120);
   }
+  await focusMainContent();
 };
 
 const setActivePage = (section: 'top' | 'bottom' | 'working', index: number) => {
@@ -398,13 +488,50 @@ const scrollToWorkingSection = async (anchor: string) => {
   }
 };
 
+const resolveElement = (target: unknown): HTMLElement | null => {
+  if (!target) return null;
+  if (target instanceof HTMLElement) return target;
+  const maybeVueEl = (target as { $el?: unknown }).$el;
+  return maybeVueEl instanceof HTMLElement ? maybeVueEl : null;
+};
+
+const focusMainContent = async () => {
+  await nextTick();
+  requestAnimationFrame(() => {
+    const contentEl = resolveElement(mainContentRef.value);
+    if (contentEl && typeof contentEl.focus === 'function') {
+      contentEl.focus({ preventScroll: true });
+    }
+  });
+};
+
+const focusSideNavigation = async () => {
+  await nextTick();
+  requestAnimationFrame(() => {
+    const navigationEl = resolveElement(sideNavigationRef.value);
+    const menuItem = navigationEl && typeof navigationEl.querySelector === 'function'
+      ? navigationEl.querySelector('ion-item.selected, ion-item') as HTMLElement | null
+      : null;
+    if (menuItem) {
+      menuItem.focus({ preventScroll: true });
+      return;
+    }
+    if (navigationEl && typeof navigationEl.focus === 'function') {
+      navigationEl.focus({ preventScroll: true });
+    }
+  });
+};
+
 onMounted(() => {
   updateActiveState();
 });
 
 // Watch for route changes to update active state
-watch(() => route.path, () => {
+watch(() => route.path, async (newPath, oldPath) => {
   updateActiveState();
+  if (newPath !== oldPath) {
+    await focusMainContent();
+  }
 });
 
 const updateActiveState = () => {
@@ -440,6 +567,27 @@ const updateActiveState = () => {
 </script>
 
 <style scoped>
+.skip-link {
+  position: fixed;
+  top: -48px;
+  left: 12px;
+  z-index: 10000;
+  background: var(--ion-color-primary, #0054e9);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.skip-link-back {
+  left: 180px;
+}
+
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
