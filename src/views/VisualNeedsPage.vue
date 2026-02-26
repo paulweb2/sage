@@ -365,7 +365,6 @@
               <MediaPlayer
                 ref="visualCaseStudyPlayer"
                 type="video"
-                title="Weekend writing task case study"
                 subtitle="Learner composing and reading his own work"
                 src="https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE%207638_7632_even_lower_quality.mp4"
                 :duration="120"

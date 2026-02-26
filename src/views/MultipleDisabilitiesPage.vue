@@ -377,7 +377,6 @@
               <MediaPlayer
                 ref="multipleDisabilitiesPlayer"
                 type="video"
-                title="Traditional dance lesson case study"
                 subtitle="Learners responding to live music in the classroom"
                 src="https://storage.googleapis.com/pwebtech.appspot.com/media/MVI_7696_blur_even_lower_quality.mp4"
                 :duration="120"

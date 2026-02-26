@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.25</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.26</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -1006,7 +1006,7 @@ const understanding = {
     { question: 'Would you like to try another way to complete this task?', prompts: [] },
     { question: 'Are there any other tools you used in the past that could help you here?', prompts: [] },
     { question: 'Could you dictate your ideas, and I will write them/type them for you?', prompts: [] },
-    { question: 'Would a different way of communicating be helpful here?', prompts: ['noise', 'spoken words', 'concrete resources', 'typing keyboard', 'flash cards with clearly numbered instructions.'] }
+    { question: 'Would a different way of communicating be helpful here?', prompts: ['spoken words', 'concrete resources', 'typing keyboard', 'flash cards with clearly numbered instructions.'] }
   ] as { question: string; prompts: string[] }[],
   advocacy: [
     'It helps me when …',

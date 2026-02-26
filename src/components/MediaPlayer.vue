@@ -130,13 +130,14 @@ import {
 
 interface Props {
   type: 'video' | 'audio';
-  title: string;
+  title?: string;
   subtitle: string;
   src: string;
   duration?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  title: '',
   duration: 0
 });
 
