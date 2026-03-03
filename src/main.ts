@@ -33,6 +33,36 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+type OfflineCacheStatus = {
+  timestamp: string
+  requestedVideos: string[]
+  cachedVideos: string[]
+  omittedVideos: string[]
+  fullyOffline: boolean
+}
+
+const OFFLINE_STATUS_EVENT = 'sage-offline-status'
+
+const publishOfflineStatus = (status: OfflineCacheStatus) => {
+  localStorage.setItem('sage-offline-cache-status', JSON.stringify(status))
+  window.dispatchEvent(new CustomEvent(OFFLINE_STATUS_EVENT, { detail: status }))
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    const data = event.data as { type?: string; payload?: OfflineCacheStatus } | undefined
+    if (data?.type === 'OFFLINE_CACHE_STATUS' && data.payload) {
+      publishOfflineStatus(data.payload)
+    }
+  })
+
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.active?.postMessage({ type: 'GET_OFFLINE_CACHE_STATUS' })
+  }).catch(() => {
+    // Ignore readiness errors; app should still bootstrap.
+  })
+}
+
 registerSW({ immediate: true })
 
 const app = createApp(App)

@@ -13,8 +13,16 @@ export default defineConfig({
     vue(),
     legacy(),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'sage-logo.svg'],
+      injectManifest: {
+        // Cache large media files too; quota fallback is handled in custom SW.
+        maximumFileSizeToCacheInBytes: 60 * 1024 * 1024,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webmanifest,mp3,mp4,webm,mov,m4v}'],
+      },
       manifest: {
         name: 'SAGE App',
         short_name: 'SAGE',

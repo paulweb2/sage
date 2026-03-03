@@ -135,6 +135,13 @@
         tabindex="-1"
         aria-label="Main content"
       ></ion-router-outlet>
+      <ion-toast
+        :is-open="offlineToastOpen"
+        :message="offlineToastMessage"
+        :duration="6000"
+        position="bottom"
+        @didDismiss="offlineToastOpen = false"
+      />
     </ion-split-pane>
   </ion-app>
 </template>
@@ -153,8 +160,9 @@ import {
   IonNote,
   IonRouterOutlet,
   IonSplitPane,
+  IonToast,
 } from '@ionic/vue';
-import { ref, onMounted, watch, computed, nextTick } from 'vue';
+import { ref, onBeforeUnmount, onMounted, watch, computed, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { scrollAnchorIntoView, storePendingAnchor, clearPendingAnchor } from '@/utils/anchorScroll';
 import {
@@ -193,6 +201,14 @@ import {
 
 const route = useRoute();
 const router = useRouter();
+type OfflineCacheStatus = {
+  fullyOffline: boolean
+  omittedVideos: string[]
+}
+
+const offlineToastOpen = ref(false);
+const offlineToastMessage = ref('');
+const OFFLINE_STATUS_EVENT = 'sage-offline-status';
 const sideNavigationRef = ref<HTMLElement | null>(null);
 const mainContentRef = ref<HTMLElement | null>(null);
 const activeSection = ref<'top' | 'bottom' | 'working'>('top');
@@ -522,8 +538,32 @@ const focusSideNavigation = async () => {
   });
 };
 
+const handleOfflineStatusEvent = (event: Event) => {
+  const customEvent = event as CustomEvent<OfflineCacheStatus>;
+  const status = customEvent.detail;
+  if (!status) {
+    return;
+  }
+
+  if (status.omittedVideos?.length) {
+    const suffix = status.omittedVideos.length === 1 ? '' : 's';
+    offlineToastMessage.value = `Offline ready. ${status.omittedVideos.length} video${suffix} requires internet.`;
+  } else if (status.fullyOffline) {
+    offlineToastMessage.value = 'Offline ready. All learning resources are cached.';
+  } else {
+    offlineToastMessage.value = 'Offline caching complete with limited media.';
+  }
+
+  offlineToastOpen.value = true;
+};
+
 onMounted(() => {
+  window.addEventListener(OFFLINE_STATUS_EVENT, handleOfflineStatusEvent as EventListener);
   updateActiveState();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener(OFFLINE_STATUS_EVENT, handleOfflineStatusEvent as EventListener);
 });
 
 // Watch for route changes to update active state
