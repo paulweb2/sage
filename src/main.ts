@@ -48,6 +48,9 @@ const publishOfflineStatus = (status: OfflineCacheStatus) => {
   window.dispatchEvent(new CustomEvent(OFFLINE_STATUS_EVENT, { detail: status }))
 }
 
+const OFFLINE_READY_EVENT = 'sage-offline-ready'
+const UPDATE_READY_EVENT = 'sage-update-ready'
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('message', (event) => {
     const data = event.data as { type?: string; payload?: OfflineCacheStatus } | undefined
@@ -63,7 +66,26 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-registerSW({ immediate: true })
+const updateSW = registerSW({
+  immediate: true,
+  onNeedRefresh() {
+    window.dispatchEvent(new CustomEvent(UPDATE_READY_EVENT))
+    // Auto-apply updates so installed apps keep in sync with production.
+    void updateSW(true)
+  },
+  onOfflineReady() {
+    window.dispatchEvent(new CustomEvent(OFFLINE_READY_EVENT))
+  },
+  onRegisteredSW(_swUrl, registration) {
+    if (!registration) {
+      return
+    }
+    // Periodic update checks reduce stale installed PWAs.
+    window.setInterval(() => {
+      void registration.update()
+    }, 60 * 60 * 1000)
+  },
+})
 
 const app = createApp(App)
   .use(IonicVue)
