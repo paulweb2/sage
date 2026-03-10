@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -25,6 +25,9 @@
       <div id="container">
         <!-- Key Definitions Card -->
         <ion-card id="key-definitions">
+          <ion-card-header>
+            <ion-card-title>Understanding Cognitive Needs</ion-card-title>
+          </ion-card-header>
           <ion-card-content>
             <p>
               <strong>Dyslexia</strong><br>

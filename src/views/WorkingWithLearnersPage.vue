@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ pageTitle }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -189,13 +189,26 @@
         <div v-if="pageId === 'working-tensions'">
           <ion-card id="tensions-multiple-needs-2">
             <ion-card-header>
-              <ion-card-title>Learners do not fall neatly into single categories</ion-card-title>
+              <ion-card-title>Learners Do Not Fall Neatly into Single Categories</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <h4><strong>Challenge</strong></h4>
               <p>Each learner with a disability is unique; some may have multiple needs, while others may face challenges that are not always visible. For example, a learner could be both deaf and have a cognitive learning difficulty, and they may also come from a disadvantaged background.</p>
               <h4><strong>Enabler</strong></h4>
-              <p>This means educators cannot rely on ‘one-size-fits-all’ approaches. Instead, they need to adopt flexible methods that respond to individual differences.</p>
+              <p>This means educators cannot rely on “one-size-fits-all” approaches. Instead, they need flexible methods that respond to individual differences. To do this, the educator should work with the learner to identify their individual strengths, needs and preferred ways of learning. For each disability, this toolkit includes a set of questions and prompts for educators to use. The questions will support educators to find out about learners’ strengths, challenges and their preferred ways of working.</p>
+              <p>Where appropriate, the educator should support the learner to develop the skills to self-advocate. Prompts for learners to consider have been included to support the learning in expressing their own needs. These prompts can be found under the heading advocacy.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card id="tensions-balanced-curriculum-access">
+            <ion-card-header>
+              <ion-card-title>Ensuring That Learners with Disabilities Have Access to a Balanced Curriculum</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <h4><strong>Challenge</strong></h4>
+              <p>Learners’ disabilities can make certain curriculum areas particularly difficult to access.</p>
+              <h4><strong>Enabler</strong></h4>
+              <p>In order for all aspects of the curriculum to be accessible and inclusive for all, educators need to anticipate potential barriers for individual learners and consider ways of minimising these to ensure participation. For each disability, this toolkit sets out potential environmental, social, task and assessment related barriers to learning and ways to support learners. These are labelled as challenges and enablers and can be applied across the curriculum.</p>
             </ion-card-content>
           </ion-card>
 

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Multiple learning needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -23,6 +23,16 @@
       </ion-header>
 
       <div id="container">
+        <ion-card id="multiple-needs-understanding">
+          <ion-card-header>
+            <ion-card-title>Understanding Multiple Needs</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Learners with multiple learning needs may experience a number of physical and social challenges including sight, hearing, mobility, sensory needs, coordination of speech and language, and speed of doing things.</p>
+            <p>Sensory needs describe an individual’s sensitivity to sensory information. Learners may seek additional sensory input if they are undersensitive (hyposensitive) or avoid certain sensations if they are oversensitive (hypersensitive).</p>
+          </ion-card-content>
+        </ion-card>
+
         <!-- Language Section -->
         <ion-card id="language">
           <ion-card-header>

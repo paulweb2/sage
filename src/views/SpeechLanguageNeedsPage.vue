@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Speech and Language Needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -23,6 +23,16 @@
       </ion-header>
 
       <div id="container">
+        <ion-card id="speech-language-needs-understanding">
+          <ion-card-header>
+            <ion-card-title>Understanding Speech and Language Needs</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>You may notice a learner has difficulties in expressing themselves. For example, putting words together to make a sentence, using accurate word endings such as verb tenses and plurals, vocabulary development or sequencing ideas to explain something or make a story. These kinds of needs are summarised as expressive language needs.</p>
+            <p>You may also notice that a learner has difficulty understanding words and language use by others. For example, a learner might have difficulty responding to a question posed by an educator and may give answers that do not seem to be related to a question. A learner may also have difficulty in quickly processing language and find it difficult to join in peer discussions. These kinds of needs are summarised using the term ‘receptive language needs’.</p>
+          </ion-card-content>
+        </ion-card>
+
         <!-- Language Section -->
         <ion-card id="language">
           <ion-card-header>

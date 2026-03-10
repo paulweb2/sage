@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Hearing needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -23,6 +23,15 @@
       </ion-header>
 
       <div id="container">
+        <ion-card id="hearing-needs-understanding">
+          <ion-card-header>
+            <ion-card-title>Understanding Hearing Needs</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>The term hearing needs includes all types of hearing loss and deafness. Deafness can be present from birth (congenital deafness) or acquired later in life. Some learners who are deaf communicate using Zimbabwe Sign Language (ZSL). Others may use a combination of speech, objects, pictures, symbols, gestures, and body language. This is known as a Total Communication approach, in which multiple communication strategies are used to support understanding and expression.</p>
+          </ion-card-content>
+        </ion-card>
+
         <!-- Language Section -->
         <ion-card id="language">
           <ion-card-header>

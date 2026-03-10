@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -99,8 +99,7 @@
               <ion-card-title>Toolkit as a professional learning resource</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <p>The digital toolkit can also be used by educators as a source of professional learning. Educators can choose to complete reflective tasks and quizzes.</p>
-              <p>Responses to the reflective tasks can be typed into the App and are saved so that you can return to them at a later date. Quizzes are automatically marked and feedback given to support learning.</p>
+              <p>The digital toolkit can also be used by educators as a source of professional learning. Educators can choose to complete reflective tasks and quizzes. Responses to the reflective tasks can be typed into the App and are saved so that you can return to them at a later date. Educators are also encouraged to keep notes outside of the App which record actions needed and progress made with respect to individual learners. Quizzes are automatically marked and feedback given to support learning.</p>
             </ion-card-content>
           </ion-card>
 
@@ -241,7 +240,7 @@
         <div v-else-if="route.params.id === 'Screening'">
           <ion-card>
             <ion-card-content>
-              <p>Screening and referring learners with disabilities.</p>
+              <p>The Signposting Tool points you in the direction of aspects of the toolkit and specialist support organisations that might be of assistance to learners with particular needs.</p>
             </ion-card-content>
           </ion-card>
           <ion-card>
@@ -1297,7 +1296,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       lot: `
         <p>Take these steps:</p>
         <ol>
-          <li>Discuss referral to an optician or refractionist for diagnosis with parents.</li>
+          <li>Discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The visual needs section of this toolkit provides advice and guidance on working with learners with visual needs.</li>
           <li>Seek additional support with resources from organisations such as:
             <ol type="a">
@@ -1315,7 +1315,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       cannot: `
         <p>Take these steps:</p>
         <ol>
-          <li>If no diagnosis in place, discuss referral to an optician or refractionist for diagnosis with parents.</li>
+          <li>If no diagnosis already in place, discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The visual needs section of this toolkit provides advice and guidance on working with learners with visual needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1354,7 +1355,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       lot: `
         <p>Take these steps:</p>
         <ol>
-          <li>Discuss a referral to an audiologist or Ear, Nose and Throat specialist for diagnosis with parents.</li>
+          <li>Discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The hearing needs section of this toolkit provides advice and guidance on working with learners with hearing needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1372,7 +1374,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       cannot: `
         <p>Take these steps:</p>
         <ol>
-          <li>Discuss a referral to an audiologist or Ear, Nose and Throat specialist for diagnosis with parents.</li>
+          <li>If no diagnosis already in place, discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The hearing needs section of this toolkit provides advice and guidance on working with learners with hearing needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1412,7 +1415,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       lot: `
         <p>Take these steps:</p>
         <ol>
-          <li>In discussion with parents, refer to rehabilitation technicians or an orthopaedic specialist for diagnosis.</li>
+          <li>Discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The physical needs section of this toolkit provides advice and guidance on working with learners with mobility needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1431,7 +1435,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       cannot: `
         <p>Take these steps:</p>
         <ol>
-          <li>If no diagnosis already in place, discuss referral to rehabilitation technicians or an orthopaedic specialist for diagnosis with parents.</li>
+          <li>If no diagnosis already in place, discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The physical needs section of this toolkit provides advice and guidance on working with learners with mobility needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1471,7 +1476,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       lot: `
         <p>Take these steps:</p>
         <ol>
-          <li>In discussion with parents, refer to a psychologist or multi-disciplinary assessment panel for diagnosis.</li>
+          <li>Discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The cognitive needs section of this toolkit provides advice and guidance on working with learners with cognitive needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1487,7 +1493,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       cannot: `
         <p>Take these steps:</p>
         <ol>
-          <li>If no diagnosis in place, discuss referral to a psychologist or multi-disciplinary assessment panel for diagnosis with parents.</li>
+          <li>If no diagnosis already in place, discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The cognitive needs section of this toolkit provides advice and guidance on working with learners with cognitive needs.</li>
           <li>Seek support with resources from organisations such as:
             <ol type="a">
@@ -1518,7 +1525,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       lot: `
         <p>Take these steps:</p>
         <ol>
-          <li>In discussion with parents, refer to an educational psychologist or multi-disciplinary assessment panel for diagnosis.</li>
+          <li>Discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>Seek support with resources from organisations such as:
             <ul>
               <li>Zimbabwe Down Syndrome Association (ZDSA)</li>
@@ -1531,7 +1539,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       cannot: `
         <p>Take these steps:</p>
         <ol>
-          <li>In discussion with parents, refer to an educational psychologist or multi-disciplinary assessment panel for diagnosis.</li>
+          <li>If no diagnosis already in place, discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>Seek support with resources from organisations such as:
             <ul>
               <li>Zimbabwe Down Syndrome Association (ZDSA)</li>
@@ -1565,7 +1574,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       lot: `
         <p>Take these steps:</p>
         <ol>
-          <li>In discussion with parents, refer to a speech therapist or a speech correctionist for diagnosis.</li>
+          <li>Discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The speech and communication sections of this toolkit provide guidance and advice on working with learners with language or communication needs.</li>
           <li>Seek additional support with resources from organisations such as:
             <ol type="a">
@@ -1580,7 +1590,8 @@ const screeningQuestions = vueRef<ScreeningQuestion[]>([
       cannot: `
         <p>Take these steps:</p>
         <ol>
-          <li>If no diagnosis in place, in discussion with parents, refer to a speech therapist or a speech correctionist for diagnosis.</li>
+          <li>If no diagnosis already in place, discuss referral to the Ministry of Primary and Secondary Education for further support with parents.</li>
+          <li>Contact Ministry of Primary and Secondary Education district office for the guidance on next steps and the relevant paperwork for referral. The contact details for each district office are included in the contact list.</li>
           <li>The speech and communication sections of this toolkit provide guidance and advice on working with learners with language or communication needs.</li>
           <li>Seek additional support with resources from organisations such as:
             <ol type="a">

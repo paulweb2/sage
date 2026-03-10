@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -380,6 +380,17 @@
               </ion-card>
             </div>
 
+            <div v-if="route.params.id === 'communication'">
+              <ion-card id="communication-needs-understanding">
+                <ion-card-header>
+                  <ion-card-title>Understanding Communication Needs</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <p>Communication needs describe how learners interact with others. Learners with communication needs may require the educator to use Augmentative and Alternative Communication (AAC). AAC refers to the use of objects, pictures symbols, charts, signing and electronic devices to support a learner to communicate.</p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+
             <!-- Show detailed content only if it exists and has subheadings -->
             <div v-if="hasSubheadings">
 
@@ -659,7 +670,7 @@
           <ion-card id="enabling">
             <ion-card-header>
               <ion-card-title>Enabling Learning</ion-card-title>
-              <ion-card-subtitle>Strategies to Support Success</ion-card-subtitle>
+              <ion-card-subtitle v-if="route.params.id !== 'communication'">Strategies to Support Success</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
               <ion-accordion-group>
@@ -3129,7 +3140,7 @@ const disabilityContent = computed(() => {
       },
       enabling: {
         physical: [
-          'Employ a total communication approach. This involves valuing, modelling and facilitating all communication modes, including verbal and non-verbal communication and Augmentative and Alternative Communication (AAC) devices, eye-tracking systems, symbols, gestures and speech.',
+          'Employ a total communication approach, valuing and modelling a wide range of verbal and non-verbal communication methods including Augmentative and Alternative Communication (AAC). AAC refers to the use of objects, pictures symbols, charts, signing and electronic devices to support a learner to communicate.',
           'Reduce distractions by simplifying classroom displays, reducing clutter and ensuring that the classroom is quiet.',
           'Devise a seating plan: some learners may find it easier to engage when seated at the front of the classroom, whilst others might experience fewer distractions and less anxiety if they sit at the back.',
           'Ensure that learners are given regular opportunities to move. ‘Fidget toys’ may help some learners.',

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Visual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.27</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -23,6 +23,15 @@
       </ion-header>
 
       <div id="container">
+        <ion-card id="visual-needs-understanding">
+          <ion-card-header>
+            <ion-card-title>Understanding Visual Needs</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>The term visual needs includes any form of visual difficulty which cannot be corrected by wearing glasses or contact lenses. It is important to be aware that even if a learner with needs wears glasses, this does not mean that they will see ‘normally’.</p>
+          </ion-card-content>
+        </ion-card>
+
         <!-- Language Section -->
         <ion-card id="language">
           <ion-card-header>

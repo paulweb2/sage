@@ -1,10 +1,10 @@
 [
   {
     "name": "Association of the  Deaf  (ASSOD)",
-    "address": "Bulawayo",
+    "address": "15228 Silver Crescent Road, Bulawayo",
     "expertise": "Speech training/sign language training",
     "phones": [
-      "+2632 202 068841"
+      "+2632202068841"
     ],
     "emails": [
       "assodorg@gmail.com"
@@ -12,12 +12,28 @@
     "website": ""
   },
   {
+    "name": "AudioMax Clinic Harare",
+    "address": "93 Baines Avenue, Harare",
+    "expertise": "Hearing tests, hearing aids, ear wax removal, ear nose and throat consultaions.",
+    "phones": [
+      "+263202068841",
+      "+263780246486",
+      "+263242700249",
+      "+263242704002",
+      "+263772325437"
+    ],
+    "emails": [
+      "info@audiomaxclinic.com"
+    ],
+    "website": "www.audiomaxclinic.com"
+  },
+  {
     "name": "AudioMax Clinic Mutare",
     "address": "3rd Floor, Suite 17, 123 Herbert Chitepo Street, Mutare.",
-    "expertise": "hearing tests, hearing aids, ear wax removal,ear nose and throat consultaions.",
+    "expertise": "Hearing tests, hearing aids, ear wax removal, ear nose and throat consultaions.",
     "phones": [
-      "+2632 202 068841",
-      "+263 780 246 486"
+      "+2632202068841",
+      "+263780246486"
     ],
     "emails": [
       "info@audiomaxclinic.com"
@@ -25,12 +41,35 @@
     "website": ""
   },
   {
+    "name": "Bindura Provincial Hospital Rehabilitaion Department",
+    "address": "Cnr Matepatepa & Greendale Road, Bindura. PO Box 940, Bindura",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263662106666"
+    ],
+    "emails": [
+      "bindurahosp@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
+    "name": "Bulawayo Province Department of Social Development",
+    "address": "Mhlanhandlela Government Complex 10th Avenue and Basch Street, Bulawayo",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263773300703",
+      "+263292882434"
+    ],
+    "emails": [],
+    "website": ""
+  },
+  {
     "name": "Bulawayo Province. Learner Welfare , Psychological Services and Special Needs Education.",
     "address": "Mhlanhandlela Government Complex 10th Avenue and Basch Street Box 555 Bulawayo",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+263 2 (09) 79238",
-      "+263 292267411"
+      "+26320979238",
+      "+263292267411"
     ],
     "emails": [],
     "website": ""
@@ -40,11 +79,43 @@
     "address": "90 Prince Edward Street,\nMilton Park, Harare",
     "expertise": "Cardiothoracic evaluation/surgery\nSupply of cardiothoracic assistive devices",
     "phones": [
-      "+263772 914 566",
+      "+263772914566",
       "+263242790454"
     ],
     "emails": [],
     "website": ""
+  },
+  {
+    "name": "Chinhoyi Provincial Hospital Rehabilitaion Department",
+    "address": "1 Shandore Drive, Cold Stream, Chinhoyi.PO Box 17, Chinhoyi.",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263672122205",
+      "+263672122354",
+      "+263672124420",
+      "+263712045648",
+      "+263774336760"
+    ],
+    "emails": [
+      "cjokwani@gmail.com"
+    ],
+    "website": "www.mashwest.gov.zw"
+  },
+  {
+    "name": "Chitungwiza Central Hospital Rehabilitaion Department",
+    "address": "12096 Batanai Street Zengeza 4, Chitungwiza. PO Box CZA 245, Chitungwiza",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263242130917",
+      "+2632702131850",
+      "+2632702131038",
+      "+263774120811",
+      "+263783555390"
+    ],
+    "emails": [
+      "pr@cch.og.zw"
+    ],
+    "website": "mohcc.gov.zw"
   },
   {
     "name": "Council for the Blind Zimbabwe",
@@ -59,11 +130,24 @@
     "website": "https://councilfortheblind.org.zw/"
   },
   {
+    "name": "Cure International Children's Hospital",
+    "address": "Old Esigodini Road and Kenwood Road, Bulawayo",
+    "expertise": "Specialises in orthopedic and plastic reconstructive surgeries for children.",
+    "phones": [
+      "+2638677192320",
+      "+2638677211855"
+    ],
+    "emails": [
+      "zw.info@cure.org"
+    ],
+    "website": "zimbabwe.cure.org"
+  },
+  {
     "name": "Danhiko Project",
     "address": "123 Mutare Road, PO Box AY 179\nAmby, Musasa",
     "expertise": "Inclusive education, training and production for persons with disabilities and the disadvantaged",
     "phones": [
-      "Reception + 2634 492909"
+      "+2634492909"
     ],
     "emails": [
       "info@danhikoproject.org.zw"
@@ -75,7 +159,7 @@
     "address": "12 Victory Avenue, Greendale, Athlone, Harare",
     "expertise": "Deaf education/sign language training",
     "phones": [
-      "+263 (242) 448293"
+      "+263242448293"
     ],
     "emails": [
       "information@deafzimbabwetrust.org"
@@ -87,7 +171,7 @@
     "address": "119 Fife Avenue 3rd/4th Street, Harare\nBox 4489 Harare",
     "expertise": "Provision of reading and educational materials for the blind and partially sighted",
     "phones": [
-      "+263242251  117",
+      "+263242251117",
       "+263242496667"
     ],
     "emails": [
@@ -101,7 +185,7 @@
     "expertise": "Lip reading training and sign language",
     "phones": [
       "+2634336726",
-      "+263 86 4408 6462",
+      "+2638644086462",
       "+263242339282"
     ],
     "emails": [
@@ -138,13 +222,54 @@
     "website": "https://grosscareinternational.com/"
   },
   {
+    "name": "Gwanda Provincial Hospital Rehabilitaion Department",
+    "address": "Gwanda Road, Gwanda. PO Box 125, Gwanda",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+26328422224",
+      "+26328422225"
+    ],
+    "emails": [
+      "gwandaaccounts@live.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
+    "name": "Gweru Provincial Hospital Rehabilitaion Department",
+    "address": "Shurugwi Road, Gweru",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263542221301",
+      "+26354221301",
+      "+26354222306"
+    ],
+    "emails": [
+      "fnderecha@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
+    "name": "Harare Province Department of Social Development",
+    "address": "9th Floor Kaguvi Building, Corner 4th Street & Central Avenue, Harare.",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263242251022",
+      "+263242251288",
+      "+263242703871"
+    ],
+    "emails": [
+      "mpslswzim@gmail.com."
+    ],
+    "website": "mpslsw.gv.zw"
+  },
+  {
     "name": "Harare Province.Learner Welfare , Psychological Services and Special Needs Education",
     "address": "3rd Floor Education Services Mount Pleasant Box CY1343, Causeway, Harare",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+0263 (0242) 339334",
-      "+263 774 035886",
-      "+263(0242)332146"
+      "+02630242339334",
+      "+263774035886",
+      "+2630242332146"
     ],
     "emails": [
       "hararemetropolitanprovince@gmail.com"
@@ -156,8 +281,8 @@
     "address": "2 Daventry Road \nMwana Dream Park, Harare",
     "expertise": "Assistive devices (crutches, wheelchairs), corner seats, standing frames, walkers,\nCP paraphernalia, cane sticks, Braille machines,\nprosthesis/orthoses including fitting; customised equipment; clubfoot management",
     "phones": [
-      "+263773 367 914",
-      "+263 77 336 7913"
+      "+263773367914",
+      "+263773367913"
     ],
     "emails": [
       "healthpromotionclinic@gmail.com"
@@ -166,10 +291,10 @@
   },
   {
     "name": "Henry Murray School for the Deaf",
-    "address": "Morgenster Mission , Masvingo , Renco Road",
-    "expertise": "hearing tests, hearing aids fitting, ear wax removal, Sign Language training.",
+    "address": "Morgenster Mission, Masvingo, Renco Road",
+    "expertise": "Hearing tests, hearing aids fitting, ear wax removal, Sign Language training.",
     "phones": [
-      "+263 773 902 859"
+      "+263773902859"
     ],
     "emails": [
       "rczdeaf@gmail.com"
@@ -181,9 +306,9 @@
     "address": "23rd Avenue Bulawayo",
     "expertise": "Mental health services/ psychiatric and psychological assessments",
     "phones": [
-      "+26329 2473896",
-      "+263 292 463411 3",
-      "+263 292 66463 5"
+      "+263292473896",
+      "+2632924634113",
+      "+263292664635"
     ],
     "emails": [
       "information@ingutshenihospital.org.zw"
@@ -207,7 +332,7 @@
     "address": "Corner Birmingham and Lobengula Roads, Southerton, Harare \nPO Box ST67 Southerton, Harare",
     "expertise": "Rehabilitation services and assistive devices/orthopaedic services",
     "phones": [
-      "+263242 662 545"
+      "+263242662545"
     ],
     "emails": [
       "jjano@jairosjiriassoc.org"
@@ -219,7 +344,7 @@
     "address": "AC 80 Ascot, Bulawayo, OO263",
     "expertise": "Rehabilitation and education",
     "phones": [
-      "+263-292-2230434"
+      "+2632922230434"
     ],
     "emails": [
       "farai@kgvi.org / loma@kvgi.org",
@@ -230,9 +355,9 @@
   {
     "name": "Kunzwa Hearing Centre",
     "address": "20 Sixth  Street, Gweru",
-    "expertise": "hearing tests, hearing aids, ear wax removal,ear nose and throat consultaions.",
+    "expertise": "Hearing tests, hearing aids, ear wax removal, ear nose and throat consultaions.",
     "phones": [
-      "+263 771 198 936"
+      "+263771198936"
     ],
     "emails": [
       "info@kunzwa.co.zw"
@@ -258,8 +383,8 @@
     "address": "188 Westwood Drive, Westwood PO Box 11 Kambuzuma, Harare",
     "expertise": "Awareness raising on disability and provison of assistive devices and inclusive programming",
     "phones": [
-      "+263242 292 8109",
-      "+263 772 746 016"
+      "+2632422928109",
+      "+263772746016"
     ],
     "emails": [
       "info@leonardcheshire.org.zw"
@@ -267,21 +392,79 @@
     "website": "https://www.leonardcheshire.org.zw/"
   },
   {
+    "name": "Manicaland Province Department of Social Development",
+    "address": "Government Composite Building, Block B, 1st Floor, Robert Mugabe Street, Mutare",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+26320263421",
+      "+263773767968"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
     "name": "Manicaland Province. Learner Welfare , Psychological Services and Special Needs Education.",
     "address": "7– 5th Street, Mutare",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+2632 (020) 64216"
+      "+263202064216"
     ],
     "emails": [],
     "website": ""
   },
   {
-    "name": "Mashonaland Central. Learner Welfare , Psychological Services and Special Needs Education.",
-    "address": "P. O. Box 340 Bindura",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "name": "Marondera Provincial Hospital Rehabilitaion Department",
+    "address": "4th Street, Marondera",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
     "phones": [
-      "+02632(27) 6992/6"
+      "+263652324877"
+    ],
+    "emails": [
+      "emutsikiwa@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
+    "name": "Mashonaland Central Province Department of Social Development",
+    "address": "Mutungagore Government Complex, 567 Thurlows Avenue, Bindura",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263662106262",
+      "+263719021339",
+      "+263773987602"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
+    "name": "Mashonaland East Province Department of Social Development",
+    "address": "New Government Complex Building, Cnr Morris/Second Street, Marondera.",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263652321985",
+      "+263652321024"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
+    "name": "Mashonaland West Province Department of Social Development",
+    "address": "1st Floor Composite Block, New Government Complex, Corner Chatambudza/Robson Manyika Street, Chinhoyi.",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+2632672129383",
+      "+263712515051"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
+    "name": "Mashonaland Central. Learner Welfare , Psychological Services and Special Needs Education.",
+    "address": "Mutungagore Government Complex, 567 Thurlows Avenue, Bindura, P. O. Box 340 Bindura",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "phones": [
+      "+02632276992",
+      "+6"
     ],
     "emails": [
       "zmashcentralprovince@gmail.com"
@@ -291,9 +474,9 @@
   {
     "name": "Mashonaland East. Learner Welfare , Psychological Services and Special Needs Education.",
     "address": "Bisset House 4th Street, Box 752, Marondera",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+263 (279) 24811",
+      "+26327924811",
       "+263652324901"
     ],
     "emails": [
@@ -304,10 +487,10 @@
   {
     "name": "Mashonaland West. Learner Welfare , Psychological Services and Special Needs Education.",
     "address": "New Complex Building Ground Floor room 20 . Box  328, Chinhoyi",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
       "+26326723004",
-      "+263 773 921814"
+      "+263773921814"
     ],
     "emails": [
       "infor@mopsemashwest.gov.zw"
@@ -315,24 +498,59 @@
     "website": "www.mopsemashwest.gov.zw"
   },
   {
-    "name": "Masvingo Province. Learner Welfare , Psychological Services and Special Needs Education.",
-    "address": "Government Offices\n Ministry of Education,  Block 3 Room 30\n Near Passport Offices",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "name": "Masvingo Provincial Hospital Rehabilitaion Department",
+    "address": "75 Hay Robertson Road, Rhodene, Masvingo.PO Box 114, Masvingo",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
     "phones": [
-      "+2632 (39) 264331",
-      "+263 239 263220"
+      "+263392640960"
+    ],
+    "emails": [
+      "masvingoprovincialhospital@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
+    "name": "Masvingo Province Department of Social Development",
+    "address": "Social Welfare Building, 30 Hudges Street, Masvingo",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263239265774",
+      "+263775088534"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
+    "name": "Masvingo Province. Learner Welfare , Psychological Services and Special Needs Education.",
+    "address": "Government Offices\n Ministry of Education, Block 3 Room 30\n Near Passport Offices",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "phones": [
+      "+263239264331",
+      "+263239263220"
     ],
     "emails": [],
     "website": ""
   },
   {
+    "name": "Matebeleland North Province Department of Social Development",
+    "address": "DDC Complex /Zimpost Building, Lupane",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263",
+      "+263812856470"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
     "name": "Matebeleland North.Learner Welfare , Psychological Services and Special Needs Education.",
     "address": "Mhlanhandlela Government Complex 10th Avenue and Basch Street 3rd Floor office No 95 Bulawayo",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+2632(09) 69943    +2632(09)72232",
-      "+2632(09) 63738",
-      "+2632(09) 881400"
+      "+26320969943",
+      "+26320972232",
+      "+26320963738",
+      "+263209881400"
     ],
     "emails": [],
     "website": ""
@@ -340,32 +558,66 @@
   {
     "name": "Matebeleland South .Learner Welfare , Psychological Services and Special Needs Education.",
     "address": "Government Complex 2nd floor P. Bag 5824 Gwanda",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+2632 (0842) 823009",
-      "+26328 42823383"
+      "+26320842823009",
+      "+2632842823383"
     ],
     "emails": [],
     "website": ""
   },
   {
-    "name": "Midlands Province.Learner Welfare , Psychological Services and Special Needs Education.",
-    "address": "New Government Complex,Block 3 Room 3010th Street  next to Wimpy Box 737, Gweru",
-    "expertise": "Psychological assessment,audiological assessments, trainings , referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "name": "Matebeleland South Province Department of Social Development.",
+    "address": "New Government Complex, Office No.6, Gwanda.",
+    "expertise": "Provision of social protection and assistive technology.",
     "phones": [
-      "+2632 (54) 223457",
-      "+263 254 2222913",
+      "+2632842823452"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
+    "name": "Midlands Province Department of Social Development",
+    "address": "Government Complex, Ground Floor, 10th Street, Gweru.",
+    "expertise": "Provision of social protection and assistive technology.",
+    "phones": [
+      "+263542229246",
+      "+263542225136"
+    ],
+    "emails": [],
+    "website": "mpslsw.gv.zw"
+  },
+  {
+    "name": "Midlands Province.Learner Welfare , Psychological Services and Special Needs Education.",
+    "address": "New Government Complex, Block 3 Room 3010th Street  next to Wimpy Box 737, Gweru",
+    "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
+    "phones": [
+      "+263254223457",
+      "+2632542222913",
       "+2267812222460"
     ],
     "emails": [],
     "website": ""
   },
   {
+    "name": "Morgenster Mission Hospital",
+    "address": "9052 Renco Mine Road, Masvingo.",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+26339262123",
+      "+26339262121"
+    ],
+    "emails": [
+      "info@rcz.org.zw"
+    ],
+    "website": "www.rcz.org.zw"
+  },
+  {
     "name": "Mpilo Hospital Children’s Resource Unit - Mrs Ncube",
     "address": "Mpilo Hospital, VHF9+2XR, Bulawayo, Zimbabwe",
     "expertise": "Child disability evaluation;\ntenotomy/bracing referral in clubfoot",
     "phones": [
-      "+263772 852 927",
+      "+263772852927",
       "+263292212011"
     ],
     "emails": [],
@@ -377,7 +629,8 @@
     "expertise": "Provision of teaching and learning materials for learners with visual impairment. Adaptaion of teachng and learning materials into Braille.",
     "phones": [
       "+263242333812",
-      "+263332988/336042"
+      "+263332988",
+      "+336042"
     ],
     "emails": [
       "admin@mopse.gov.zw"
@@ -389,7 +642,7 @@
     "address": "Freedom House, Bulawayo\nBox 1952 Bulawayo",
     "expertise": "Education, gender and empowerment",
     "phones": [
-      "+263  357 7222"
+      "+2633577222"
     ],
     "emails": [
       "infor@ncdpz.org.zw",
@@ -403,7 +656,8 @@
     "expertise": "Audiological assessments, provision of hearing aids, Sign Langauge Training. Development of teaching and learning materials for learners with hearing impairment.",
     "phones": [
       "+263242333812",
-      "+263332988/336042"
+      "+263332988",
+      "+336042"
     ],
     "emails": [
       "admin@mopse.gov.zw"
@@ -411,16 +665,56 @@
     "website": "https://mopse.ac.zw"
   },
   {
+    "name": "Ngomahuru Psychiatric Hospital",
+    "address": "Ngomahuru Village, Masvingo",
+    "expertise": "Mental health services/ psychiatric and psychological assessments",
+    "phones": [
+      "+263785070361"
+    ],
+    "emails": [
+      "ngomahuru.psychiatric@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
     "name": "Nzeve Deaf Centre",
     "address": "Old Sakubva, Mutare next to Zororai Old People's Home",
-    "expertise": "hearing tests, hearing aids, ear wax removal,Sign Langauge Training.",
+    "expertise": "Hearing tests, hearing aids, ear wax removal, Sign Langauge Training.",
     "phones": [
-      "+263 220 66339"
+      "+26322066339"
     ],
     "emails": [
       "info@nzeve.org"
     ],
     "website": "https://nzeve.org.zw"
+  },
+  {
+    "name": "Parirenyatwa Group of Hospitals Rehabilitaion Department",
+    "address": "Mazowe Street. PO Box CY 198, Causeway, Harare",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263242702992",
+      "+263242790067"
+    ],
+    "emails": [
+      "publicrelations@parihosp.org"
+    ],
+    "website": "https://parihosp.org"
+  },
+  {
+    "name": "Parirenyatwa Mental Health Hospital",
+    "address": "Mazowe Street. PO Box CY 198, Causeway, Harare",
+    "expertise": "Mental health services/ psychiatric and psychological assessments",
+    "phones": [
+      "+263242701555",
+      "+2632427015943",
+      "+263242701623",
+      "+263242702224"
+    ],
+    "emails": [
+      "publicrelations@parihosp.org"
+    ],
+    "website": "https://parihosp.org"
   },
   {
     "name": "Playing, Talking, Learning",
@@ -437,7 +731,7 @@
     "address": "58 Borrowdale Road, Harare, Zimbabwe",
     "expertise": "Crutches and walking sticks, wheelchairs, rollators, walking aids, commode chairs, bathroom aids",
     "phones": [
-      "+263774 595 732"
+      "+263774595732"
     ],
     "emails": [],
     "website": ""
@@ -447,7 +741,7 @@
     "address": "Woodlands, Bulawayo Drive,\nBulawayo",
     "expertise": "Eye health services",
     "phones": [
-      "+263 9 230 750",
+      "+2639230750",
       "+263292252111"
     ],
     "emails": [
@@ -457,13 +751,26 @@
     "website": "http://www.ubh.org.zw/ophthalmology-department/ - Opthalmology department"
   },
   {
+    "name": "Sally Mugabe Central Hospital Rehabilitaion Department",
+    "address": "Lobengula Street Southerton, Harare. PO box 14, Southertone Harare",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263242621143",
+      "+263242667928"
+    ],
+    "emails": [
+      "ceosechch@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
     "name": "St Giles Rehabilitation Centre",
-    "address": "8 Drummond,  Chaplin Street, \nMilton Park,\nHarare",
+    "address": "8 Drummond, Chaplin Street, \nMilton Park,\nHarare",
     "expertise": "Physiotherapy/occupational/ speech rehabilitation\nspecial school",
     "phones": [
-      "242-740955",
-      "+263 77 627 2080",
-      "+263 78 706 7935"
+      "+242740955",
+      "+263776272080",
+      "+263787067935"
     ],
     "emails": [
       "ceo@stgiles.org.zw"
@@ -471,17 +778,52 @@
     "website": "https://www.stgiles.org.zw/"
   },
   {
+    "name": "St Luke Hospital",
+    "address": "Lupane Town, Postal Address Private Bag 5314, Lupane.",
+    "expertise": "Hearing tests, hearing aids, ear wax removal, ear nose and throat consultaions.",
+    "phones": [
+      "+263292398362"
+    ],
+    "emails": [],
+    "website": ""
+  },
+  {
     "name": "The Ear Centre",
     "address": "63 Tongogara Street, Bulawayo",
-    "expertise": "hearing tests, hearing aids, ear wax removal,ear nose and throat consultaions.",
+    "expertise": "Hearing tests, hearing aids, ear wax removal, ear nose and throat consultaions.",
     "phones": [
-      "+263 785 460 707",
-      "+263 292 261 310"
+      "+263785460707",
+      "+263292261310"
     ],
     "emails": [
       "info@earcentrezw.com"
     ],
     "website": "www.earcentrezw.com"
+  },
+  {
+    "name": "United Bulawayo Hospitals(UBH) Rehabilitaion Department",
+    "address": "Woodlands, Bulawayo Drive,\nBulawayo. PO Box 958, Bulawayo",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263292238397"
+    ],
+    "emails": [
+      "info@ubh.org.zw"
+    ],
+    "website": "mohcc.gov.zw"
+  },
+  {
+    "name": "Victoria Chitepo Provincial Hospital Rehabilitaion Department",
+    "address": "19 Robert Mugabe Road, Mutare.",
+    "expertise": "Provision of rehabilitation/habilitaion, phsyiotherapy, occupational therapy, speech therapy, counseling, assistive technology and orthopaedic services",
+    "phones": [
+      "+263202064321",
+      "+263772588928"
+    ],
+    "emails": [
+      "njodziisaac@gmail.com"
+    ],
+    "website": "mohcc.gov.zw"
   },
   {
     "name": "WizEar Trust",
@@ -501,8 +843,8 @@
     "expertise": "Education and health supplies for persons with albinism",
     "phones": [
       "+2632427244777",
-      "+263 779 761663",
-      "+263 71 727 1073"
+      "+263779761663",
+      "+263717271073"
     ],
     "emails": [
       "zimas@ecoweb.co.zw",
@@ -515,7 +857,7 @@
     "address": "14 Bertram Road Milton Park, Harare",
     "expertise": "Professional association for speech/language pathologists and audiologists in Zimbabwe",
     "phones": [
-      "+263 77 652 0210"
+      "+263776520210"
     ],
     "emails": [
       "admin@mrpcz.org.zw",
@@ -538,11 +880,11 @@
   },
   {
     "name": "Zimbabwe National Association of the Deaf (ZIMNAD)",
-    "address": "PO Box 661043,Kopje, Harare",
+    "address": "PO Box 661043, Kopje, Harare",
     "expertise": "Human rights/sign language training",
     "phones": [
-      "+263 912 451 156",
-      "+263 772 451902"
+      "+263912451156",
+      "+263772451902"
     ],
     "emails": [
       "zimnada@gmail.com",
@@ -555,9 +897,9 @@
     "address": "59 Glamorgan Avenue, Harare / 19 Colchester Avenue Avonlea, Harare",
     "expertise": "Parents of children with  disabilities offering psycho-social support and empowerment as well as advocacy for parents of children with disabilities",
     "phones": [
-      "+263 304046302",
-      "+263 772 615 050",
-      "+263 71 727 1073"
+      "+263304046302",
+      "+263772615050",
+      "+263717271073"
     ],
     "emails": [
       "parentszim.org@gmail.com / info@zphca.org.zw",
@@ -570,9 +912,9 @@
     "address": "4 Drummond Chaplin Street, Harare",
     "expertise": "Rehabilitation and PSS",
     "phones": [
-      "+2634 741859",
-      "+2634 741860",
-      "+263773 626 322 (Head of School)"
+      "+2634741859",
+      "+2634741860",
+      "+263773626322"
     ],
     "emails": [
       "zimcaretrustorg@gmail.com",
