@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.29</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -1242,7 +1242,9 @@ const contactTeam = async () => {
 
 const formatWebsite = (value: string) => {
   if (!value) return '';
-  const match = value.match(/(https?:\/\/[^\s]+|www\.[^\s]+)/i);
+  const match = value.match(
+    /(https?:\/\/[^\s]+|www\.[^\s]+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:\/[^\s]*)?)/i
+  );
   if (!match) return '';
   const cleaned = match[0].replace(/[),.;]+$/, '');
   return cleaned.startsWith('http') ? cleaned : `https://${cleaned}`;

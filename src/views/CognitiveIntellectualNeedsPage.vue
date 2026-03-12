@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Cognitive needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.29</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -320,10 +320,21 @@
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
-                    <ion-item v-for="(s, i) in enabling.tasks" :key="`en-task-` + i + '-' + s">
-                      <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
-                    </ion-item>
+                    <template v-for="(s, i) in enabling.tasks" :key="`en-task-` + i">
+                      <ion-item v-if="typeof s === 'string'">
+                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                        <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
+                      </ion-item>
+                      <template v-else>
+                        <ion-item-divider color="light">
+                          <ion-label><strong>{{ s.title }}</strong></ion-label>
+                        </ion-item-divider>
+                        <ion-item v-for="(p, pi) in s.items" :key="`en-taskp-` + i + '-' + pi">
+                          <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                          <ion-label>{{ ensureSentenceEnding(p) }}</ion-label>
+                        </ion-item>
+                      </template>
+                    </template>
                   </ion-list>
                 </div>
               </ion-accordion>
@@ -335,10 +346,21 @@
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
-                    <ion-item v-for="(s, i) in enabling.assessment" :key="`en-assess-` + i + '-' + s">
-                      <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                      <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
-                    </ion-item>
+                    <template v-for="(s, i) in enabling.assessment" :key="`en-assess-` + i">
+                      <ion-item v-if="typeof s === 'string'">
+                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                        <ion-label>{{ ensureSentenceEnding(s) }}</ion-label>
+                      </ion-item>
+                      <template v-else>
+                        <ion-item-divider color="light">
+                          <ion-label><strong>{{ s.title }}</strong></ion-label>
+                        </ion-item-divider>
+                        <ion-item v-for="(p, pi) in s.items" :key="`en-assessp-` + i + '-' + pi">
+                          <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
+                          <ion-label>{{ ensureSentenceEnding(p) }}</ion-label>
+                        </ion-item>
+                      </template>
+                    </template>
                   </ion-list>
                 </div>
               </ion-accordion>
@@ -1156,10 +1178,88 @@ const challenges = {
 };
 
 const enabling = {
-  physical: [] as string[],
-  social: [] as string[],
-  tasks: [] as string[],
-  assessment: [] as string[]
+  physical: [
+    'Distractions such as visible resources and other classroom stimuli should be reduced.',
+    'Clear pathways in the classroom and avoid narrow gaps between furniture, resources stored so they can be easily accessed.',
+    'Consider whether typing or voice to type rather than writing is possible.'
+  ] as string[],
+  social: [
+    'Allow learners to express their learning/needs/wishes in different forms, for instance, written/spoken/drawn/typed information or painting their story instead of writing it, and recording a voice-over to describe it, or acting out complex calculations with concrete resources to aid working memory.',
+    'Introduce different ways of doing things to peers so they can include all learners in their interactions.'
+  ] as string[],
+  tasks: [
+    {
+      title: 'Dyslexia',
+      items: [
+        'Provide visual prompts to support organisation of text.',
+        'Use clear and simple language of instruction, both verbally and in any written tasks.',
+        'Supply assistive technology such as text-to-speech and speech-to-text to enable self-expression.',
+        'Learners who also experience visual stress may benefit from a coloured overlay. The learner should be consulted to check which colour overlay they prefer.',
+        'Do not ask learners to read aloud in class unless they volunteer.',
+        'Provide opportunity to practise writing on a chalkboard before writing on paper.',
+        'Celebrate all achievements, even small ones, to build perseverance and self-esteem.'
+      ]
+    },
+    {
+      title: 'Dyscalculia',
+      items: [
+        'Build on the learner\'s existing knowledge, creating an increasingly secure base, rather than teaching a lesson at a level because that is what the learner\'s chronological age is.',
+        'Concrete resources are normalised for all learners as a strategy that we all use when needed. For example, number lines on rulers, calculators, or problem-solving scaffolds.'
+      ]
+    },
+    {
+      title: 'Dyspraxia',
+      items: [
+        'Support writing and cutting tasks with pencil grips and adequate cutting scissors.',
+        'Support doing up the zips or buttons on their school uniform before going out to play.',
+        'Be mindful of throwing/catching in the playground, using cutlery to cut their food during lunch, changing into their clothing/tying their laces for PE, and balancing and sequencing the gymnastic movements.',
+        'Establish ethos of attempting/participating rather than success/outcomes to enable several attempts to execute simple tasks.',
+        'Patience and encouragement are needed to foster an attitude where learners are willing to continue trying.'
+      ]
+    },
+    {
+      title: 'Dysgraphia',
+      items: [
+        'Where possible, replace handwriting with touch-typing and using voice recognition software.',
+        'Provide sloping boards, lined paper and pencil grips for writing activities.',
+        'Adapt tasks to minimise writing components, for instance, giving learners less to write, printing resources that they can stick in rather than copy from the board or working with a partner who could scribe.',
+        'Write short messages/comments, use post-it notes, pictures and photos to make the task simple and more enjoyable.',
+        'If possible, include therapeutic input, including hand strength, arm and body positioning and fine motor co-ordination.'
+      ]
+    }
+  ] as Array<string | { title: string; items: string[] }>,
+  assessment: [
+    {
+      title: 'Dyslexia',
+      items: [
+        'Use learner\'s strengths in assessments, for example, replace a written task with a verbal task such as a voice-over recording by the student.',
+        'Enable the learner to use assistive technologies, additional resources/software efficiently every day and throughout assessments.',
+        'Plan assessments to assess learners\' abilities, not difficulties.'
+      ]
+    },
+    {
+      title: 'Dyscalculia',
+      items: [
+        'Be flexible in approaches to work out a calculation, for example, mental methods, such as using a number line or a calculator.',
+        'Provide concrete resources to aid memory and recall, for example, a times table square.',
+        'Break the assessment task into small, step-by-step instructions to minimise anxiety and overwhelm with multiple tasks presented at once.'
+      ]
+    },
+    {
+      title: 'Dyspraxia',
+      items: [
+        'Where possible, replace demonstration or verbal prompting with opportunities for learners to find solutions for themselves in problem-solving tasks, as their method may frequently be atypical but functional.'
+      ]
+    },
+    {
+      title: 'Dysgraphia',
+      items: [
+        'Break assessment down into the components of writing to see where the difficulties persist (an occupational therapist can assist with this), for example, letter formation, line placement, spacing between words, correct joins, correct sizing of tall and short letters, entry and exit strokes. Adapt assessment accordingly.',
+        'Use a keyboard to type instead of writing wherever possible.',
+        'Consider pencil grasp and sitting posture during assessments to allow learners to demonstrate what they know and understand.'
+      ]
+    }
+  ] as Array<string | { title: string; items: string[] }>
 };
 
 const resources = {

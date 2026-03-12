@@ -1,10 +1,10 @@
 [
   {
-    "name": "Association of the  Deaf  (ASSOD)",
+    "name": "Association of the Deaf (ASSOD)",
     "address": "15228 Silver Crescent Road, Bulawayo",
     "expertise": "Speech training/sign language training",
     "phones": [
-      "+2632202068841"
+      "+263772117032"
     ],
     "emails": [
       "assodorg@gmail.com"
@@ -64,7 +64,7 @@
     "website": ""
   },
   {
-    "name": "Bulawayo Province. Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Bulawayo Province. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "Mhlanhandlela Government Complex 10th Avenue and Basch Street Box 555 Bulawayo",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -125,7 +125,8 @@
       "+263292264"
     ],
     "emails": [
-      "cfbzim@gmail.com"
+      "cfbzim@gmail.com",
+      "aplos@cfbzimbabwe.com"
     ],
     "website": "https://councilfortheblind.org.zw/"
   },
@@ -263,7 +264,7 @@
     "website": "mpslsw.gv.zw"
   },
   {
-    "name": "Harare Province.Learner Welfare , Psychological Services and Special Needs Education",
+    "name": "Harare Province. Learner Welfare, Psychological Services and Special Needs Education",
     "address": "3rd Floor Education Services Mount Pleasant Box CY1343, Causeway, Harare",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -347,7 +348,8 @@
       "+2632922230434"
     ],
     "emails": [
-      "farai@kgvi.org / loma@kvgi.org",
+      "farai@kgvi.org",
+      "loma@kvgi.org",
       "precious@kgvi.org"
     ],
     "website": "https://www.kgvi.org/"
@@ -403,7 +405,7 @@
     "website": "mpslsw.gv.zw"
   },
   {
-    "name": "Manicaland Province. Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Manicaland Province. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "7– 5th Street, Mutare",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -459,12 +461,11 @@
     "website": "mpslsw.gv.zw"
   },
   {
-    "name": "Mashonaland Central. Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Mashonaland Central. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "Mutungagore Government Complex, 567 Thurlows Avenue, Bindura, P. O. Box 340 Bindura",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
-      "+02632276992",
-      "+6"
+      "+2632276992"
     ],
     "emails": [
       "zmashcentralprovince@gmail.com"
@@ -472,7 +473,7 @@
     "website": ""
   },
   {
-    "name": "Mashonaland East. Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Mashonaland East. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "Bisset House 4th Street, Box 752, Marondera",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -485,7 +486,7 @@
     "website": ""
   },
   {
-    "name": "Mashonaland West. Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Mashonaland West. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "New Complex Building Ground Floor room 20 . Box  328, Chinhoyi",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -521,7 +522,7 @@
     "website": "mpslsw.gv.zw"
   },
   {
-    "name": "Masvingo Province. Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Masvingo Province. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "Government Offices\n Ministry of Education, Block 3 Room 30\n Near Passport Offices",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -536,14 +537,13 @@
     "address": "DDC Complex /Zimpost Building, Lupane",
     "expertise": "Provision of social protection and assistive technology.",
     "phones": [
-      "+263",
       "+263812856470"
     ],
     "emails": [],
     "website": "mpslsw.gv.zw"
   },
   {
-    "name": "Matebeleland North.Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Matebeleland North. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "Mhlanhandlela Government Complex 10th Avenue and Basch Street 3rd Floor office No 95 Bulawayo",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -556,7 +556,7 @@
     "website": ""
   },
   {
-    "name": "Matebeleland South .Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Matebeleland South. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "Government Complex 2nd floor P. Bag 5824 Gwanda",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -588,7 +588,7 @@
     "website": "mpslsw.gv.zw"
   },
   {
-    "name": "Midlands Province.Learner Welfare , Psychological Services and Special Needs Education.",
+    "name": "Midlands Province. Learner Welfare, Psychological Services and Special Needs Education.",
     "address": "New Government Complex, Block 3 Room 3010th Street  next to Wimpy Box 737, Gweru",
     "expertise": "Psychological assessment, audiological assessments, trainings, referral and support for learners with disabilities and educators. Provision of assistive technology.",
     "phones": [
@@ -628,9 +628,9 @@
     "address": "Postal Address; P.O. Box MP133, Mount Pleasant, Harare • Physical Address: Education Services Centre, Upper East Road, Mount pleasant, Harare",
     "expertise": "Provision of teaching and learning materials for learners with visual impairment. Adaptaion of teachng and learning materials into Braille.",
     "phones": [
-      "+263242333812",
-      "+263332988",
-      "+336042"
+      "0263242333812",
+      "0263242332988",
+      "0263242336042"
     ],
     "emails": [
       "admin@mopse.gov.zw"
@@ -655,9 +655,9 @@
     "address": "Postal Address; P.O. Box MP133, Mount Pleasant, Harare • Physical Address: Education Services Centre, Upper East Road, Mount pleasant, Harare",
     "expertise": "Audiological assessments, provision of hearing aids, Sign Langauge Training. Development of teaching and learning materials for learners with hearing impairment.",
     "phones": [
-      "+263242333812",
-      "+263332988",
-      "+336042"
+      "0263242333812",
+      "0263242332988",
+      "0263242336042"
     ],
     "emails": [
       "admin@mopse.gov.zw"
@@ -715,16 +715,6 @@
       "publicrelations@parihosp.org"
     ],
     "website": "https://parihosp.org"
-  },
-  {
-    "name": "Playing, Talking, Learning",
-    "address": "",
-    "expertise": "A language progress checker used in Zimbabwe. Note that this resource is typically for younger girls, but it is relevant for those who struggle with speech and language at any age.",
-    "phones": [],
-    "emails": [
-      "info@playingtalkinglearning.org"
-    ],
-    "website": "https://playingtalkinglearning.org/product/traffic-light-profile/ - RESOURCE https://playingtalkinglearning.org/ - WEBSITE"
   },
   {
     "name": "Rehabilitation Equipment Wholesalers",
@@ -866,15 +856,16 @@
     "website": "https://www.facebook.com/p/Zimbabwe-Association-of-Audiology-and-Speech-Pathology-61557098333881/ - Facebook page"
   },
   {
-    "name": "Zimbabwe Down Syndrome Association  {ZDSA}",
+    "name": "Zimbabwe Down Syndrome Association {ZDSA}",
     "address": "Cnr 3rd Avenue and Basch Street\nMakokoba\nBulawayo\nZimbabwe",
     "expertise": "Health and education",
     "phones": [
       "+263772673209"
     ],
     "emails": [
-      "bonniemazula@gmail.com or",
-      "zdsabyo@ymail.com / zwdsa21@gmail.com"
+      "bonniemazula@gmail.com",
+      "zdsabyo@ymail.com",
+      "zwdsa21@gmail.com"
     ],
     "website": "https://www.zwdsa.org/"
   },
@@ -893,7 +884,7 @@
     "website": ""
   },
   {
-    "name": "Zimbabwe Parents of Children with Disabilities  Association (ZPCDA) (Formally ZPHCA)",
+    "name": "Zimbabwe Parents of Children with Disabilities Association (ZPCDA) (Formally ZPHCA)",
     "address": "59 Glamorgan Avenue, Harare / 19 Colchester Avenue Avonlea, Harare",
     "expertise": "Parents of children with  disabilities offering psycho-social support and empowerment as well as advocacy for parents of children with disabilities",
     "phones": [
@@ -902,7 +893,8 @@
       "+263717271073"
     ],
     "emails": [
-      "parentszim.org@gmail.com / info@zphca.org.zw",
+      "parentszim.org@gmail.com",
+      "info@zphca.org.zw",
       "Parents90@gmail.com"
     ],
     "website": "https://zphca.org.zw/ - website uses organisations old name"

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ pageTitle }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.28</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.29</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -189,7 +189,7 @@
         <div v-if="pageId === 'working-tensions'">
           <ion-card id="tensions-multiple-needs-2">
             <ion-card-header>
-              <ion-card-title>Learners Do Not Fall Neatly into Single Categories</ion-card-title>
+              <ion-card-title>Learners do not fall neatly into single categories</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <h4><strong>Challenge</strong></h4>
@@ -202,7 +202,7 @@
 
           <ion-card id="tensions-balanced-curriculum-access">
             <ion-card-header>
-              <ion-card-title>Ensuring That Learners with Disabilities Have Access to a Balanced Curriculum</ion-card-title>
+              <ion-card-title>Ensuring that learners with disabilities have access to a balanced curriculum</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <h4><strong>Challenge</strong></h4>
