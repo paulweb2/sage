@@ -25,7 +25,7 @@
       <div id="container">
         <ion-card id="multiple-needs-understanding">
           <ion-card-header>
-            <ion-card-title>Understanding Multiple Needs</ion-card-title>
+            <ion-card-title>Understanding multiple needs</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <p>Learners with multiple learning needs may experience a number of physical and social challenges including sight, hearing, mobility, sensory needs, coordination of speech and language, and speed of doing things.</p>
@@ -82,7 +82,7 @@
         <!-- Understanding Section -->
         <ion-card id="understanding">
           <ion-card-header>
-            <ion-card-title>Understanding the Learner</ion-card-title>
+            <ion-card-title>Understanding the learner</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-segment v-model="selectedUnderstanding" :scrollable="true">
@@ -170,7 +170,7 @@
         <!-- Challenges Section -->
         <ion-card id="challenges">
           <ion-card-header>
-            <ion-card-title>Challenges to Learning</ion-card-title>
+            <ion-card-title>Challenges to learning</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-grid v-if="challenges.physical.length + challenges.social.length + challenges.tasks.length + challenges.assessment.length > 0">
@@ -178,7 +178,7 @@
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title>Physical Environment</ion-card-title>
+                      <ion-card-title>Physical environment</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                       <ion-list>
@@ -193,7 +193,7 @@
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title>Social Environment</ion-card-title>
+                      <ion-card-title>Social environment</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                       <ion-list>
@@ -246,14 +246,14 @@
         <!-- Enabling Section -->
         <ion-card id="enabling">
           <ion-card-header>
-            <ion-card-title>Enabling Learning</ion-card-title>
+            <ion-card-title>Enabling learning</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-accordion-group v-if="enabling.physical.length + enabling.social.length + enabling.tasks.length + enabling.assessment.length > 0">
               <ion-accordion value="md-enable-physical">
                 <ion-item slot="header" color="primary">
                   <ion-icon :icon="home" slot="start" color="primary"></ion-icon>
-                  <ion-label>Physical Environment</ion-label>
+                  <ion-label>Physical environment</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -268,7 +268,7 @@
               <ion-accordion value="md-enable-social">
                 <ion-item slot="header" color="success">
                   <ion-icon :icon="people" slot="start" color="success"></ion-icon>
-                  <ion-label>Social</ion-label>
+                  <ion-label>Social environment</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -317,7 +317,7 @@
         <!-- Resources Section -->
         <ion-card id="resources">
           <ion-card-header>
-            <ion-card-title>Resources to Support Learning</ion-card-title>
+            <ion-card-title>Resources to support learning</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-segment v-model="selectedResourceType" :scrollable="true">
@@ -378,7 +378,7 @@
         <!-- Case Study -->
         <ion-card id="case-study">
           <ion-card-header>
-            <ion-card-title>Case Study</ion-card-title>
+            <ion-card-title>Case study</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <h3 class="case-study-heading">Traditional dance lesson</h3>

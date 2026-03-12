@@ -25,7 +25,7 @@
       <div id="container">
         <ion-card id="hearing-needs-understanding">
           <ion-card-header>
-            <ion-card-title>Understanding Hearing Needs</ion-card-title>
+            <ion-card-title>Understanding hearing needs</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <p>The term hearing needs includes all types of hearing loss and deafness. Deafness can be present from birth (congenital deafness) or acquired later in life. Some learners who are deaf communicate using Zimbabwe Sign Language (ZSL). Others may use a combination of speech, objects, pictures, symbols, gestures, and body language. This is known as a Total Communication approach, in which multiple communication strategies are used to support understanding and expression.</p>
@@ -79,7 +79,7 @@
         <!-- Understanding Section -->
         <ion-card id="understanding">
           <ion-card-header>
-            <ion-card-title>Understanding the Learner</ion-card-title>
+            <ion-card-title>Understanding the learner</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-segment v-model="selectedUnderstanding" :scrollable="true">
@@ -151,7 +151,7 @@
         <!-- Challenges Section -->
         <ion-card id="challenges">
           <ion-card-header>
-            <ion-card-title>Challenges to Learning</ion-card-title>
+            <ion-card-title>Challenges to learning</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-grid>
@@ -159,7 +159,7 @@
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title>Physical Environment</ion-card-title>
+                      <ion-card-title>Physical environment</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                       <ion-list>
@@ -174,7 +174,7 @@
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title>Social Environment</ion-card-title>
+                      <ion-card-title>Social environment</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                       <ion-list>
@@ -226,14 +226,14 @@
         <!-- Enabling Section -->
         <ion-card id="enabling">
           <ion-card-header>
-            <ion-card-title>Enabling Learning</ion-card-title>
+            <ion-card-title>Enabling learning</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-accordion-group>
               <ion-accordion value="hearing-enable-physical">
                 <ion-item slot="header" color="primary">
                   <ion-icon :icon="home" slot="start" color="primary"></ion-icon>
-                  <ion-label>Physical Environment</ion-label>
+                  <ion-label>Physical environment</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -248,7 +248,7 @@
               <ion-accordion value="hearing-enable-social">
                 <ion-item slot="header" color="success">
                   <ion-icon :icon="people" slot="start" color="success"></ion-icon>
-                  <ion-label>Social</ion-label>
+                  <ion-label>Social environment</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                   <ion-list>
@@ -296,7 +296,7 @@
         <!-- Resources Section -->
         <ion-card id="resources">
           <ion-card-header>
-            <ion-card-title>Resources to Support Learning</ion-card-title>
+            <ion-card-title>Resources to support learning</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-segment v-model="selectedResourceType" :scrollable="true">
@@ -354,7 +354,7 @@
         <!-- Case Study -->
         <ion-card id="case-study">
           <ion-card-header>
-            <ion-card-title>Case Study</ion-card-title>
+            <ion-card-title>Case study</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <h3 class="case-study-heading">Working with numbers to 20</h3>

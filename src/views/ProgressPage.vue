@@ -22,7 +22,7 @@
         <ion-card-header>
           <ion-card-title>
             <ion-icon :icon="trophy" slot="start" :color="achievement.color"></ion-icon>
-            Overall Progress
+            Overall progress
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -68,7 +68,7 @@
         <ion-card-header>
           <ion-card-title>
             <ion-icon :icon="analytics" slot="start" color="primary"></ion-icon>
-            Progress Statistics
+            Progress statistics
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -102,7 +102,7 @@
         <ion-card-header>
           <ion-card-title>
             <ion-icon :icon="time" slot="start" color="primary"></ion-icon>
-            Recent Activity
+            Recent activity
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -135,9 +135,9 @@
         <ion-card-header>
           <ion-card-title>
             <ion-icon :icon="list" slot="start" color="primary"></ion-icon>
-            Detailed Progress
+            Detailed progress
           </ion-card-title>
-          <ion-card-subtitle>All Quizzes and Reflections</ion-card-subtitle>
+          <ion-card-subtitle>All quizzes and reflections</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <ion-accordion-group>
@@ -215,7 +215,7 @@
         <ion-card-header>
           <ion-card-title>
             <ion-icon :icon="bulb" slot="start" color="secondary"></ion-icon>
-            Tips to Continue Progress
+            Tips to continue progress
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>

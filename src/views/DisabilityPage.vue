@@ -29,7 +29,7 @@
             <!-- Quiz -->
             <ion-card id="knowledge-check">
               <ion-card-header>
-                <ion-card-title>Communication Quiz</ion-card-title>
+                <ion-card-title>Communication quiz</ion-card-title>
                 <ion-card-subtitle>Test Your Understanding of Communication Disabilities</ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
@@ -258,7 +258,7 @@
                 <div v-if="quizCompleted && quizQuestions.length > 0">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title>Quiz Results</ion-card-title>
+                      <ion-card-title>Quiz results</ion-card-title>
                       <ion-card-subtitle>Your Score: {{ quizScore }}%</ion-card-subtitle>
                     </ion-card-header>
                     <ion-card-content>
@@ -383,7 +383,7 @@
             <div v-if="route.params.id === 'communication'">
               <ion-card id="communication-needs-understanding">
                 <ion-card-header>
-                  <ion-card-title>Understanding Communication Needs</ion-card-title>
+                  <ion-card-title>Understanding communication needs</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                   <p>Communication needs describe how learners interact with others. Learners with communication needs may require the educator to use Augmentative and Alternative Communication (AAC). AAC refers to the use of objects, pictures symbols, charts, signing and electronic devices to support a learner to communicate.</p>
@@ -519,7 +519,7 @@
           <!-- 3. Understanding the Learner -->
         <ion-card id="understanding">
           <ion-card-header>
-              <ion-card-title>Understanding the Learner</ion-card-title>
+              <ion-card-title>Understanding the learner</ion-card-title>
               <ion-card-subtitle>Questions to Support Understanding</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
@@ -593,7 +593,7 @@
           <!-- 4. Challenges to Learning -->
           <ion-card id="challenges">
             <ion-card-header>
-              <ion-card-title>Challenges to Learning</ion-card-title>
+              <ion-card-title>Challenges to learning</ion-card-title>
               <ion-card-subtitle>Common Barriers and Difficulties</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -602,7 +602,7 @@
                   <ion-col size="12" size-md="6">
                     <ion-card>
                       <ion-card-header>
-                        <ion-card-title>Physical Environment</ion-card-title>
+                        <ion-card-title>Physical environment</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
                         <ion-list>
@@ -617,7 +617,7 @@
                   <ion-col size="12" size-md="6">
                     <ion-card>
                       <ion-card-header>
-                        <ion-card-title>Social Environment</ion-card-title>
+                        <ion-card-title>Social environment</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
                         <ion-list>
@@ -669,7 +669,7 @@
           <!-- 5. Enabling Learning -->
           <ion-card id="enabling">
             <ion-card-header>
-              <ion-card-title>Enabling Learning</ion-card-title>
+              <ion-card-title>Enabling learning</ion-card-title>
               <ion-card-subtitle v-if="route.params.id !== 'communication'">Strategies to Support Success</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -677,7 +677,7 @@
                 <ion-accordion value="physical-enabling">
                   <ion-item slot="header" color="primary">
                     <ion-icon :icon="home" slot="start" color="primary"></ion-icon>
-                    <ion-label>Physical Environment</ion-label>
+                    <ion-label>Physical environment</ion-label>
                   </ion-item>
                   <div class="ion-padding" slot="content">
                     <ion-list>
@@ -692,7 +692,7 @@
                 <ion-accordion value="social-enabling">
                   <ion-item slot="header" color="success">
                     <ion-icon :icon="people" slot="start" color="success"></ion-icon>
-                    <ion-label>Social Environment</ion-label>
+                    <ion-label>Social environment</ion-label>
                   </ion-item>
                   <div class="ion-padding" slot="content">
                     <ion-list>
@@ -740,7 +740,7 @@
           <!-- 6. Resources to Support Learning -->
           <ion-card id="resources">
             <ion-card-header>
-              <ion-card-title>Resources to Support Learning</ion-card-title>
+              <ion-card-title>Resources to support learning</ion-card-title>
               <ion-card-subtitle>Key Resources and Organizations</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -817,7 +817,7 @@
           <!-- 7. Case Study -->
           <ion-card id="case-study">
             <ion-card-header>
-              <ion-card-title>Case Study</ion-card-title>
+              <ion-card-title>Case study</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <!-- Custom content for Communication page -->
@@ -1467,7 +1467,7 @@
               <div v-if="quizCompleted">
                 <ion-card>
                   <ion-card-header>
-                    <ion-card-title>Quiz Results</ion-card-title>
+                    <ion-card-title>Quiz results</ion-card-title>
                     <ion-card-subtitle>Your Score: {{ quizScore }}%</ion-card-subtitle>
                   </ion-card-header>
                   <ion-card-content>
