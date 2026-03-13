@@ -2,7 +2,7 @@
   {
     "name": "Able Child",
     "address": "34 Ponton Road, Nine Elms\nLondon SW11 7BA",
-    "expertise": "A charity working with the Zimbabwe Parents of Handicapped Children Association (ZPHCA) to promote the inclusion of children with disabilities in Zimbabwe.",
+    "expertise": "A charity working with the Zimbabwe Parents of Handicapped Children Association (ZPHCA) to promote the inclusion of children with disabilities in Zimbabwe",
     "phones": [
       "+44 (0) 20 7733 6006"
     ],
@@ -26,7 +26,7 @@
   {
     "name": "Deaf Child Worldwide (Subsidiary of NDCS)",
     "address": "",
-    "expertise": "Supports inclusive education in low-resource settings for children with hearing impairments.",
+    "expertise": "Supports inclusive education in low-resource settings for children with hearing impairments",
     "phones": [],
     "emails": [
       "info@deafchildworldwide.org"
@@ -36,7 +36,7 @@
   {
     "name": "Dyscalculia Network",
     "address": "",
-    "expertise": "Resources for educationalists, workforce and communities regarding dyscalculia.",
+    "expertise": "Resources for educationalists, workforce and communities regarding dyscalculia",
     "phones": [],
     "emails": [
       "info@dyscalculianetwork.com"
@@ -46,7 +46,7 @@
   {
     "name": "Dyspraxia UK",
     "address": "Main Office, Summerhouse Farm, Melbourn, Royston, SG8 6DL",
-    "expertise": "A platform providing assessment tools for dyspraxia, while also advising on extensive information about dyspraxia and relevant resources for educators, parents and employers.",
+    "expertise": "A platform providing assessment tools for dyspraxia, while also advising on extensive information about dyspraxia and relevant resources for educators, parents and employers",
     "phones": [
       "+441223 967897"
     ],
@@ -58,7 +58,7 @@
   {
     "name": "International Dyslexia Association",
     "address": "1829 Reisterstown Road Suite 350\nPikesville, MD 21208",
-    "expertise": "International Dyslexia Association offering six months free membership to classroom teachers to access resources.",
+    "expertise": "International Dyslexia Association offering six months free membership to classroom teachers to access resources",
     "phones": [
       "(410) 296-0232",
       "(410) 321-5069 Fax"
@@ -71,7 +71,7 @@
   {
     "name": "Made by Dyslexia",
     "address": "",
-    "expertise": "A platform full of useful printable resources for people with dyslexia.",
+    "expertise": "A platform full of useful printable resources for people with dyslexia",
     "phones": [
       "+447584517772"
     ],
@@ -83,7 +83,7 @@
   {
     "name": "Mencap",
     "address": "",
-    "expertise": "UK organisation supporting people with disabilities; information about person-centred communication and belonging to a local community.",
+    "expertise": "UK organisation supporting people with disabilities; information about person-centred communication and belonging to a local community",
     "phones": [
       "+4420 7454 0454"
     ],
@@ -95,7 +95,7 @@
   {
     "name": "NAC Wellbeing",
     "address": "Oxfordshire, UK",
-    "expertise": "Well-being and mental health support for children and families with profound and multiple learning disability experiences.",
+    "expertise": "Well-being and mental health support for children and families with profound and multiple learning disability experiences",
     "phones": [],
     "emails": [
       "Contact form on website"
@@ -105,7 +105,7 @@
   {
     "name": "National Deaf Children's Society (NDCS)",
     "address": "National Deaf Children's Society\n5th Floor\n167-169 Great Portland Street\nLondon\nW1W 5PF",
-    "expertise": "The National Deaf Children's Society (NDCS) provides educational resources and teacher guidance.",
+    "expertise": "The National Deaf Children's Society (NDCS) provides educational resources and teacher guidance",
     "phones": [],
     "emails": [
       "Contact form on website"
@@ -115,7 +115,7 @@
   {
     "name": "NHS Cambridge Community Services (Speech, Language and Communication)",
     "address": "",
-    "expertise": "Information and advice about various speech and language needs.",
+    "expertise": "Information and advice about various speech and language needs",
     "phones": [
       "+44300 029 50 50 (Call)",
       "+447520 649887 (Text)"
@@ -126,7 +126,7 @@
   {
     "name": "PDNET",
     "address": "",
-    "expertise": "A national network in the UK that provides support to professionals in education who are working to promote positive outcomes for children and young people with physical disabilities.",
+    "expertise": "A national network in the UK that provides support to professionals in education who are working to promote positive outcomes for children and young people with physical disabilities",
     "phones": [],
     "emails": [],
     "website": "https://pdnet.org.uk/"
@@ -134,7 +134,7 @@
   {
     "name": "Perkins School for the Blind",
     "address": "175 North Beacon Street\nWatertown, MA 02472\nUSA",
-    "expertise": "Perkins School for the Blind provides support for educators of students with visual needs.",
+    "expertise": "Perkins School for the Blind provides support for educators of students with visual needs",
     "phones": [
       "+1 135 617-924-3434"
     ],
@@ -146,7 +146,7 @@
   {
     "name": "Scope UK",
     "address": "Scope, Here East Press Centre, 14 East Bay Lane, London E15 2GW",
-    "expertise": "A disability equality charity in England and Wales.",
+    "expertise": "A disability equality charity in England and Wales",
     "phones": [
       "+44808 800 3333"
     ],
@@ -158,7 +158,7 @@
   {
     "name": "Shine Charity",
     "address": "",
-    "expertise": "A charity that supports individuals and families affected by spina bifida, microcephalus and hydrocephalus.",
+    "expertise": "A charity that supports individuals and families affected by spina bifida, microcephalus and hydrocephalus",
     "phones": [
       "+441733 555988"
     ],
@@ -170,7 +170,7 @@
   {
     "name": "The Michael Palin Centre for Stammering",
     "address": "Michael Palin Centre\n13-15 Pine Street\nLondon, EC1R 0JG",
-    "expertise": "A UK NHS team which helps children, young people and adults who stammer through individually tailored therapy delivered by highly experienced specialists.",
+    "expertise": "A UK NHS team which helps children, young people and adults who stammer through individually tailored therapy delivered by highly experienced specialists",
     "phones": [
       "+4420 3316 8100"
     ],
@@ -182,7 +182,7 @@
   {
     "name": "The Sensory Projects",
     "address": "",
-    "expertise": "Examples of sensory stories activities.",
+    "expertise": "Examples of sensory stories activities",
     "phones": [],
     "emails": [
       "sensorystory@gmail.com"
@@ -190,4 +190,3 @@
     "website": "https://www.thesensoryprojects.co.uk/home"
   }
 ]
-
