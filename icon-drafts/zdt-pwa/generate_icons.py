@@ -20,6 +20,7 @@ SOURCE_BAND_RED_TOP = 379
 
 STANDARD_RECT = {"x": 128, "y": 96, "size": 768, "radius": 182}
 MASKABLE_RECT = {"x": 64, "y": 64, "size": 896, "radius": 212}
+APPLE_RECT = {"x": 0, "y": 0, "size": 1024, "radius": 0}
 
 
 def component_bbox(points):
@@ -305,19 +306,25 @@ def main():
     source_geometry = extract_geometry()
     standard_geometry = icon_geometry(source_geometry, STANDARD_RECT)
     maskable_geometry = icon_geometry(source_geometry, MASKABLE_RECT)
+    apple_geometry = icon_geometry(source_geometry, APPLE_RECT)
 
     standard = render_icon(standard_geometry)
     maskable = render_icon(maskable_geometry)
+    apple = render_icon(apple_geometry)
 
     write_master_svg(standard_geometry)
 
     standard.save(OUT_DIR / "preview-1024.png")
     maskable.save(OUT_DIR / "maskable-preview-1024.png")
+    apple.save(OUT_DIR / "apple-preview-1024.png")
 
     export_png(standard, "pwa-192x192.png", 192)
     export_png(standard, "pwa-512x512.png", 512)
     export_png(maskable, "maskable-512x512.png", 512)
-    export_png(standard, "apple-touch-icon.png", 180)
+    export_png(apple, "apple-touch-icon.png", 180)
+    export_png(apple, "apple-touch-icon-152x152.png", 152)
+    export_png(apple, "apple-touch-icon-167x167.png", 167)
+    export_png(apple, "apple-touch-icon-180x180.png", 180)
     export_png(standard, "favicon.png", 64)
 
     standard.save(
