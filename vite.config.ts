@@ -24,9 +24,9 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webmanifest,mp3,mp4,webm,mov,m4v}'],
       },
       manifest: {
-        name: 'SAGE App',
-        short_name: 'SAGE',
-        description: 'SAGE learning and accessibility app',
+        name: 'ZDT',
+        short_name: 'ZDT',
+        description: 'ZDT learning and accessibility app',
         theme_color: '#1f6feb',
         background_color: '#ffffff',
         display: 'standalone',
