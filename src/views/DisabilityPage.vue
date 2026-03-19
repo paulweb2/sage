@@ -902,20 +902,6 @@
                     class="reflection-textarea"
                     @ionInput="autoSaveCaseStudyNote"
                   ></ion-textarea>
-                  <div class="reflection-actions">
-                    <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
-                      <ion-icon :icon="save" slot="start"></ion-icon>
-                      Save
-                    </ion-button>
-                    <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
-                      <ion-icon :icon="download" slot="start"></ion-icon>
-                      Export as TXT
-                    </ion-button>
-                    <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
-                      <ion-icon :icon="trash" slot="start"></ion-icon>
-                      Clear
-                    </ion-button>
-                  </div>
                   <ion-accordion-group>
                     <ion-accordion value="communication-case-study-think">
                       <ion-item slot="header" color="light">
@@ -940,6 +926,20 @@
                       </div>
                     </ion-accordion>
                   </ion-accordion-group>
+                  <div class="reflection-actions">
+                    <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
+                      <ion-icon :icon="save" slot="start"></ion-icon>
+                      Save
+                    </ion-button>
+                    <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
+                      <ion-icon :icon="download" slot="start"></ion-icon>
+                      Export as TXT
+                    </ion-button>
+                    <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
+                      <ion-icon :icon="trash" slot="start"></ion-icon>
+                      Clear
+                    </ion-button>
+                  </div>
                 </div>
               </div>
 
@@ -1227,43 +1227,6 @@
                 <ion-note>{{ Math.round(reflectionProgress * 100) }}% Complete</ion-note>
               </div>
               
-              <!-- Reflection prompts accordion -->
-            <ion-accordion-group>
-              <ion-accordion value="general-prompts">
-                <ion-item slot="header" color="light">
-                  <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
-                  <ion-label>Think about...</ion-label>
-                </ion-item>
-                  <div class="ion-padding" slot="content">
-                    <ion-list>
-                      <ion-item>
-                        <ion-icon :icon="star" slot="start" color="warning"></ion-icon>
-                        <ion-label>What are your student's strengths and how can you build on them?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="people" slot="start" color="secondary"></ion-icon>
-                        <ion-label>How can you involve the student's family and support network?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
-                        <ion-label>What environmental changes would make the biggest difference?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="school" slot="start" color="primary"></ion-icon>
-                        <ion-label>How can you collaborate with other professionals and specialists?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="heart" slot="start" color="danger"></ion-icon>
-                        <ion-label>What would help your student feel more confident and included?</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-icon :icon="checkmark" slot="start" color="success"></ion-icon>
-                        <ion-label>How will you know if your interventions are working?</ion-label>
-                      </ion-item>
-                    </ion-list>
-                  </div>
-                </ion-accordion>
-              </ion-accordion-group>
             </ion-card-content>
           </ion-card>
 

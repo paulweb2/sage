@@ -426,20 +426,6 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveCaseStudyNote"
               ></ion-textarea>
-              <div class="reflection-actions">
-                <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
-                  <ion-icon :icon="save" slot="start"></ion-icon>
-                  Save
-                </ion-button>
-                <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
-                  <ion-icon :icon="download" slot="start"></ion-icon>
-                  Export as TXT
-                </ion-button>
-                <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
-                  <ion-icon :icon="trash" slot="start"></ion-icon>
-                  Clear
-                </ion-button>
-              </div>
               <ion-accordion-group>
                 <ion-accordion value="md-case-study-think">
                   <ion-item slot="header" color="light">
@@ -468,6 +454,20 @@
                   </div>
                 </ion-accordion>
               </ion-accordion-group>
+              <div class="reflection-actions">
+                <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
+                  <ion-icon :icon="save" slot="start"></ion-icon>
+                  Save
+                </ion-button>
+                <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
+                  <ion-icon :icon="download" slot="start"></ion-icon>
+                  Export as TXT
+                </ion-button>
+                <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
+                  <ion-icon :icon="trash" slot="start"></ion-icon>
+                  Clear
+                </ion-button>
+              </div>
             </div>
           </ion-card-content>
         </ion-card>

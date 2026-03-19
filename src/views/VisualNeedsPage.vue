@@ -412,6 +412,30 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveCaseStudyNote"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="visual-general-think">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Did you notice that the learner independently inserted Braille paper into the Perkins machine, identified correct keys, spaced accurately, and constructed sentences in response to the task?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How might speech to text technology be used, so that the learner’s message is accessible beyond only those who can read Braille?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How can the teacher support the learner to proofread and edit his work?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
               <div class="reflection-actions">
                 <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
                   <ion-icon :icon="save" slot="start"></ion-icon>
@@ -426,17 +450,6 @@
                   Clear
                 </ion-button>
               </div>
-              <ul class="case-study-prompts">
-                <li>
-                  Did you notice that the learner independently inserted Braille paper into the Perkins machine,
-                  identified correct keys, spaced accurately, and constructed sentences in response to the task?
-                </li>
-                <li>
-                  How might speech to text technology be used, so that the learner’s message is accessible beyond
-                  only those who can read Braille?
-                </li>
-                <li>How can the teacher support the learner to proofread and edit his work?</li>
-              </ul>
             </div>
           </ion-card-content>
         </ion-card>
@@ -553,30 +566,6 @@
               </ion-button>
             </div>
 
-            <ion-accordion-group>
-              <ion-accordion value="visual-general-think">
-                <ion-item slot="header" color="light">
-                  <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
-                  <ion-label>Think about...</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                  <ion-list>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>Did you notice that the learner independently inserted Braille paper into the Perkins machine, identified correct keys, spaced accurately, and constructed sentences in response to the task?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>How might speech to text technology be used, so that the learner’s message is accessible beyond only those who can read Braille?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>How can the teacher support the learner to proofread and edit his work?</ion-label>
-                    </ion-item>
-                  </ion-list>
-                </div>
-              </ion-accordion>
-            </ion-accordion-group>
           </ion-card-content>
         </ion-card>
 

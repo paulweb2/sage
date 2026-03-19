@@ -414,6 +414,38 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveCaseStudyNote"
               ></ion-textarea>
+              <ion-accordion-group>
+                <ion-accordion value="general-prompts">
+                  <ion-item slot="header" color="light">
+                    <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
+                    <ion-label>Think about...</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-list>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you thought about the table arrangements?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you thought about the position of the teacher or any other adults?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>Have you considered grouping learners who communicate in the same ways or pairing learners with different ways of communicating?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How does the use of games support participation?</ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
+                        <ion-label>How does the use of dice or dominoes support an understanding of number?</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
               <div class="reflection-actions">
                 <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
                   <ion-icon :icon="save" slot="start"></ion-icon>
@@ -428,13 +460,6 @@
                   Clear
                 </ion-button>
               </div>
-              <ul class="case-study-prompts">
-                <li>Have you thought about the table arrangements?</li>
-                <li>Have you thought about the position of the teacher or any other adults?</li>
-                <li>Have you considered grouping learners who communicate in the same ways or pairing learners with different ways of communicating?</li>
-                <li>How does the use of games support participation?</li>
-                <li>How does the use of dice or dominoes support an understanding of number?</li>
-              </ul>
             </div>
           </ion-card-content>
         </ion-card>
@@ -547,38 +572,6 @@
               </ion-button>
             </div>
 
-            <ion-accordion-group>
-              <ion-accordion value="general-prompts">
-                <ion-item slot="header" color="light">
-                  <ion-icon :icon="bulb" slot="start" color="warning"></ion-icon>
-                  <ion-label>Think about...</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                  <ion-list>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>Have you thought about the table arrangements?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>Have you thought about the position of the teacher or any other adults?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>Have you considered grouping learners who communicate in the same ways or pairing learners with different ways of communicating?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>How does the use of games support participation?</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-icon :icon="arrowForward" slot="start" color="primary"></ion-icon>
-                      <ion-label>How does the use of dice or dominoes support an understanding of number?</ion-label>
-                    </ion-item>
-                  </ion-list>
-                </div>
-              </ion-accordion>
-            </ion-accordion-group>
           </ion-card-content>
         </ion-card>
 

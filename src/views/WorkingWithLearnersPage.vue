@@ -267,28 +267,6 @@
               ></ion-textarea>
             </div>
 
-            <div class="reflection-actions">
-              <ion-button expand="block" color="primary" @click="saveReflection">
-                <ion-icon :icon="save" slot="start"></ion-icon>
-                Save Reflection
-              </ion-button>
-
-              <ion-button expand="block" fill="outline" color="secondary" @click="exportReflection">
-                <ion-icon :icon="download" slot="start"></ion-icon>
-                Export as TXT
-              </ion-button>
-
-              <ion-button expand="block" fill="outline" color="warning" @click="clearReflection">
-                <ion-icon :icon="trash" slot="start"></ion-icon>
-                Clear All
-              </ion-button>
-            </div>
-
-            <div class="reflection-progress">
-              <ion-progress-bar :value="progressValue" color="success"></ion-progress-bar>
-              <ion-note>{{ Math.round(progressValue * 100) }}% Complete</ion-note>
-            </div>
-
             <ion-accordion-group>
               <ion-accordion value="general-prompts">
                 <ion-item slot="header" color="light">
@@ -307,7 +285,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-icon :icon="settings" slot="start" color="tertiary"></ion-icon>
-                      <ion-label>What support might OPDs and NGOs be able to offer educators or learners?</ion-label>
+                      <ion-label>What support might Organisations of persons with disabilities (OPDs) and Non-governmental organisations (NGOs) be able to offer educators or learners?</ion-label>
                     </ion-item>
                   </ion-list>
                   <ion-list v-else-if="pageId === 'working-language'">
@@ -367,6 +345,28 @@
                 </div>
               </ion-accordion>
             </ion-accordion-group>
+
+            <div class="reflection-actions">
+              <ion-button expand="block" color="primary" @click="saveReflection">
+                <ion-icon :icon="save" slot="start"></ion-icon>
+                Save Reflection
+              </ion-button>
+
+              <ion-button expand="block" fill="outline" color="secondary" @click="exportReflection">
+                <ion-icon :icon="download" slot="start"></ion-icon>
+                Export as TXT
+              </ion-button>
+
+              <ion-button expand="block" fill="outline" color="warning" @click="clearReflection">
+                <ion-icon :icon="trash" slot="start"></ion-icon>
+                Clear All
+              </ion-button>
+            </div>
+
+            <div class="reflection-progress">
+              <ion-progress-bar :value="progressValue" color="success"></ion-progress-bar>
+              <ion-note>{{ Math.round(progressValue * 100) }}% Complete</ion-note>
+            </div>
           </ion-card-content>
         </ion-card>
 

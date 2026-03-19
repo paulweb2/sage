@@ -379,7 +379,7 @@
             </div>
             <div class="case-study-text">
               <p>
-                Patience is a Grade 6 learner enrolled in a mainstream school with a resource unit that has
+                Patience is enrolled in a mainstream school with a resource unit that has
                 specialised classes for deaf learners. The class consists of 10 learners (three boys, seven
                 girls) who use Zimbabwe Sign Language (ZSL) for communication.
               </p>
@@ -451,20 +451,6 @@
                 class="reflection-textarea"
                 @ionInput="autoSaveCaseStudyNote"
               ></ion-textarea>
-              <div class="reflection-actions">
-                <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
-                  <ion-icon :icon="save" slot="start"></ion-icon>
-                  Save
-                </ion-button>
-                <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
-                  <ion-icon :icon="download" slot="start"></ion-icon>
-                  Export as TXT
-                </ion-button>
-                <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
-                  <ion-icon :icon="trash" slot="start"></ion-icon>
-                  Clear
-                </ion-button>
-              </div>
               <ion-accordion-group>
                 <ion-accordion value="speech-case-study-think">
                   <ion-item slot="header" color="light">
@@ -497,6 +483,20 @@
                   </div>
                 </ion-accordion>
               </ion-accordion-group>
+              <div class="reflection-actions">
+                <ion-button expand="block" color="primary" @click="saveCaseStudyNote">
+                  <ion-icon :icon="save" slot="start"></ion-icon>
+                  Save
+                </ion-button>
+                <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNote">
+                  <ion-icon :icon="download" slot="start"></ion-icon>
+                  Export as TXT
+                </ion-button>
+                <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNote">
+                  <ion-icon :icon="trash" slot="start"></ion-icon>
+                  Clear
+                </ion-button>
+              </div>
             </div>
           </ion-card-content>
         </ion-card>

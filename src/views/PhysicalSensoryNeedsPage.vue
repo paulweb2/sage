@@ -423,20 +423,6 @@
                   class="reflection-textarea"
                   @ionInput="autoSaveCaseStudyNoteCase1"
                 ></ion-textarea>
-                <div class="reflection-actions">
-                  <ion-button expand="block" color="primary" @click="saveCaseStudyNoteCase1">
-                    <ion-icon :icon="save" slot="start"></ion-icon>
-                    Save
-                  </ion-button>
-                  <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNoteCase1">
-                    <ion-icon :icon="download" slot="start"></ion-icon>
-                    Export as TXT
-                  </ion-button>
-                  <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNoteCase1">
-                    <ion-icon :icon="trash" slot="start"></ion-icon>
-                    Clear
-                  </ion-button>
-                </div>
                 <ion-accordion-group>
                   <ion-accordion value="psn-case-study-1-think">
                     <ion-item slot="header" color="light">
@@ -469,6 +455,20 @@
                     </div>
                   </ion-accordion>
                 </ion-accordion-group>
+                <div class="reflection-actions">
+                  <ion-button expand="block" color="primary" @click="saveCaseStudyNoteCase1">
+                    <ion-icon :icon="save" slot="start"></ion-icon>
+                    Save
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNoteCase1">
+                    <ion-icon :icon="download" slot="start"></ion-icon>
+                    Export as TXT
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNoteCase1">
+                    <ion-icon :icon="trash" slot="start"></ion-icon>
+                    Clear
+                  </ion-button>
+                </div>
               </div>
             </div>
 
@@ -511,20 +511,6 @@
                   class="reflection-textarea"
                   @ionInput="autoSaveCaseStudyNoteCase2"
                 ></ion-textarea>
-                <div class="reflection-actions">
-                  <ion-button expand="block" color="primary" @click="saveCaseStudyNoteCase2">
-                    <ion-icon :icon="save" slot="start"></ion-icon>
-                    Save
-                  </ion-button>
-                  <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNoteCase2">
-                    <ion-icon :icon="download" slot="start"></ion-icon>
-                    Export as TXT
-                  </ion-button>
-                  <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNoteCase2">
-                    <ion-icon :icon="trash" slot="start"></ion-icon>
-                    Clear
-                  </ion-button>
-                </div>
                 <ion-accordion-group>
                   <ion-accordion value="psn-case-study-2-think">
                     <ion-item slot="header" color="light">
@@ -553,6 +539,20 @@
                     </div>
                   </ion-accordion>
                 </ion-accordion-group>
+                <div class="reflection-actions">
+                  <ion-button expand="block" color="primary" @click="saveCaseStudyNoteCase2">
+                    <ion-icon :icon="save" slot="start"></ion-icon>
+                    Save
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="secondary" @click="exportCaseStudyNoteCase2">
+                    <ion-icon :icon="download" slot="start"></ion-icon>
+                    Export as TXT
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" color="warning" @click="clearCaseStudyNoteCase2">
+                    <ion-icon :icon="trash" slot="start"></ion-icon>
+                    Clear
+                  </ion-button>
+                </div>
               </div>
             </div>
           </ion-card-content>

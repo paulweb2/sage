@@ -349,18 +349,6 @@
                 ></ion-textarea>
               </div>
 
-              <div class="reflection-actions">
-                <ion-button expand="block" color="primary" @click="saveSignpostingReflection">
-                  <ion-icon :icon="save" slot="start"></ion-icon>
-                  Save Reflection
-                </ion-button>
-
-                <ion-button expand="block" fill="outline" color="warning" @click="clearSignpostingReflection">
-                  <ion-icon :icon="trash" slot="start"></ion-icon>
-                  Clear All
-                </ion-button>
-              </div>
-
               <ion-accordion-group>
                 <ion-accordion value="signposting-think">
                   <ion-item slot="header" color="light">
@@ -381,6 +369,18 @@
                   </div>
                 </ion-accordion>
               </ion-accordion-group>
+
+              <div class="reflection-actions">
+                <ion-button expand="block" color="primary" @click="saveSignpostingReflection">
+                  <ion-icon :icon="save" slot="start"></ion-icon>
+                  Save Reflection
+                </ion-button>
+
+                <ion-button expand="block" fill="outline" color="warning" @click="clearSignpostingReflection">
+                  <ion-icon :icon="trash" slot="start"></ion-icon>
+                  Clear All
+                </ion-button>
+              </div>
             </ion-card-content>
           </ion-card>
 
