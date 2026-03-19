@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.30</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.31</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -31,7 +31,7 @@
               <img src="/sage-logo.svg" alt="" class="home-mobile-logo-img home-mobile-logo-img--primary" />
             </div>
             <div class="home-mobile-logo-text">
-              Zimbabwe Disability<br />Toolkit
+              Zimbabwe Disability Toolkit
             </div>
           </div>
 
@@ -1728,40 +1728,22 @@ ion-badge {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 520px) {
   .home-mobile-logo {
     align-items: center;
-    gap: 10px;
   }
 
   .home-mobile-logo-images {
+    flex-direction: row;
+    align-items: center;
     gap: 8px;
   }
 
-  .home-mobile-logo-img--primary {
-    width: 56px;
-    height: 56px;
-  }
-
-  .home-mobile-logo-img--secondary {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-  }
-
   .home-mobile-logo-text {
-    font-size: 1.18rem;
-  }
-}
-
-@media (max-width: 420px) {
-  .home-mobile-logo {
-    flex-wrap: wrap;
-  }
-
-  .home-mobile-logo-images {
-    width: 100%;
-    justify-content: flex-start;
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 }
 
