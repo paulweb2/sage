@@ -4377,10 +4377,10 @@ ion-spinner {
 /* Reflective Writing Styles */
 .reflection-section {
   margin-bottom: 24px;
-  padding: 16px;
-  background: rgba(var(--ion-color-light-rgb), 0.3);
-  border-radius: 8px;
-  border-left: 4px solid var(--ion-color-primary);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border-left: none;
 }
 
 .reflection-section h4 {
