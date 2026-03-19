@@ -26,7 +26,10 @@
         <!-- Home Page -->
         <div v-if="route.params.id === 'Home'">
           <div class="home-mobile-logo">
-            <img src="/sage-logo.svg" alt="SAGE logo" class="home-mobile-logo-img" />
+            <div class="home-mobile-logo-images" aria-hidden="true">
+              <img src="/apple-touch-icon.png" alt="" class="home-mobile-logo-img home-mobile-logo-img--secondary" />
+              <img src="/sage-logo.svg" alt="" class="home-mobile-logo-img home-mobile-logo-img--primary" />
+            </div>
             <div class="home-mobile-logo-text">
               Zimbabwe Disability<br />Toolkit
             </div>
@@ -1681,7 +1684,7 @@ ion-badge {
   .home-mobile-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     margin: 16px;
     padding: 12px 16px;
     border-radius: 12px;
@@ -1689,12 +1692,30 @@ ion-badge {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   }
 
-  .home-mobile-logo-img {
-    width: 72px;
-    height: 72px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  .home-mobile-logo-images {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     flex-shrink: 0;
+    min-width: 0;
+  }
+
+  .home-mobile-logo-img {
+    display: block;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .home-mobile-logo-img--primary {
+    width: 68px;
+    height: 68px;
+  }
+
+  .home-mobile-logo-img--secondary {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   .home-mobile-logo-text {
@@ -1702,6 +1723,45 @@ ion-badge {
     font-weight: 700;
     line-height: 1.2;
     color: var(--ion-text-color, #1e1e1e);
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-mobile-logo {
+    align-items: center;
+    gap: 10px;
+  }
+
+  .home-mobile-logo-images {
+    gap: 8px;
+  }
+
+  .home-mobile-logo-img--primary {
+    width: 56px;
+    height: 56px;
+  }
+
+  .home-mobile-logo-img--secondary {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+  }
+
+  .home-mobile-logo-text {
+    font-size: 1.18rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-mobile-logo {
+    flex-wrap: wrap;
+  }
+
+  .home-mobile-logo-images {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 

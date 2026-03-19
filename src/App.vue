@@ -15,7 +15,10 @@
         <ion-content>
           <ion-list id="inbox-list">
             <div class="sage-logo-wrapper">
-              <img src="/sage-logo.svg" alt="SAGE logo" class="sage-logo-img" />
+              <div class="brand-image-stack" aria-hidden="true">
+                <img src="/apple-touch-icon.png" alt="" class="sage-logo-img sage-logo-img--secondary" />
+                <img src="/sage-logo.svg" alt="" class="sage-logo-img sage-logo-img--primary" />
+              </div>
               <div class="sage-logo-text">Zimbabwe Disability<br>Toolkit</div>
             </div>
             <ion-menu-toggle :auto-hide="false" v-if="topHome">
@@ -829,17 +832,37 @@ ion-item.selected {
   justify-content: flex-start;
   align-items: center;
   padding: 0 8px 16px 8px;
-  gap: 12px;
+  gap: 14px;
 }
-.sage-logo-img {
+.brand-image-stack {
   width: 96px;
   height: 96px;
-  display: block;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  background: transparent;
-  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
+}
+.sage-logo-img {
+  display: block;
+  object-fit: contain;
+  background: transparent;
+}
+.sage-logo-img--primary {
+  width: 88px;
+  height: 48px;
+}
+.sage-logo-img--secondary {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.sage-logo-img--primary,
+.sage-logo-img--secondary {
+  display: block;
+  margin-top: 0;
 }
 .sage-logo-text {
   font-size: 24px;
@@ -853,6 +876,32 @@ ion-item.selected {
   word-break: break-word;
   text-align: left;
   max-width: 220px;
+}
+@media (max-width: 480px) {
+  .sage-logo-wrapper {
+    gap: 12px;
+  }
+
+  .brand-image-stack {
+    width: 84px;
+    height: 88px;
+    gap: 7px;
+  }
+
+  .sage-logo-img--primary {
+    width: 76px;
+    height: 42px;
+  }
+
+  .sage-logo-img--secondary {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sage-logo-text {
+    font-size: 22px;
+    max-width: 180px;
+  }
 }
 .menu-divider {
   height: 1px;
