@@ -24,11 +24,11 @@
       <ul class="needs-list">
         <li>Visual needs</li>
         <li>Hearing needs</li>
-        <li>Communication needs</li>
-        <li>Speech needs</li>
-        <li>Cognitive needs</li>
-        <li>Multiple needs</li>
         <li>Physical needs</li>
+        <li>Cognitive needs</li>
+        <li>Speech and language needs</li>
+        <li>Communication needs</li>
+        <li>Multiple learning needs</li>
       </ul>
 
       <div class="date-section">
@@ -37,18 +37,24 @@
 
       <div class="signature-row">
         <div class="signature-box">
-          <div class="signature-placeholder"></div>
-          <div class="signature-caption">Permanent Secretary</div>
-        </div>
-        <div class="signature-box">
           <div class="signature-placeholder signature-with-image">
             <img src="/cbm_signature.png" alt="Signature of a CBM representative." />
           </div>
-          <div class="signature-caption">CBM</div>
+          <div class="signature-caption signature-caption-cbm">
+            <span>Greaterman Chivandire</span>
+            <span>Country Director</span>
+            <span>Christian Blind Mission Global Disability Inclusion Zimbabwe</span>
+          </div>
         </div>
         <div class="signature-box">
-          <div class="signature-placeholder"></div>
-          <div class="signature-caption">The Open University</div>
+          <div class="signature-placeholder signature-with-image">
+            <img src="/ou_signature.png" alt="Signature of an Open University representative." />
+          </div>
+          <div class="signature-caption signature-caption-cbm">
+            <span>Dr. Clare Tope</span>
+            <span>Lecturer in Education</span>
+            <span>The Open University, UK</span>
+          </div>
         </div>
       </div>
 
@@ -72,8 +78,11 @@ const printCertificate = () => {
   if (!certificateRef.value) return;
   const printContents = certificateRef.value.innerHTML;
   const originalContents = document.body.innerHTML;
+  const originalTitle = document.title;
   document.body.innerHTML = printContents;
+  document.title = 'zdt_certificate';
   window.print();
+  document.title = originalTitle;
   document.body.innerHTML = originalContents;
   window.location.reload();
 };
@@ -93,7 +102,7 @@ defineExpose({ printCertificate });
 
 .certificate-sheet {
   background: #fff;
-  padding: 48px 56px 40px;
+  padding: 40px 56px 64px;
   border: 6px solid #d4d4d4;
   max-width: 900px;
   width: 100%;
@@ -171,7 +180,7 @@ defineExpose({ printCertificate });
 .needs-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 32px;
+  margin: 0 0 20px;
   font-size: 1rem;
   color: #444;
 }
@@ -184,27 +193,27 @@ defineExpose({ printCertificate });
   font-family: 'Playfair Display', 'Times New Roman', serif;
   font-size: 1.3rem;
   color: #1f2933;
-  margin: 24px 0 36px;
+  margin: 16px 0 20px;
 }
 
 .signature-row {
   display: flex;
-  justify-content: space-between;
-  gap: 32px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .signature-box {
-  flex: 1;
-  min-width: 200px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .signature-placeholder {
   border: 2px solid #c1c1c1;
   height: 80px;
-  margin-bottom: 12px;
+  width: 220px;
+  flex-shrink: 0;
 }
 
 .signature-with-image {
@@ -225,24 +234,72 @@ defineExpose({ printCertificate });
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #555;
+  text-align: left;
+}
+
+.signature-caption-cbm {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.84rem;
+  line-height: 1.2;
+  max-width: 360px;
+}
+
+.signature-caption-cbm span {
+  display: block;
 }
 
 .footer-banner {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 8px;
+  position: relative;
+  top: 24px;
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
   body {
     background: #fff !important;
   }
   .certificate-container {
     background: #fff !important;
     padding: 0 !important;
+    align-items: flex-start;
   }
   .certificate-sheet {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: auto !important;
+    box-sizing: border-box;
+    padding: 18px 40px 42px !important;
+    font-size: 92%;
     box-shadow: none !important;
-    border-color: #c3c3c3;
+    border: 6px solid #c3c3c3 !important;
+    overflow: hidden;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .footer-banner {
+    margin-top: 0 !important;
+    top: 18px;
+  }
+
+  .needs-list {
+    margin-bottom: 12px !important;
+  }
+
+  .date-section {
+    margin: 10px 0 14px !important;
+  }
+
+  .signature-row {
+    gap: 8px !important;
+    margin-bottom: 10px !important;
   }
 }
 </style>
