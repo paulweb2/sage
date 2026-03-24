@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ pageTitle }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.32</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.34</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -196,7 +196,7 @@
               <p>Each learner with a disability is unique; some may have multiple needs, while others may face challenges that are not always visible. For example, a learner could be both deaf and have a cognitive learning difficulty, and they may also come from a disadvantaged background.</p>
               <h4><strong>Enabler</strong></h4>
               <p>This means educators cannot rely on “one-size-fits-all” approaches. Instead, they need flexible methods that respond to individual differences. To do this, the educator should work with the learner to identify their individual strengths, needs and preferred ways of learning. For each disability, this toolkit includes a set of questions and prompts for educators to use. The questions will support educators to find out about learners’ strengths, challenges and their preferred ways of working.</p>
-              <p>Where appropriate, the educator should support the learner to develop the skills to self-advocate. Prompts for learners to consider have been included to support the learning in expressing their own needs. These prompts can be found under the heading advocacy.</p>
+              <p>Where appropriate, the educator should support the learner to develop the skills to self-advocate. Prompts for learners to consider have been included to support learners in expressing their own needs. These prompts can be found under the heading advocacy.</p>
             </ion-card-content>
           </ion-card>
 

@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.32</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.34</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -111,7 +111,7 @@
               <ion-card-title>Certificate of Participation</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <p>Educators who choose to use the toolkit as a professional learning resource should complete all of the tasks and quizzes in order to receive a certificate of participation which recognises their engagement with the learning and resources in this toolkit.</p>
+              <p>Educators who choose to use the toolkit as a professional learning resource should complete all of the tasks and quizzes in order to receive a certificate of participation which recognises their engagement with the learning and resources in this toolkit. <strong>You need to score 60% in each quiz and complete all the reflective tasks to be able to download and print out your certificate.</strong></p>
             </ion-card-content>
           </ion-card>
 
@@ -253,7 +253,7 @@
             <ion-card-content>
               <p>Learners with disabilities are not all the same; they have different strengths and challenges. Because of this diversity, educators need simple but reliable ways to identify learners who may require extra support.</p>
               <p>One recognised tool is the Washington Group Short Set of Questions (WGSSQ). These six questions are used worldwide to screen learners for possible difficulties in seeing, hearing, walking, remembering, communicating and self-care. The results can guide teachers in referring learners for further assessment by specialists such as doctors, psychologists or therapists, and/or in putting in place a strategy to support the learner in the classroom.</p>
-              <p>There is an interactive version of the six questions in the toolkit — the Signposting Tool — which points you in the direction of specialist support, organisations that might be of assistance and aspects of the toolkit that will be of use.</p>
+              <p>An interactive version of the six questions called the Signposting Tool, points you in the direction of specialist support from the Ministry of Primary and Secondary Education, specialist support organisations and aspects of the toolkit that will be of use.</p>
             </ion-card-content>
           </ion-card>
 

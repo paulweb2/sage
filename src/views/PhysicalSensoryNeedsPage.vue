@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Physical needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.32</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.34</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -28,7 +28,7 @@
             <ion-card-title>Understanding physical needs</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <p>Physical needs is an umbrella term covering a range of conditions and impairments; each individual will have unique needs arising from their disability. The impact may range from mild to severe and affect their ability to take part in activities in the same way as others.</p>
+            <p>Physical needs or physical difficulties ( PD) is an umbrella term covering a range of conditions and impairments; each individual will have unique needs arising from their disability. The impact may range from mild to severe and affect their ability to take part in activities in the same way as others.</p>
           </ion-card-content>
         </ion-card>
 

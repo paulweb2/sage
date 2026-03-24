@@ -19,7 +19,7 @@
                 <img src="/apple-touch-icon.png" alt="" class="sage-logo-img sage-logo-img--secondary" />
                 <img src="/sage-logo.svg" alt="" class="sage-logo-img sage-logo-img--primary" />
               </div>
-              <div class="sage-logo-text">Zimbabwe Disability<br>Toolkit</div>
+              <div class="sage-logo-text">Zimbabwe<br>Disability<br>Toolkit</div>
             </div>
             <ion-menu-toggle :auto-hide="false" v-if="topHome">
               <ion-item @click="setActivePage('top', topHome.index)" router-direction="root" :router-link="topHome.page.url" lines="none" :detail="false" class="hydrated" :class="{ selected: activeSection === 'top' && activeIndex === topHome.index }">
@@ -833,6 +833,7 @@ ion-item.selected {
   align-items: center;
   padding: 0 8px 16px 8px;
   gap: 14px;
+  container-type: inline-size;
 }
 .brand-image-stack {
   width: 96px;
@@ -872,11 +873,56 @@ ion-item.selected {
   font-family: var(--ion-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol');
   color: var(--ion-text-color, #1e1e1e);
   white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
   text-align: left;
   max-width: 220px;
 }
+
+@container (min-width: 300px) {
+  .brand-image-stack {
+    width: auto;
+    height: auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 13px;
+  }
+
+  .sage-logo-img--primary {
+    width: 108px;
+    height: 60px;
+  }
+
+  .sage-logo-img--secondary {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+  }
+
+  .sage-logo-text {
+    max-width: 190px;
+  }
+}
+
+@container (min-width: 350px) {
+  .brand-image-stack {
+    gap: 16px;
+  }
+
+  .sage-logo-img--primary {
+    width: 120px;
+    height: 66px;
+  }
+
+  .sage-logo-img--secondary {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+  }
+}
+
 @media (max-width: 480px) {
   .sage-logo-wrapper {
     gap: 12px;

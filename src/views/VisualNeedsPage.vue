@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>Visual needs</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.32</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.34</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>

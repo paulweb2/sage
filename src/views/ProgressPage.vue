@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>My certificate of participation</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.32</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.34</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -242,6 +242,15 @@
               </ion-label>
             </ion-item>
           </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card v-if="!certificateStatus.isUnlocked">
+        <ion-card-header>
+          <ion-card-title>Certificate of participation</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>The certificate is available to download and print if you complete all of the quizzes and reflection tasks. <strong>You need to score 60% in each quiz to achieve your certificate.</strong></p>
         </ion-card-content>
       </ion-card>
       </div>
