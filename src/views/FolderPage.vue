@@ -134,7 +134,7 @@
               <ion-card-title>Acknowledgments</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <p>With thanks to all authors, partners and schools who took part in the creation and testing of this toolkit</p>
+              <p>With thanks to all authors, partners and schools who took part in the creation and testing of this toolkit.</p>
             </ion-card-content>
           </ion-card>
 

@@ -933,7 +933,7 @@ const caseStudyImages = [
 ];
 
 const wordsToUse = [
-  { term: 'D/deaf', explanation: 'Refers to the condition of profound or complete hearing loss; lower or upper case D/d can be used. Check with the learner for their preference.' },
+  { term: 'Deaf', explanation: 'Refers to the condition of profound or complete hearing loss; lower or upper case D/d can be used. Check with the learner for their preference.' },
   { term: 'Hearing impairment / hearing loss', explanation: 'These terms are also used. Again, check with the learner for their preference.' },
   { term: 'Non-verbal', explanation: 'Should only be used if the person does not use speech. Learners may communicate in different ways, for example, sign language and gestures.' },
   { term: 'Person-first language', explanation: "For example, 'person with hearing loss', 'a person who uses sign language'." }
@@ -1269,7 +1269,7 @@ const questions = ref<HearingQuestion[]>([
   {
     question: "What is an example of respectful language to use when describing a learner who has hearing needs?",
     options: [
-      { value: 'a', text: 'D/deaf or has hearing loss' },
+      { value: 'a', text: 'Deaf or has hearing loss' },
       { value: 'b', text: 'Deaf and dumb' },
       { value: 'c', text: 'Handicapped' }
     ],
@@ -1622,7 +1622,7 @@ const questionHints: string[] = [
 const questionExplanations: string[] = [
   `The term 'Deaf and dumb' is offensive and outdated. It incorrectly suggests that people with hearing loss cannot communicate or think clearly.
 
-"D/deaf or has hearing loss" is the correct answer because it uses respectful, inclusive language that focuses on the person first and avoids offensive or outdated terms. Terms like 'Deaf and dumb' and 'Handicapped' are considered offensive and perpetuate harmful stereotypes.
+"Deaf or has hearing loss" is the correct answer because it uses respectful, inclusive language that focuses on the person first and avoids offensive or outdated terms. Terms like 'Deaf and dumb' and 'Handicapped' are considered offensive and perpetuate harmful stereotypes.
 
 Using respectful, person-first language supports inclusive practice for hearing needs.`,
   `I. True - Low lighting affects visual communication which is crucial for learners with hearing needs. 

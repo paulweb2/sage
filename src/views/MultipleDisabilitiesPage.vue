@@ -1226,7 +1226,7 @@ const questions = ref<MultipleDisabilitiesQuestion[]>([
     correctAnswers: ['a', 'c', 'd']
   },
   {
-    question: 'Select the correct word to complete each sentence. You have three words to choose from; touch hear, observation, times.',
+    question: 'Select the correct word to complete each sentence. You have four words to choose from: touch, hear, observation, times.',
     type: 'fill-in-blank',
     instructions: 'Click on the arrow to select your answer.',
     sentences: [
