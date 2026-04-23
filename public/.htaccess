@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /candc/zimbabwe_disability_toolkit/
+
+# Serve existing files/directories without rewriting.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# SPA fallback for history routing.
+RewriteRule ^ index.html [L]

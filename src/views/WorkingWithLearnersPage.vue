@@ -56,7 +56,7 @@
                       <ion-card-header class="partner-card-header">
                         <div class="partner-badge">
                           <img
-                            src="/family_1996677.png"
+                            :src="withBase('family_1996677.png')"
                             alt=""
                             aria-hidden="true"
                             class="partner-badge-image"
@@ -415,6 +415,8 @@ import { toastController } from '@ionic/vue';
 import { save, download, trash, bulb, star, people, settings, school, heart, checkmark, ellipsisVertical, business, close } from 'ionicons/icons';
 
 const route = useRoute();
+const base = (import.meta as any).env?.BASE_URL || '/';
+const withBase = (assetPath: string) => `${base}${assetPath.replace(/^\/+/, '')}`;
 const pageId = computed(() => (route.params.id as string) || 'working-partnership');
 
 const pageTitle = computed(() => {

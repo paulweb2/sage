@@ -388,7 +388,7 @@
                 ref="multipleDisabilitiesPlayer"
                 type="video"
                 subtitle="Learners responding to live music in the classroom"
-                src="https://storage.googleapis.com/pwebtech.appspot.com/media/MVI_7696_blur_even_lower_quality.mp4"
+                :src="withBase('MVI_7696_blur_even_lower_quality.mp4')"
                 :duration="120"
               >
               </MediaPlayer>
@@ -852,6 +852,8 @@ import { ensureSentenceEnding } from '@/utils/text';
 const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
+const base = (import.meta as any).env?.BASE_URL || '/';
+const withBase = (assetPath: string) => `${base}${assetPath.replace(/^\/+/, '')}`;
 
 const multipleDisabilitiesPlayer = ref<any>(null);
 

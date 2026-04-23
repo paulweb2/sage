@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
+    "build:client-php": "VITE_BASE_PATH=/candc/zimbabwe_disability_toolkit/ npm run build",
+    "build:appengine": "VITE_BASE_PATH=/sage/ npm run build",
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",

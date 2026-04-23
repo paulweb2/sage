@@ -27,8 +27,8 @@
         <div v-if="route.params.id === 'Home'">
           <div class="home-mobile-logo">
             <div class="home-mobile-logo-images" aria-hidden="true">
-              <img src="/apple-touch-icon.png" alt="" class="home-mobile-logo-img home-mobile-logo-img--secondary" />
-              <img src="/sage-logo.svg" alt="" class="home-mobile-logo-img home-mobile-logo-img--primary" />
+              <img :src="withBase('apple-touch-icon.png')" alt="" class="home-mobile-logo-img home-mobile-logo-img--secondary" />
+              <img :src="withBase('sage-logo.svg')" alt="" class="home-mobile-logo-img home-mobile-logo-img--primary" />
             </div>
             <div class="home-mobile-logo-text">
               Zimbabwe Disability Toolkit
@@ -37,7 +37,7 @@
 
           <!-- SAGE Cover Illustration -->
           <div class="sage-cover-illustration-wrapper">
-            <img src="/Letwin_Gwambura_Danda.jpg" alt="Illustration of learners studying together in a classroom, including a learner using a wheelchair." class="sage-cover-illustration" />
+            <img :src="withBase('Letwin_Gwambura_Danda.jpg')" alt="Illustration of learners studying together in a classroom, including a learner using a wheelchair." class="sage-cover-illustration" />
           </div>
 
           <ion-card>
@@ -118,7 +118,7 @@
           <ion-card>
             <ion-card-content>
               <div class="partners-strip single" role="img" aria-label="Programme sponsors and partners">
-                <img src="/sage_logo_strip.png" alt="Logos of SAGE and partner organisations." class="partners-strip-img" />
+                <img :src="withBase('sage_logo_strip.png')" alt="Logos of SAGE and partner organisations." class="partners-strip-img" />
               </div>
               <p>
                 SAGE (Supporting Adolescent Girls' Education) is a UK Aid-funded programme through the UK's Foreign,
@@ -683,6 +683,8 @@ import worldwideContactsData from '@/data/worldwideContacts.json';
 
 const route = useRoute();
 const router = useRouter();
+const base = (import.meta as any).env?.BASE_URL || '/';
+const withBase = (assetPath: string) => `${base}${assetPath.replace(/^\/+/, '')}`;
 
 type ContactRecord = {
   name: string;
@@ -1276,7 +1278,7 @@ type ScreeningQuestion = {
 };
 
 const contactDetailsNote =
-  '<p>Contact details for each of the organisations can be found in the <a href="/folder/Contacts">Contacts section</a>. The list is alphabetical to help you find each organisation.</p>';
+  `<p>Contact details for each of the organisations can be found in the <a href="${base}folder/Contacts">Contacts section</a>. The list is alphabetical to help you find each organisation.</p>`;
 
 const screeningQuestions = vueRef<ScreeningQuestion[]>([
   {

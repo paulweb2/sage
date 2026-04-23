@@ -1,7 +1,7 @@
 <template>
   <div class="certificate-container" ref="certificateRef">
     <div class="certificate-sheet">
-      <img src="/sage-logo.svg" alt="SAGE logo" class="certificate-logo" />
+      <img :src="withBase('sage-logo.svg')" alt="SAGE logo" class="certificate-logo" />
 
       <div class="title-block">
         <p class="title-prefix">
@@ -38,7 +38,7 @@
       <div class="signature-row">
         <div class="signature-box">
           <div class="signature-placeholder signature-with-image">
-            <img src="/cbm_signature.png" alt="Signature of a CBM representative." />
+            <img :src="withBase('cbm_signature.png')" alt="Signature of a CBM representative." />
           </div>
           <div class="signature-caption signature-caption-cbm">
             <span>Greaterman Chivandire</span>
@@ -48,7 +48,7 @@
         </div>
         <div class="signature-box">
           <div class="signature-placeholder signature-with-image">
-            <img src="/ou_signature.png" alt="Signature of an Open University representative." />
+            <img :src="withBase('ou_signature.png')" alt="Signature of an Open University representative." />
           </div>
           <div class="signature-caption signature-caption-cbm">
             <span>Dr. Clare Tope</span>
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <img src="/sage_logo_strip.png" alt="Logos of SAGE and partner organisations." class="footer-banner" />
+      <img :src="withBase('sage_logo_strip.png')" alt="Logos of SAGE and partner organisations." class="footer-banner" />
     </div>
   </div>
 </template>
@@ -70,6 +70,8 @@ const props = defineProps<{
   completionDate: string;
   recipientName?: string;
 }>();
+const base = (import.meta as any).env?.BASE_URL || '/';
+const withBase = (assetPath: string) => `${base}${assetPath.replace(/^\/+/, '')}`;
 
 const displayedName = computed(() => props.recipientName?.trim() || '[Your Name]');
 const certificateRef = ref<HTMLElement | null>(null);

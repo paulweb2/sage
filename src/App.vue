@@ -16,8 +16,8 @@
           <ion-list id="inbox-list">
             <div class="sage-logo-wrapper">
               <div class="brand-image-stack" aria-hidden="true">
-                <img src="/apple-touch-icon.png" alt="" class="sage-logo-img sage-logo-img--secondary" />
-                <img src="/sage-logo.svg" alt="" class="sage-logo-img sage-logo-img--primary" />
+                <img :src="withBase('apple-touch-icon.png')" alt="" class="sage-logo-img sage-logo-img--secondary" />
+                <img :src="withBase('sage-logo.svg')" alt="" class="sage-logo-img sage-logo-img--primary" />
               </div>
               <div class="sage-logo-text">Zimbabwe<br>Disability<br>Toolkit</div>
             </div>
@@ -204,6 +204,8 @@ import {
 
 const route = useRoute();
 const router = useRouter();
+const base = (import.meta as any).env?.BASE_URL || '/';
+const withBase = (assetPath: string) => `${base}${assetPath.replace(/^\/+/, '')}`;
 type OfflineCacheStatus = {
   fullyOffline: boolean
   omittedVideos: string[]
@@ -326,7 +328,7 @@ const disabilityCategories = ref([
   {
     title: 'Cognitive needs',
     icon: bulbOutline,
-    imageSrc: '/brain_1491214.png',
+    imageSrc: withBase('brain_1491214.png'),
     expanded: false,
     url: '/needs/cognitive-intellectual',
     subItems: createDisabilitySubItems()

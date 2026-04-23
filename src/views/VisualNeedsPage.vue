@@ -375,7 +375,7 @@
                 ref="visualCaseStudyPlayer"
                 type="video"
                 subtitle="Learner composing and reading his own work"
-                src="https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE%207638_7632_even_lower_quality.mp4"
+                :src="withBase('SAGE%207638_7632_even_lower_quality.mp4')"
                 :duration="120"
               >
               </MediaPlayer>
@@ -849,6 +849,8 @@ import MediaPlayer from '../components/MediaPlayer.vue';
 const route = useRoute();
 const selectedUnderstanding = ref('strengths');
 const selectedResourceType = ref('electronic');
+const base = (import.meta as any).env?.BASE_URL || '/';
+const withBase = (assetPath: string) => `${base}${assetPath.replace(/^\/+/, '')}`;
 
 const visualCaseStudyPlayer = ref<any>(null);
 

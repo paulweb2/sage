@@ -26,10 +26,8 @@ declare let self: ServiceWorkerGlobalScope & {
 }
 
 const VIDEO_EXTENSION_PATTERN = /\.(mp4|webm|mov|m4v)(\?.*)?$/i
-const REMOTE_VIDEO_URLS = [
-  'https://storage.googleapis.com/pwebtech.appspot.com/media/SAGE%207638_7632_even_lower_quality.mp4',
-  'https://storage.googleapis.com/pwebtech.appspot.com/media/MVI_7696_blur_even_lower_quality.mp4',
-]
+const SCOPE_PATH = new URL(self.registration.scope).pathname
+const NORMALIZED_SCOPE_PATH = SCOPE_PATH.endsWith('/') ? SCOPE_PATH : `${SCOPE_PATH}/`
 const STATUS_CACHE_NAME = 'sage-offline-meta-v1'
 const STATUS_CACHE_KEY = '/offline-cache-status.json'
 const VIDEO_CACHE_NAME = 'sage-video-cache-v1'
@@ -151,7 +149,7 @@ self.addEventListener('message', (event) => {
 
 async function cacheVideosWithQuotaFallback(): Promise<void> {
   const localVideoUrls = videoManifestEntries.map((entry) => toAbsoluteUrl(entry.url))
-  const requestedVideos = dedupeUrls([...localVideoUrls, ...REMOTE_VIDEO_URLS])
+  const requestedVideos = dedupeUrls(localVideoUrls)
   const prioritizedVideos = await sortUrlsByApproxSizeDesc(requestedVideos)
   const videoCache = await caches.open(VIDEO_CACHE_NAME)
   const cachedVideos: string[] = []
@@ -320,10 +318,7 @@ function normalizeUrl(url: string): string {
 
 function isManagedVideoRequest(request: Request, url: URL): boolean {
   if (request.destination === 'video') {
-    if (url.origin === self.location.origin) {
-      return true
-    }
-    return isRemoteVideoUrl(url)
+    return url.origin === self.location.origin && url.pathname.startsWith(NORMALIZED_SCOPE_PATH)
   }
 
   if (!VIDEO_EXTENSION_PATTERN.test(url.pathname)) {
@@ -331,15 +326,9 @@ function isManagedVideoRequest(request: Request, url: URL): boolean {
   }
 
   if (url.origin === self.location.origin) {
-    return url.pathname.startsWith('/sage/') || url.pathname.startsWith('/assets/')
+    return url.pathname.startsWith(NORMALIZED_SCOPE_PATH)
   }
-
-  return isRemoteVideoUrl(url)
-}
-
-function isRemoteVideoUrl(url: URL): boolean {
-  const normalized = normalizeUrl(url.toString())
-  return REMOTE_VIDEO_URLS.some((allowedUrl) => normalizeUrl(allowedUrl) === normalized)
+  return false
 }
 
 function logInfo(message: string, payload?: unknown): void {
