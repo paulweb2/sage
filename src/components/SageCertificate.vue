@@ -36,6 +36,16 @@
       </div>
 
       <div class="signature-row">
+        <div class="signature-box signature-box-permanent">
+          <div class="signature-placeholder signature-with-image">
+            <img :src="withBase('permanent_sec_sig.png')" alt="Signature of the Permanent Secretary." />
+          </div>
+          <div class="signature-caption signature-caption-cbm">
+            <span>Moses Mhike</span>
+            <span>Permanent Secretary</span>
+            <span>Ministry of Primary and Secondary Education, Zimbabwe</span>
+          </div>
+        </div>
         <div class="signature-box">
           <div class="signature-placeholder signature-with-image">
             <img :src="withBase('cbm_signature.png')" alt="Signature of a CBM representative." />
@@ -43,7 +53,7 @@
           <div class="signature-caption signature-caption-cbm">
             <span>Greaterman Chivandire</span>
             <span>Country Director</span>
-            <span>Christian Blind Mission Global Disability Inclusion Zimbabwe</span>
+            <span>Christian Blind Mission Global Disability Inclusion, Zimbabwe</span>
           </div>
         </div>
         <div class="signature-box">
@@ -113,6 +123,11 @@ defineExpose({ printCertificate });
   text-align: center;
   font-family: 'Source Sans 3', Arial, sans-serif;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+.certificate-sheet > :not(.footer-banner) {
+  position: relative;
+  top: -10px;
 }
 
 .certificate-logo {
@@ -198,17 +213,31 @@ defineExpose({ printCertificate });
   margin: 16px 0 20px;
 }
 
+.needs-list,
+.date-section {
+  position: relative;
+  top: -10px;
+}
+
 .signature-row {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 120px;
   margin-bottom: 16px;
+  position: relative;
 }
 
 .signature-box {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.signature-box-permanent {
+  position: absolute;
+  top: -100px;
+  left: 0;
 }
 
 .signature-placeholder {
@@ -255,7 +284,7 @@ defineExpose({ printCertificate });
   width: 100%;
   margin-top: 8px;
   position: relative;
-  top: 24px;
+  top: 34px;
 }
 
 @media print {
@@ -277,7 +306,9 @@ defineExpose({ printCertificate });
     max-width: none !important;
     min-height: auto !important;
     box-sizing: border-box;
-    padding: 18px 40px 42px !important;
+    padding: 18px 40px 20px !important;
+    position: relative;
+    top: -1px;
     font-size: 92%;
     box-shadow: none !important;
     border: 6px solid #c3c3c3 !important;
@@ -288,7 +319,7 @@ defineExpose({ printCertificate });
 
   .footer-banner {
     margin-top: 0 !important;
-    top: 18px;
+    top: 10px;
   }
 
   .needs-list {
@@ -296,12 +327,18 @@ defineExpose({ printCertificate });
   }
 
   .date-section {
-    margin: 10px 0 14px !important;
+    margin: 8px 0 10px !important;
   }
 
   .signature-row {
     gap: 8px !important;
-    margin-bottom: 10px !important;
+    margin-top: 55px !important;
+    margin-bottom: 6px !important;
+    transform: translateY(20px) !important;
+  }
+
+  .signature-box-permanent {
+    top: -70px;
   }
 }
 </style>
