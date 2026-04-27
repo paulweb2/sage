@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>My certificate of participation</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.35</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v1.0.0</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -165,13 +165,11 @@
                       </p>
                       <p v-else-if="!item.completed">Not started</p>
                     </ion-label>
-                    <ion-button 
-                      v-if="!item.completed" 
-                      fill="clear" 
-                      size="small" 
-                      :router-link="isItemEnabled(item.id) ? getItemRoute(item.id) : undefined"
-                      :disabled="!isItemEnabled(item.id)"
-                      :router-direction="'forward'"
+                    <ion-button
+                      v-if="!item.completed"
+                      fill="clear"
+                      size="small"
+                      @click="startItem(item.id)"
                     >
                       Start
                     </ion-button>
@@ -305,7 +303,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import {
   IonPage,
   IonHeader,
@@ -356,8 +354,10 @@ import {
 import { ProgressService, type ProgressData, type ProgressItem, type ProgressOptions } from '../services/ProgressService';
 import SageCertificate from '../components/SageCertificate.vue';
 import { actionSheetController, toastController } from '@ionic/vue';
+import { storePendingAnchor } from '@/utils/anchorScroll';
 
 const route = useRoute();
+const router = useRouter();
 const CERTIFICATE_EXCLUDED_ITEMS: string[] = ['signposting-reflection'];
 const certificateProgressOptions: ProgressOptions = {
   excludedItemIds: CERTIFICATE_EXCLUDED_ITEMS
@@ -453,29 +453,42 @@ const certificateNumber = computed(() => {
   return `${year}${month}${day}-${random}`;
 });
 
-// Only enable hearing quiz, hearing reflection, and communication quiz
-const ENABLED_IDS = new Set([
-  'hearing-needs-quiz',
-  'hearing-needs-reflection',
-  'communication-quiz',
-  'visual-needs-quiz'
-]);
+const SECTION_ANCHOR_BY_ITEM_TYPE: Record<string, string> = {
+  quiz: 'knowledge-check',
+  reflection: 'reflective-task',
+  'case-study': 'case-study'
+};
 
-function isItemEnabled(id: string): boolean {
-  return ENABLED_IDS.has(id);
+const PAGE_ROUTE_BY_PAGE_ID: Record<string, string> = {
+  'visual-needs': '/needs/visual',
+  'hearing-needs': '/needs/hearing',
+  'physical-sensory-needs': '/needs/physical-sensory',
+  'cognitive-intellectual-needs': '/needs/cognitive-intellectual',
+  'speech-language-needs': '/needs/speech-language',
+  communication: '/disability/communication',
+  'multiple-disabilities': '/needs/multiple-disabilities'
+};
+
+function getItemSectionAnchor(id: string): string | undefined {
+  const itemTypeMatch = id.match(/-(quiz|reflection|case-study)$/);
+  if (!itemTypeMatch) {
+    return undefined;
+  }
+  return SECTION_ANCHOR_BY_ITEM_TYPE[itemTypeMatch[1]];
 }
 
 function getItemRoute(id: string): string {
-  // id pattern: `${pageId}-quiz` or `${pageId}-reflection`
-  const pageId = id.replace(/-(quiz|reflection)$/,'');
-  if (pageId === 'hearing-needs') {
-    return '/needs/hearing'; // dedicated hearing route
+  const pageId = id.replace(/-(quiz|reflection|case-study)$/, '');
+  return PAGE_ROUTE_BY_PAGE_ID[pageId] ?? `/disability/${pageId}`;
+}
+
+async function startItem(id: string): Promise<void> {
+  const targetPage = getItemRoute(id);
+  const targetAnchor = getItemSectionAnchor(id);
+  if (targetAnchor) {
+    storePendingAnchor(targetAnchor, targetPage);
   }
-  if (pageId === 'communication') {
-    return '/disability/communication';
-  }
-  // Fallback (should be disabled for others): keep existing pattern
-  return `/disability/${pageId}`;
+  await router.push(targetPage);
 }
 
 const loadProgress = async () => {

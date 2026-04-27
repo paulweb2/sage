@@ -7,7 +7,7 @@
         </ion-buttons>
         <ion-title>{{ getPageTitle() }}</ion-title>
         <ion-buttons slot="end">
-          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v0.0.35</span>
+          <span style="font-size: 14px; color: var(--ion-color-medium); margin-right: 8px;">v1.0.0</span>
           <ion-button @click="presentActionSheet">
             <ion-icon :icon="ellipsisVertical"></ion-icon>
           </ion-button>
@@ -1209,7 +1209,7 @@
                 
                 <ion-button expand="block" fill="outline" color="secondary" @click="exportReflection">
                   <ion-icon :icon="download" slot="start"></ion-icon>
-                  Export as PDF
+                  Export as TXT
                 </ion-button>
                 
                 <ion-button expand="block" fill="outline" color="warning" @click="clearReflection">
@@ -1701,14 +1701,20 @@ const currentReflection = ref({
 });
 
 const reflectionProgress = computed(() => {
-  const totalFields = 3;
-  const completedFields = [
-    currentReflection.value.caseStudyReflection.trim(),
-    currentReflection.value.practiceReflection.trim(),
-    currentReflection.value.nextSteps.trim()
-  ].filter(field => field.length > 0).length;
-  
-  return completedFields / totalFields;
+  const pageId = (route.params.id as string) || '';
+  const progressFields = pageId === 'communication'
+    ? [
+        currentReflection.value.caseStudyReflection.trim(),
+        currentReflection.value.practiceReflection.trim()
+      ]
+    : [
+        currentReflection.value.caseStudyReflection.trim(),
+        currentReflection.value.practiceReflection.trim(),
+        currentReflection.value.nextSteps.trim()
+      ];
+
+  const completedFields = progressFields.filter(field => field.length > 0).length;
+  return progressFields.length > 0 ? completedFields / progressFields.length : 0;
 });
 
 // Auto-save functionality with debouncing
@@ -3524,13 +3530,29 @@ const saveReflectionToStorage = () => {
 };
 
 const exportReflection = () => {
+  const pageId = (route.params.id as string) || 'reflection';
   const version = reflectionVersions.value.find(v => v.id === selectedReflectionVersion.value);
-  if (!version) return;
-  
-  const content = `
+  const versionName = (version?.name || 'Current Session').trim() || 'Current Session';
+  const versionLabel = version?.lastModified || new Date().toLocaleDateString();
+  const versionSlug = versionName.toLowerCase().replace(/\s+/g, '-');
+  const pageSlug = getPageTitle().toLowerCase().replace(/\s+/g, '-');
+  const isCommunicationPage = pageId === 'communication';
+  const content = isCommunicationPage
+    ? `
+Reflective tasks - ${getPageTitle()}
+Version: ${versionName}
+Date: ${versionLabel}
+
+1) REFLECTION:
+${currentReflection.value.caseStudyReflection || 'No reflection written yet.'}
+
+2) REFLECTION:
+${currentReflection.value.practiceReflection || 'No reflection written yet.'}
+    `.trim()
+    : `
 Reflective Writing Journal - ${getPageTitle()}
-Version: ${version.name}
-Date: ${version.lastModified}
+Version: ${versionName}
+Date: ${versionLabel}
 
 CASE STUDY REFLECTION:
 ${currentReflection.value.caseStudyReflection || 'No reflection written yet.'}
@@ -3540,14 +3562,14 @@ ${currentReflection.value.practiceReflection || 'No reflection written yet.'}
 
 NEXT STEPS ACTION PLAN:
 ${currentReflection.value.nextSteps || 'No action plan written yet.'}
-  `.trim();
+    `.trim();
   
   // Create and download text file
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = window.document.createElement('a');
   a.href = url;
-  a.download = `reflection-${getPageTitle().toLowerCase().replace(/\s+/g, '-')}-${version.name.toLowerCase().replace(/\s+/g, '-')}.txt`;
+  a.download = `reflection-${pageSlug}-${versionSlug}.txt`;
   window.document.body.appendChild(a);
   a.click();
   window.document.body.removeChild(a);
