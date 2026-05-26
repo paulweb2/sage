@@ -1247,7 +1247,7 @@ const questions = ref<VisualQuestion[]>([
       { value: 'd', text: 'Sign language' },
       { value: 'e', text: 'Textured number lines and rulers.' }
     ],
-    correctAnswers: ['a', 'b', 'c']
+    correctAnswers: ['a', 'b', 'c', 'd', 'e']
   },
   {
     question: 'True or false: It is helpful if peers are taught to verbalise gestures.',
@@ -1441,7 +1441,7 @@ const questionHints: string[] = [
   'Look for language that centres the learner first before mentioning a disability.',
   'Think about what might make learning less assessable for learners with visual needs.',
   'Think about how the learner can be included in all aspects of the lesson.',
-  'Think about the different ways that learners with visual needs can be supported.',
+  'Think about the different ways that learners with visual needs can be supported through non-visual  means of communication or enlarged visuals for easier access.',
   'Think about how peers can describe what they do, so everyone understands what is happening.'
 ];
 const questionExplanations: string[] = [
@@ -1456,11 +1456,9 @@ b) Using names cues learners with visual needs into conversations;
 c) Changed layouts can be dangerous for learners with visual needs so keeping a stable classroom layout is best.
 
 Consistent materials and predictable environments reduce confusion and support orientation for learner with visual needs`,
-  `a) Talking books, large print, and audio description offer direct support for visual needs.
-b) Sign language focuses on communication for hearing differences, so is not appropriate for learners with visual needs"
-c) Layered sensory inputs let learners engage with information in format that may be more accessible.
-d) Focus on tools that deliver information through non-visual channels or enlarge visuals for easier access.
-e) Textured number lines and rulers.`,
+  `Talking books, large print, and audio description offer direct support for visual needs.
+Sign language focuses on communication for hearing differences, so is not appropriate for learners with visual needs
+Layered sensory inputs let learners engage with information in a format that may be more accessible.`,
   'True – narrating gestures turns visual cues into auditory information so learners with visual needs stay involved during group work. Coaching peers to verbalise actions removes hidden barriers in collaborative tasks.'
 ];
 
